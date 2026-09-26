@@ -223,7 +223,7 @@ Write-Host "`n── Orphan Checks ──" -ForegroundColor White
 
 # Check for .md files directly in root that shouldn't be there
 $rootMdFiles = Get-ChildItem "$RootDir/*.md" -ErrorAction SilentlyContinue |
-    Where-Object { $_.Name -notin @("README.md", "ROADMAP.md", "MAKEFILE.md") }
+    Where-Object { $_.Name -notin @("README.md", "ROADMAP.md", "MAKEFILE.md", "AGENTS.md") }
 
 if ($rootMdFiles.Count -gt 0) {
     foreach ($f in $rootMdFiles) {
