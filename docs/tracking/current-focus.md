@@ -52,8 +52,8 @@ Python baseline repair and the curriculum module decision above.
 - [x] DevMate lint/types/tests pass locally (ruff 0, mypy 0, pytest 19 → 23 pass)
 - [x] `devmate stats` CLI runs and prints repository statistics (verified 2026-09-26)
 - [x] `.ai` registry system validated and gated (`tests/*/validate.ps1` × 5, wired into CI)
-- [ ] GitHub Actions green on `master`
-- [ ] Tests exist for the stats command
+- [x] GitHub Actions green on `master` (CI run 36269637267, 2026-09-26)
+- [x] Tests exist for the stats command (4 tests in `tests/unit/test_cli_stats.py`)
 - [ ] Legacy backlog R1–R7, R9 closed (reproduce + verify each fix)
 - [x] `master-ai-engineering/` decision made — adopted as `docs/curriculum/` (2026-09-26)
 - [ ] `embeddings/`, `prompt-engineering/`, `rag-system/` no longer empty

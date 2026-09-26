@@ -65,5 +65,5 @@ docker/
 - [x] `devmate stats <path>` prints correct statistics
 - [x] ruff, ruff format, mypy, pytest pass locally
 - [x] Wheel contains all 13 packages; `import devmate.db` succeeds
-- [ ] GitHub Actions green on `master`
+- [x] GitHub Actions green on `master` (run 36269637267, 2026-09-26)
 - [x] Stats command has unit tests (4 tests in `tests/unit/test_cli_stats.py`, passing 2026-09-26)
