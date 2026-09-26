@@ -51,7 +51,9 @@ eval = [
 # is the primary implementation and runs without it.
 agents = [
     "langgraph>=0.1.0",
-    "mcp>=1.0.0",
+    # Cap at <2.0: mcp/server.py uses the 1.x Tool(inputSchema=...) API;
+    # mcp 2.x renamed it to input_schema. Don't bump one side without the other.
+    "mcp>=1.0.0,<2.0",
 ]
 
 [build-system]
