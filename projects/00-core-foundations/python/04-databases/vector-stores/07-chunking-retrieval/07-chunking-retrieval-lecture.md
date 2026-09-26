@@ -37,7 +37,7 @@ consequential retrieval parameter most teams set by default and never revisit.
 ```python
 def fixed_chunks(text, size=500, overlap=50):
     # Overlap preserves boundary context; cost is ~overlap/size extra index.
-    return [text[i:i + size] for i in range(0, len(text), size - overlap)]
+    return [text[i : i + size] for i in range(0, len(text), size - overlap)]
 ```
 
 ## 2. Fixed-Size vs Sentence Boundaries

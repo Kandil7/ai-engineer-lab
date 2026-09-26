@@ -38,9 +38,9 @@ matching, it is nearest-neighbor lookup in a learned space.
 import numpy as np
 
 # Same idea as embed_text() in the exercise: coordinates carry meaning.
-q  = np.array([0.9, 0.1, 0.0])   # "vector search retrieval"
-c1 = np.array([0.8, 0.2, 0.1])   # near-duplicate wording
-c2 = np.array([0.0, 0.1, 0.9])   # unrelated topic
+q = np.array([0.9, 0.1, 0.0])  # "vector search retrieval"
+c1 = np.array([0.8, 0.2, 0.1])  # near-duplicate wording
+c2 = np.array([0.0, 0.1, 0.9])  # unrelated topic
 ```
 
 ## 2. Three Metrics, One Decision
@@ -49,8 +49,10 @@ c2 = np.array([0.0, 0.1, 0.9])   # unrelated topic
 def cosine_sim(a, b):
     return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
 
+
 def dot_sim(a, b):
     return float(np.dot(a, b))
+
 
 def l2_dist(a, b):
     return float(np.linalg.norm(a - b))

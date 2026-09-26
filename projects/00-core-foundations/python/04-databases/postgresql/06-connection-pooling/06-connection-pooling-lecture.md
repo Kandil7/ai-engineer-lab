@@ -49,8 +49,9 @@ a small API: pool of 5–20 with an overflow allowance and a checkout timeout
 ```python
 # psycopg_pool: bounded, timed out, closed structurally
 from psycopg_pool import ConnectionPool
+
 pool = ConnectionPool("postgresql://...", min_size=2, max_size=10, timeout=30.0)
-with pool.connection() as conn:   # borrow; returned (or timed out loudly) after
+with pool.connection() as conn:  # borrow; returned (or timed out loudly) after
     ...
 pool.close()
 ```

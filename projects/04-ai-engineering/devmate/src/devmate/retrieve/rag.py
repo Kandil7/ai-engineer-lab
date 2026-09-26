@@ -94,10 +94,18 @@ class RAGPipeline:
             self.retriever = await get_retriever()
 
     def _build_context(self, results: list[RerankResult]) -> str:
-        """Build context string from retrieved results."""
-        context_parts = []
+        """Build context string from retrieved results.
+
+        Enforces a character budget: retrieval top_k is a *candidate* count,
+        not a prompt guarantee. Stuffing every chunk into the system prompt
+        overflows small local models (Ollama returns HTTP 500) and dilutes
+        the context that actually matters. Always includes the first chunk
+        even if it alone exceeds the budget.
+        """
+        budget = settings.rag_context_char_budget
+        context_parts: list[str] = []
+        used = 0
         for i, result in enumerate(results, 1):
-            result.metadata.get("source", "unknown")
             filename = result.metadata.get("filename", "unknown")
             chunk_type = result.metadata.get("chunk_type", "")
             name = result.metadata.get("name", "")
@@ -109,7 +117,11 @@ class RAGPipeline:
                 header += f" | {name}"
             header += "]"
 
-            context_parts.append(f"{header}\n{result.content}")
+            part = f"{header}\n{result.content}"
+            if context_parts and used + len(part) > budget:
+                break
+            context_parts.append(part)
+            used += len(part)
 
         return "\n\n---\n\n".join(context_parts)
 

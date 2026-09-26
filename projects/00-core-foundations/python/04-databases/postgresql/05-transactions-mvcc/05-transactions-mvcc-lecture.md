@@ -35,7 +35,7 @@ first). Each letter is a mechanism, not a vibe; when someone says "Postgres
 is safe," these four are the receipt.
 
 ```python
-with psycopg.connect(DSN) as conn:   # commit on clean exit, rollback on error
+with psycopg.connect(DSN) as conn:  # commit on clean exit, rollback on error
     with conn.cursor() as cur:
         cur.execute("INSERT INTO eval_runs ...")
         cur.execute("INSERT INTO eval_scores ...")
@@ -71,7 +71,7 @@ short, never hold one open across a network call to an LLM API.
 # SAVEPOINT: retry one statement without aborting the whole transaction
 cur.execute("SAVEPOINT bulk_part")
 try:
-    cur.execute("INSERT ...")   # may hit a unique violation on one row
+    cur.execute("INSERT ...")  # may hit a unique violation on one row
 except UniqueViolation:
     cur.execute("ROLLBACK TO SAVEPOINT bulk_part")  # rest of the batch survives
 ```

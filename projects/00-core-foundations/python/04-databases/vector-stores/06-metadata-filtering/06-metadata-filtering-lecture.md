@@ -37,9 +37,8 @@ the payload is a re-ingest, not a query fix.
 
 ```python
 # The contract every vector store honors in some syntax:
-eligible = [c for c in chunks
-            if c["language"] == "python" and c["date"] >= "2026-01-01"]
-candidates = vector_search(query, eligible, k=10)   # rank only the eligible
+eligible = [c for c in chunks if c["language"] == "python" and c["date"] >= "2026-01-01"]
+candidates = vector_search(query, eligible, k=10)  # rank only the eligible
 ```
 
 ## 2. Selectivity Decides the Plan

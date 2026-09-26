@@ -30,15 +30,16 @@ By the end of this lecture, you will be able to:
 ```python
 import numpy as np
 
+
 def exact_knn(query, corpus, k, metric="cosine"):
     if metric == "cosine":
         qn = query / np.linalg.norm(query)
         cn = corpus / np.linalg.norm(corpus, axis=1, keepdims=True)
-        scores = cn @ qn                    # higher wins
+        scores = cn @ qn  # higher wins
         idx = np.argpartition(-scores, k)[:k]
         order = idx[np.argsort(-scores[idx])]
     else:
-        dists = np.linalg.norm(corpus - query, axis=1)   # smaller wins
+        dists = np.linalg.norm(corpus - query, axis=1)  # smaller wins
         idx = np.argpartition(dists, k)[:k]
         order = idx[np.argsort(dists[idx])]
     return order

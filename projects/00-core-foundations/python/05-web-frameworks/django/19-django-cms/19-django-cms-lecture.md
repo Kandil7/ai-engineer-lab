@@ -35,16 +35,19 @@ own content, and neither deploys to do the other's job.
 
 ```python
 INSTALLED_APPS = [
-    'cms', 'menus', 'treebeard', 'sekizai',
-    'djangocms_text_ckeditor',
+    "cms",
+    "menus",
+    "treebeard",
+    "sekizai",
+    "djangocms_text_ckeditor",
 ]
 MIDDLEWARE = [
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.page.PageAccessMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
+    "cms.middleware.user.CurrentUserMiddleware",
+    "cms.middleware.page.PageAccessMiddleware",
+    "cms.middleware.toolbar.ToolbarMiddleware",
 ]
-CMS_TEMPLATES = [('base.html', 'Base'), ('blog.html', 'Blog Page')]
-LANGUAGES = [('en', 'English'), ('es', 'Spanish')]
+CMS_TEMPLATES = [("base.html", "Base"), ("blog.html", "Blog Page")]
+LANGUAGES = [("en", "English"), ("es", "Spanish")]
 ```
 
 Each entry earns its place: `menus` renders navigation from the tree,
@@ -62,6 +65,7 @@ A plugin is a model plus rendering. The pattern never varies:
 class Testimonial(CMSPlugin):
     author = models.CharField(max_length=100)
     quote = models.TextField()
+
 
 # cms_plugins.py — how it renders and edits
 class TestimonialPlugin(CMSPluginBase):
@@ -105,7 +109,7 @@ routing for app behavior.
 ```python
 # WRONG - CMS_TEMPLATES = [('base.html', 'Everything')]
 # RIGHT - a template per page shape: base, blog, landing
-CMS_TEMPLATES = [('base.html', 'Base'), ('blog.html', 'Blog Page')]
+CMS_TEMPLATES = [("base.html", "Base"), ("blog.html", "Blog Page")]
 ```
 
 ### Skipping the plugin layer (hardcoding content in templates)

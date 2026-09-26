@@ -88,6 +88,12 @@ class Settings(BaseSettings):
     rag_rerank_top_k: int = 5
     rag_chunk_size: int = 512
     rag_chunk_overlap: int = 50
+    # Retrieved context is part of the prompt budget: 20 x 512-char chunks
+    # overflowed qwen2.5-coder:7b's default Ollama context (HTTP 500).
+    rag_context_char_budget: int = 8000
+
+    # Ollama — num_ctx must cover system prompt (with context) + history + answer
+    ollama_num_ctx: int = 8192
 
     # Cache
     cache_ttl_seconds: int = 3600

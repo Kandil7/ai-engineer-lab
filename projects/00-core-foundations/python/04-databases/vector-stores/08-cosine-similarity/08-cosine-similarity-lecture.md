@@ -33,8 +33,9 @@ import numpy as np
 
 # cosine(a, b) = a.b / (||a|| * ||b||). If ||a|| = ||b|| = 1:
 # cosine(a, b) = a.b / 1 = a.b. That is the whole trick.
-a = np.array([3.0, 4.0]); b = np.array([1.0, 0.0])
-print(np.dot(a, b))                                        # 3.0 (meaningless scale)
+a = np.array([3.0, 4.0])
+b = np.array([1.0, 0.0])
+print(np.dot(a, b))  # 3.0 (meaningless scale)
 an, bn = a / np.linalg.norm(a), b / np.linalg.norm(b)
 print(np.dot(an, bn), np.dot(an, bn) / (np.linalg.norm(an) * np.linalg.norm(bn)))  # equal
 ```

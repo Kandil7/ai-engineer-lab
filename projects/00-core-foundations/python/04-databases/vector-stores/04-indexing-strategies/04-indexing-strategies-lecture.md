@@ -37,8 +37,14 @@ steeply then flattens — the knee is the point where doubling latency buys
 ```python
 # Per cell, record the full tuple — a recall number without its config is trivia:
 # (M, ef_search, recall@10, p95_ms, index_MB, build_s)
-record = {"M": 16, "ef_search": 64, "recall@10": 0.971,
-          "p95_ms": 38.0, "index_MB": 412.0, "build_s": 190.0}
+record = {
+    "M": 16,
+    "ef_search": 64,
+    "recall@10": 0.971,
+    "p95_ms": 38.0,
+    "index_MB": 412.0,
+    "build_s": 190.0,
+}
 ```
 
 ## 2. Quantization From the RAM Budget

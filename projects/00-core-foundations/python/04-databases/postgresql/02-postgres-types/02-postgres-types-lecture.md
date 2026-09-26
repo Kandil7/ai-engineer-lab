@@ -35,6 +35,7 @@ everything measured is float, everything counted is integer.
 ```python
 # psycopg3 mapping: int -> integer/bigint, Decimal -> numeric, float -> float8
 from decimal import Decimal
+
 cur.execute("INSERT INTO ledger (amount) VALUES (%s)", (Decimal("19.99"),))
 ```
 

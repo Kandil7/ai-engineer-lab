@@ -542,6 +542,9 @@ class OllamaProvider(BaseLLMProvider):
             "options": {
                 "temperature": temperature,
                 "num_predict": max_tokens,
+                # Default Ollama context is too small for RAG prompts
+                # (retrieved context + history + answer) and 500s mid-chat.
+                "num_ctx": settings.ollama_num_ctx,
             },
         }
         if response_model:

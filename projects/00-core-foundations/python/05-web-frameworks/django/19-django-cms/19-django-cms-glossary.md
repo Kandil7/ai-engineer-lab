@@ -24,7 +24,7 @@ page shapes. One entry per genuinely different layout.
 
 **Example:**
 ```python
-CMS_TEMPLATES = [('base.html', 'Base'), ('blog.html', 'Blog Page')]
+CMS_TEMPLATES = [("base.html", "Base"), ("blog.html", "Blog Page")]
 ```
 
 **Related concepts:** Placeholder, Page tree
