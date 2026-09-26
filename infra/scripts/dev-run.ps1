@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Start the development environment and run the auth-service.
 

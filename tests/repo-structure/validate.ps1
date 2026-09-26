@@ -125,7 +125,8 @@ $requiredFiles = @(
     @{ path = "registries/workflow-registry.yaml"; desc = "Workflow registry" },
     @{ path = "registries/template-registry.yaml"; desc = "Template registry" },
     @{ path = "registries/decision-log.yaml"; desc = "Decision log" },
-    @{ path = "registries/skills-registry.yaml"; desc = "Skills registry" }
+    @{ path = "registries/skills-registry.yaml"; desc = "Skills registry" },
+    @{ path = "registries/review-log.yaml"; desc = "Review log" }
 )
 
 foreach ($file in $requiredFiles) {
@@ -207,7 +208,8 @@ $requiredTestFiles = @(
     "tests/repo-structure/validate.ps1",
     "tests/templates/validate.ps1",
     "tests/workflows/validate.ps1",
-    "tests/prompts/validate.ps1"
+    "tests/prompts/validate.ps1",
+    "tests/registries/validate.ps1"
 )
 
 foreach ($file in $requiredTestFiles) {
@@ -248,7 +250,7 @@ Write-Host "  Passed: $passCount" -ForegroundColor Green
 Write-Host "  Failed: $failCount" -ForegroundColor $(if ($failCount -gt 0) { "Red" } else { "Green" })
 Write-Host "  Warnings: $warnCount" -ForegroundColor $(if ($warnCount -gt 0) { "Yellow" } else { "Green" })
 
-if ($failCount -gt 0) {
+if ($failCount -gt 0 -or $warnCount -gt 0) {
     Write-Host "`n  ✗ Validation FAILED — fix the issues above" -ForegroundColor Red
     exit 1
 } else {

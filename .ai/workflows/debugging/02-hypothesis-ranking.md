@@ -1,3 +1,13 @@
+---
+id: debugging/02-hypothesis-ranking
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: debugging
+entry_point: false
+---
+
 # Debugging Workflow — 02 Hypothesis Ranking
 
 - **Prompt:** `.ai/prompts/roles/debugging-specialist.md`

@@ -1,3 +1,13 @@
+---
+id: evaluation/ai-feature-eval
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: evaluation
+entry_point: true
+---
+
 # Evaluation Workflow — AI Feature Eval
 
 - **Prompt:** `.ai/prompts/roles/principal-system-designer.md` (eval-planning) + `roles/code-reviewer.md`

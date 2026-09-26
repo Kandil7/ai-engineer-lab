@@ -51,12 +51,16 @@ jobs:
       - run: cd projects/02-frontend/flutter-app && flutter test
 
   validate-repo:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: PowerShell/PowerShell@v7
-        with:
-          script: Invoke-Pester tests/
+      - name: Run registry validators
+        shell: pwsh
+        run: |
+          foreach ($suite in @("prompts", "workflows", "templates", "registries", "repo-structure")) {
+            & "tests/$suite/validate.ps1"
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
 ```
 
 ### 2. Build Workflow (`build.yml`)
@@ -126,9 +130,10 @@ jobs:
 | flutter-app      | Integration    | integration_test| `flutter test integration_test/`|
 | nextjs-web       | Unit           | Vitest      | `npm run test`                   |
 | nextjs-web       | E2E            | Playwright  | `npx playwright test`            |
-| prompts          | Validation     | Pester      | `Invoke-Pester tests/prompts`    |
-| workflows        | Validation     | Pester      | `Invoke-Pester tests/workflows`  |
-| templates        | Validation     | Pester      | `Invoke-Pester tests/templates`  |
+| prompts          | Validation     | PowerShell  | `./tests/prompts/validate.ps1`   |
+| workflows        | Validation     | PowerShell  | `./tests/workflows/validate.ps1` |
+| templates        | Validation     | PowerShell  | `./tests/templates/validate.ps1` |
+| registries       | Validation     | PowerShell  | `./tests/registries/validate.ps1`|
 
 ### Coverage Requirements
 

@@ -1,3 +1,13 @@
+---
+id: debugging/04-fix-verification
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: debugging
+entry_point: false
+---
+
 # Debugging Workflow — 04 Fix & Verification
 
 - **Prompt:** `.ai/prompts/roles/debugging-specialist.md` + `roles/pair-programmer.md`

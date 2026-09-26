@@ -2,10 +2,19 @@
 id: task.implementation-planner
 layer: task
 version: 1.0.0
-status: active
+status: deprecated
 owner: workspace
+deprecated_in_favor_of: role.project-planner
 pairs_with_roles: [project-planner, system-architect]
 constraints: [mvp-first, file-structure-required, repo-first]
+---
+
+# Task: Implementation Planner (DEPRECATED)
+
+> Deprecated 2026-09-26: this task duplicates `roles/project-planner.md` — both fill
+> `templates/project-plan.template.md` with file structure, acceptance criteria, and
+> ordered tasks. Use the Project Planner instead. Kept on disk for provenance; do not
+> wire it into any workflow.
 ---
 
 # Task: Implementation Planner

@@ -226,7 +226,7 @@ Write-Host "  Passed: $passCount" -ForegroundColor Green
 Write-Host "  Failed: $failCount" -ForegroundColor $(if ($failCount -gt 0) { "Red" } else { "Green" })
 Write-Host "  Warnings: $warnCount" -ForegroundColor $(if ($warnCount -gt 0) { "Yellow" } else { "Green" })
 
-if ($failCount -gt 0) {
+if ($failCount -gt 0 -or $warnCount -gt 0) {
     Write-Host "`n  [FAIL] Validation FAILED" -ForegroundColor Red
     exit 1
 } else {

@@ -1,3 +1,13 @@
+---
+id: learning/learn-from-book
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: learning
+entry_point: true
+---
+
 # Learning Workflow — Learn From Book
 
 - **Prompt:** `.ai/prompts/roles/source-learning-agent.md`

@@ -1,6 +1,6 @@
 # Full-Stack AI Engineer Lab
 
-[![Code Intelligence](https://img.shields.io/badge/Structural%20Graph-53%2C218%20nodes%20%2F%20125%2C174%20edges-blue)](docs/CODEBASE-INTELLIGENCE.md)
+[![Code Intelligence](https://img.shields.io/badge/Structural%20Graph-53%2C461%20nodes%20%2F%20126%2C790%20edges-blue)](docs/CODEBASE-INTELLIGENCE.md)
 [![Review Graph](https://img.shields.io/badge/Review%20Graph-11%2C590%20nodes%20%2F%2087%2C721%20edges-green)](docs/CODEBASE-INTELLIGENCE.md)
 [![Multimodal Graph](https://img.shields.io/badge/Multimodal%20Graph-49%2C856%20nodes%20%2F%2054%2C483%20edges-purple)](docs/CODEBASE-INTELLIGENCE.md)
 
@@ -83,7 +83,7 @@ Four-layer code intelligence for token-efficient, context-aware engineering:
 
 | Layer | Tool | What it does | Stats |
 |-------|------|--------------|-------|
-| **Structural Graph** | codebase-memory-mcp | Tree-sitter + LSP call graph, 155 languages | 53,218 nodes, 125,174 edges |
+| **Structural Graph** | codebase-memory-mcp | Tree-sitter + LSP call graph, 155 languages | 53,461 nodes, 126,790 edges |
 | **Review Graph** | code-review-graph | PR blast-radius, community detection, impact analysis | 11,590 nodes, 87,721 edges, 23 communities |
 | **Multimodal Graph** | graphify | Code + docs + schemas, god nodes, shortest path | 49,856 nodes, 54,483 edges, 2,833 communities |
 | **Context Pack** | repomix | One-shot repo packing for ad-hoc LLM tasks | 1,244,995 tokens, 1,082 files |
@@ -132,9 +132,10 @@ Full cadence: [`docs/WEEKLY_PROTOCOL.md`](docs/WEEKLY_PROTOCOL.md)
 2026-08-02 by [ADR-0004](docs/decisions/0004-adopt-10-week-ai-engineer-track.md).
 Target: a remote AI/LLM engineering role. Vehicle: **DevMate**.
 
-> **Governing rule:** no new lecture, glossary, or quiz file until DevMate is deployed at a
-> public URL. The repo holds 6,947 lines of AI teaching material and zero running AI services;
-> that ratio has to invert.
+> **Governing rule (amended by [ADR-0006](docs/decisions/0006-adopt-master-ai-engineering-curriculum.md)):**
+> curriculum content is allowed again, but only when it traces to a DevMate concept or an
+> interview answer — never as a substitute for building. The build-first ratio still has
+> to hold: running services first, teaching material second.
 
 | Week | Milestone | Deliverable |
 | ---- | --------- | ----------- |
@@ -170,15 +171,15 @@ Target: a remote AI/LLM engineering role. Vehicle: **DevMate**.
 - [x] Phase 4 — Advanced (RAG eval harness, capstone structure, operating manual)
 
 ### Code Intelligence (Complete ✅)
-- [x] Structural graph — codebase-memory-mcp indexed (53,218 nodes, 125,174 edges, 8 languages)
+- [x] Structural graph — codebase-memory-mcp indexed (53,461 nodes, 126,790 edges, 8 languages)
 - [x] Review graph — code-review-graph built (11,590 nodes, 87,721 edges, 23 communities)
 - [x] Multimodal graph — graphify built (49,856 nodes, 54,483 edges, 2,833 communities)
 - [x] Context pack — repomix ready (1,244,995 tokens, 1,082 files)
 - [x] Security exercises — 10 modules split into 94 files (directory-per-exercise)
 
 ### Learning Journey
-- [x] Python foundations — 1,128 files across 9 phases: core (41 topics), advanced (27), libraries (NumPy, Pandas, Matplotlib, SciPy), databases, web frameworks, DSA, ML, MLOps, GenAI
-- [x] AI curriculum — 6,947+ lines across LLM APIs, RAG, agents, evaluation, safety, security (10 lectures + quizzes)
+- [x] Python foundations — 1,941 files across 9 phases: core (41 topics), advanced (27), libraries (NumPy, Pandas, Matplotlib, SciPy), databases, web frameworks, DSA, ML, MLOps, GenAI
+- [x] AI curriculum — 9,554 lines of lectures and practice workbooks under `docs/curriculum`, plus phase-4 tracks (agents, RAG, embeddings, prompt engineering, security, fast.ai) with lectures, exercises, and quizzes
 - [x] fast.ai Deep Learning track — 13 modules with lectures, exercises, and quizzes
 - [ ] **A1 — CI green + first DevMate command** ← YOU ARE HERE
 - [ ] A2–A10 — see the table above

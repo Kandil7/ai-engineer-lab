@@ -173,8 +173,9 @@ spreading molecules farther apart than in liquid form. This makes ice less dense
 ls .ai/prompts/roles/
 ls .ai/prompts/tasks/
 
-# Run prompt regression tests
-Invoke-Pester tests/prompts
+# Run the prompt and registry validators
+./tests/prompts/validate.ps1
+./tests/registries/validate.ps1
 
 # Follow the prompt workflow
 # .ai/workflows/evaluation/prompt-regression.md

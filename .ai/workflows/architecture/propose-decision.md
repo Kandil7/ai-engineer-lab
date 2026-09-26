@@ -1,3 +1,13 @@
+---
+id: architecture/propose-decision
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: architecture
+entry_point: true
+---
+
 # Architecture Workflow — Propose Decision
 
 - **Prompt:** `.ai/prompts/roles/system-architect.md` (+ `tasks/adr-writer.md`)

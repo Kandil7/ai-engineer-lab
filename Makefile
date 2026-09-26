@@ -12,8 +12,10 @@ COMPOSE   := docker compose -f infra/docker/docker-compose.yml
 # Poetry has no lockfile here and is not the environment of record.
 ifeq ($(OS),Windows_NT)
 PY        := cd $(DEVMATE) && .venv/Scripts/python
+PSH       := powershell
 else
 PY        := cd $(DEVMATE) && .venv/bin/python
+PSH       := pwsh
 endif
 
 .DEFAULT_GOAL := help
@@ -52,6 +54,7 @@ test-int:  ## Integration tests (needs `make up`)
 ## ---------------------------------------------------------------- devmate
 
 eval:  ## Run the RAG evaluation harness (week 2+)
+	@test -f $(DEVMATE)/eval/run_ragas.py || { echo "eval harness not implemented yet (tracked for week 2+, milestone A3)"; exit 1; }
 	$(PY) eval/run_ragas.py
 
 run:  ## Serve the DevMate API locally
@@ -82,8 +85,12 @@ logs:  ## Follow logs — make logs SVC=qdrant
 
 ## ---------------------------------------------------------------- workspace
 
-validate:  ## Pester suites (Windows/PowerShell only)
-	pwsh -NoProfile -Command "Invoke-Pester tests/"
+validate:  ## Run the 5 .ai registry validator suites (PowerShell)
+	$(PSH) -NoProfile -ExecutionPolicy Bypass -File tests/prompts/validate.ps1
+	$(PSH) -NoProfile -ExecutionPolicy Bypass -File tests/workflows/validate.ps1
+	$(PSH) -NoProfile -ExecutionPolicy Bypass -File tests/templates/validate.ps1
+	$(PSH) -NoProfile -ExecutionPolicy Bypass -File tests/registries/validate.ps1
+	$(PSH) -NoProfile -ExecutionPolicy Bypass -File tests/repo-structure/validate.ps1
 
 docs-check:  ## Find broken relative links in docs/
 	@fail=0; \

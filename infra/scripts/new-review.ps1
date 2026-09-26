@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generate a new code review file from the template.
 
@@ -91,7 +91,8 @@ Write-Step "Generating review file..."
 
 $slug = ConvertTo-Slug $Feature
 $date = Get-Date -Format "yyyy-MM-dd"
-$reviewFilename = "$slug-ai-review-$date.md"
+# Canonical name per README workflow rules and feature/04-review.md.
+$reviewFilename = "ai-review.md"
 $reviewPath = "$($projectDir.FullName)/$reviewFilename"
 
 if (Test-Path $reviewPath) {
@@ -127,6 +128,34 @@ $fullContent = $header + $content
 Set-Content -Path $reviewPath -Value $fullContent -Encoding UTF8
 
 Write-Ok "Created: $reviewPath"
+
+# ─── Step 4: Register in Review Log ─────────────
+
+Write-Step "Registering review..."
+
+$logFile = "$RootDir/registries/review-log.yaml"
+$relativePath = $reviewPath.Replace("$RootDir\", "").Replace("\", "/")
+$reviewId = "$Project-$slug"
+
+$logContent = ""
+if (Test-Path $logFile) { $logContent = Get-Content $logFile -Raw }
+
+if ($logContent -notmatch [regex]::Escape($relativePath)) {
+    $entry = @"
+
+  - id: "$reviewId"
+    project: $Project
+    feature: $Feature
+    date: $date
+    path: $relativePath
+    decision: in-progress
+    score: null
+"@
+    Add-Content -Path $logFile -Value $entry -Encoding UTF8
+    Write-Ok "Logged in registries/review-log.yaml"
+} else {
+    Write-Ok "Already logged — skipped duplicate entry"
+}
 
 # ─── Summary ───────────────────────────────────────
 

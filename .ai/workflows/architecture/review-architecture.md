@@ -1,3 +1,13 @@
+---
+id: architecture/review-architecture
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: architecture
+entry_point: true
+---
+
 # Architecture Workflow — Review Architecture
 
 - **Prompt:** `.ai/prompts/roles/principal-system-designer.md`

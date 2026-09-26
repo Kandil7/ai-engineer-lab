@@ -1,3 +1,13 @@
+---
+id: feature/01-plan
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: feature
+entry_point: true
+---
+
 # Feature Workflow — 01 Plan
 
 **Entry point** for any new feature. Start here.

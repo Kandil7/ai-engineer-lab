@@ -1,3 +1,13 @@
+---
+id: feature/02-design
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: feature
+entry_point: false
+---
+
 # Feature Workflow — 02 Design
 
 Run when the feature touches **system boundaries** (new service, schema change, cross-cutting

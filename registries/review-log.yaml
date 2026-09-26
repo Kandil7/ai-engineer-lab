@@ -1,0 +1,19 @@
+# Review Log — index of all AI code reviews (mirrors projects/*/ai-review.md)
+# Schema: id, project, feature, date, path, decision, score
+# Maintained by infra/scripts/new-review.ps1; each entry points at the review file.
+version: 1
+reviews:
+  - id: "01-auth-service-initial"
+    project: 01-auth-service
+    feature: initial
+    date: null
+    path: projects/01-backend-go/01-auth-service/ai-review.md
+    decision: draft
+    score: null
+  - id: "devmate-scaffold-a1"
+    project: devmate
+    feature: a1-scaffold
+    date: 2026-09-26
+    path: projects/04-ai-engineering/devmate/ai-review.md
+    decision: approve-with-warnings
+    score: 6

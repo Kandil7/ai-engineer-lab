@@ -1,3 +1,13 @@
+---
+id: learning/source-to-exercise
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: learning
+entry_point: false
+---
+
 # Learning Workflow — Source To Exercise
 
 Convert any source summary into a concrete, gradeable exercise.

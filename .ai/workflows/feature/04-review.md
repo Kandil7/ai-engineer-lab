@@ -1,3 +1,13 @@
+---
+id: feature/04-review
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: feature
+entry_point: false
+---
+
 # Feature Workflow — 04 Review
 
 - **Prompt:** `.ai/prompts/roles/code-reviewer.md`
@@ -19,7 +29,7 @@
 ## Artifacts Produced
 
 - `projects/<path>/ai-review.md`
-- Entry appended to `registries/` review index (via `new-review.ps1`)
+- Entry appended to `registries/review-log.yaml` (via `new-review.ps1`)
 
 ## Exit Criteria
 

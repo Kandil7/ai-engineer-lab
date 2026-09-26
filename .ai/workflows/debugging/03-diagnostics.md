@@ -1,3 +1,13 @@
+---
+id: debugging/03-diagnostics
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: debugging
+entry_point: false
+---
+
 # Debugging Workflow — 03 Diagnostics
 
 - **Prompt:** `.ai/prompts/roles/debugging-specialist.md`

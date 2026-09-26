@@ -1,3 +1,13 @@
+---
+id: evaluation/rag-quality-check
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: evaluation
+entry_point: true
+---
+
 # Evaluation Workflow — RAG Quality Check
 
 - **Prompt:** `.ai/prompts/roles/principal-system-designer.md`

@@ -1,3 +1,13 @@
+---
+id: feature/05-fix
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: feature
+entry_point: false
+---
+
 # Feature Workflow — 05 Fix
 
 - **Prompt:** `.ai/prompts/tasks/review-summarizer.md` + `roles/pair-programmer.md`

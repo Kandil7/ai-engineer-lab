@@ -9,17 +9,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Install Poetry
-RUN pip install --no-cache-dir poetry==1.8.3
+# Copy the project definition and source. pyproject.toml declares a PEP 621
+# setuptools build (there is no [tool.poetry] section), so plain pip installs
+# it. README.md ships because pyproject.toml references it as the readme.
+COPY pyproject.toml README.md ./
+COPY src/ ./src/
 
-# Copy poetry files
-COPY pyproject.toml poetry.lock* ./
-
-# Export requirements
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
-
-# Install dependencies to /install
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+# Install DevMate AND its dependencies to /install. The package itself must
+# be installed — copying src/ alone leaves `import devmate` unresolvable,
+# because /app is on sys.path but the code lives one level deeper in src/.
+RUN pip install --no-cache-dir --prefix=/install .
 
 
 # Runtime stage
@@ -33,11 +32,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Copy installed packages from builder
+# Copy installed packages (dependencies + devmate itself) from builder.
+# No src/ copy: devmate resolves from site-packages, and every file the code
+# reads (repos, uploads) arrives via explicit request/CLI paths.
 COPY --from=builder /install /usr/local
-
-# Copy application code
-COPY src/ ./src/
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app \

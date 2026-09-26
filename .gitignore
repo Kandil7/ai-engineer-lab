@@ -63,8 +63,11 @@ coverage/
 
 # ---- Generated artifacts (regenerable — do not commit) ----
 # Plot output from matplotlib/scipy exercises. ~10MB, reproduced by re-running the scripts.
-# Untracked 2026-08-02; the exercise READMEs list expected filenames, none are embedded.
+# Note: PNGs committed under outputs/ predate this rule and stay tracked until
+# untracked deliberately: git rm -r --cached outputs/
 **/output/*.png
+outputs/**/*.png
+.coverage
 projects/00-core-foundations/python/*.png
 *.sqlite
 *.sqlite3

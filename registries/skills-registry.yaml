@@ -5,7 +5,7 @@ skills:
   - id: scope-decomposition
     name: Scope Decomposition
     purpose: Break a feature/task into MVP + ordered tasks with dependencies
-    reusable_by: [role.project-planner, role.system-architect, role.pair-programmer]
+    reusable_by: [role.project-planner, role.pair-programmer]
     inputs: [feature-description]
     outputs: [task-tree]
     failure_modes: [vague-scope]
@@ -61,7 +61,7 @@ skills:
   - id: adr-writing
     name: ADR Writing
     purpose: Capture a decision with context, options, consequences
-    reusable_by: [role.system-architect, role.project-planner]
+    reusable_by: [task.adr-writer]
     inputs: [design-decision]
     outputs: [adr-doc]
     failure_modes: [weak-rationale]

@@ -1,3 +1,13 @@
+---
+id: feature/03-build
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: feature
+entry_point: false
+---
+
 # Feature Workflow — 03 Build
 
 You write the code. AI assists step by step.

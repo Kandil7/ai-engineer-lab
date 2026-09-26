@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generate a new source learning note from the appropriate template.
 

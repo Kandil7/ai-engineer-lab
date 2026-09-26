@@ -6,7 +6,7 @@ Multi-layered code intelligence powered by codebase-memory-mcp and repomix.
 
 | Layer | Status | Details |
 |-------|--------|---------|
-| **Structural Graph** | ✅ Indexed | `D-AI-Projects-fullstack-ai-engineer-lab`, 53,200 nodes, 125,156 edges, 8 languages |
+| **Structural Graph** | ✅ Indexed | `D-AI-Projects-fullstack-ai-engineer-lab`, 53,461 nodes, 126,790 edges, 8 languages |
 | **Review Graph** | ✅ Built | 11,590 nodes, 87,721 edges, 23 communities, 1,147 flows |
 | **Multimodal Graph** | ✅ Built | 49,856 nodes, 54,483 edges, 2,833 communities (AST-only, no LLM) |
 | **Context Pack** | ✅ Ready | 1,244,995 tokens (compressed), 1,082 files |

@@ -43,7 +43,7 @@ class Conversation(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
-    metadata: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    meta: Mapped[dict[str, Any]] = mapped_column(JSONB, name="metadata", default=dict)
 
     # Relationships
     messages: Mapped[list["Message"]] = relationship(
@@ -74,7 +74,7 @@ class Message(Base):
     model: Mapped[str | None] = mapped_column(String(100), nullable=True)
     latency_ms: Mapped[float | None] = mapped_column(Float, nullable=True)
     cost_usd: Mapped[float | None] = mapped_column(Float, nullable=True)
-    metadata: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    meta: Mapped[dict[str, Any]] = mapped_column(JSONB, name="metadata", default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
@@ -103,7 +103,7 @@ class EvalRun(Base):
     )  # pending, running, completed, failed
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    metadata: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    meta: Mapped[dict[str, Any]] = mapped_column(JSONB, name="metadata", default=dict)
 
     # Relationships
     conversation: Mapped[Optional["Conversation"]] = relationship(
@@ -135,7 +135,7 @@ class EvalResult(Base):
     scores: Mapped[dict[str, float]] = mapped_column(JSONB, default=dict)
     latency_ms: Mapped[float | None] = mapped_column(Float, nullable=True)
     cost_usd: Mapped[float | None] = mapped_column(Float, nullable=True)
-    metadata: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    meta: Mapped[dict[str, Any]] = mapped_column(JSONB, name="metadata", default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
@@ -178,7 +178,7 @@ class DocumentRecord(Base):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     language: Mapped[str | None] = mapped_column(String(50), nullable=True)
     chunk_type: Mapped[str | None] = mapped_column(String(50), nullable=True)
-    metadata: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    meta: Mapped[dict[str, Any]] = mapped_column(JSONB, name="metadata", default=dict)
     indexed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
@@ -241,7 +241,7 @@ class ConversationRepository:
     async def create(
         self, user_id: str = None, title: str = None, metadata: dict = None
     ) -> Conversation:
-        conv = Conversation(user_id=user_id, title=title, metadata=metadata or {})
+        conv = Conversation(user_id=user_id, title=title, meta=metadata or {})
         self.session.add(conv)
         await self.session.flush()
         return conv
@@ -302,7 +302,7 @@ class MessageRepository:
             model=model,
             latency_ms=latency_ms,
             cost_usd=cost_usd,
-            metadata=metadata or {},
+            meta=metadata or {},
         )
         self.session.add(msg)
         await self.session.flush()
@@ -407,7 +407,7 @@ class EvalRepository:
             name=name,
             dataset=dataset,
             conversation_id=conversation_id,
-            metadata=metadata or {},
+            meta=metadata or {},
         )
         self.session.add(run)
         await self.session.flush()
@@ -434,7 +434,7 @@ class EvalRepository:
             scores=scores or {},
             latency_ms=latency_ms,
             cost_usd=cost_usd,
-            metadata=metadata or {},
+            meta=metadata or {},
         )
         self.session.add(result)
         await self.session.flush()

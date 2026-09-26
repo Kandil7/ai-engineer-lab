@@ -1,3 +1,13 @@
+---
+id: feature/06-reflect
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: feature
+entry_point: false
+---
+
 # Feature Workflow — 06 Reflect
 
 Close the loop. Turn the work into durable learning.

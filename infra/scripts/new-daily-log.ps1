@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Create today's daily log from the template.
 

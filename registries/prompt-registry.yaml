@@ -1,5 +1,8 @@
 # Prompt Registry — inventory, ownership, and versioning for all .ai/prompts
-# Schema: id, path, owner, version, status, layer, used_by (workflows), constraints, last_reviewed
+# Schema: id, path, owner, version, status, layer, used_by (workflows), constraints, trigger (repair only), last_reviewed
+# used_by accepts workflow ids (feature/01-plan), category globs (learning/*),
+# or prefix globs (debugging/*). Repair entries leave used_by empty and declare
+# a trigger instead. Deprecated entries are unreferenced by design.
 version: 1
 prompts:
   # --- system ---
@@ -9,7 +12,7 @@ prompts:
     version: 1.0.0
     status: active
     layer: system
-    used_by: [all]
+    used_by: [feature/*, debugging/*, learning/*, architecture/*, evaluation/*]
     constraints: [repo-first, no-invented-scope, mvp-first]
     last_reviewed: 2026-06-26
   - id: sys.output-format-rules
@@ -18,7 +21,7 @@ prompts:
     version: 1.0.0
     status: active
     layer: system
-    used_by: [all]
+    used_by: [feature/*, debugging/*, learning/*, architecture/*, evaluation/*]
     constraints: [bounded, anti-hallucination]
     last_reviewed: 2026-06-26
 
@@ -128,11 +131,12 @@ prompts:
     path: .ai/prompts/tasks/implementation-planner.md
     owner: workspace
     version: 1.0.0
-    status: active
+    status: deprecated
     layer: task
-    used_by: [feature/01-plan]
+    used_by: []
+    deprecated_in_favor_of: role.project-planner
     constraints: [mvp-first, file-structure-required]
-    last_reviewed: 2026-06-26
+    last_reviewed: 2026-09-26
   - id: task.review-summarizer
     path: .ai/prompts/tasks/review-summarizer.md
     owner: workspace
@@ -172,16 +176,17 @@ prompts:
     constraints: [scope-focus, detect-sprawl]
     last_reviewed: 2026-06-26
 
-  # --- repair ---
+  # --- repair (escalation paths; composed on failure, not bound to a workflow) ---
   - id: repair.retry-with-missing-context
     path: .ai/prompts/repair/retry-with-missing-context.md
     owner: workspace
     version: 1.0.0
     status: active
     layer: repair
-    used_by: [all]
+    used_by: []
+    trigger: missing-context
     constraints: [no-speculation]
-    last_reviewed: 2026-06-26
+    last_reviewed: 2026-09-26
   - id: repair.simplify-overengineered-plan
     path: .ai/prompts/repair/simplify-overengineered-plan.md
     owner: workspace
@@ -189,14 +194,16 @@ prompts:
     status: active
     layer: repair
     used_by: [feature/02-design, architecture/*]
+    trigger: over-engineering
     constraints: [preserve-scope, yagni]
-    last_reviewed: 2026-06-26
+    last_reviewed: 2026-09-26
   - id: repair.fix-output-format
     path: .ai/prompts/repair/fix-output-format.md
     owner: workspace
     version: 1.0.0
     status: active
     layer: repair
-    used_by: [all]
+    used_by: []
+    trigger: invalid-output-shape
     constraints: [preserve-substance]
-    last_reviewed: 2026-06-26
+    last_reviewed: 2026-09-26

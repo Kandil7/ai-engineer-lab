@@ -1,3 +1,13 @@
+---
+id: architecture/record-adr
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: architecture
+entry_point: false
+---
+
 # Architecture Workflow — Record ADR
 
 Finalize and index an accepted architectural decision.

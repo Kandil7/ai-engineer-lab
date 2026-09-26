@@ -1,3 +1,13 @@
+---
+id: debugging/01-symptom-capture
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: debugging
+entry_point: true
+---
+
 # Debugging Workflow — 01 Symptom Capture
 
 - **Prompt:** `.ai/prompts/roles/debugging-specialist.md`

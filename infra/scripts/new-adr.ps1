@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generate a new Architecture Decision Record (ADR) with numbered filename.
 
@@ -86,6 +86,7 @@ Write-Step "Generating filename..."
 $slug = ConvertTo-Slug $Title
 $filename = "$numberStr-$slug.md"
 $filepath = "$DecisionsDir/$filename"
+$statusLabel = $Status.Substring(0, 1).ToUpper() + $Status.Substring(1)
 
 Write-Ok "Filename: $filename"
 
@@ -107,16 +108,18 @@ if (-not (Test-Path $TemplateFile)) {
 
 $template = Get-Content $TemplateFile -Raw
 
-# Replace placeholders
+# Replace the template's fill-in markers (literal replace — titles may
+# contain regex-special characters, so -replace is not safe here)
 $date = Get-Date -Format "yyyy-MM-dd"
-$content = $template -replace '\{\{TITLE\}\}', $Title
-$content = $content -replace '\{\{NUMBER\}\}', $numberStr
-$content = $content -replace '\{\{STATUS\}\}', $Status
-$content = $content -replace '\{\{DATE\}\}', $date
-$content = $content -replace '\{\{SLUG\}\}', $slug
+$content = $template.Replace("NNNN", $numberStr).Replace(
+    "<short decision title>", $Title
+).Replace("YYYY-MM-DD", $date)
+$content = [regex]::Replace(
+    $content, '(?m)^- \*\*Status:\*\*.*$', "- **Status:** $statusLabel"
+)
 
-# Set content
-Set-Content -Path $filepath -Value $content -Encoding UTF8
+# Set content (UTF-8 without BOM, matching the existing ADRs)
+[System.IO.File]::WriteAllText($filepath, $content, [System.Text.UTF8Encoding]::new($false))
 
 Write-Ok "Created: $filepath"
 
@@ -127,11 +130,13 @@ Write-Step "Updating decision log..."
 $decisionLog = "$RootDir/registries/decision-log.yaml"
 
 $logEntry = @"
-  - id: ADR-$numberStr
+  - id: "$numberStr"
     title: "$Title"
-    path: docs/decisions/$filename
-    status: $Status
+    status: $statusLabel
     date: $date
+    path: docs/decisions/$filename
+    supersedes: null
+    superseded_by: null
 "@
 
 if (Test-Path $decisionLog) {
@@ -142,9 +147,33 @@ if (Test-Path $decisionLog) {
 # Decision Log — Architecture Decision Records
 version: 1
 decisions:
-$logEntry"@
-    Set-Content -Path $decisionLog -Value $logContent -Encoding UTF8
+$logEntry
+"@
+    [System.IO.File]::WriteAllText($decisionLog, $logContent, [System.Text.UTF8Encoding]::new($false))
     Write-Ok "Decision log created"
+}
+
+# ─── Step 6: Update Decisions README Index ──────
+
+Write-Step "Updating decisions index..."
+
+$indexFile = "$DecisionsDir/README.md"
+$indexRow = "| [$numberStr]($filename) | $Title | $statusLabel | $date |"
+$indexText = [System.IO.File]::ReadAllText($indexFile, [System.Text.Encoding]::UTF8)
+if ($indexText -notmatch [regex]::Escape("[$numberStr]")) {
+    $nl = if ($indexText -match "`r`n") { "`r`n" } else { "`n" }
+    $rows = [regex]::Matches($indexText, '(?m)^\| \[\d{4}\].*$')
+    if ($rows.Count -gt 0) {
+        $last = $rows[$rows.Count - 1]
+        $indexText = $indexText.Insert($last.Index + $last.Length, $nl + $indexRow)
+    } else {
+        $anchor = $nl + "## Lifecycle"
+        $indexText = $indexText -replace [regex]::Escape($anchor), ($nl + $indexRow + $anchor)
+    }
+    [System.IO.File]::WriteAllText($indexFile, $indexText, [System.Text.UTF8Encoding]::new($false))
+    Write-Ok "Decisions index updated"
+} else {
+    Write-Ok "Already indexed — skipped duplicate row"
 }
 
 # ─── Summary ───────────────────────────────────────

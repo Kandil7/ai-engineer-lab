@@ -1,3 +1,13 @@
+---
+id: learning/learn-from-docs
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: learning
+entry_point: true
+---
+
 # Learning Workflow — Learn From Docs
 
 - **Prompt:** `.ai/prompts/roles/source-learning-agent.md` (+ `tasks/source-extractor.md`)

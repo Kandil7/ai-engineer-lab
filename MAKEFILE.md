@@ -4,8 +4,9 @@ This repo targets **Windows/PowerShell**, so automation lives in `infra/scripts/
 than a Makefile. This document is the comprehensive reference for every command and operation
 available in the workspace.
 
-> **Prerequisites:** PowerShell 5.1+, Go 1.22+, Docker Desktop (optional), Pester 5+
-> (`Install-Module Pester -Scope CurrentUser`).
+> **Prerequisites:** PowerShell 5.1+, Go 1.22+, Docker Desktop (optional).
+> The `tests/*` validators are standalone PowerShell scripts (not Pester tests);
+> run them directly or via `make validate`.
 
 ---
 
@@ -281,10 +282,14 @@ and optionally runs Docker Compose.
 
 ## Validation Commands
 
+Each suite is a standalone `tests/<area>/validate.ps1` script. Every suite
+exits non-zero on any failure **or warning**, so they gate CI directly (see
+the `workspace` job in `.github/workflows/ci.yml`).
+
 ### Validate Repository Structure
 
 ```powershell
-Invoke-Pester tests/repo-structure
+./tests/repo-structure/validate.ps1
 ```
 
 Validates that the repository follows the expected folder structure: required directories
@@ -297,7 +302,7 @@ exist, files are in the right places, and naming conventions are followed.
 ### Validate Templates
 
 ```powershell
-Invoke-Pester tests/templates
+./tests/templates/validate.ps1
 ```
 
 Checks that all templates in `templates/` are well-formed, have required sections, and
@@ -310,7 +315,7 @@ follow the naming convention.
 ### Validate Prompts
 
 ```powershell
-Invoke-Pester tests/prompts
+./tests/prompts/validate.ps1
 ```
 
 Validates prompt files under `.ai/prompts/` for correct structure, required fields, and
@@ -323,7 +328,7 @@ consistency with the registry.
 ### Validate Workflows
 
 ```powershell
-Invoke-Pester tests/workflows
+./tests/workflows/validate.ps1
 ```
 
 Checks workflow files under `.ai/workflows/` for valid step sequences, required artifacts,
@@ -333,10 +338,26 @@ and correct cross-references.
 
 ---
 
+### Validate Registry Consistency
+
+```powershell
+./tests/registries/validate.ps1
+```
+
+Checks that the registries agree with each other and with the files on disk: prompt
+and workflow frontmatter match their registries, every `prompts_used` /
+`used_by` / `used_by_workflows` / `reusable_by` / `pairs_with_roles`
+reference resolves, no active prompt is orphaned, and every concrete path
+referenced inside `.ai/` exists.
+
+**When to use:** After editing any prompt, workflow, or registry file.
+
+---
+
 ### Run All Validations
 
 ```powershell
-Invoke-Pester tests/
+make validate
 ```
 
 Runs every validation suite in a single pass. This is the pre-commit quality gate.
@@ -587,8 +608,8 @@ End-to-end evaluation of AI features against quality criteria and golden test ca
 | **Dev**      | `go test ./...`                                      | Run Go tests               |
 | **Dev**      | `./infra/scripts/new-adr.ps1 "title"`               | New architecture decision  |
 | **Dev**      | `./infra/scripts/seed-db.ps1`                        | Populate test data         |
-| **Validate** | `Invoke-Pester tests/`                               | Run all validations        |
-| **Validate** | `Invoke-Pester tests/repo-structure`                 | Check folder structure     |
+| **Validate** | `make validate`                                    | Run all validations        |
+| **Validate** | `./tests/repo-structure/validate.ps1`              | Check folder structure     |
 | **Workflow** | `./infra/scripts/new-source-note.ps1 <type> "title"`| Study source               |
 | **Workflow** | `./infra/scripts/new-review.ps1 <path> "feature"`   | Code review                |
 | **Daily**    | Copy `templates/daily-log.template.md`               | Start daily session        |
@@ -627,8 +648,12 @@ go mod tidy
 go mod download
 ```
 
-### Pester Not Found
+### Validator Script Fails to Run
+
+The `tests/*` validators are plain PowerShell scripts. If execution is
+blocked, unblock the file or bypass the policy for one run:
 
 ```powershell
-Install-Module Pester -Scope CurrentUser -Force -SkipPublisherCheck
+Unblock-File ./tests/prompts/validate.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File ./tests/prompts/validate.ps1
 ```

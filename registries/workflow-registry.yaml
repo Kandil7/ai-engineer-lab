@@ -13,7 +13,7 @@ workflows:
     - id: feature/02-design
       path: .ai/workflows/feature/02-design.md
       entry_point: false
-      prompts_used: [role.system-architect, critic.architecture-validator, task.adr-writer]
+      prompts_used: [role.system-architect, critic.architecture-validator, task.adr-writer, repair.simplify-overengineered-plan]
       template_used: architecture-review.template.md
       produces: ["projects/<path>/architecture-review.md", "docs/decisions/NNNN-*.md"]
       exit_criteria: "architecture accepted; ADR candidates recorded"
@@ -128,7 +128,7 @@ workflows:
     - id: architecture/review-architecture
       path: .ai/workflows/architecture/review-architecture.md
       entry_point: true
-      prompts_used: [role.principal-system-designer, critic.architecture-validator]
+      prompts_used: [role.principal-system-designer, critic.architecture-validator, repair.simplify-overengineered-plan]
       template_used: architecture-review.template.md
       produces: ["architecture-review.md"]
       exit_criteria: "review complete; complexity justified"

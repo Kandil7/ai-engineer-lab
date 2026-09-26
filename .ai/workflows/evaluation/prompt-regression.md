@@ -1,3 +1,13 @@
+---
+id: evaluation/prompt-regression
+layer: workflow
+version: 1.0.0
+status: active
+owner: workspace
+category: evaluation
+entry_point: true
+---
+
 # Evaluation Workflow — Prompt Regression
 
 Guard prompts against drift when they change.

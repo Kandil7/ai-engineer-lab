@@ -4,6 +4,7 @@ layer: task
 version: 1.0.0
 status: active
 owner: workspace
+uses_skills: [adr-writing]
 pairs_with_roles: [system-architect, project-planner]
 constraints: [consequences-required, options-compared, repo-first]
 ---

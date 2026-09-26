@@ -158,11 +158,13 @@ foreach ($wf in $workflowEntries) {
         }
     }
 
-    # Check for entry point marker
+    # Check for entry point marker: entry-point workflows must declare an
+    # ## Inputs section. (Frontmatter carries entry_point too, so a loose
+    # keyword search would false-positive on its own metadata.)
     if ($wf.entry_point -and $content) {
-        $hasEntryPoint = $content -match '(?i)(entry|start|trigger|begin)'
-        if (-not $hasEntryPoint) {
-            Write-Warn "Workflow '$($wf.id)' is entry point but may lack entry section"
+        $hasInputs = $content -match '(?m)^## Inputs'
+        if (-not $hasInputs) {
+            Write-Warn "Workflow '$($wf.id)' is entry point but lacks an ## Inputs section"
         }
     }
 }
@@ -201,7 +203,7 @@ Write-Host "  Passed: $passCount" -ForegroundColor Green
 Write-Host "  Failed: $failCount" -ForegroundColor $(if ($failCount -gt 0) { "Red" } else { "Green" })
 Write-Host "  Warnings: $warnCount" -ForegroundColor $(if ($warnCount -gt 0) { "Yellow" } else { "Green" })
 
-if ($failCount -gt 0) {
+if ($failCount -gt 0 -or $warnCount -gt 0) {
     Write-Host "`n  [FAIL] Validation FAILED" -ForegroundColor Red
     exit 1
 } else {

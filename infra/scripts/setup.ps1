@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Setup the Full-Stack AI Engineer Lab development environment.
 

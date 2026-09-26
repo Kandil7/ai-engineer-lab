@@ -55,9 +55,7 @@ Feature request enters the workspace:
     ↓
 workspace-governor.md sets the global rules and constraints
     ↓
-roles/project-planner.md defines who the AI is (planner persona)
-    ↓
-tasks/implementation-planner.md describes the specific job
+roles/project-planner.md defines who the AI is and decomposes the work
     ↓
 system/output-format-rules.md enforces the output shape (plan.md)
     ↓
@@ -66,8 +64,10 @@ system/output-format-rules.md enforces the output shape (plan.md)
 
 ## Current State
 
-The `.ai/` directory structure is defined in the project structure but prompt files
-are being authored incrementally as each workflow is implemented. The registration
-registries are initialized with the core entries.
+All 21 prompts (system, roles, tasks, critics, repair) and 21 workflows (feature,
+debugging, learning, architecture, evaluation) exist with `status: active` and are
+registered in `registries/`. `tests/*/validate.ps1` gates the inventories and their
+cross-references in CI. `task.implementation-planner` is deprecated in favor of
+`role.project-planner`; it stays on disk for provenance.
 
-*Last updated: 2026-08-06*
+*Last updated: 2026-09-26*
