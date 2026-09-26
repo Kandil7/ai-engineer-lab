@@ -1382,6 +1382,254 @@ The reasoning policy: forcing CoT on every request costs +$0.0045/query and +lat
 
 ---
 
+## §1.5 Model sourcing: open vs closed, self-hosted, and routed inference
+
+### Topic 1.5.a — Choosing the right model: quality, cost, latency, privacy, license
+
+**Mastery =** you can score 2–3 candidate models on a fixed rubric and defend the pick in an ADR with measured numbers, not brand loyalty.
+
+**Level 1 — Drill** (mechanics, 20–45 min)
+
+Score three candidates for DevMate's `ask` path on a 1–5 rubric: answer quality (spot-check 5 golden cases by hand), $/1M blended tokens, p50 latency, context length headroom, tool-use reliability. No API calls needed — use published pricing and your week-1 latency notes:
+
+```python
+candidates = {
+    "claude-sonnet":   {"quality": 5, "cost_pm": 15.0, "p50_s": 1.2, "ctx_k": 200, "tools": 5},
+    "cheap-frontier":  {"quality": 3, "cost_pm": 0.6,  "p50_s": 0.8, "ctx_k": 128, "tools": 3},
+    "open-8b-hosted":  {"quality": 3, "cost_pm": 0.5,  "p50_s": 1.5, "ctx_k": 128, "tools": 2},
+}
+# Blended $/query at 2k prompt + 500 completion tokens, then rank by quality-per-dollar
+# subject to: tools >= 4 for agent paths (weeks 5-6 need reliable tool calls).
+def blended Queen(c): return None  # placeholder to force your own implementation
+```
+
+Replace the placeholder with a real scorer: blended $/query, a hard gate on tool reliability for agent paths, and a ranked recommendation. **Assert:** the agent path never selects a model with tools < 4; the cheapest model winning on quality-per-dollar is recorded with its margin.
+
+**Level 2 — Applied** (DevMate, 1–3 h)
+
+Write the model-choice ADR into `docs/decisions/` (use the ADR template): the rubric, the three scores, the winner per path (ask vs agent vs judge), and revisit conditions (what price drop or benchmark change flips the pick). Wire the winner into `MODEL_PRICING` in `src/devmate/obs/cost.py` so `make cli ARGS="cost --days 1"` reflects it.
+
+**Deliverable:** ADR + pricing update. **Acceptance:** `make test`, `make types` green; ADR cites numbers.
+
+**Level 3 — Stretch** (production-grade, 3–6 h)
+
+Benchmarks move monthly, so a one-time pick rots. Design the re-evaluation loop: which public benchmarks you trust (check LMArena and Artificial Analysis for the current leaders — never hardcode a "best model" claim), the quarterly re-run procedure against your own golden set, and the switching cost inventory (prompt rewrites, schema compat, eval deltas). Write it as the ADR's Consequences section.
+
+**Verify:** scorer script prints a ranked table; ADR exists with numbers; pricing table matches the ADR winner.
+
+**Common failure modes:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Pick justified by vibes | No rubric, no numbers | Scorecard first, ADR second (your L1/L2) |
+| Model choice rots in 3 months | One-time decision, no loop | Quarterly re-run + switching-cost inventory (L3) |
+| Agent path on a weak tool-caller | Quality-per-dollar ignored reliability | Hard gate: tools >= 4 for agent paths |
+| Sticker shock on cloud bill | Compared $/token, ignored blended $/query at your mix | Score at your real prompt/completion sizes |
+
+**Interview:** "How do you choose between models for a production feature?" A strong answer covers: the rubric (quality on YOUR evals, blended $/query at your token mix, latency, context, tool reliability, privacy, license); why public benchmarks inform but never decide; the hard gates (tool-calling for agents); and the re-evaluation loop with revisit triggers.
+
+### Topic 1.5.b — Repetition controls: frequency and presence penalties
+
+**Mastery =** you can explain what each penalty does to the logits, set them deliberately, and diagnose repetition loops in agent output.
+
+**Level 1 — Drill** (mechanics, 20–45 min)
+
+Penalties reshape logits before sampling: `frequency_penalty` (OpenAI range −2.0 to 2.0) subtracts proportional to how often a token already appeared; `presence_penalty` (same range) subtracts once if it appeared at all. Positive values discourage repetition. Implement the math and prove the ordering:
+
+```python
+def apply_penalties(logits: dict, counts: dict, freq: float, pres: float) -> dict:
+    return {
+        t: v - freq * counts.get(t, 0) - (pres if counts.get(t, 0) else 0.0)
+        for t, v in logits.items()
+    }
+
+
+base = {"the": 5.0, "cat": 4.0, "quasar": 3.0}
+seen = {"the": 6}
+out = apply_penalties(base, seen, freq=0.5, pres=0.5)
+assert (
+    out["the"] < out["quasar"] < out["cat"]
+)  # heavy repeater sinks below untouched tokens
+flat = apply_penalties(base, seen, freq=0.0, pres=0.0)
+assert flat == base  # zero penalties = identity
+```
+
+**Level 2 — Applied** (DevMate, 1–3 h)
+
+Expose `frequency_penalty` / `presence_penalty` on the DevMate client `complete()` signature with provider-safe defaults (0.0), passing them through on providers that support them and ignoring them with a logged warning where unsupported. Add a unit test asserting the passthrough on the fake provider and the warning path elsewhere.
+
+**Deliverable:** client signature + test. **Acceptance:** `make test` green; golden-case outputs unchanged at defaults.
+
+**Level 3 — Stretch** (production-grade, 3–6 h)
+
+Connect penalties to the agent loop (weeks 5–6): a repetition detector (topic 3.4c) that escalates `frequency_penalty` on repeated tool calls before killing the loop. Specify the escalation ladder, the ceiling, and the interaction with the step cap. Write it as an ADR-style note; the loop-killer stays the hard guarantee, penalties are the soft nudge.
+
+**Verify:** drill asserts pass; client test green; note exists.
+
+**Common failure modes:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Repetition persists at penalty 2.0 | Degenerate loop, not sampling noise | Loop detection + step cap (3.4c), not stronger penalties |
+| Output goes incoherent | Penalty far too high for the task | Stay ≤ 0.5 for factual tasks; tune on golden cases |
+| Changed temperature AND top_p at once | Two knobs moved, effect unattributable | Move one sampling knob at a time |
+| Penalties silently ignored | Provider doesn't support them | Log a warning on unsupported paths (your L2) |
+
+**Interview:** "Your agent repeats the same tool call. What do you tune?" A strong answer covers: the ladder — frequency penalty as soft nudge, loop detection as the detector, step cap as the guarantee — and why penalties alone never bound worst-case cost.
+
+### Topic 1.5.c — Self-hosted inference with Ollama
+
+**Mastery =** you can pull a model, serve it locally, call it with structured output, and state exactly when local beats hosted.
+
+**Level 1 — Drill** (mechanics, 20–45 min)
+
+Against a local Ollama server (`ollama pull llama3.2` first; if no server is reachable the drill asserts the skip path, not the call):
+
+```python
+from ollama import Client
+
+client = Client()  # localhost:11434
+probe = {
+    "model": "llama3.2",
+    "prompt": "Return JSON: name and age.",
+    "format": {
+        "type": "object",
+        "properties": {"name": {"type": "string"}, "age": {"type": "integer"}},
+        "required": ["name", "age"],
+    },
+    "options": {"temperature": 0.0, "top_k": 40},
+}
+try:
+    out = client.generate(**probe)
+    import json
+
+    parsed = json.loads(out.response)
+    assert set(parsed) == {"name", "age"}
+    print("ollama live: schema-valid JSON")
+except ConnectionError:
+    print("ollama unavailable: documented skip")
+```
+
+**Level 2 — Applied** (DevMate, 1–3 h)
+
+Add an `OllamaProvider` stub to the DevMate client behind an env flag (`DEVMATE_LOCAL_MODEL`), wired as the last fallback after hosted providers: $0 marginal cost, latency-only. Record the VRAM budget in a comment: ~0.5 GB per 1B params at Q4 plus context overhead, so a 7–8B Q4 model (~5 GB) fits the 16 GB workstation GPU while a 70B Q4 (~40 GB) does not. Unit-test the fallback ordering with fakes; document the live probe separately.
+
+**Deliverable:** provider stub + budget comment + test. **Acceptance:** `make test` green with no server running.
+
+**Level 3 — Stretch** (production-grade, 3–6 h)
+
+Define the local-vs-hosted routing policy: which DevMate paths may run locally (bulk embedding-adjacent work, offline dev, privacy-sensitive repos) and which may not (agent tool-calling until a local model passes your tool-reliability gate from 1.5.a). Include `keep_alive` tuning (evict idle models so VRAM doesn't pin) and the failure mode where two paths load two models and OOM the card.
+
+**Verify:** drill prints live-or-skip; fallback test green; policy note exists.
+
+**Common failure modes:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| OOM on the GPU | Two models resident / context too large | `keep_alive` eviction; one model at a time; KV-cache math first |
+| Local agent can't call tools | Small model, weak tool-calling | Gate: local models only where 1.5.a rubric passes them |
+| Results differ from hosted | Different weights, not a bug | Golden-set deltas recorded; never assume parity |
+| `format` schema ignored | Model too small for constrained generation | Validate output server-side anyway (1.2.c habits apply) |
+
+**Interview:** "When do you self-host a model instead of calling an API?" A strong answer covers: privacy/offline, marginal-cost math at volume, the VRAM budget that decides which sizes fit, tool-calling as the usual disqualifier, and local-as-fallback as the cheap first step.
+
+### Topic 1.5.d — Hosted open weights via Hugging Face Inference Providers
+
+**Mastery =** you can call an open-weight model through `InferenceClient` with provider routing and explain what the `hf_` token changes about the request path.
+
+**Level 1 — Drill** (mechanics, 20–45 min)
+
+Route through the HF proxy with an `hf_` token, or document the skip without one. Note the migration fact this drill exists to teach: the legacy serverless Inference API is superseded by Inference Providers — new code uses `InferenceClient`, not the old endpoints:
+
+```python
+import os
+from huggingface_hub import InferenceClient
+
+if not os.getenv("HF_TOKEN"):
+    print("no HF_TOKEN: documented skip")
+else:
+    client = InferenceClient(provider="auto", api_key=os.getenv("HF_TOKEN"))
+    out = client.chat.completions.create(
+        model="meta-llama/Meta-Llama-3-8B-Instruct",
+        messages=[{"role": "user", "content": "Reply with the word OK."}],
+        max_tokens=10,
+        temperature=0.0,
+    )
+    assert "OK" in out.choices[0].message.content
+    print("hf providers live: auto-routed chat")
+```
+
+**Level 2 — Applied** (DevMate, 1–3 h)
+
+Add an `HFProvider` option to the DevMate client notes (not necessarily the fallback chain): the exact `InferenceClient` construction, which models are routed, and the cost entry ($/1M from the provider, kept in `MODEL_PRICING` with a "verify quarterly" comment per 1.5.a). Test the construction path with a fake; live call documented, not gated.
+
+**Deliverable:** notes + pricing entry + construction test. **Acceptance:** `make test` green without `HF_TOKEN`.
+
+**Level 3 — Stretch** (production-grade, 3–6 h)
+
+Compare the three open-weight paths head-to-head on one DevMate workload (golden-case subset): self-hosted Ollama vs HF-routed vs a closed API — latency, $/query, quality delta, and failure behavior when the provider is down. This is the evidence the weeks 2–3 model-choice ADR cites.
+
+**Verify:** drill prints live-or-skip; pricing entry present; comparison table exists or is scheduled in the ADR.
+
+**Common failure modes:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| 404 on an old inference URL | Legacy Inference API retired | `InferenceClient` + Providers (this topic) |
+| Provider doesn't support your task | Assumed all providers serve all tasks | Check the provider mapping for the model first |
+| Token billed to wrong account | `hf_` routes via HF proxy; direct keys don't | Know which key type you're holding |
+| Quality surprise on swap | Different provider, different quantization/config | Golden-set delta before switching (1.5.a loop) |
+
+**Interview:** "How do you consume open-weight models without self-hosting?" A strong answer covers: Inference Providers routing via `InferenceClient`, the `hf_` proxy behavior, provider-task support checks, and the measured comparison against self-host and closed APIs.
+
+### Topic 1.5.e — Abuse attribution: safety identifiers, not raw user IDs
+
+**Mastery =** you can attach abuse-monitoring identifiers to API calls without ever sending PII.
+
+**Level 1 — Drill** (mechanics, 20–45 min)
+
+Hash, don't forward. OpenAI's `safety_identifier` takes a stable per-end-user string (hashed username, hashed email, session ID) so abuse can be traced without exposing identity — and it does not carry across APIs or sessions automatically:
+
+```python
+import hashlib
+
+
+def safety_id(raw: str, salt: str) -> str:
+    return hashlib.sha256(f"{salt}:{raw}".encode()).hexdigest()[:32]
+
+
+a = safety_id("user@example.com", "devmate-v1")
+assert a != "user@example.com" and len(a) == 32
+assert safety_id("user@example.com", "devmate-v1") == a  # stable per user+salt
+assert safety_id("user@example.com", "other") != a  # salt rotation works
+print("safety id: stable, opaque, salted")
+```
+
+**Level 2 — Applied** (DevMate, 1–3 h)
+
+Pass a salted hash of the session ID as `safety_identifier` on the OpenAI provider path (and the equivalent end-user field wherever the active provider supports one). Unit test: assert the value sent is the hash, never the raw ID; assert rotation via env salt change.
+
+**Deliverable:** provider-path change + test. **Acceptance:** `make test` green; no raw identifiers in logged requests.
+
+**Level 3 — Stretch** (production-grade, 3–6 h)
+
+Write the abuse-response runbook entry: what happens when the provider flags one of your identifiers (per-user throttle vs global key risk), how you rotate salts without losing attribution history, and what you log for the incident review. One page in the failure-modes style of week 7.
+
+**Verify:** drill asserts pass; test asserts hashed-only; runbook entry exists.
+
+**Common failure modes:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Raw emails in request logs | Forwarded the user ID directly | Hash at the boundary (your L2); audit logs |
+| One abuser burns the whole key | No per-user attribution | Safety identifiers isolate the blast radius |
+| Attribution gaps across sessions | Assumed identifiers carry over | They don't — set per call, per API |
+| Salt checked into git | Treated like config, not secret | Env-only, rotated like any secret |
+
+**Interview:** "How do you keep one abusive user from getting your API key banned?" A strong answer covers: salted hashed identifiers per end user, provider-side abuse isolation, log hygiene (hashes only), and the rotation/incident runbook.
+
+---
+
 ## 🚀 Definition of done for this workbook
 
 Work through the checklist top-to-bottom; every box needs evidence, not "I understand it".
@@ -1390,10 +1638,11 @@ Work through the checklist top-to-bottom; every box needs evidence, not "I under
 - [ ] **§1.2** — All 3 drills pass; Applied artifacts exist (validated `LLMRequest` in `schemas.py`, `--metrics` in `cli/main.py`, repair-once in `client.py`); 3 Stretch ADRs written.
 - [ ] **§1.3** — All 4 drills pass; Applied artifacts exist (429 retry policy, `Budget` in `obs/cost.py`, degraded-provider fallback, typed errors + CLI messages); 4 Stretch ADRs written.
 - [ ] **§1.4** — All 4 drills pass; Applied artifacts exist (`system_v1.j2`, `evaluations/prompts/golden-cases/devmate.jsonl` with exactly 10 cases, `prompts/registry.py` with 3 versioned templates committed to git, `ReasonedAnswer` + `reasoning.py`); 4 Stretch ADRs written.
+- [ ] **§1.5** — Model-choice scorer runs and ranks; penalties passthrough tested; Ollama probe prints live-or-skip; HF construction test green; safety-identifier test asserts hashed-only; model-choice ADR written.
 - [ ] **Week-1 Definition of Done (roadmap §4):** every LLM call appears as a Langfuse trace with token count and cost — verified in Langfuse (`make up` + `LANGFUSE_*` keys, `src/devmate/obs/tracing.py` exports spans with `usage.prompt_tokens`, `usage.completion_tokens`, `latency_ms`).
 - [ ] **Week-1 Definition of Done:** you can state the cost of one `devmate ask` in dollars — written in `notes.md`/`mistakes.md` with the command output that produced it (`make cli ARGS="cost --days 1"`).
 - [ ] **Break-it-on-purpose experiments (roadmap §4) logged to `projects/04-ai-engineering/devmate/mistakes.md`:** kill the network mid-stream; send a 200k-token prompt; force a malformed structured output. Each entry: what broke, the symptom, the fix.
 - [ ] **Quality gates:** `make test`, `make types`, `make lint` all green after every Applied task; `make ci` green at the end of the week.
-- [ ] **Interview practice:** all 15 Interview questions answered out loud, 2-minute recordings, per track §7 (Technical English).
+- [ ] **Interview practice:** all 20 Interview questions answered out loud, 2-minute recordings, per track §7 (Technical English).
 
 *Workbook created 2026-08-11 under ADR-0006 — every topic traces to a DevMate concept or an interview answer.*

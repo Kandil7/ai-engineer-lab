@@ -2120,6 +2120,135 @@ removes a failure class, and the DoD proof is a trajectory test, not a vibe.
 
 ---
 
+## §3.9 Context engineering: compaction, isolation, failure modes
+
+### Topic 3.9a — Compaction: summarize-then-drop with invariants
+
+**Mastery =** you can compact a 40-step tape to fit the window without losing the goal, the constraints, or the evidence the final answer cites.
+
+**Level 1 — Drill** (mechanics, 20–45 min)
+
+A compactor keeps three things verbatim (goal, hard constraints, last K steps) and compresses everything older to one line per step. Implement and prove the invariants:
+
+```python
+def compact(tape: list, keep_last: int = 5) -> dict:
+    assert len(tape) > keep_last, "nothing to compact"
+    head = [
+        {"step": s["i"], "tool": s["tool"], "result": s["result"][:80]}
+        for s in tape[:-keep_last]
+    ]
+    return {
+        "goal": tape[0]["goal"],
+        "constraints": tape[0]["constraints"],
+        "compressed": head,
+        "recent": tape[-keep_last:],
+    }
+
+
+tape = [
+    {
+        "i": 0,
+        "goal": "find auth bug",
+        "constraints": ["read-only"],
+        "tool": "-",
+        "result": "-",
+    }
+]
+tape += [
+    {"i": i, "goal": "", "constraints": [], "tool": "search_code", "result": "r%d" % i}
+    for i in range(1, 12)
+]
+c = compact(tape, keep_last=3)
+assert c["goal"] == "find auth bug" and c["constraints"] == ["read-only"]
+assert len(c["recent"]) == 3 and len(c["compressed"]) == 9
+assert all(len(s["result"]) <= 80 for s in c["compressed"])
+print("compaction: invariants hold")
+```
+
+**Level 2 — Applied** (DevMate, 1–3 h)
+
+Add `compact_tape()` to the agent loop (`src/devmate/agent/agent.py`): trigger at 70% of the context budget (measure with the token counter from 1.3.b), keep the goal/constraints/recent-K verbatim, compress the rest per the drill. Tape-test: a 40-step recorded run compacts at least once, the compacted run still completes the goal, and the token count after compaction is below the trigger. Record the trigger threshold and K in `notes.md` (`## 3.9 Compaction policy`).
+
+**Deliverable:** compactor + tape test + policy note. **Acceptance:** completion rate on `eval/cases.json` unchanged with compaction on; max tape tokens bounded.
+
+**Level 3 — Stretch** (production-grade, 3–6 h)
+
+Write the compaction-failure analysis: construct (or find in eval logs) a case where compaction dropped the one fact the answer needed, and specify the detector — the agent cites evidence ids, and any citation missing from the compacted context fails the run loudly instead of hallucinating. This is the context-failure-modes discipline: compact aggressively, verify citations strictly.
+
+**Verify:** drill prints the invariants line; tape test green; detector documented.
+
+**Common failure modes:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Answer cites missing evidence | Compaction dropped the cited fact | Citation check post-compaction; fail loudly (L3) |
+| Never compacts, then hits the wall | Trigger at 100% = too late | Trigger at 70% (your L2) |
+| Compacts every 3 steps | K too large relative to budget | Size K from the token counter, not vibes |
+| Constraints forgotten mid-run | Constraints lived only in old steps | Constraints verbatim, always (drill invariants) |
+
+**Interview:** "How do you keep a long agent run inside the context window?" A strong answer covers: the 70% trigger, what survives verbatim (goal, constraints, recent steps) vs what compresses, token-measured K, and the citation check that turns silent evidence loss into a loud failure.
+
+### Topic 3.9b — Isolation: scope what each step may see
+
+**Mastery =** you can state the isolation rule for tool results and show where DevMate enforces it.
+
+Isolation means a step sees what it needs and nothing else: tool results truncated to a budget, file contents scoped to the requested ranges, and untrusted tool output never merged into the system prompt. In DevMate this is three existing mechanisms working together — `read_file` size limits and binary refusal (3.3c), subprocess output truncation (3.3d), and prompt-injection guardrails on input (week 7). No new code: audit the three, record the per-path byte budgets in `notes.md` (`## 3.9 Isolation budgets`), and add one test asserting an oversized tool result is truncated before reaching the prompt builder.
+
+**Verify:** budgets table exists; truncation test green.
+
+**Common failure modes:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Whole repo in one prompt | Unscoped `read_file` on a directory | Range-scoped reads + size caps (3.3c) |
+| Tool output overrides instructions | Untrusted text in a trusted slot | Guardrail boundary; results are data, never instructions |
+
+**Interview:** "What stops a tool result from hijacking your agent?" A strong answer covers: the trust boundary (tool output is data), size caps per path, and the guardrail that keeps instructions and observations in separate slots.
+
+## §3.10 DevMate as MCP client: consuming outside servers
+
+### Topic 3.10a — Consume an outside MCP server from the agent loop
+
+**Mastery =** you can connect the DevMate agent to a third-party MCP server, call one of its tools inside a run, and show the isolation boundary holding.
+
+**Level 1 — Drill** (mechanics, 20–45 min)
+
+List-then-call against any local test MCP server (the DevMate server itself works as the fixture): initialize, `tools/list`, call one tool with valid args, call with invalid args. Assert the three outcomes: tool list non-empty with schemas, valid call returns text, invalid call returns a graceful error — never a crash. If the installed `mcp` SDK version changes the client call sequence from the one below, document the working sequence in `notes.md`; the behavior assertions are the deliverable:
+
+```python
+# Shape of the drill (adapt import path to the installed mcp version):
+# from mcp.client.stdio import stdio_client  # check installed version first
+# async with stdio_client(server_params) as (read, write):
+#     tools = await session.list_tools()          # assert: non-empty, each has inputSchema
+#     ok = await session.call_tool("search_code", {"query": "x"})   # assert: text result
+#     bad = await session.call_tool("search_code", {})              # assert: graceful error
+```
+
+**Level 2 — Applied** (DevMate, 1–3 h)
+
+Wire one outside tool into the agent loop (`src/devmate/agent/agent.py`): a new tool entry whose implementation is an MCP client call to a configured server (start with a local test server, e.g. a second DevMate server process or any reference server). The tool goes through the same registry, step cap, loop detection, and cost tracking as native tools — consumption must not bypass agent governance. Mark the test `integration`; assert a full loop goal that requires the outside tool completes, and assert an unreachable server degrades to a clear error, not a hang (timeout per 3.3d rules).
+
+**Deliverable:** consumer tool + integration test. **Acceptance:** test green with the fixture server up; clear-error path green with it down.
+
+**Level 3 — Stretch** (production-grade, 3–6 h)
+
+Write the trust policy for outside tools: which servers are allowlisted and how (config, not code), what the agent may send them (redact secrets and PII before the call leaves the process), timeout and cost budgets per outside call, and the kill-switch (one flag disables all outside tools). This is the consumer-side mirror of the 3.6 debugging runbook: 3.6 is "others consume us", this is "we consume others".
+
+**Verify:** drill behavior assertions hold; integration test green both directions; policy exists.
+
+**Common failure modes:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Agent hangs on outside call | No timeout on the consumer path | Same timeout rules as 3.3d, applied to MCP calls |
+| Secret leaves the process | Full prompt forwarded to third party | Redact before the call (L3 policy) |
+| Outside tool bypasses step cap | Consumed outside the loop's accounting | All consumption through the tool registry (your L2) |
+| Works against fixture, fails in prod | Server version drift | Pin + record the server version in `notes.md` |
+
+**Interview:** "Your agent uses third-party MCP tools. Where's the trust boundary?" A strong answer covers: allowlist in config, redaction before egress, per-call timeout and cost budgets, registry-mediated accounting (no bypasses), and the kill-switch.
+
+---
+
 ## Definition of Done — the whole module
 
 The roadmap's DoD for weeks 5–6, with the artifacts that prove each line:
@@ -2136,7 +2265,7 @@ failure modes in this workbook are study material, not decoration.
 
 ## Self-check before you finish
 
-1. `grep -c "### Topic" docs/curriculum/practice/03-agents-practice.md` → 24 topics (3.1a–3.8e).
+1. `grep -c "### Topic" docs/curriculum/practice/03-agents-practice.md` → 26 topics (3.1a–3.8e) plus §3.9–§3.10 (compaction, isolation, MCP consumer): 27 topics (3.1a–3.10). Note the grep counts its own command line, so expect 28 matches.
 2. Every Level 2 task produced a repo artifact (test file, `notes.md` section, `eval/` script, runbook) — list them in `notes.md` under `## Module 3 artifacts`.
 3. `make test` still green at the end — the whole unit suite passes together.
 4. `make types` and `make lint` clean on everything you touched.

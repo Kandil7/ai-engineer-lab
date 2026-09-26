@@ -17,7 +17,7 @@
 
 ## Tally
 
-Covered 54 · Partial 37 · Missing 30 · Deferred 2 · Divergence 19 · Out of scope 47.
+Covered 76 · Partial 37 · Missing 6 · Deferred 4 · Divergence 19 · Out of scope 47.
 (189 unique slugs, machine-counted; multi-slug rows split on commas, zero duplicates.)
 
 ## 1. Orientation
@@ -65,10 +65,10 @@ Covered 54 · Partial 37 · Missing 30 · Deferred 2 · Divergence 19 · Out of 
 | --- | --- | --- |
 | tokens | Partial | Cost tracking implies it; never taught directly |
 | context-window | Partial | Prompt caching week 1; limits handled ad hoc |
-| temperature | Missing | Minor; fold into week 1 study list |
-| top-k, top-p | Missing | Minor; fold into week 1 study list |
-| sampling-parameters | Missing | Minor; fold into week 1 study list |
-| repetition-penalties | Missing | Minor; fold into week 1 study list |
+| temperature | Covered | Week 1 inference parameters |
+| top-k, top-p | Covered | Week 1 inference parameters |
+| sampling-parameters | Covered | Week 1 inference parameters |
+| repetition-penalties | Covered | Week 1 inference parameters |
 | streaming-responses | Covered | Week 1 client + `/ask` SSE week 4 |
 | structured-output | Covered | Week 1 Pydantic schemas |
 | input-format | Partial | Covered via schemas; multimodal inputs excluded |
@@ -123,7 +123,7 @@ Covered 54 · Partial 37 · Missing 30 · Deferred 2 · Divergence 19 · Out of 
 | retrieval-process | Covered | Hybrid dense + BM25 + rerank |
 | performing-similarity-search | Covered | VectorStore Protocol + adapters |
 | semantic-search | Covered | Same as above |
-| rag-and-dynamic-filters, rag--dynamic-filters | Missing | Minor; metadata filtering never named |
+| rag-and-dynamic-filters, rag--dynamic-filters | Covered | Weeks 2–3 hybrid retrieval |
 | langchain, langchain-for-multimodal-apps | Divergence | Hand-rolled by design; LangGraph only at week 5 |
 | llama-index, llamaindex-for-multimodal-apps | Divergence | Same as above |
 
@@ -131,14 +131,14 @@ Covered 54 · Partial 37 · Missing 30 · Deferred 2 · Divergence 19 · Out of 
 
 | Roadmap topic | Status | Track home / note |
 | --- | --- | --- |
-| context, context-engineering (2 nodes) | Missing | No home; suggested: week 5 with the agent loop |
-| context-sources | Missing | Same as above |
-| context-compaction | Missing | Same as above |
-| context-evaluation | Missing | Same as above |
+| context, context-engineering (2 nodes) | Covered | Week 5 context-engineering block |
+| context-sources | Covered | Week 5 block |
+| context-compaction | Covered | Week 5 block |
+| context-evaluation | Covered | Week 5 block |
 | context-failure-modes | Partial | Week 7 failure-modes doc covers system failures, not context failures |
-| context-isolation | Missing | Suggested: week 5 |
+| context-isolation | Covered | Week 5 block |
 | context-security | Partial | Week 7 guardrails cover injection; isolation unaddressed |
-| what-is-a-context-layer | Missing | Suggested: week 5 |
+| what-is-a-context-layer | Covered | Week 5 block |
 | generation | Out of scope | Low-information node |
 
 ## 9. Agents
@@ -147,8 +147,8 @@ Covered 54 · Partial 37 · Missing 30 · Deferred 2 · Divergence 19 · Out of 
 | --- | --- | --- |
 | ai-agents (2 nodes) | Covered | Weeks 5–6 |
 | agents-usecases | Partial | DevMate is the use case; no survey |
-| multi-agents | Missing | Candidate for weeks 11–12 buffer, not core |
-| multi-agent-context-sharing | Missing | Same as above |
+| multi-agents | Deferred | Weeks 11–12 buffer candidate |
+| multi-agent-context-sharing | Deferred | Weeks 11–12 buffer candidate |
 | react | Covered | Hand-rolled loop before LangGraph |
 | manual-implementation | Covered | Explicit first step before frameworks |
 | memory-systems | Partial | Conversations + semantic cache; no memory architecture |
@@ -164,10 +164,10 @@ Covered 54 · Partial 37 · Missing 30 · Deferred 2 · Divergence 19 · Out of 
 | --- | --- | --- |
 | mcp, model-context-protocol-mcp | Covered | Weeks 5–6 study (modelcontextprotocol.io) |
 | mcp-server, building-an-mcp-server | Covered | Week 5–6 step 5, 2-day budget |
-| mcp-client, building-an-mcp-client | Missing | Suggested: week 6 step 7, agent consumes outside servers |
-| mcp-host | Missing | Same as above |
-| connect-to-local-server, connect-to-remote-server | Missing | Same as above |
-| transport-layer, data-layer | Missing | Minor; fold into the MCP study block |
+| mcp-client, building-an-mcp-client | Covered | Week 6 step 7 |
+| mcp-host | Covered | Week 6 step 7 |
+| connect-to-local-server, connect-to-remote-server | Covered | Week 6 step 7 |
+| transport-layer, data-layer | Covered | Week 6 MCP study block |
 
 ## 11. Evaluation and observability
 
@@ -177,7 +177,7 @@ Covered 54 · Partial 37 · Missing 30 · Deferred 2 · Divergence 19 · Out of 
 | llm-evaluations | Covered | Eval harness weeks 2–3 + agent eval weeks 5–6 |
 | deterministic-evals | Partial | Golden sets serve this role; never framed as such |
 | model-based-evals | Partial | Faithfulness/relevance imply a judge; unnamed |
-| human-evals | Missing | Suggested: one manual grading round in weeks 2–3 |
+| human-evals | Covered | Weeks 2–3 hand-grading round |
 | ragas | Covered | `devmate/eval/run_ragas.py` |
 | deepeval | Divergence | One harness picked; RAGAS |
 | regression-testing | Partial | Prompt snapshots week 7 approximate it |

@@ -367,6 +367,13 @@ Format as structured review with severity levels.
 | **Prompt Injection** | Attack where user input manipulates model behavior |
 | **Hallucination** | Model generating plausible but incorrect information |
 | **Grounding** | Constraining model output to verified sources |
+| **Top-k Sampling** | Samples from the k most likely tokens; 1 = greedy |
+| **Frequency Penalty** | Logit penalty proportional to a token's repeat count (−2 to 2, OpenAI) |
+| **Presence Penalty** | One-time logit penalty if a token appeared at all (−2 to 2, OpenAI) |
+| **Open Weights** | Downloadable weights; check the license (Apache/MIT vs community-use terms) |
+| **Self-Hosted Inference** | Serving a model on your own GPU (e.g., Ollama); VRAM decides what fits |
+| **Inference Provider** | Hosted API serving open-weight models (e.g., HF Inference Providers routing) |
+| **Safety Identifier** | Salted hash of an end-user ID sent for abuse attribution; never raw PII |
 
 ---
 
@@ -441,6 +448,14 @@ Build a versioned prompt template system:
 - Version management
 - Token estimation before sending
 
+### Exercise 1.6: Model-Choice Spike + Local Fallback Probe (60 min)
+Score two models for one DevMate path using the §1.5.a rubric (no API key needed —
+pricing pages plus your latency notes), then probe local inference:
+- `ollama pull llama3.2`, then call `generate` with a JSON-schema `format` and
+  `options={"temperature": 0.0}`; assert the parsed keys
+- Record the VRAM verdict for your card (Q4 rule of thumb: ~0.5 GB per 1B params
+  plus context) and which DevMate paths may run locally
+
 ---
 
 ## ❓ Quiz
@@ -500,6 +515,41 @@ Why should you version your prompts?
 - B) To enable rollback when quality degrades
 - C) For A/B testing different prompts
 - D) All of the above
+
+### Question 9
+What is the difference between `frequency_penalty` and `presence_penalty`?
+- A) They're aliases for the same parameter
+- B) Frequency scales with repeat count, presence applies once per repeated token
+- C) Presence only works with streaming
+- D) Frequency controls length, presence controls creativity
+
+### Question 10
+A 7B model in Q4 quantization needs roughly how much VRAM, and does it fit a 16 GB card?
+- A) ~14 GB, barely fits
+- B) ~500 MB, fits dozens
+- C) ~5 GB with context overhead, fits comfortably
+- D) VRAM doesn't matter for inference
+
+### Question 11
+Why does `InferenceClient(provider="auto")` require a model argument?
+- A) Routing looks up the provider mapping for that model
+- B) It doesn't; the provider is always fixed
+- C) The model name is the API key
+- D) Auto mode only works locally
+
+### Question 12
+What should you send as OpenAI's `safety_identifier`?
+- A) The user's raw email address
+- B) Your organization's API key
+- C) A salted hash of a per-user ID (username hash, email hash, session ID)
+- D) Nothing; the field doesn't exist
+
+### Question 13
+Your agent repeats the same tool call. What bounds the worst-case cost?
+- A) Raising `frequency_penalty` to 2.0
+- B) The step cap and loop detection; penalties only soften repetition
+- C) Lowering temperature to 0
+- D) Switching to a bigger model
 
 ---
 
