@@ -231,8 +231,8 @@ Covered 54 · Partial 37 · Missing 30 · Deferred 2 · Divergence 19 · Out of 
 
 ## Recommendation
 
-Fold into the core track now: sampling parameters (week 1), metadata filtering (weeks 2–3),
-one human-eval round (weeks 2–3), context-engineering block (week 5), MCP-client step
-(week 6). Document as deferred: multi-agent, multimodal, self-hosted models. Everything
-else either is covered or is correctly out of scope. No ADR required; this analysis changes
-no plan commitment until the track itself is edited.
+Applied 2026-09-26: sampling parameters (week 1), metadata filtering and one
+hand-grading round (weeks 2–3), context-engineering block (week 5), MCP-client step
+(week 6), and a documented deferral for multi-agent, multimodal, and self-hosted
+models. Everything else either is covered or is correctly out of scope. The rows
+above still describe the roadmap side; the track side has moved.

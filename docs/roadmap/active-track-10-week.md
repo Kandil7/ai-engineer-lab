@@ -82,6 +82,10 @@ wrong for a research-leaning one. Scheduled as a sprint at week 11+ into the exi
 
 **Go / Flutter / Next.js** — paused. Lives on in [`master-roadmap.md`](master-roadmap.md).
 
+**Multi-agent systems, multimodal, self-hosted models** — deferred. No home in weeks 0–10;
+multi-agent is a weeks 11–12 buffer candidate. Multimodal and self-hosted serving stay out
+unless postings demand them.
+
 ---
 
 ## 4. Week-by-week
@@ -123,7 +127,8 @@ statistics about this repo. 5 merged PRs.
 ### Week 1 — LLM layer, observable from day one
 
 **Study:** Claude API — messages, streaming, structured outputs, tool-use basics, prompt
-caching. Prompt engineering: zero-shot, few-shot, chain-of-thought, system-prompt design.
+caching. Inference parameters: temperature, top-k/top-p, repetition penalties.
+Prompt engineering: zero-shot, few-shot, chain-of-thought, system-prompt design.
 Read *AI Engineering* (Chip Huyen) ch. 1–3 **after** the day's code, not before.
 
 **Build:**
@@ -161,13 +166,13 @@ The heaviest two weeks. Eval comes **first**, so every later choice is backed by
 1. **Golden set first** — 25 questions over this repo with expected source files.
    `evaluations/rag/datasets/devmate-golden.jsonl`
 2. **Eval harness** — recall@5, recall@10, MRR, faithfulness, answer relevance.
-   `devmate/eval/run_ragas.py`
+   `devmate/eval/run_ragas.py`. Hand-grade a sample of answers to calibrate the metrics.
 3. **Three chunkers** — fixed-size, recursive, AST-aware (code-structure boundaries).
    `devmate/src/devmate/ingest/chunkers/`
 4. **`VectorStore` Protocol** + Qdrant adapter, per [ADR-0005](../decisions/0005-vector-db-qdrant-over-chromadb.md).
    `devmate/src/devmate/index/`
 5. **Chroma adapter** — time-boxed to 2 days; comparison report.
-6. **Hybrid retrieval** — dense + BM25 fusion, then reranking.
+6. **Hybrid retrieval** — dense + BM25 fusion, metadata filtering, then reranking.
    `devmate/src/devmate/retrieve/`
 7. **Two ADRs**, each with a results table: chunking strategy, vector store comparison.
 
@@ -211,7 +216,8 @@ Note free-tier cold starts — add a keep-warm ping or say so in the README.
 
 ### Weeks 5–6 — Agents and MCP
 
-**Study:** tool use in depth; ReAct; LangGraph; **MCP (Model Context Protocol)**. Hugging Face
+**Study:** tool use in depth; ReAct; LangGraph; **MCP (Model Context Protocol)**; context
+engineering (compaction, isolation, failure modes). Hugging Face
 Agents Course, one module per day, applying each to DevMate rather than to course examples.
 
 **Build incrementally — one tool working before the next is added:**
@@ -224,6 +230,7 @@ Agents Course, one module per day, applying each to DevMate rather than to cours
 | 4 | Tools 2–4: `read_file`, `run_tests`, `propose_patch` |
 | 5 | **MCP server exposing DevMate retrieval to any MCP client** |
 | 6 | Agent eval: task completion rate, tool-selection accuracy |
+| 7 | **MCP client: consume an outside MCP server from the DevMate agent** |
 
 Paths: `devmate/src/devmate/agent/tools/`, `agent/graph.py`, `devmate/mcp/`
 
