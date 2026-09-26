@@ -23,8 +23,10 @@ def test_phase1_example_runs(filepath):
 
 @pytest.mark.unit
 def test_introduction_output():
-    """Test 01-introduction.py produces expected output."""
-    file_path = PROJECT_ROOT / "01-core-python" / "01-introduction.py"
+    """Test 01-introduction.py produces expected output (per-topic layout)."""
+    file_path = (
+        PROJECT_ROOT / "01-core-python" / "basics" / "01-introduction" / "01-introduction.py"
+    )
     result = run_py_file(file_path, timeout=30)
     assert "Hello, World!" in result.stdout
     assert "Python is versatile and beginner-friendly!" in result.stdout
@@ -41,7 +43,7 @@ def test_practice_all_imports():
         capture_output=True,
         text=True,
         timeout=10,
-        cwd=str(PROJECT_ROOT / "01-core-python"),
+        cwd=str(PROJECT_ROOT / "01-core-python" / "practice"),
     )
     assert result.returncode == 0, result.stderr[:200]
 
@@ -54,6 +56,6 @@ def test_practice_no_solutions_imports():
         capture_output=True,
         text=True,
         timeout=10,
-        cwd=str(PROJECT_ROOT / "01-core-python"),
+        cwd=str(PROJECT_ROOT / "01-core-python" / "practice"),
     )
     assert result.returncode == 0, result.stderr[:200]

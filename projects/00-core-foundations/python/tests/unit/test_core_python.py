@@ -16,14 +16,31 @@ SKIP_FILES = {"practice_all.py", "practice_no_solutions.py", "39-pip.py", "40-vi
 
 
 def _discover_phase_files(phase_dir: str) -> list[Path]:
-    """Discover all .py files in a phase directory (matching smoke runner)."""
+    """Discover all topic .py files in a phase directory (recursive).
+
+    Topics moved from a flat layout into per-topic subdirectories
+    (e.g. ``01-core-python/functions/38-file-handling/38-file-handling.py``),
+    so discovery is recursive and excludes non-topic trees.
+    """
     phase_path = HERE / phase_dir
     if not phase_path.is_dir():
         return []
+    exclude_dirs = {
+        "challenges",
+        "practice",
+        "lectures",
+        "supplementary",
+        "tests",
+        "lab",  # scratch exercise files, not topic demos
+        "__pycache__",
+    }
     files = []
-    for f in sorted(phase_path.iterdir()):
-        if f.suffix == ".py" and f.name not in SKIP_FILES:
-            files.append(f)
+    for f in sorted(phase_path.rglob("*.py")):
+        if f.name in SKIP_FILES or f.name == "__init__.py":
+            continue
+        if any(part in exclude_dirs for part in f.relative_to(phase_path).parts[:-1]):
+            continue
+        files.append(f)
     return files
 
 
@@ -77,8 +94,12 @@ def test_phase1_has_docstring(filepath):
 
 
 def test_phase1_all_files_present():
-    """Verify all 41 core Python files exist (39 runnable + 2 skipped)."""
-    expected = {f"{i:02d}" for i in range(1, 42)} - {"39", "40"}  # 39/40 are in SKIP_FILES
+    """Verify all core Python topic files exist (recursive layout).
+
+    Topics 01–52 live in per-topic subdirectories; 39/40 are skipped
+    (pip/virtualenv cannot run standalone).
+    """
+    expected = {f"{i:02d}" for i in range(1, 53)} - {"39", "40"}
     actual = {f.stem[:2] for f in PHASE1_FILES if f.stem[:2].isdigit()}
     missing = expected - actual
     assert not missing, f"Missing files: {sorted(missing)}"
@@ -176,7 +197,7 @@ def test_expected_directories_exist():
         "03-libraries/pandas",
         "03-libraries/matplotlib",
         "03-libraries/scipy",
-        "04-databases/mysql",
+        "04-databases/postgresql",
         "04-databases/mongodb",
         "05-web-frameworks/fastapi",
         "05-web-frameworks/django",
@@ -250,11 +271,13 @@ def test_interviews_exist():
 
 
 def test_phase1_lectures_exist():
-    """Verify Phase 1 lecture/glossary pairs exist in the module lectures dir."""
-    lecture_dir = HERE / "01-core-python/lectures"
-    assert lecture_dir.is_dir()
-    md_files = list(lecture_dir.glob("*.md"))
-    assert len(md_files) >= 40, f"Expected 40+ lecture files, found {len(md_files)}"
+    """Verify Phase 1 lecture files exist (recursive per-topic layout).
+
+    Lectures moved from a central ``lectures/`` dir into each topic
+    directory; count them recursively.
+    """
+    lecture_files = list((HERE / "01-core-python").rglob("*-lecture.md"))
+    assert len(lecture_files) >= 40, f"Expected 40+ lecture files, found {len(lecture_files)}"
 
 
 # =========================================================================

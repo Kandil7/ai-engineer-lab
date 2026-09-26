@@ -31,7 +31,7 @@ exists — to record what is done, what was repaired, and what remains.
 | 2 | Fix `db/models.py` reserved `metadata` columns; add regression tests | 60 | — | done |
 | 3 | Rewrite Dockerfile builder stage (`pip install .`, drop poetry export) | 45 | 1 | done |
 | 4 | Push to `master`, confirm GitHub Actions green (devmate + workspace jobs) | 15 | 1–3 | todo |
-| 5 | Write stats-command unit tests (`tests/unit/test_cli_stats.py`) | 60 | — | todo |
+| 5 | Write stats-command unit tests (`tests/unit/test_cli_stats.py`) | 60 | — | done |
 | 6 | Repair legacy Tier 0 backlog R1–R7 + R9 | 240 | — | todo |
 
 ## Proposed File Structure
@@ -66,4 +66,4 @@ docker/
 - [x] ruff, ruff format, mypy, pytest pass locally
 - [x] Wheel contains all 13 packages; `import devmate.db` succeeds
 - [ ] GitHub Actions green on `master`
-- [ ] Stats command has unit tests
+- [x] Stats command has unit tests (4 tests in `tests/unit/test_cli_stats.py`, passing 2026-09-26)
