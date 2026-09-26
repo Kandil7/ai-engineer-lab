@@ -16,10 +16,10 @@ import numpy as np
 # Ensure output directory exists (Tier 0 fix: Windows + CI)
 import os
 
-os.makedirs(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy",
-    exist_ok=True,
+OUT_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "outputs", "scipy"
 )
+os.makedirs(OUT_DIR, exist_ok=True)
 
 import matplotlib
 
@@ -72,12 +72,10 @@ ax.legend()
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_scalar_min.png",
+    os.path.join(OUT_DIR, "scipy_07_scalar_min.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_scalar_min.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_07_scalar_min.png')}")
 
 # ============================================================
 # Example 2: Multivariate Minimization
@@ -130,12 +128,10 @@ ax.set_ylabel("y")
 ax.legend()
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_rosenbrock.png",
+    os.path.join(OUT_DIR, "scipy_07_rosenbrock.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_rosenbrock.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_07_rosenbrock.png')}")
 
 # ============================================================
 # Example 3: Curve Fitting with curve_fit
@@ -188,12 +184,10 @@ ax.legend()
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_curve_fit.png",
+    os.path.join(OUT_DIR, "scipy_07_curve_fit.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_curve_fit.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_07_curve_fit.png')}")
 
 # ============================================================
 # Example 4: Root Finding
@@ -236,12 +230,10 @@ ax.set_ylabel("f(x)")
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_roots.png",
+    os.path.join(OUT_DIR, "scipy_07_roots.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_roots.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_07_roots.png')}")
 
 # Verify roots
 print(f"\nVerification:")
@@ -319,12 +311,10 @@ ax.legend()
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_linprog.png",
+    os.path.join(OUT_DIR, "scipy_07_linprog.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_07_linprog.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_07_linprog.png')}")
 
 print("\n[OK] SciPy optimization covered!")
 print("   Next: 08-linear-algebra.py for matrix operations.")

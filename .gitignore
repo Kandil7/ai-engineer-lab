@@ -66,6 +66,7 @@ coverage/
 # Note: PNGs committed under outputs/ predate this rule and stay tracked until
 # untracked deliberately: git rm -r --cached outputs/
 **/output/*.png
+**/output/
 outputs/**/*.png
 .coverage
 projects/00-core-foundations/python/*.png

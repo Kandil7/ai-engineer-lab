@@ -17,10 +17,10 @@ import numpy as np
 # Ensure output directory exists (Tier 0 fix: Windows + CI)
 import os
 
-os.makedirs(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy",
-    exist_ok=True,
+OUT_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "outputs", "scipy"
 )
+os.makedirs(OUT_DIR, exist_ok=True)
 
 import matplotlib
 
@@ -154,12 +154,10 @@ ax.grid(True, alpha=0.3)
 ax.set_aspect("equal")
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_08_eigenvalues.png",
+    os.path.join(OUT_DIR, "scipy_08_eigenvalues.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_08_eigenvalues.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_08_eigenvalues.png')}")
 
 # ============================================================
 # Example 4: Singular Value Decomposition (SVD)
@@ -193,12 +191,10 @@ for ax, k in zip(axes, ranks):
 plt.suptitle("Low-Rank Approximation via SVD", fontsize=14)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_08_svd.png",
+    os.path.join(OUT_DIR, "scipy_08_svd.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_08_svd.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_08_svd.png')}")
 
 # Scree plot (singular value spectrum)
 fig, ax = plt.subplots(figsize=(8, 4))
@@ -211,12 +207,10 @@ ax.legend()
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_08_scree.png",
+    os.path.join(OUT_DIR, "scipy_08_scree.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_08_scree.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_08_scree.png')}")
 
 # ============================================================
 # Example 5: Matrix Decompositions
@@ -273,12 +267,10 @@ ax.legend()
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_08_expm.png",
+    os.path.join(OUT_DIR, "scipy_08_expm.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_08_expm.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_08_expm.png')}")
 
 # --- Matrix square root ---
 M = np.array([[4, 2], [2, 5]])

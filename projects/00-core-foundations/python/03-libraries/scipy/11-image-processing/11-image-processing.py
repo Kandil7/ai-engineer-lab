@@ -16,10 +16,10 @@ import numpy as np
 # Ensure output directory exists (Tier 0 fix: Windows + CI)
 import os
 
-os.makedirs(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy",
-    exist_ok=True,
+OUT_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "outputs", "scipy"
 )
+os.makedirs(OUT_DIR, exist_ok=True)
 
 import matplotlib
 
@@ -61,12 +61,10 @@ for ax in axes:
     ax.set_yticks([])
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_smoothing.png",
+    os.path.join(OUT_DIR, "scipy_11_smoothing.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_smoothing.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_11_smoothing.png')}")
 
 # Edge detection with Sobel filter
 sx = ndimage.sobel(image, axis=0, mode="constant")
@@ -85,12 +83,10 @@ for ax in axes:
     ax.set_yticks([])
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_edges.png",
+    os.path.join(OUT_DIR, "scipy_11_edges.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_edges.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_11_edges.png')}")
 
 # ============================================================
 # Example 2: Morphological Operations
@@ -133,12 +129,10 @@ for ax in axes.flatten():
     ax.set_yticks([])
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_morphology.png",
+    os.path.join(OUT_DIR, "scipy_11_morphology.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_morphology.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_11_morphology.png')}")
 
 # Count objects after cleaning
 labeled_opened, n_opened = ndimage.label(opened)
@@ -210,12 +204,10 @@ for ax in axes:
     ax.set_yticks([])
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_labeling.png",
+    os.path.join(OUT_DIR, "scipy_11_labeling.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_labeling.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_11_labeling.png')}")
 
 # ============================================================
 # Example 4: Image Transformations
@@ -262,12 +254,10 @@ for ax in axes.flatten():
     ax.set_yticks([])
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_transforms.png",
+    os.path.join(OUT_DIR, "scipy_11_transforms.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_transforms.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_11_transforms.png')}")
 
 print(f"\nOriginal shape: {test_img.shape}")
 print(f"Rotated 45Â° shape: {rotated_45.shape}")
@@ -317,12 +307,10 @@ for ax in axes.flatten():
     ax.set_yticks([])
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_contrast.png",
+    os.path.join(OUT_DIR, "scipy_11_contrast.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_11_contrast.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_11_contrast.png')}")
 
 # Print statistics
 print(f"\nImage statistics:")

@@ -7,6 +7,8 @@
 
 **How to use** — (1) Do sections 1.1 → 1.4 in order; each section's real-world problem is the lens — read it before the topics. (2) Every topic has three levels — Level 1 must pass before Level 2, Level 2 must produce a repo artifact before Level 3; a level isn't done until its **Verify** command proves it. (3) Every failure you hit goes into `../../../projects/04-ai-engineering/devmate/mistakes.md` — that file is a deliverable, not a diary.
 
+**Local command note (this workstation):** `make` and `poetry` are not installed here. Wherever a command says `poetry run python ...`, run `& .venv\Scripts\python.exe ...` from `projects/04-ai-engineering/devmate/` instead (see the repo `AGENTS.md`). The `devmate/labs/` scratch folder exists for the drill scripts below.
+
 **Week-1 Definition of Done (roadmap §4 — cite this when you finish):** *every LLM call appears as a Langfuse trace with token count and cost; you can state the cost of one `devmate ask` in dollars.*
 
 | Lecture section | Topics covered here | Workbook section |

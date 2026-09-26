@@ -251,9 +251,14 @@ def top_n_salary(group, n=2):
     return group.nlargest(n, "salary")
 
 
+# pandas 2.2+ excludes the grouping key from each applied group; it stays in the index
 top_2_per_dept = df.groupby("department").apply(top_n_salary, n=2)
 print("Top 2 salaries per department:")
-print(top_2_per_dept[["name", "department", "salary"]].reset_index(drop=True))
+print(
+    top_2_per_dept.reset_index(level="department")[["name", "department", "salary"]].reset_index(
+        drop=True
+    )
+)
 print()
 
 # =============================================================================

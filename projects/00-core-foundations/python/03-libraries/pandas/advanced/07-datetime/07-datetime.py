@@ -73,22 +73,22 @@ dr3 = pd.date_range("2020-01-01", periods=10, freq="B")
 print(f"Business days: {dr3}")
 
 # Monthly
-dr4 = pd.date_range("2020-01-01", periods=6, freq="M")
+dr4 = pd.date_range("2020-01-01", periods=6, freq="ME")  # month END ('M' removed in pandas 3)
 print(f"Month end: {dr4}")
 
 dr5 = pd.date_range("2020-01-01", periods=6, freq="MS")
 print(f"Month start: {dr5}")
 
 # Quarterly
-dr6 = pd.date_range("2020-01-01", periods=4, freq="Q")
+dr6 = pd.date_range("2020-01-01", periods=4, freq="QE")  # quarter END ('Q' removed in pandas 3)
 print(f"Quarter end: {dr6}")
 
 # Hourly
-dr7 = pd.date_range("2020-01-01", periods=24, freq="H")
+dr7 = pd.date_range("2020-01-01", periods=24, freq="h")  # lowercase since pandas 3
 print(f"Hourly (first 5): {dr7[:5]}")
 
 # Minutes
-dr8 = pd.date_range("2020-01-01", periods=60, freq="T")  # or 'min'
+dr8 = pd.date_range("2020-01-01", periods=60, freq="min")  # 'T' removed in pandas 3
 print(f"Minutely (first 5): {dr8[:5]}")
 
 # Custom frequency
@@ -156,7 +156,7 @@ print("4. TIME SERIES DATAFRAME")
 print("=" * 60)
 
 # Create time series data
-dates = pd.date_range("2020-01-01", periods=100, freq="H")
+dates = pd.date_range("2020-01-01", periods=100, freq="h")
 values = np.random.randn(100).cumsum() + 100
 
 ts_df = pd.DataFrame(
@@ -205,7 +205,7 @@ daily_series = pd.Series(
 print("\nOriginal daily:")
 print(daily_series)
 
-hourly = daily_series.resample("H").interpolate("time")
+hourly = daily_series.resample("h").interpolate("time")
 print("\nUpsampled to hourly (first 5):")
 print(hourly.head())
 
@@ -222,9 +222,9 @@ print("\n" + "=" * 60)
 print("6. ROLLING WINDOWS")
 print("=" * 60)
 
-# Rolling window on time series
-ts_df["rolling_mean_24h"] = ts_df["value"].rolling("24H").mean()
-ts_df["rolling_std_24h"] = ts_df["value"].rolling("24H").std()
+# Rolling window on time series ('24H' removed in pandas 3 -> '24h')
+ts_df["rolling_mean_24h"] = ts_df["value"].rolling("24h").mean()
+ts_df["rolling_std_24h"] = ts_df["value"].rolling("24h").std()
 
 print("Rolling 24H mean/std (first 30):")
 print(ts_df[["value", "rolling_mean_24h", "rolling_std_24h"]].head(30))
@@ -268,7 +268,7 @@ print(f"UTC to NY: {ts_ny_converted}")
 
 # DataFrame with timezone
 df_tz = pd.DataFrame(
-    {"value": np.random.randn(5)}, index=pd.date_range("2020-01-01", periods=5, freq="H", tz="UTC")
+    {"value": np.random.randn(5)}, index=pd.date_range("2020-01-01", periods=5, freq="h", tz="UTC")
 )
 print(f"\nDataFrame with UTC index:\n{df_tz}")
 
@@ -328,7 +328,7 @@ sales = (
 df_sales = pd.DataFrame({"sales": sales}, index=dates)
 
 # 1. Monthly aggregation
-monthly = df_sales.resample("M").agg(["sum", "mean", "std"])
+monthly = df_sales.resample("ME").agg(["sum", "mean", "std"])
 print("Monthly sales stats:")
 print(monthly.head())
 

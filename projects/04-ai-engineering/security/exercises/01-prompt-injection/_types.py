@@ -35,6 +35,8 @@ from enum import Enum, auto
 from typing import Optional, Callable
 from collections import defaultdict
 
+logger = logging.getLogger("prompt_injection")
+
 
 class AttackType(Enum):
     """Classification of prompt injection attack types."""

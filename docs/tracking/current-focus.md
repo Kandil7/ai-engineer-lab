@@ -19,10 +19,11 @@
 **Project:** DevMate — `projects/04-ai-engineering/devmate/`
 
 **Content track:** [ADR-0006](../decisions/0006-adopt-master-ai-engineering-curriculum.md)
-lifted the lecture moratorium, but the `projects/04-ai-engineering/master-ai-engineering/`
-module it names does not exist yet, and `embeddings/`, `prompt-engineering/`, `rag-system/`
-are empty directories (0 files each, verified 2026-09-26). Decide: create the module or
-retire the task — do not leave it dangling.
+lifted the lecture moratorium. Decision made 2026-09-26: the "Master AI Engineering" content
+is adopted as `docs/curriculum/` (4 lecture + workbook modules anchored to DevMate) — no
+separate `projects/04-ai-engineering/master-ai-engineering/` directory will be created.
+`embeddings/`, `prompt-engineering/`, `rag-system/` remain empty; fill them only when a
+DevMate milestone demands the content (A2/A3).
 
 ---
 
@@ -39,8 +40,8 @@ Python baseline repair and the curriculum module decision above.
 1. DevMate lint/types/tests pass locally — ruff, ruff format, mypy, pytest verified 2026-09-26
 2. Push to `master` and confirm GitHub Actions green (new `workspace` job + pip-based `devmate` job)
 3. Repair Tier 0 backlog R1–R7 + R9 (`../../projects/00-core-foundations/python/admin/mastery-plan/10-remediation-backlog.md`)
-4. Decide the **Master AI Engineering** module: create `master-ai-engineering/` with the 12
-   topics, or fold the content into the existing `projects/04-ai-engineering/` tracks
+4. ~~Decide the **Master AI Engineering** module~~ — decided 2026-09-26: adopted as
+   `docs/curriculum/`; no separate module directory
 5. Fill the empty modules: `embeddings/`, `prompt-engineering/`, `rag-system/`
 6. Write DevMate unit tests for the stats command (no test covers `cli/main.py` yet)
 
@@ -54,7 +55,7 @@ Python baseline repair and the curriculum module decision above.
 - [ ] GitHub Actions green on `master`
 - [ ] Tests exist for the stats command
 - [ ] Legacy backlog R1–R7, R9 closed (reproduce + verify each fix)
-- [ ] `master-ai-engineering/` decision made (created or retired)
+- [x] `master-ai-engineering/` decision made — adopted as `docs/curriculum/` (2026-09-26)
 - [ ] `embeddings/`, `prompt-engineering/`, `rag-system/` no longer empty
 
 ---

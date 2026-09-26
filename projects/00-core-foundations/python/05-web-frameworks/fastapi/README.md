@@ -81,3 +81,14 @@ python 20-testing.py
 - **Database**: SQLAlchemy ORM, relationships, queries
 - **WebSockets**: Real-time communication
 - **Testing**: TestClient, fixtures, dependency overrides
+
+## Beyond the 25 core scripts
+
+Topics 26–52 live in their own directories (`NN-topic-name/`), each with a
+lecture, glossary, and runnable demo (`python NN-topic.py --verify`). The
+first topic with a full 3-tier challenge set (per
+[`../../PRACTICE_SPEC.md`](../../PRACTICE_SPEC.md)) is:
+
+- **36 — Streaming and SSE** → [`challenges/36-streaming-and-sse/`](challenges/36-streaming-and-sse/README.md)
+  (Bronze/Silver/Gold + quiz) and a DevMate bridge task in
+  [`36-streaming-and-sse/devmate-task.md`](36-streaming-and-sse/devmate-task.md).

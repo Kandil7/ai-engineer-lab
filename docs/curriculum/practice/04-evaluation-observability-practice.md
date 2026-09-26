@@ -14,6 +14,8 @@
 4. Level 3 tasks are deliberately bigger than the week. Module 2 required two ADRs with results tables (chunking, vector store); Module 4 adds **at least one more** — your choice of the ADR-style justifications flagged here. Use the format in `docs/decisions/0006-adopt-master-ai-engineering-curriculum.md`: Context → Decision Drivers → Options Considered → Decision → Consequences (non-empty) → Links. Number from the next free ID (currently 0007).
 5. Track completion in the table below. The module's Definition of Done: **`make eval` prints a metrics table, a regression gate catches an injected bug, every pipeline stage appears in a trace, and cost per eval run < $0.50.**
 
+**Local command note (this workstation):** `make` and `poetry` are not installed here. Wherever a command says `poetry run python ...`, run `& .venv\Scripts\python.exe ...` from `projects/04-ai-engineering/devmate/` instead (see the repo `AGENTS.md`). The `devmate/eval/` folder exists (empty apart from its README) — the harness below is yours to create.
+
 ## Completion tracker
 
 | # | Topic | L1 | L2 | L3 | Evidence (file / output) |

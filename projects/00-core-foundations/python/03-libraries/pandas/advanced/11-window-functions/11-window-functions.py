@@ -85,7 +85,7 @@ print("2. TIME-AWARE ROLLING (window='7D')")
 print("=" * 60)
 
 # Create irregular time series
-irregular_dates = pd.date_range("2023-01-01", "2023-01-31", freq="6H")
+irregular_dates = pd.date_range("2023-01-01", "2023-01-31", freq="6h")
 irregular_dates = irregular_dates[np.random.choice(len(irregular_dates), 50, replace=False)]
 irregular_dates = irregular_dates.sort_values()
 

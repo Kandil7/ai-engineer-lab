@@ -23,9 +23,11 @@
 | Evaluation harness + results | `projects/04-ai-engineering/devmate/eval/` (dir exists, empty; `make eval` currently points at `eval/run_ragas.py` which does not exist yet — your agent eval script is a separate file) |
 | Hand-rolled vs LangGraph comparison, design notes | `projects/04-ai-engineering/devmate/notes.md` (roadmap's designated home) |
 | Decisions | `docs/decisions/` per the ADR template at `templates/adr.template.md` (sections: Context, Decision Drivers, Options Considered, Decision, Consequences) — new ADRs via `infra/scripts/new-adr.ps1` |
-| Failure-mode log | `docs/learning/reviews/mistakes.md` (the track's explicit learning loop) |
+| Failure-mode log | `projects/04-ai-engineering/devmate/mistakes.md` (the track's explicit learning loop — same file Module 1 uses; one entry per failure: what you tried, what broke, the fix, the rule you extracted) |
 
 **Command map (root Makefile):** `make test` = `cd projects/04-ai-engineering/devmate && poetry run pytest -q --cov=devmate --cov-report=term-missing` · `make test-int` = pytest `-m integration` (needs `make up`) · `make types` = `poetry run mypy src/` · `make lint` = `poetry run ruff check .` · `make eval` = `poetry run python eval/run_ragas.py` · `make cli ARGS="ask '...'"` = run the DevMate CLI (commands: `stats`, `ask`, `ingest`, `serve`, `cost`) · `make up` = docker compose up Postgres/Redis/Qdrant.
+
+**Local command note (this workstation):** `make` and `poetry` are not installed here. Run the underlying commands directly: `& .venv\Scripts\python.exe -m pytest -q --cov=devmate` etc. from `projects/04-ai-engineering/devmate/` (see the repo `AGENTS.md`). The `tests/integration/`, `tests/load/`, and `eval/` folders exist (empty apart from their READMEs) — you create the first files in each.
 
 **Real modules you will touch (verified to exist):**
 `src/devmate/agent/agent.py` (ReActAgent, BaseTool, the 4 tools, TOOLS registry, LangGraphAgent stub), `src/devmate/mcp/server.py` (DevMateMCPServer, 3 MCP tools, stdio + SSE transports), `src/devmate/retrieve/retriever.py` (`get_retriever`, `retriever.retrieve(query, query_vector, filter=..., use_reranker=True)`), `src/devmate/retrieve/rag.py`, `src/devmate/llm/client.py` (`llm_client.complete(messages, model, max_tokens, temperature, stream)`), `src/devmate/index/vector_store.py`, `src/devmate/cli/main.py`, `src/devmate/guards/guardrails.py` (`PromptInjectionGuardrail`), `src/devmate/obs/tracing.py` (`tracer.trace("agent.step")`), `src/devmate/obs/cost.py` (`cost_tracker.record_usage / get_summary / estimate_cost`).

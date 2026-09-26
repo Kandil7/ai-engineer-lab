@@ -16,10 +16,10 @@ import numpy as np
 # Ensure output directory exists (Tier 0 fix: Windows + CI)
 import os
 
-os.makedirs(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy",
-    exist_ok=True,
+OUT_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "outputs", "scipy"
 )
+os.makedirs(OUT_DIR, exist_ok=True)
 
 import matplotlib
 
@@ -64,12 +64,10 @@ ax.plot(root, f(root), "ro", markersize=10, label=f"Root â‰ˆ {root:.4f}")
 ax.legend()
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_03_roots.png",
+    os.path.join(OUT_DIR, "scipy_03_roots.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_03_roots.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_03_roots.png')}")
 
 
 # System of nonlinear equations with fsolve
@@ -140,12 +138,10 @@ ax.legend()
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_03_derivative.png",
+    os.path.join(OUT_DIR, "scipy_03_derivative.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_03_derivative.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_03_derivative.png')}")
 
 # ============================================================
 # Example 3: Spatial Distance Calculations
@@ -210,12 +206,10 @@ ax.legend()
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_03_smoothing.png",
+    os.path.join(OUT_DIR, "scipy_03_smoothing.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_03_smoothing.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_03_smoothing.png')}")
 
 # 2D Gaussian filter example
 image = np.random.rand(100, 100)
@@ -231,12 +225,10 @@ axes[1].set_title("After Gaussian Filter (Ïƒ=5)")
 plt.colorbar(im1, ax=axes[1], shrink=0.8)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_03_2d_filter.png",
+    os.path.join(OUT_DIR, "scipy_03_2d_filter.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_03_2d_filter.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_03_2d_filter.png')}")
 
 # ============================================================
 # Example 5: Quick Optimization (minimize a function)

@@ -136,13 +136,15 @@ print(json_str_index[:200])
 print("...")
 print()
 
-# Read JSON
-df_json = pd.read_json(json_str_records, orient="records")
+# Read JSON (pandas 3 requires a file-like object for JSON strings)
+df_json = pd.read_json(io.StringIO(json_str_records), orient="records")
 print(f"Read JSON (records) shape: {df_json.shape}")
 print()
 
 # Read with date parsing
-df_json_dates = pd.read_json(json_str_records, orient="records", convert_dates=["join_date"])
+df_json_dates = pd.read_json(
+    io.StringIO(json_str_records), orient="records", convert_dates=["join_date"]
+)
 print(f"Join date dtype: {df_json_dates['join_date'].dtype}")
 print()
 
@@ -364,8 +366,8 @@ html_content = """
 </table>
 """
 
-# Read HTML tables
-tables = pd.read_html(html_content)
+# Read HTML tables (pandas 3 requires a file-like object for HTML strings)
+tables = pd.read_html(io.StringIO(html_content))
 print(f"Number of tables found: {len(tables)}")
 print(tables[0])
 print()

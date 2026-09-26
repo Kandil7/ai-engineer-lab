@@ -136,15 +136,15 @@ print("Numeric DataFrame:")
 print(num_df)
 print()
 
-# Applymap - element-wise
-rounded = num_df.applymap(lambda x: round(x, 1))
-print("Applymap round to 1 decimal:")
+# Element-wise: DataFrame.map (applymap was removed in pandas 3)
+rounded = num_df.map(lambda x: round(x, 1))
+print("Map round to 1 decimal:")
 print(rounded)
 print()
 
 # Format all numbers
-formatted = num_df.applymap(lambda x: f"{x:.2f}")
-print("Applymap format as string:")
+formatted = num_df.map(lambda x: f"{x:.2f}")
+print("Map format as string:")
 print(formatted)
 print()
 
@@ -156,8 +156,8 @@ def highlight(x):
     return f"{x:.2f}"
 
 
-highlighted = num_df.applymap(highlight)
-print("Applymap with conditional:")
+highlighted = num_df.map(highlight)
+print("Map with conditional:")
 print(highlighted)
 print()
 
@@ -296,11 +296,11 @@ time_series_vec = time.time() - start
 
 print(f"DataFrame apply(axis=1): {time_apply:.4f}s")
 print(f"Vectorized: {time_vec:.4f}s")
-print(f"Speedup: {time_apply / time_vec:.1f}x")
+print(f"Speedup: {time_apply / max(time_vec, 1e-6):.1f}x")
 print()
 print(f"Series apply: {time_series:.4f}s")
 print(f"Series vectorized: {time_series_vec:.4f}s")
-print(f"Speedup: {time_series / time_series_vec:.1f}x")
+print(f"Speedup: {time_series / max(time_series_vec, 1e-6):.1f}x")
 print()
 
 # When to use apply:

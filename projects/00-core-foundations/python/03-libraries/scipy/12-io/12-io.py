@@ -17,10 +17,10 @@ import numpy as np
 # Ensure output directory exists (Tier 0 fix: Windows + CI)
 import os
 
-os.makedirs(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy",
-    exist_ok=True,
+OUT_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "outputs", "scipy"
 )
+os.makedirs(OUT_DIR, exist_ok=True)
 
 import os
 import tempfile
@@ -176,12 +176,10 @@ axes[1].set_xlim(0, 1000)
 axes[1].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_12_wav.png",
+    os.path.join(OUT_DIR, "scipy_12_wav.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_12_wav.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_12_wav.png')}")
 
 # ============================================================
 # Example 4: NumPy Binary Format (.npy, .npz)

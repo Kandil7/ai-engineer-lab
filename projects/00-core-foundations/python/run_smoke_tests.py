@@ -31,6 +31,7 @@ SKIP_FILES = {
     "39-pip.py",
     "40-virtualenv.py",
     "33-user-input.py",  # requires stdin
+    "test_challenge.py",  # pytest file — run via `python -m pytest`, not standalone
 }
 
 # Directories to skip entirely

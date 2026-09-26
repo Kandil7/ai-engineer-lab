@@ -244,8 +244,8 @@ print("=" * 60)
 orders_ts = orders.set_index("order_date").sort_index()
 
 # Monthly revenue
-monthly_rev = orders_ts["revenue"].resample("M").sum()
-monthly_orders = orders_ts["order_id"].resample("M").count()
+monthly_rev = orders_ts["revenue"].resample("ME").sum()
+monthly_orders = orders_ts["order_id"].resample("ME").count()
 
 print("Monthly Revenue Trend:")
 print(monthly_rev.tail(12).to_string())

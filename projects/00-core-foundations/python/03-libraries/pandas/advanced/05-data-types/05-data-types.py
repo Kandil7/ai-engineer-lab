@@ -89,8 +89,11 @@ print("Messy series:", messy_numbers.tolist())
 numeric_coerce = pd.to_numeric(messy_numbers, errors="coerce")
 print("to_numeric(errors='coerce'):", numeric_coerce.tolist())
 
-# errors='ignore' -> return original
-numeric_ignore = pd.to_numeric(messy_numbers, errors="ignore")
+# errors='ignore' -> return original (removed in pandas 3; emulate it)
+try:
+    numeric_ignore = pd.to_numeric(messy_numbers)
+except (ValueError, TypeError):
+    numeric_ignore = messy_numbers
 print("to_numeric(errors='ignore'):", numeric_ignore.tolist())
 
 # downcast for memory efficiency
@@ -129,7 +132,10 @@ print()
 bad_dates = pd.Series(["2020-01-01", "not-a-date", "2020-02-30", None])  # Feb 30 invalid
 print("Bad dates:", bad_dates.tolist())
 print("coerce:", pd.to_datetime(bad_dates, errors="coerce").tolist())
-print("ignore:", pd.to_datetime(bad_dates, errors="ignore").tolist())
+try:
+    print("ignore:", pd.to_datetime(bad_dates).tolist())
+except (ValueError, TypeError):
+    print("ignore:", bad_dates.tolist())  # pandas 3 removed errors='ignore'
 print()
 
 # UTC handling

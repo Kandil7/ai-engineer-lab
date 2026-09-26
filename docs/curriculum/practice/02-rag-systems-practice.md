@@ -13,6 +13,8 @@
 3. Level 3 tasks are deliberately bigger than the week; pick the one per section that hurts most, do it end-to-end, and write the ADR-style justification. The track requires **two ADRs with results tables** (chunking strategy, vector-store comparison) — the Level 3s of §2.2 and §2.3 are the natural homes.
 4. Track your completion in the table below; `make eval` printing a metrics table is the week's Definition of Done.
 
+**Local command note (this workstation):** `make` and `poetry` are not installed here. Wherever a command says `poetry run python ...`, run `& .venv\Scripts\python.exe ...` from `projects/04-ai-engineering/devmate/` instead (see the repo `AGENTS.md`). The `devmate/scripts/` folder exists for the scripts below.
+
 ## Completion tracker
 
 | # | Topic | L1 | L2 | L3 | Evidence (file / output) |
@@ -90,7 +92,7 @@ with tempfile.TemporaryDirectory() as d:
         )
 ```
 
-Expected output (assert each): `count: 3` — `a.md` becomes ≥ 2 chunks (body exceeds 32 chars), `b.py` becomes 1 chunk, `blob.bin` is skipped (UnicodeDecodeError path), `notes.xyz` is skipped (not in `DocumentLoader.SUPPORTED_EXTENSIONS`). Every chunk carries `source`, `filename`, `extension`, `size_bytes`, `chunk_index`, `chunker`; every `id` is 16 hex chars (md5 of `source:position:content[:100]`).
+Expected output (assert each): `count: 3` — `a.md` becomes ≥ 2 chunks (body exceeds 32 chars), `b.py` becomes 1 chunk, `blob.bin` is skipped (UnicodeDecodeError path), `notes.xyz` is skipped (not in `DocumentLoader.SUPPORTED_EXTENSIONS`). Every chunk carries `source`, `filename`, `extension`, `size_bytes`, `chunk_index`, `chunker`; every `id` is 32 hex chars (full md5 of `source:position:content[:100]` — see `_generate_id` in `src/devmate/ingest/chunker.py`; a 16-hex prefix is neither an integer nor a UUID, so Qdrant rejects the upsert).
 
 Edge cases you must handle in your mental model (each maps to a code path you just saw): empty/whitespace files → `[]`; binary files → `[]`; unsupported extensions → `[]`; the same file re-loaded → identical ids (deterministic hashing = free idempotency at chunk level).
 

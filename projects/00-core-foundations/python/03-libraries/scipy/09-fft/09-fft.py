@@ -17,10 +17,10 @@ import numpy as np
 # Ensure output directory exists (Tier 0 fix: Windows + CI)
 import os
 
-os.makedirs(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy",
-    exist_ok=True,
+OUT_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "outputs", "scipy"
 )
+os.makedirs(OUT_DIR, exist_ok=True)
 
 import matplotlib
 
@@ -84,12 +84,10 @@ axes[1].legend()
 axes[1].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_basic_fft.png",
+    os.path.join(OUT_DIR, "scipy_09_basic_fft.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_basic_fft.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_09_basic_fft.png')}")
 
 # ============================================================
 # Example 2: Power Spectral Density
@@ -139,12 +137,10 @@ ax.legend()
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_psd.png",
+    os.path.join(OUT_DIR, "scipy_09_psd.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_psd.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_09_psd.png')}")
 
 print(f"Signal length: {len(t)} samples")
 print(f"Sampling rate: {fs} Hz")
@@ -188,12 +184,10 @@ axes[1].set_xlabel("u (frequency)")
 axes[1].set_ylabel("v (frequency)")
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_2d_fft.png",
+    os.path.join(OUT_DIR, "scipy_09_2d_fft.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_2d_fft.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_09_2d_fft.png')}")
 
 # Low-pass filtering in frequency domain
 rows, cols = image.shape
@@ -222,12 +216,10 @@ for ax in axes:
     ax.set_yticks([])
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_lowpass.png",
+    os.path.join(OUT_DIR, "scipy_09_lowpass.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_lowpass.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_09_lowpass.png')}")
 
 # ============================================================
 # Example 4: Windowing Functions
@@ -259,12 +251,10 @@ for ax, name in zip(axes, window_names):
     ax.set_ylim(-0.1, 1.1)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_windows.png",
+    os.path.join(OUT_DIR, "scipy_09_windows.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_windows.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_09_windows.png')}")
 
 # Effect of windowing on spectral leakage
 np.random.seed(42)
@@ -293,12 +283,10 @@ axes[1].set_xlim(0, 100)
 axes[1].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_window_effect.png",
+    os.path.join(OUT_DIR, "scipy_09_window_effect.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_window_effect.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_09_window_effect.png')}")
 
 # ============================================================
 # Example 5: FFT-based Convolution
@@ -353,12 +341,10 @@ axes[2].set_xlabel("Sample")
 axes[2].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.savefig(
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_convolution.png",
+    os.path.join(OUT_DIR, "scipy_09_convolution.png"),
     dpi=100,
 )
-print(
-    "Plot saved: K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/projects/00-core-foundations/python/outputs/scipy/scipy_09_convolution.png"
-)
+print("Plot saved: {os.path.join(OUT_DIR, 'scipy_09_convolution.png')}")
 
 print("\n[OK] SciPy FFT module covered!")
 print("   Next: 10-spatial-data.py for spatial computations.")

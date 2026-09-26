@@ -21,10 +21,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from scipy import optimize  # noqa: E402
 
-OUT = (
-    "K:/learning/technical/ai-ml/01-main-projects/fullstack-ai-engineer-lab/"
-    "projects/00-core-foundations/python/outputs/scipy"
-)
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "outputs", "scipy")
 os.makedirs(OUT, exist_ok=True)
 
 rng = np.random.default_rng(42)

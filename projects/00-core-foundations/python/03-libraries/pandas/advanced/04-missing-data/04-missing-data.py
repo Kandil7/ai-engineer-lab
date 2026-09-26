@@ -80,7 +80,7 @@ df = pd.DataFrame(
             "HR",
             "Sales",
         ],
-        "join_date": pd.date_range("2020-01-01", periods=20, freq="M"),
+        "join_date": pd.date_range("2020-01-01", periods=20, freq="ME"),
         "performance": [
             4.2,
             3.8,
@@ -208,13 +208,13 @@ ts = pd.Series(
 print("Original:")
 print(ts)
 print("Forward fill:")
-print(ts.fillna(method="ffill"))
+print(ts.ffill())
 print("Backward fill:")
-print(ts.fillna(method="bfill"))
+print(ts.bfill())
 print()
 
 print("df.fillna(method='ffill', limit=1) - Limit consecutive fills:")
-print(ts.fillna(method="ffill", limit=1))
+print(ts.ffill(limit=1))
 print()
 
 print("=" * 60)
@@ -317,7 +317,7 @@ print()
 print("For time series - use forward/backward fill:")
 ts_df = df.set_index("join_date")[["salary"]].asfreq("D")
 print("Resampled to daily:", len(ts_df), "rows")
-ts_filled = ts_df.fillna(method="ffill")
+ts_filled = ts_df.ffill()
 print("After ffill:", ts_filled["salary"].isna().sum(), "missing")
 print()
 
