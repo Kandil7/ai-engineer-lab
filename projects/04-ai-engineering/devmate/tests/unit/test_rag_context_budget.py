@@ -13,9 +13,11 @@ from devmate.retrieve.retriever import RerankResult
 
 def _chunk(i: int, size: int) -> RerankResult:
     return RerankResult(
-        content="x" * size,
+        id=f"chunk-{i}",
         score=1.0 / (i + 1),
+        content="x" * size,
         metadata={"filename": f"file_{i}.py", "chunk_type": "function", "name": f"fn_{i}"},
+        original_score=1.0 / (i + 1),
     )
 
 
