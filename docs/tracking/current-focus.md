@@ -77,8 +77,8 @@ Python baseline repair and the curriculum module decision above.
 
 | ID | Milestone | Week | Status |
 | --- | --- | --- | --- |
-| A1 | CI green + `devmate stats` CLI | 0 | In Progress |
-| A2 | LLM layer traced and costed | 1 | Planned |
+| A1 | CI green + `devmate stats` CLI | 0 | **Done** (CI run 36269637267) |
+| A2 | LLM layer traced and costed | 1 | In Progress — Ollama path verified end-to-end (ingest 568 vectors, `devmate ask` streaming + non-streaming, cost tracking records tokens); remaining: Langfuse keys + 10 golden cases |
 | A3 | RAG with measured eval + 2 ADRs | 2–3 | Planned |
 | A4 | **Deployed at a public URL** | 4 | Planned |
 
