@@ -23,3 +23,9 @@ Rules:
 - What I tried: reproduced via the RAG pipeline directly (worked), then compared questions.
 - Fix: not a code bug — the retrieved-context prompt exceeded qwen2.5-coder:7b's default context window. Shorter question -> fewer/smaller contexts -> fits.
 - Rule: retrieval context size is part of the prompt budget; cap retrieved chunks (or set num_ctx) before blaming the provider. Module 1.1's context-budget lesson, live.
+
+## 2026-09-26 — RESOLVED: Ollama 500 on long questions
+- Fix: added ag_context_char_budget (8000 chars) enforced in RAGPipeline._build_context, and ollama_num_ctx (8192) passed as an Ollama 
+um_ctx option. Regression tests: 	ests/unit/test_rag_context_budget.py (4 passing).
+- Verified live: the previously-failing question now answers correctly.
+- Rule: retrieval top_k is a candidate count, not a prompt guarantee — always budget the context you actually paste.
