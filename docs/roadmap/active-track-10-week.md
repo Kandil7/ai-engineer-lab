@@ -319,7 +319,9 @@ If unused, in priority order:
 1. **Deferred ML sprint** — scikit-learn pipeline end-to-end, one PyTorch training loop from
    scratch, attention implemented by hand once, into
    `projects/00-core-foundations/python/07-machine-learning/`. Closes the stated gap. → A10
-2. Fine-tuning (LoRA/QLoRA) if postings you are seeing ask for it.
+2. Fine-tuning (LoRA/QLoRA) if postings you are seeing ask for it — implementation
+   reference: the LLM Engineer's Handbook companion repo SFT + DPO pipeline
+   (see `docs/reference/books-and-sources.md`), not a new book.
 3. System design depth — *Designing Data-Intensive Applications*, selected chapters.
 4. Revive Athar (Arabic RAG) as the domain-depth story.
 

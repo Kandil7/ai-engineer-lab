@@ -36,6 +36,23 @@ Chapters 1–3 in week 1; the RAG chapter in weeks 2–3; evaluation and agents 
 Bridges ML theory and production systems. More hands-on than Huyen: RAG, vector databases,
 evaluation, deployment, observability, optimization. *Use:* weeks 7–8, during hardening.
 
+Companion repo (MIT, 5.4k stars): https://github.com/PacktPublishing/LLM-Engineers-Handbook —
+packed and mined 2026-09-26 (155 files). Transferable patterns, verified against source:
+
+- RAG retriever (`llm_engineering/application/rag/retriever.py`): self-query metadata filter
+  → query expansion (1→3) → ThreadPool fan-out across collections → dedupe → cross-encoder
+  rerank. The metadata-filter-then-search shape matches the DevMate fold-in.
+- Reranker (`application/rag/reranking.py`): cross-encoder (query, chunk) pairs, sort desc,
+  keep_top_k. Direct template for the weeks 2–3 reranking step.
+- Chunking (`application/preprocessing/operations/chunking.py`): two-level split (paragraph
+  then token-capped), per-type sizes (posts 250/25, articles 1000–2000 chars, repos 1500/100),
+  md5 content ids, sizes recorded in chunk metadata. Evidence for the chunking ADR.
+- Eval (`model/evaluation/evaluate.py`): vLLM batch generation → results dataset → GPT-4o-mini
+  judge (accuracy + style rubric JSON) → threaded batch eval → aggregate columns. Judge pattern
+  reference for the weeks 5–6 agent eval (ours scores faithfulness/relevance, not style).
+- Fine-tuning (`model/finetuning/finetune.py`): SFT + DPO pipeline reference for week 11+,
+  if postings demand it. Do not open before then.
+
 **Designing Machine Learning Systems** — Chip Huyen (2022)
 
 System-level thinking — data engineering, feature engineering, deployment, monitoring, A/B
