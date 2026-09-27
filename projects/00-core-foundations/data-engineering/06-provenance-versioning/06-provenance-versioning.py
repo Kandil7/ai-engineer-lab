@@ -17,6 +17,13 @@ from __future__ import annotations
 
 import sys
 
+try:
+    reconfigure = getattr(sys.stdout, "reconfigure", None)
+    if reconfigure is not None:
+        reconfigure(encoding="utf-8")
+except (AttributeError, ValueError):
+    pass
+
 
 class Source:
     """A versioned source snapshot."""

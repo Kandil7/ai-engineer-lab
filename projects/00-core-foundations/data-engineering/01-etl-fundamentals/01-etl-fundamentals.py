@@ -15,6 +15,7 @@ Verify:   python 01-etl-fundamentals.py --verify
 from __future__ import annotations
 
 import json
+import re
 import sys
 import unicodedata
 from pathlib import Path
@@ -33,7 +34,10 @@ def extract(pages_dir: Path) -> list[tuple[int, str]]:
     """Read-only extract: page number + raw text, sorted by page."""
     pages = []
     for f in sorted(pages_dir.glob("*.txt")):
-        page = int(f.stem.split("_")[-1])
+        m = re.search(r"(\d+)\s*$", f.stem)
+        if m is None:
+            raise ValueError(f"cannot parse page number from filename: {f.name}")
+        page = int(m.group(1))
         pages.append((page, f.read_text(encoding="utf-8")))
     return sorted(pages)
 

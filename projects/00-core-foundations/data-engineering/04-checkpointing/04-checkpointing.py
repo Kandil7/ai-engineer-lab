@@ -37,14 +37,17 @@ class Checkpoint:
         return json.loads(self.path.read_text(encoding="utf-8"))
 
 
-def process_pages(pages: list[int], checkpoint: Checkpoint) -> list[int]:
-    """Process pages, checkpointing after each. Simulates a crash at page 3."""
+def process_pages(
+    pages: list[int], checkpoint: Checkpoint, crash_once: list[bool]
+) -> list[int]:
+    """Process pages, checkpointing after each. Simulates a one-time crash at page 3."""
     state = checkpoint.load() or {"last_committed": 0}
     done = list(range(1, state["last_committed"] + 1))
     for page in pages:
         if page <= state["last_committed"]:
             continue  # already committed: resume skips it
-        if page == 3:
+        if page == 3 and crash_once[0]:
+            crash_once[0] = False
             raise RuntimeError("simulated crash at page 3")
         done.append(page)
         checkpoint.save({"last_committed": page})
@@ -56,16 +59,17 @@ def main() -> None:
         cp = Checkpoint(Path(tmp) / "checkpoint.json")
         pages = [1, 2, 3, 4, 5]
 
-        # First run crashes at page 3.
+        # First run crashes once at page 3.
+        crash_once = [True]
         try:
-            process_pages(pages, cp)
+            process_pages(pages, cp, crash_once)
             raise AssertionError("expected crash")
         except RuntimeError:
             pass
 
-        # Resume: continues from page 3, does not redo 1-2.
-        done = process_pages(pages, cp)
-        assert done == [1, 2, 4, 5], f"resume skipped committed work: {done}"
+        # Resume: pages 1-2 not redone (committed), page 3 processed (never committed).
+        done = process_pages(pages, cp, crash_once)
+        assert done == [1, 2, 3, 4, 5], f"resume wrong: {done}"
         final_state = cp.load()
         assert final_state is not None
         assert final_state["last_committed"] == 5
@@ -74,7 +78,7 @@ def main() -> None:
         assert not (cp.path.with_suffix(".tmp")).exists()
 
         print(f"after crash: checkpoint at page {final_state['last_committed']}")
-        print(f"resume processed: {done} (pages 1-2 not redone)")
+        print(f"resume processed: {done} (pages 1-2 not redone, page 3 retried)")
         print("atomic write: no torn or leftover tmp records")
         print("all asserts passed")
 
