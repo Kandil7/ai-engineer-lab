@@ -107,7 +107,8 @@ multiple distributions without occlusion. The comparison default.
 
 **Example:**
 ```python
-ax.hist(old, histtype="step"); ax.hist(new, histtype="step")  # shared axes
+ax.hist(old, histtype="step")
+ax.hist(new, histtype="step")  # shared axes
 ```
 
 **Related concepts:** Density, Histogram

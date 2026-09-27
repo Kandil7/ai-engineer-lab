@@ -23,15 +23,18 @@ By the end of this lecture, you will be able to:
 import matplotlib.pyplot as plt
 import numpy as np
 
-x = np.linspace(-3, 3, 60); y = np.linspace(-3, 3, 60)
+x = np.linspace(-3, 3, 60)
+y = np.linspace(-3, 3, 60)
 X, Y = np.meshgrid(x, y)
-Z = np.sin(np.sqrt(X**2 + Y**2))   # any two-input function
+Z = np.sin(np.sqrt(X**2 + Y**2))  # any two-input function
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection="3d")
 ax.plot_surface(X, Y, Z, cmap="viridis")
-ax.set_xlabel("x"); ax.set_ylabel("y"); ax.set_zlabel("f(x, y)")
-ax.view_init(elev=25, azim=-60)    # viewpoint is a decision, set it
+ax.set_xlabel("x")
+ax.set_ylabel("y")
+ax.set_zlabel("f(x, y)")
+ax.view_init(elev=25, azim=-60)  # viewpoint is a decision, set it
 ```
 
 Wireframes (`plot_wireframe`) suit sparse grids; surfaces suit dense ones;

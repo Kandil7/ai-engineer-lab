@@ -52,7 +52,8 @@ them the chart dances and trends unread.
 
 **Example:**
 ```python
-ax.set_xlim(0, 10); ax.set_ylim(-1.2, 1.2)
+ax.set_xlim(0, 10)
+ax.set_ylim(-1.2, 1.2)
 ```
 
 **Related concepts:** FuncAnimation
@@ -94,7 +95,8 @@ new plot objects per frame. O(1) per frame vs O(n²) debris.
 
 **Example:**
 ```python
-line.set_data(x, y); return (line,)  # never ax.plot inside update
+line.set_data(x, y)
+return (line,)  # never ax.plot inside update
 ```
 
 **Related concepts:** Blitting

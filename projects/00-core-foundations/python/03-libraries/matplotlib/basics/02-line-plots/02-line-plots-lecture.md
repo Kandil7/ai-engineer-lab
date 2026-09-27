@@ -30,7 +30,9 @@ valid = [0.95, 0.7, 0.6, 0.58, 0.59]
 fig, ax = plt.subplots()
 ax.plot(epochs, train, "b-", label="train")
 ax.plot(epochs, valid, "r--", label="valid")
-ax.set_xlabel("epoch"); ax.set_ylabel("loss"); ax.legend()
+ax.set_xlabel("epoch")
+ax.set_ylabel("loss")
+ax.legend()
 fig.savefig("loss.png", bbox_inches="tight")
 ```
 

@@ -68,6 +68,9 @@ coverage/
 **/output/*.png
 **/output/
 outputs/**/*.png
+# The golden set is the regression gate's source of truth — track it even
+# though the machine-level global gitignore excludes datasets/.
+!evaluations/rag/datasets/devmate-golden.jsonl
 .coverage
 projects/00-core-foundations/python/*.png
 *.sqlite

@@ -79,7 +79,9 @@ ground truth for "which Python" in venvs, tools, CI, and debugging.
 
 **Example:**
 ```python
-import sys; print(sys.executable)
+import sys
+
+print(sys.executable)
 ```
 
 **Related concepts:** PATH, Site-packages

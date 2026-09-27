@@ -27,8 +27,8 @@ recall = [0.81, 0.93, 0.78]
 
 fig, ax = plt.subplots()
 bars = ax.bar(models, recall)
-ax.set_ylim(0, 1)                      # zero baseline: bar AREA means value
-ax.bar_label(bars, fmt="%.2f")         # exact values on the chart itself
+ax.set_ylim(0, 1)  # zero baseline: bar AREA means value
+ax.bar_label(bars, fmt="%.2f")  # exact values on the chart itself
 ax.set_ylabel("recall@10")
 ```
 

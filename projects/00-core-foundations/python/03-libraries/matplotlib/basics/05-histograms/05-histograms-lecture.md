@@ -27,7 +27,8 @@ import numpy as np
 lat = np.random.gamma(2.0, 0.4, size=2000)  # right-skewed, like latency
 fig, ax = plt.subplots()
 ax.hist(lat, bins=40, density=False)
-ax.set_xlabel("latency (s)"); ax.set_ylabel("queries")
+ax.set_xlabel("latency (s)")
+ax.set_ylabel("queries")
 ax.axvline(np.percentile(lat, 95), color="r", linestyle="--", label="p95")
 ```
 

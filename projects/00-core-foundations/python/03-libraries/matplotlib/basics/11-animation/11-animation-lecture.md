@@ -27,16 +27,20 @@ import numpy as np
 
 fig, ax = plt.subplots()
 (line,) = ax.plot([], [], "b-", linewidth=2)
-ax.set_xlim(0, 10); ax.set_ylim(-1.2, 1.2)   # fixed limits: no autoscale jitter
+ax.set_xlim(0, 10)
+ax.set_ylim(-1.2, 1.2)  # fixed limits: no autoscale jitter
+
 
 def init():
     line.set_data([], [])
     return (line,)
 
+
 def update(frame):
     x = np.linspace(0, frame / 10, 200)
     line.set_data(x, np.sin(x))
     return (line,)
+
 
 ani = animation.FuncAnimation(fig, update, frames=100, init_func=init, blit=True)
 ani.save("sine.gif", writer="pillow", fps=20)
