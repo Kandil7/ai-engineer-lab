@@ -76,10 +76,18 @@ services:
     image: langfuse/langfuse:2.47.0
     container_name: devmate-langfuse
     environment:
-      DATABASE_URL: postgresql://devmate:devmate@postgres:5432/devmate
+      DATABASE_URL: postgresql://devmate:devmate@postgres:5432/langfuse
       NEXTAUTH_SECRET: devmate-langfuse-secret-change-in-production
       NEXTAUTH_URL: http://localhost:3000
       LANGFUSE_HOST: http://localhost:3000
+      # Required by langfuse 2.x env validation; dev-only values
+      SALT: devmate-langfuse-salt-change-in-production
+      ENCRYPTION_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+      # NOTE: langfuse 2.x has no env-based key seeding (that is a v3 feature).
+      # One-time manual step: open http://localhost:3000, sign in with the
+      # seeded user (devmate@localhost.dev / devmate-local-password), create a
+      # project, and copy its API keys into devmate/.env as
+      # LANGFUSE_PUBLIC_KEY / LANGFUSE_SECRET_KEY.
     ports:
       - "3000:3000"
     depends_on:
