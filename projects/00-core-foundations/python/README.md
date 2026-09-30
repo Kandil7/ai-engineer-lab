@@ -10,16 +10,18 @@
 | Phase | Directory | Focus |
 |-------|-----------|-------|
 | **1** | `01-core-python/` | Python fundamentals: basics → control-flow → functions → OOP → advanced |
-| **2** | `02-advanced-python/` | Decorators → async → metaclasses → design patterns |
+| **2** | `02-advanced-python/` | Decorators → async → metaclasses → design patterns → Unicode → maintainable code → test strategy |
 | **3** | `03-libraries/` | NumPy, Pandas, Matplotlib, SciPy, Polars |
-| **4** | `04-databases/` | SQL, PostgreSQL, MongoDB, Redis, SQLAlchemy, Vector Stores |
+| **4** | `04-databases/` | SQL, PostgreSQL, MongoDB, Redis, SQLAlchemy, Vector Stores, migrations, backups |
 | **5** | `05-web-frameworks/` | FastAPI (runnable), Django (reference-only) |
 | **6** | `06-data-structures-algorithms/` | Arrays → trees → sorts → searches |
 | **7** | `07-machine-learning/` | Fundamentals → Advanced → Deep Learning |
 | **8** | `08-mlops/` | Reproducibility → registry → serving → monitoring → A/B |
 | **9** | `09-genai/` | LLMs → RAG → agents → eval → fine-tuning → production |
+| **10** | `10-system-design/` | **[NEW]** Component contracts → queues → consistency → failure modes → ADRs |
 | 📚 | `supplementary/` | Quizzes + interview prep |
 | 🏆 | `projects/` | Capstone mini-projects combining all phases |
+| 🗺️ | `SKILLS_MASTERY_MAP.md` | **[NEW]** Six professional skills → topics → Athar mastery evidence |
 
 ---
 
@@ -65,7 +67,11 @@ python/
 │   │   ├── 01-decorators.py
 │   │   ├── 01-decorators-lecture.md
 │   │   └── 01-decorators-glossary.md
-│   └── ... (34 topics)
+│   ├── ... (34 original topics)
+│   ├── 35-unicode-and-arabic-text/  # [NEW] Unicode, normalization, Arabic text
+│   ├── 36-separation-of-concerns/   # [NEW] Layers, Protocols, DI, config, logging
+│   ├── 37-code-review-and-refactoring/ # [NEW] Review lenses, smells, lock tests
+│   └── 38-test-strategy-contract-regression/ # [NEW] Unit/integration/contract/regression/data
 │
 ├── 03-libraries/                    # 📊 Phase 3: Data Science Libraries
 │   ├── numpy/                       # 34 topics: Arrays, ufuncs, linear algebra
@@ -86,10 +92,10 @@ python/
 ├── 04-databases/                    # 🗄️ Phase 4: Database Integration
 │   ├── sql-fundamentals/            # 14 topics: Core SQL concepts
 │   ├── sql-sqlite/                  # 12 topics: SQLite exercises
-│   ├── postgresql/                  # 6 topics: PostgreSQL exercises
+│   ├── postgresql/                  # 7 topics: PostgreSQL exercises + [NEW] backup/restore
 │   ├── mongodb/                     # 12 topics: MongoDB exercises
 │   ├── redis/                       # 8 topics: Caching, pub/sub, sessions
-│   ├── sqlalchemy/                  # 10 topics: ORM patterns
+│   ├── sqlalchemy/                  # 11 topics: ORM patterns + [NEW] migrations
 │   └── vector-stores/               # 8 topics: Embeddings, similarity search
 │
 ├── 05-web-frameworks/               # 🌐 Phase 5: Backend Development
@@ -110,6 +116,12 @@ python/
 │
 ├── 08-mlops/                        # 🚀 Phase 8: MLOps (Production ML)
 ├── 09-genai/                        # 🧠 Phase 9: GenAI (LLMs, RAG, Agents)
+├── 10-system-design/                # 🏗️ Phase 10: System Design [NEW]
+│   ├── 01-component-contracts/      # Contracts, compatibility, migration paths
+│   ├── 02-queues-and-workflows/     # Jobs, at-least-once, idempotency, DLQ
+│   ├── 03-consistency-and-staleness/# Truth vs derived, drift, caches, rebuild
+│   ├── 04-failure-modes-and-resilience/ # FMEA, timeouts, bulkheads, degradation
+│   └── 05-architecture-decision-records/ # ADR format, lifecycle, enforcement
 ├── supplementary/                   # 📚 Quizzes (80) + Interview prep (18)
 ├── projects/                        # 🏆 Capstone Mini-Projects
 ├── tests/                           # ✅ Unit tests (328 passing)

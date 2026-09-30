@@ -268,7 +268,7 @@ def calculate_area(length, width):
 
 
 print(f"\nArea: {calculate_area(5, 3)}")
-print(f"Docstring preview: {calculate_area.__doc__[:50]}...")
+print(f"Docstring preview: {calculate_area.__doc__}...")
 
 # ============================================================
 # Summary

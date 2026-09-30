@@ -23,70 +23,122 @@ import math
 # Read a name from input and print a greeting.
 # Example: Input "Alice" → Output "Hello, Alice!"
 def problem_01():
-    pass  # Write your code here
+    name =input("Enter your name : ")
+    print(f"Hello,{name}!")
+    
 
 
 # Problem 2: Celsius to Fahrenheit
 # Convert a temperature from Celsius to Fahrenheit.
 # Formula: F = (C × 9/5) + 32
 def problem_02():
-    pass  # Write your code here
+    C=float(input("Enter temperature in Celsius : "))
+    F = (C × 9/5) + 32
+    print(f"{C}°C = {F}°F")
 
 
 # Problem 3: Even or Odd
 # Check if a number is even or odd.
 def problem_03():
-    pass  # Write your code here
+    num=input("Enter your number")
+    if num % 2 == 0:
+        print(f"{num} is even")
+    else:
+        print(f"{num} is odd")
 
 
 # Problem 4: Make a Username
 # Create a username and initials from a first and last name.
 # Example: Input "John Doe" → Username: "john.doe", Initials: "J.D."
 def problem_04():
-    pass  # Write your code here
+    name=input("Enter your username : ")
+    name_lowerd=name.lower()
+    name_clean=name_lowerd.split()
+    username=f"{name_clean[0]}.{name_clean[1]}"
+    intitials=f"{name_clean[0][0].upper()}.{name_clean[1][0].upper}."
+    print(f"Username: {username}, Initials: {intitials}")
 
 
 # Problem 5: Voting Age
 # Determine if a person is old enough to vote (18+).
 def problem_05():
-    pass  # Write your code here
+    """Determine if a person is old enough to vote."""
+    age = int(input("Enter your age: "))
+    if age >= 18:
+        print("You are old enough to vote!")
+    else:
+        print(f"You need to wait {18 - age} more years to vote.")
+
 
 
 # Problem 6: Grade Calculator
 # Convert a score into a letter grade:
 # 90+ = A, 80-89 = B, 70-79 = C, 60-69 = D, below 60 = F
 def problem_06():
-    pass  # Write your code here
-
+    """Convert a score into a letter grade."""
+    score = int(input("Enter your score (0-100): "))
+    if score >= 90:
+        grade = "A"
+    elif score >= 80:
+        grade = "B"
+    elif score >= 70:
+        grade = "C"
+    elif score >= 60:
+        grade = "D"
+    else:
+        grade = "F"
+    print(f"Score: {score} → Grade: {grade}")
 
 # Problem 7: Multiplication Table
 # Print the multiplication table for a given number (1-10).
 def problem_07():
-    pass  # Write your code here
+    """Print the multiplication table for a given number """
+    num=input("Enter your number: ")
+    print(f"Multiplication table for {num}:")
+    for i in range(1,int(num)+1):
+        print(f"{i}x{num}={i*num}")
 
 
 # Problem 8: Factorial
 # Calculate the factorial of a number (n! = n × (n-1) × ... × 1)
 def problem_08():
-    pass  # Write your code here
-
+    """Calculate the factorial of a number."""
+    num = int(input("Enter a number: "))
+    factorial = 1
+    for i in range(1, num + 1):
+        factorial *= i
+    print(f"{num}! = {factorial}")
 
 # Problem 9: Sum of Numbers
 # Read a list of numbers separated by spaces and calculate their sum.
 def problem_09():
-    pass  # Write your code here
-
+    """Read a list of numbers and calculate their sum."""
+    nums = input("Enter numbers separated by spaces: ")
+    numbers = [int(x) for x in nums.split()]
+    print(f"Sum: {sum(numbers)}")
 
 # Problem 10: Area Calculator
 # Calculate the area of a rectangle, triangle, or circle.
 # Rectangle: w × h, Triangle: 0.5 × b × h, Circle: π × r²
 def problem_10():
-    pass  # Write your code here
-
+    """Calculate the area of a rectangle, triangle, or circle."""
+    shape = input("Enter shape (rectangle/triangle/circle): ").lower()
+    if shape == "rectangle":
+        w = float(input("Width: "))
+        h = float(input("Height: "))
+        print(f"Area: {w * h}")
+    elif shape == "triangle":
+        b = float(input("Base: "))
+        h = float(input("Height: "))
+        print(f"Area: {0.5 * b * h}")
+    elif shape == "circle":
+        r = float(input("Radius: "))
+        print(f"Area: {math.pi * r ** 2:.2f}")
 
 # Problem 11: Shopping Receipt
 # Read item details (name, price, quantity) and print a receipt with total.
 def problem_11():
+    
     pass  # Write your code here
 
 

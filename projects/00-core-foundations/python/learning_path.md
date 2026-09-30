@@ -52,6 +52,10 @@ python 01-core-python/basics/01-introduction/01-introduction.py
 | 11–15 | Collections, Properties, Slots, Metaclasses, Descriptors | Object system deep dive |
 | 16–20 | Threading, Multiprocessing, Unit Testing, Logging, Design Patterns | Production patterns |
 | 21–34 | Concurrency, Asyncio, Typing, Memory, Profiling, Packaging, Security | Expert topics |
+| **35** | **Unicode and Arabic text [NEW]** | Normalization, harakat, presentation forms, batch importer |
+| **36** | **Separation of concerns [NEW]** | Layers, Protocols, DI, config, logging, engine-swap proof |
+| **37** | **Code review and refactoring [NEW]** | Review lenses, smell measurement, lock tests |
+| **38** | **Test strategy [NEW]** | Unit/integration/contract/regression/data tests |
 
 **Each topic directory contains:**
 - `NN-topic-name.py` — Exercise (runnable code)
@@ -113,10 +117,10 @@ python 01-core-python/basics/01-introduction/01-introduction.py
 |--------|--------|-------------|
 | **sql-fundamentals/** | 14 | Core SQL (DDL, DML, joins, optimization) |
 | **sql-sqlite/** | 12 | SQLite exercises (no installation needed) |
-| **postgresql/** | 6 | PostgreSQL with psycopg2 |
+| **postgresql/** | 7 | PostgreSQL with psycopg2 + [NEW] backup/restore |
 | **mongodb/** | 12 | MongoDB concepts (dict stand-in) |
 | **redis/** | 8 | Caching, pub/sub, distributed locks |
-| **sqlalchemy/** | 10 | ORM patterns, async, testing |
+| **sqlalchemy/** | 11 | ORM patterns, async, testing + [NEW] migrations/Alembic |
 | **vector-stores/** | 8 | Embeddings, similarity search |
 
 **Each topic directory contains:**
@@ -212,6 +216,27 @@ fundamentals → advanced → deep-learning
 | 13–16 | Tool calling, agent patterns, multi-agent, memory |
 | 17–22 | Observability, caching, guardrails, evaluation, fine-tuning |
 | 23–25 | Case studies: RAG service, agent, extraction pipeline |
+
+---
+
+## 🏗️ Phase 10: System Design [NEW]
+
+**Directory:** `10-system-design/`  
+**Topics:** 5 self-contained topic directories
+
+| # | Topic | Core question |
+|---|-------|---------------|
+| 01 | Component contracts | What do producer and consumer promise each other? |
+| 02 | Queues and workflows | How does slow work survive crashes without duplicating? |
+| 03 | Consistency and staleness | What is truth, what is derived, and how do they converge? |
+| 04 | Failure modes and resilience | What happens when each component breaks? |
+| 05 | Architecture decision records | How do decisions survive the people who made them? |
+
+**Mastery criterion:** explain what happens if a worker fails or the index
+becomes older than the source — as a designed story with detections and runbooks.
+
+See `SKILLS_MASTERY_MAP.md` for how this phase maps to the six professional
+skills and their Athar mastery evidence.
 
 ---
 
