@@ -73,7 +73,7 @@ migration that is re-run does not error on the part that already applied.
 ### The exercise
 
 ```python
-m.apply("003", ["sessions"], idempotent=True)   # safe to re-run
+m.apply("003", ["sessions"], idempotent=True)  # safe to re-run
 ```
 
 The exercise models an idempotent migration and a non-idempotent one that fails on an existing table,
@@ -155,7 +155,7 @@ rollback.
 m.apply("001", ["users"])
 m.apply("002", ["messages"])
 assert m.applied == ["001", "002"]
-m.apply("003", ["sessions"], idempotent=True)   # safe to re-run
+m.apply("003", ["sessions"], idempotent=True)  # safe to re-run
 m.rollback("003", ["sessions"])
 assert "003" not in m.applied
 ```

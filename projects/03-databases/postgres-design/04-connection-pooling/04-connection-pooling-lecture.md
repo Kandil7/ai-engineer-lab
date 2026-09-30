@@ -104,7 +104,7 @@ discipline that prevents most leaks:
 
 ```python
 with pool.connection() as conn:
-    conn.execute(...)   # released on exit, success or failure
+    conn.execute(...)  # released on exit, success or failure
 ```
 
 ### The exit test

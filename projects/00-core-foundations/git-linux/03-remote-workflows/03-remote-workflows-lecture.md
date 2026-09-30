@@ -69,7 +69,7 @@ assert ok and remote.commits == ["c1", "c2"]
 A push is rejected when the remote has commits the local lacks:
 
 ```python
-remote.commits.append("c3")   # someone else pushed
+remote.commits.append("c3")  # someone else pushed
 ok, _ = remote.push(local, last_pushed)
 assert not ok, "push rejected when the remote is ahead"
 ```
@@ -164,7 +164,7 @@ a pull that merges the remote's commits, and a subsequent successful push.
 ### The assertions
 
 ```python
-assert ok and remote.commits == ["c1", "c2"]       # push up
+assert ok and remote.commits == ["c1", "c2"]  # push up
 assert not ok, "push rejected when the remote is ahead"
 local = remote.pull(local)
 assert ok, "after pull, the push succeeds"
