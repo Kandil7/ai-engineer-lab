@@ -4,7 +4,7 @@
 > Scale: 1 (aware) → 10 (authority). Targets set by the
 > [active track](active-track-10-week.md).
 
-**Last updated:** 2026-08-02 (re-assessed against actual repo state; previous 2026-06-26)
+**Last updated:** 2026-09-30 (added Production AI Systems rows; previous 2026-08-02)
 
 ---
 
@@ -55,6 +55,25 @@ The pattern is consistent: **curriculum-level exposure (2) with production-level
 an evidence problem, and the active track is structured to close it week by week.
 
 Rows in **bold** are at level 1 — genuinely untouched, not merely unapplied.
+
+---
+
+## Production AI Systems track (deferred until P0 gate)
+
+Targets from [`production-ai-systems-engineer.md`](production-ai-systems-engineer.md).
+Current levels from the 2026-09-30 repo audit.
+
+| Skill | Target | Current | Evidence | Next step |
+| --- | --- | --- | --- | --- |
+| Model serving (vLLM/TGI) | 7 | **2** | curriculum only; no server started | P5 lab on RTX 5000 |
+| LLMOps release gates | 7 | **3** | llmops README; prompts versioned in DevMate | P1 eval gate + P6 rollback |
+| Observability ops (SLOs) | 7 | **4** | Langfuse code + compose service | P2 dashboards, SLOs, alerts |
+| Cost engineering | 7 | **3** | `obs/cost.py` ledger only | P3 budgets + routing |
+| Reliability / AI SRE | 7 | **3** | client fallback exists; load/integration tests empty | P4 |
+| GPU / K8s orchestration | 5–6 | **1** | READMEs describe unbuilt manifests | P7 only if postings demand |
+| Evaluation infrastructure | 8 | **3** | golden set + baseline; harness missing | P1 |
+| Gateway / multi-tenant routing | 6 | **1** | 3 providers in client, no router | P6 |
+| Experiment tracking (MLflow+) | 5 | **1** | interview questions only | P5–P6 as needed |
 
 ---
 

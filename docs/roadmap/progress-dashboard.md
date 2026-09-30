@@ -2,7 +2,7 @@
 
 > Quick-read status summary. Update at weekly and monthly reviews.
 
-**Last updated:** 2026-08-02 (plan reconciliation; previous update 2026-06-26)
+**Last updated:** 2026-09-30 (Production AI Systems track added; previous 2026-08-02)
 
 ---
 
@@ -14,10 +14,15 @@
 The 12-month [`master-roadmap.md`](master-roadmap.md) is demoted to the **long track** — not
 active. [`phase-2-athar-baligh.md`](phase-2-athar-baligh.md) follows the active track.
 
+**Strategic follow-on:** [`production-ai-systems-engineer.md`](production-ai-systems-engineer.md)
+— Production AI Systems / AI Platform track (P1–P8). Gap analysis 2026-09-30: active track
+covers ~60–70% of the role (LLM application layer); missing depth is serving engines,
+gateway/routing, cost enforcement, SLO operations, and experiment tracking. Start after A4/A6.
+
 ### Current focus
 
-**Week 0** (2026-08-03 → 08-05) — repo hygiene, CI green, `devmate stats` CLI shipped with
-tests. Details: [`../tracking/current-focus.md`](../tracking/current-focus.md).
+**Week 0/1** — CI green, `devmate stats` shipped; LLM layer in progress. Details:
+[`../tracking/current-focus.md`](../tracking/current-focus.md).
 
 ---
 
@@ -35,7 +40,7 @@ tests. Details: [`../tracking/current-focus.md`](../tracking/current-focus.md).
 | Agents curriculum | `04-ai-engineering/agents/` | 10 exercises + lectures + quizzes |
 | Security curriculum | `04-ai-engineering/security/` | 10 exercises + lectures + quizzes |
 | fast.ai track | `04-ai-engineering/fastai-deep-learning/` | 13 modules + quizzes |
-| Workspace system | `.ai/`, `templates/`, `registries/` | 22 prompts, 21 workflows, 15 templates, 5 registries |
+| Workspace system | `.ai/`, `templates/`, `registries/` | 21 prompts, 21 workflows, 16 templates, 6 registries |
 | ADRs | `docs/decisions/` | 5 |
 
 ### The gap this dashboard exists to surface

@@ -152,6 +152,24 @@ weeks (11–12) absorb slippage.
 
 ---
 
+# Production AI Systems track (P0–P8)
+
+> Strategic track defined 2026-09-30 in
+> [`production-ai-systems-engineer.md`](production-ai-systems-engineer.md).
+> Not the plan of record. Gate: finish active-track A4 and preferably A6 first.
+
+| ID | Milestone | Phase | Status |
+| --- | --- | --- | --- |
+| P0 | Gate: A4 + A6 complete | — | Planned |
+| P1 | Eval infrastructure + CI gate | P1 | Planned |
+| P2 | SLOs + observability operations | P2 | Planned |
+| P3 | Cost enforcement + routing | P3 | Planned |
+| P4 | Reliability + red-team schedule | P4 | Planned |
+| P5 | Self-hosted serving lab | P5 | Planned |
+| P6 | Gateway + eval-gated release | P6 | Planned |
+| P7 | K8s / orchestration depth | P7 | Planned — demand-gated |
+| P8 | Platform capstone | P8 | Planned |
+
 # Long Track (M1–M13) — deferred
 
 > Retained for post-employment depth. Not scheduled. See
@@ -202,7 +220,10 @@ weeks (11–12) absorb slippage.
 
 | Track | Total | Done | In Progress | Planned | Deferred / Superseded |
 | --- | --- | --- | --- | --- | --- |
-| Active (A) | 10 | 0 | 1 | 9 | 0 |
+| Active (A) | 10 | 1 | 1 | 8 | 0 |
+| Production (P) | 9 | 0 | 0 | 9 | 0 |
 | Long (M) | 13 | 0 | 0 | 0 | 13 |
 
-**The number that matters: deployed services = 0.** Target A4, week 4.
+**The number that matters: deployed services = 0.** Target A4, week 4. Production AI
+Systems evidence requires more than a URL: eval gates, SLOs, cost enforcement, and
+measured serving numbers (see P-track).
