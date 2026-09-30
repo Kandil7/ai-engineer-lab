@@ -5,7 +5,7 @@
 > ⚠️ A staleness gate fails CI if this file is more than 8 days old: `make fresh-check`
 > locally and the Tracking freshness step in `.github/workflows/ci.yml`.
 
-**Last updated:** 2026-09-29
+**Last updated:** 2026-09-30
 
 ---
 
@@ -15,6 +15,10 @@
 
 **Plan:** [Active Track — 10-Week AI Engineer](../roadmap/active-track-10-week.md)
 (adopted 2026-08-02 by [ADR-0004](../decisions/0004-adopt-10-week-ai-engineer-track.md))
+
+**Strategic follow-on (not active yet):**
+[Production AI Systems Engineer roadmap](../roadmap/production-ai-systems-engineer.md)
+— phased P1–P8 production depth. Start only after A4 and preferably A6.
 
 **Project:** DevMate — `projects/04-ai-engineering/devmate/`
 
@@ -29,32 +33,40 @@ content (4-6 topics each, lecture + glossary + exercise + quiz).
 
 ## Main Goal
 
-Finish Week 0 debt: the workspace registry system is now gated in CI, DevMate packaging
-and the DB layer are repaired, and lint/types/tests pass locally. Remaining: legacy
-Python baseline repair and the curriculum module decision above.
+Week 1 (A2) mostly closed offline: golden cases + eval harness foundation shipped.
+Remaining A2: Langfuse keys + live traced ask. A3 harness code exists; live retrieval
+and the two ADRs are next once Qdrant/ingest are up.
 
 ---
 
 ## Today's Tasks
 
-1. DevMate lint/types/tests pass locally — ruff, ruff format, mypy, pytest verified 2026-09-26
-2. Push to `master` and confirm GitHub Actions green (new `workspace` job + pip-based `devmate` job)
+1. ~~DevMate lint/types/tests pass locally~~ — verified 2026-09-26
+2. ~~GitHub Actions green on `master`~~ — CI run 36269637267, 2026-09-26
 3. Repair Tier 0 backlog R1–R7 + R9 (`../../projects/00-core-foundations/python/admin/mastery-plan/10-remediation-backlog.md`)
-4. ~~Decide the **Master AI Engineering** module~~ — decided 2026-09-26: adopted as
-   `docs/curriculum/`; no separate module directory
-5. ~~Fill the empty modules: `embeddings/`, `prompt-engineering/`, `rag-system/`~~ — done 2026-09-29
-6. Write DevMate unit tests for the stats command (no test covers `cli/main.py` yet)
+4. ~~Master AI Engineering module decision~~ — adopted as `docs/curriculum/` (ADR-0006)
+5. ~~Fill empty modules: `embeddings/`, `prompt-engineering/`, `rag-system/`~~ — done 2026-09-29
+6. ~~Write DevMate unit tests for the stats command~~ — `tests/unit/test_cli_stats.py`
+7. ~~10 prompt golden cases for `devmate ask`~~ — done 2026-09-30
+8. Add Langfuse keys to `projects/04-ai-engineering/devmate/.env` (from self-hosted compose UI) and run one traced `devmate ask`
+9. ~~Offline eval harness~~ — `python -m devmate.eval.run_ragas --mode offline` works; 52 unit tests green
+10. Live retrieval eval: start qdrant, ingest repo, run `--mode live`; write chunking ADR with measured numbers
+11. Full DevMate gate after any further code change
 
 ---
 
 ## Week 0 Success Criteria
 
-- [x] DevMate lint/types/tests pass locally (ruff 0, mypy 0, pytest 19 → 23 pass)
+- [x] DevMate lint/types/tests pass locally (ruff 0, format clean, mypy 0, pytest 52 pass as of 2026-09-30)
+- [x] Offline eval harness runs and prints a metrics table (`devmate.eval.run_ragas`, 2026-09-30)
 - [x] `devmate stats` CLI runs and prints repository statistics (verified 2026-09-26)
 - [x] `.ai` registry system validated and gated (`tests/*/validate.ps1` × 5, wired into CI)
 - [x] GitHub Actions green on `master` (CI run 36269637267, 2026-09-26)
 - [x] Tests exist for the stats command (4 tests in `tests/unit/test_cli_stats.py`)
 - [ ] Legacy backlog R1–R7, R9 closed (reproduce + verify each fix)
+- [x] 10 prompt golden cases committed (`evaluations/prompts/golden-cases/devmate.jsonl`, 2026-09-30)
+- [ ] Langfuse keys configured and one live traced `devmate ask` recorded
+- [x] Offline schema tests for golden cases (`tests/unit/test_prompt_golden.py`)
 - [x] `master-ai-engineering/` decision made — adopted as `docs/curriculum/` (2026-09-26)
 - [x] `embeddings/`, `prompt-engineering/`, `rag-system/` no longer empty (filled 2026-09-29)
 
@@ -78,8 +90,8 @@ Python baseline repair and the curriculum module decision above.
 | ID | Milestone | Week | Status |
 | --- | --- | --- | --- |
 | A1 | CI green + `devmate stats` CLI | 0 | **Done** (CI run 36269637267) |
-| A2 | LLM layer traced and costed | 1 | In Progress — Ollama path verified end-to-end (ingest 568 vectors, `devmate ask` streaming + non-streaming, cost tracking records tokens); remaining: Langfuse keys + 10 golden cases |
-| A3 | RAG with measured eval + 2 ADRs | 2–3 | Planned |
+| A2 | LLM layer traced and costed | 1 | In Progress — Ollama path verified. Prompt golden cases + offline schema tests done 2026-09-30. Remaining: Langfuse keys + live traced `devmate ask` |
+| A3 | RAG with measured eval + 2 ADRs | 2–3 | **In Progress** — offline eval harness implemented 2026-09-30 (`devmate.eval.run_ragas`); golden sets load; Hit@5 offline recorded path = 1.0; live retrieval still needs Qdrant + ingest; chunking/vector ADRs still open |
 | A4 | **Deployed at a public URL** | 4 | Planned |
 
 Full list: [`../roadmap/milestones.md`](../roadmap/milestones.md)

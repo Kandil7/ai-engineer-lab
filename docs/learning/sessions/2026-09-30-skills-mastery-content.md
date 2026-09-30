@@ -37,3 +37,33 @@ Matched the repo's established convention exactly (NN-name/ with .py + -lecture.
 Challenge sets per PRACTICE_SPEC for the 11 new topics (Bronze/Silver/Gold tiers). Wire the new test markers into CI. Extend the skills map with links into 08-mlops and 09-genai case studies as capstone references.
 
 ---
+
+## Challenge Sets Completed for All 11 New Topics (2026-09-30)
+
+### Context
+
+Follow-up to the skills-mastery content session in `projects/00-core-foundations/python/`. The 11 new topics (35-38 advanced-python, 11-migrations, 07-backup, 10-system-design 01-05) had lectures and exercises but no practice challenge sets per `PRACTICE_SPEC.md`.
+
+### Explanation
+
+Created 11 complete challenge sets (60 files: README + starter + solution + test_challenge + quiz each) at the central challenges paths, following the 49-collections-toolkit reference exactly. Every set implements the spec's non-negotiable rules: Bronze/Silver/Gold tiers, measured guards (comparison counting via CountingStr, call counting via spies, tracemalloc ceilings — never wall-clock), deterministic seeded data, starter-default target (importlib loading, CHALLENGE_USE_SOLUTION=1 for reference), explicit edge coverage, adversarial guard cases, and Athar-domain framing. The Silver/Gold guards separate naive from correct: O(n^2) pairwise comparison budgets, fail-fast-vs-collect-all validation, one-shot-vs-expand-backfill-contract migrations, count-only-vs-byte-for-byte restore verification, apply-all-vs-point-in-time WAL replay, one-step-vs-rolling-upgrade plans, no-TTL-vs-TTL cache loader call budgets, arrival-order-vs-versioned event apply, unlimited-vs-bulkhead concurrency, and partial-vs-complete ADR validation. Created four challenges/README.md indexes (none existed before).
+
+A parallel first attempt via builder subagents returned empty results and wrote nothing — diagnosed and built directly instead per the guardrails. Several verification cycles caught real bugs: the shared SpyIndex double-count in challenge 36, the visit_Return name-rewrite gap in challenge 37's AST state-threading, TTL boundary semantics in challenge 03, and the markdown bold-marker parse in challenge 05.
+
+### Alternatives
+
+1) Re-delegate to subagents after the silent failure (rejected per guardrails: diagnose yourself). 2) Skip the Gold tier's measured guards (rejected: the spec requires naive-but-correct to FAIL a guard). 3) Wall-clock timing assertions (rejected explicitly by the spec).
+
+### Rationale (Why this?)
+
+Direct construction with per-set two-mode verification (starter must fail, solution must pass) caught every design flaw before it reached the learner. The guards are all deterministic (counts, hashes, memory ceilings) so the suites are CI-stable.
+
+### Exercises
+
+1. Pick any set and solve starter.py until the suite goes green. 2. Break one guard intentionally (e.g. replace dict grouping with pairwise comparison in 35) and watch the budget fail. 3. Time yourself against the Bronze/Silver/Gold estimates. 4. Re-solve Gold with a different structure and confirm the guard still passes. 5. Add one more known-failure case to 38's suite.
+
+### Next Steps
+
+Add the challenge sets to the module's smoke test discovery if desired. Wire CHALLENGE_USE_SOLUTION=1 runs into CI as a reference-regression job. Continue extending gold-case coverage in `evaluations/prompts/golden-cases/`.
+
+---
