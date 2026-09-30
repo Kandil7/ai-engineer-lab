@@ -75,7 +75,7 @@ content would insert a new row rather than update the existing one. Choose the k
 row" means:
 
 ```python
-key = f"{book_id}:p{page}:{index}"   # stable identity
+key = f"{book_id}:p{page}:{index}"  # stable identity
 ```
 
 ### The tradeoff
@@ -113,9 +113,9 @@ Run the pipeline twice and assert identical state:
 
 ```python
 store = UpsertStore()
-run_pipeline(store, rows)   # first run
+run_pipeline(store, rows)  # first run
 first = store.read_all()
-run_pipeline(store, rows)   # second run
+run_pipeline(store, rows)  # second run
 second = store.read_all()
 assert first == second, "idempotent: identical state after re-run"
 assert len(second) == 2, "no duplicates"
