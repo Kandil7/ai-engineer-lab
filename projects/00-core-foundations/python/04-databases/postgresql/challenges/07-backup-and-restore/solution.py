@@ -74,14 +74,10 @@ def verify_restore(src_conn: sqlite3.Connection, dst_conn: sqlite3.Connection) -
         cols = [r[1] for r in src_conn.execute(f"PRAGMA table_info({name})").fetchall()]
         text_cols = [c for c in cols if c in ("text", "title", "content", "label")]
         for col in text_cols:
-            mismatch = src_conn.execute(
-                f"SELECT COUNT(*) FROM (SELECT * FROM {name} EXCEPT SELECT * FROM {name})"
-            ).fetchone()[0]
             src_rows = src_conn.execute(f"SELECT {col} FROM {name} ORDER BY rowid").fetchall()
             dst_rows = dst_conn.execute(f"SELECT {col} FROM {name} ORDER BY rowid").fetchall()
             if src_rows != dst_rows:
                 problems.append(f"{name}.{col}: content drift detected")
-            del mismatch
     for name in sorted(dst_tables - src_tables):
         problems.append(f"{name}: present in restore but not in source")
     return problems

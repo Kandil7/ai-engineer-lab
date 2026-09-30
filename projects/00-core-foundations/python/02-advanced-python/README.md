@@ -1,6 +1,6 @@
 # 🔬 Phase 2: Advanced Python
 
-34 self-contained topic directories covering advanced Python concepts from decorators to debugging techniques.
+38 self-contained topic directories covering advanced Python concepts from decorators to production engineering, plus practice challenge sets for the production topics.
 
 ## 📋 Directory Structure
 
@@ -19,7 +19,18 @@ Each topic directory contains:
 │   ├── 02-generators.py
 │   ├── 02-generators-lecture.md
 │   └── 02-generators-glossary.md
-└── ... (34 topics)
+└── ... (38 topics)
+```
+
+Challenge sets (one per production topic, `challenges/`):
+
+```
+challenges/
+├── README.md                                 # index
+├── 35-unicode-and-arabic-text/               # Bronze/Silver/Gold + quiz
+├── 36-separation-of-concerns/
+├── 37-code-review-and-refactoring/
+└── 38-test-strategy-contract-regression/
 ```
 
 ## 📚 Topics
@@ -60,6 +71,10 @@ Each topic directory contains:
 | 32 | Metaprogramming | exec, eval, code generation, AST manipulation |
 | 33 | Security Essentials | Input validation, secrets, CORS, rate limiting |
 | 34 | Debugging Techniques | pdb, breakpoints, logging, profiling |
+| **35** | **Unicode & Arabic Text** | Code points vs bytes, NFC/NFKC, presentation forms, harakat, digit folding, batch import with located errors |
+| **36** | **Separation of Concerns** | Layered pipeline, Protocols, DI, composition root, frozen config, engine-swap proof |
+| **37** | **Code Review & Refactoring** | Review lenses, smell measurement (ast), extract-method, lock tests, four-part comments |
+| **38** | **Test Strategy** | Unit/integration/contract/regression/data tests, provenance, idempotency, golden cases |
 
 ## 🚀 Quick Start
 
@@ -72,6 +87,12 @@ for d in [0-9]*/; do
     py=$(ls "$d"/*.py 2>/dev/null | head -1)
     [ -n "$py" ] && echo "=== $d ===" && python "$py"
 done
+
+# Verify a challenge set (starter fails until solved)
+python -m pytest challenges/35-unicode-and-arabic-text/test_challenge.py -q
+# Validate the reference solution:
+#   $env:CHALLENGE_USE_SOLUTION = "1"  (PowerShell)
+python -m pytest challenges/35-unicode-and-arabic-text/test_challenge.py -q
 ```
 
 ## 📖 Recommended Learning Order
@@ -105,6 +126,16 @@ done
 ### Production Depth (21-34)
 21-34. Advanced topics for production applications
 
+### Production Engineering (35-38) — Athar mastery track
+35. **35-unicode-and-arabic-text** — Arabic corpus hygiene and the streaming importer
+36. **36-separation-of-concerns** — swappable search engine, validation independence
+37. **37-code-review-and-refactoring** — structure measured, behavior locked
+38. **38-test-strategy-contract-regression** — the five test types on one pipeline
+
+These four map directly to the Athar skills table — see
+[`../SKILLS_MASTERY_MAP.md`](../SKILLS_MASTERY_MAP.md). Each has a challenge set
+in `challenges/` with Bronze/Silver/Gold tiers.
+
 ## 🎯 Each Topic Contains
 
 - **3-5 complete working examples** with real implementations
@@ -115,4 +146,4 @@ done
 
 ---
 
-*Last updated: August 2026*
+*Last updated: September 2026*
