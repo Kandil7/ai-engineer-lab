@@ -155,7 +155,7 @@ weeks (11–12) absorb slippage.
 # Production AI Systems track (P0–P8)
 
 > Strategic track defined 2026-09-30 in
-> [`production-ai-systems-engineer.md`](production-ai-systems-engineer.md).
+> [`../learning/design/production-ai-systems-engineer-roadmap.md`](../learning/design/production-ai-systems-engineer-roadmap.md).
 > Not the plan of record. Gate: finish active-track A4 and preferably A6 first.
 
 | ID | Milestone | Phase | Status |

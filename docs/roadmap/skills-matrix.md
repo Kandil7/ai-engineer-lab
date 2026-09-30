@@ -60,7 +60,7 @@ Rows in **bold** are at level 1 — genuinely untouched, not merely unapplied.
 
 ## Production AI Systems track (deferred until P0 gate)
 
-Targets from [`production-ai-systems-engineer.md`](production-ai-systems-engineer.md).
+Targets from [`../learning/design/production-ai-systems-engineer-roadmap.md`](../learning/design/production-ai-systems-engineer-roadmap.md).
 Current levels from the 2026-09-30 repo audit.
 
 | Skill | Target | Current | Evidence | Next step |

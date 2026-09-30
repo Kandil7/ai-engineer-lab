@@ -17,7 +17,7 @@
 (adopted 2026-08-02 by [ADR-0004](../decisions/0004-adopt-10-week-ai-engineer-track.md))
 
 **Strategic follow-on (not active yet):**
-[Production AI Systems Engineer roadmap](../roadmap/production-ai-systems-engineer.md)
+[Production AI Systems Engineer roadmap](../learning/design/production-ai-systems-engineer-roadmap.md)
 — phased P1–P8 production depth. Start only after A4 and preferably A6.
 
 **Project:** DevMate — `projects/04-ai-engineering/devmate/`

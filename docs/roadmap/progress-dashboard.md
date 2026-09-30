@@ -14,7 +14,7 @@
 The 12-month [`master-roadmap.md`](master-roadmap.md) is demoted to the **long track** — not
 active. [`phase-2-athar-baligh.md`](phase-2-athar-baligh.md) follows the active track.
 
-**Strategic follow-on:** [`production-ai-systems-engineer.md`](production-ai-systems-engineer.md)
+**Strategic follow-on:** [`../learning/design/production-ai-systems-engineer-roadmap.md`](../learning/design/production-ai-systems-engineer-roadmap.md)
 — Production AI Systems / AI Platform track (P1–P8). Gap analysis 2026-09-30: active track
 covers ~60–70% of the role (LLM application layer); missing depth is serving engines,
 gateway/routing, cost enforcement, SLO operations, and experiment tracking. Start after A4/A6.
