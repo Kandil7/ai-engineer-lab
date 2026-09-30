@@ -83,7 +83,8 @@ A page is edited when the same key has a different content hash than the stored 
 ```python
 def detect_edits(rows, index):
     return [
-        r["passage_id"] for r in rows
+        r["passage_id"]
+        for r in rows
         if r["passage_id"] in index
         and index[r["passage_id"]] != content_hash(r["text"])
     ]
@@ -142,7 +143,7 @@ is detected") is a cleanup-style check that belongs in CI so it runs continuousl
 def test_dedup_never_removes_distinct():
     rows = [passage_a, passage_b, passage_a_duplicate]
     result = dedup_by_key(rows)
-    assert len(result) == 2            # duplicate removed
+    assert len(result) == 2  # duplicate removed
     assert any(r["passage_id"] == "b1:p1:0" for r in result)  # original kept
     assert any(r["passage_id"] == "b1:p2:0" for r in result)  # distinct kept
 ```
