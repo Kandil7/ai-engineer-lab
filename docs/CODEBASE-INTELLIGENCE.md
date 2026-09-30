@@ -1,79 +1,68 @@
 # Code Intelligence
 
-Multi-layered code intelligence powered by codebase-memory-mcp and repomix.
+Multi-layered code intelligence powered by codebase-memory-mcp, code-review-graph,
+graphify, and repomix.
 
 ## Status
 
 | Layer | Status | Details |
 |-------|--------|---------|
-| **Structural Graph** | ✅ Indexed | `D-AI-Projects-fullstack-ai-engineer-lab`, 53,461 nodes, 126,790 edges, 8 languages |
+| **Structural Graph** | ✅ Reindexed 2026-09-30 | `D-AI-Projects-fullstack-ai-engineer-lab`, **60,751 nodes, 141,083 edges**, 8 languages |
 | **Review Graph** | ✅ Built | 11,590 nodes, 87,721 edges, 23 communities, 1,147 flows |
 | **Multimodal Graph** | ✅ Built | 49,856 nodes, 54,483 edges, 2,833 communities (AST-only, no LLM) |
 | **Context Pack** | ✅ Ready | 1,244,995 tokens (compressed), 1,082 files |
-| **Watcher** | ⏳ Manual | Re-index with `codebase-memory index_repository` |
+| **Watcher** | ⏳ Manual | Re-index with `codebase-memory index_repository` after large edits |
 
-## Architecture
+**Structural project name:** `D-AI-Projects-fullstack-ai-engineer-lab`
+**Root:** `D:/AI/Projects/fullstack-ai-engineer-lab` · branch `master`
+
+### Reindex notes (2026-09-30)
+
+- Full reindex after DevMate eval package + roadmap docs landed.
+- Nodes 60,577 → **60,751**; edges 140,909 → **141,083**.
+- `parse_partial`: 7 files (infra sql/conf/ps1 + a few curriculum files) — not DevMate eval.
+- `skipped`: 0.
+- By-design exclusions include `.venv`, `__pycache__`, `.env`, gitignored assets.
+- `evaluations/rag/datasets` is currently in not-indexed dirs — golden JSONL is **not** in
+  the graph; read those files from the filesystem.
+- Uncommitted work still reports `freshness: metadata_changed` on coverage checks until
+  committed and reindexed.
+
+### DevMate call-graph after retrace
+
+| Symbol | Callers | Callees | Notes |
+| ------ | ------- | ------- | ----- |
+| `get_rag_pipeline` | 8 | 1 | API (`ask`/`ingest`/`lifespan`/`rag_query`) + CLI |
+| `RAGPipeline.query` | 5 | 33 | hybrid search, tracer, LLM complete, context builders |
+| `Tracer.trace` | 47 | 6 | API, CLI, RAG, agents, guards, embeddings, eval live path |
+| `Retriever.retrieve` | 15 | 16 | hybrid_search + RRF + rerank; also `eval.run_ragas` live path |
+| `score_retrieval` | 3+ | 4 | `run_offline`, `run_live`, `amain` |
+| `LLMClient.complete` | 0 in graph | 3 | Lazy `get_llm_client()` + provider dict — **use source, not inbound CALLS** |
+| `run_ragas` | module node | 14 | Indexed as Module 1–386; function-level edges resolve via callees |
+
+### Architecture
 
 ```mermaid
 graph TD
-    subgraph "Python Foundations (4,664 nodes)"
-        CHALLENGES["challenges-demo<br/>2,232 · 0.23"]
-        PRACTICE["practice-problem<br/>1,201 · 0.20"]
-        EXERCISES_USER["exercises-user<br/>1,160 · 0.15"]
+    subgraph "Python Foundations"
+        CHALLENGES["challenges-demo"]
+        PRACTICE["practice-problem"]
+        EXERCISES_USER["exercises-user"]
     end
 
-    subgraph "Python DSA & Libraries (2,593 nodes)"
-        REPO["repository-pattern<br/>1,252 · 0.24"]
-        ML_VIZ["ml-visualization<br/>1,031 · 0.07"]
-        QUEUES["queues-sort<br/>577 · 0.27"]
+    subgraph "AI Engineering"
+        AGENT_EX["exercises-agent"]
+        DEV["devmate eval / llm / rag"]
     end
 
-    subgraph "AI Engineering (1,381 nodes)"
-        AGENT_EX["exercises-agent<br/>605 · 0.31"]
-        AGENT_DEMO["demo-agent<br/>430 · 0.31"]
-        PRACTICE_AGENT["practice-agent<br/>346 · 0.60"]
+    subgraph "Entry points"
+        ASK["cli.ask / api.ask"]
+        EVAL["python -m devmate.eval.run_ragas"]
     end
 
-    subgraph "GenAI & MLOps (1,013 nodes)"
-        GENAI["genai-verify<br/>296 · 0.31"]
-        MLOPS["mlops-verify<br/>180 · 0.34"]
-        TRAIN["exercises-train<br/>162 · 0.18"]
-        LLM["llm-count<br/>375 · 0.32"]
-    end
-
-    subgraph "Services (64 nodes)"
-        GO_SVC["services-user<br/>Go · 0.11"]
-    end
-
-    subgraph "Capstone (74 nodes)"
-        CALC["calculator-task<br/>0.17"]
-    end
-
-    %% Entry points
-    ASK["ask · crit=0.73"]:::entry
-    RAG["rag_query · crit=0.72"]:::entry
-    INGEST["ingest · crit=0.67"]:::entry
-    AUTH["auth main.go"]:::entry
-
-    %% Flows
-    ASK --> GENAI
-    RAG --> GENAI
-    INGEST --> GENAI
-    AUTH --> GO_SVC
-
-    %% Cross-community
-    GENAI --> LLM
-    LLM -.->|"40 edges ⚠️"| UNIT["unit-usage<br/>21 nodes"]
-
-    %% Hotspots (red)
-    LEN["len · fan-in 1211"]:::hotspot
-    PRINT["print · fan-in 893"]:::hotspot
-    APPEND["list.append · fan-in 498"]:::hotspot
-
-    classDef entry fill:#3b82f6,stroke:#1e40af,color:#fff
-    classDef hotspot fill:#ef4444,stroke:#991b1b,color:#fff
-    style LLM fill:#f59e0b,stroke:#92400e,color:#fff
-    style UNIT fill:#f59e0b,stroke:#92400e,color:#fff
+    ASK --> DEV
+    EVAL --> DEV
+    DEV -.->|"Tracer.trace 47 callers"| OBS["obs.tracing + cost"]
 ```
 
 ### Key Hotspots
@@ -176,17 +165,18 @@ graphify update . --force
 
 ## What it covers
 
-- **Python** (899 files): Core, advanced, libraries, databases, web frameworks, DSA, ML, MLOps, GenAI exercises and capstones
-- **Go** (17 files): Auth, user, chat microservices with chi router, pgx, JWT
-- **Markdown** (extensive): Lectures, quizzes, exercises, ADRs, learning paths, deep dives
-- **HTML/CSS/JS** (13 files): Dashboard templates, static assets
-- **YAML** (8 files): Docker Compose, CI/CD, registries
-- **SQL** (1 file): Postgres init script
+- **Python** (1,126 files in structural graph language counts): core, advanced, libraries,
+  databases, web frameworks, DSA, ML, MLOps, GenAI, DevMate package + unit tests
+- **Go** (17 files): Auth / user / chat scaffolds (deferred track)
+- **Markdown** (extensive): lectures, quizzes, ADRs, roadmaps, learning paths
+- **HTML/CSS/JS / YAML / TOML / SQL**: templates, compose, CI, registries, init scripts
 
 ## Agent tiers
 
 | Tier | When to use | Tools |
 |------|-------------|-------|
 | **Scout** | Quick lookup, provisional | graph + repomix tools |
-| **Verify** | Task-directed evidence | graph + coverage checks |
+| **Verify** | Task-directed evidence | graph + coverage checks + exact snippets |
 | **Auditor** | Full bounded verification | All tools, complete pagination |
+
+*Last updated: 2026-09-30 (structural reindex + DevMate retrace)*
