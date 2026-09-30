@@ -12,7 +12,7 @@ orchestration is human-led and workflow-driven.
 | **2. Project** | `projects/` | Actual code: auth-service, chat-service, rag-system, capstone |
 | **3. Workflow** | `.ai/workflows/` | Step-by-step procedures for planning, building, reviewing, debugging, learning |
 | **4. Prompt** | `.ai/prompts/` | Modular operating modes (system / roles / tasks / critics / repair) |
-| **5. Template** | `templates/` | Standardized artifact shapes (15 templates) |
+| **5. Template** | `templates/` | Standardized artifact shapes (16 templates) |
 | **6. Evaluation** | `evaluations/` | Golden cases, regressions, RAG datasets, reports, release gates |
 | **7. Delivery** | `infra/` | Docker Compose, setup scripts, dev tooling |
 

@@ -8,7 +8,7 @@ fullstack-ai-engineer-lab/
     prompts/   system/ roles/ tasks/ critics/ repair/
     workflows/ feature/ debugging/ learning/ architecture/ evaluation/
 
-  templates/            # 15 artifact templates
+  templates/            # 16 artifact templates
 
   registries/           # prompt / workflow / template / decision / skills YAML
 
