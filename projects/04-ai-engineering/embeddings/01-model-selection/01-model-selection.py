@@ -30,7 +30,8 @@ def choose(corpus_language: str, context: str) -> str:
     ]
     if context == "prototype":
         return min(candidates, key=lambda m: MODELS[m]["dims"])
-    return min(candidates, key=lambda m: MODELS[m]["cost"])
+    paid = [m for m in candidates if MODELS[m]["cost"] > 0.0]
+    return min(paid, key=lambda m: MODELS[m]["cost"])
 
 
 def main() -> None:
