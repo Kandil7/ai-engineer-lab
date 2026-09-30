@@ -1,4 +1,4 @@
-# ---- Secrets / env ----
+﻿# ---- Secrets / env ----
 .env
 .env.local
 *.local.env
@@ -61,15 +61,16 @@ desktop.ini
 coverage/
 *.cover
 
-# ---- Generated artifacts (regenerable — do not commit) ----
+# ---- Generated artifacts (regenerable â€” do not commit) ----
 # Plot output from matplotlib/scipy exercises. ~10MB, reproduced by re-running the scripts.
 # Note: PNGs committed under outputs/ predate this rule and stay tracked until
 # untracked deliberately: git rm -r --cached outputs/
 **/output/*.png
 **/output/
 outputs/**/*.png
-# The golden set is the regression gate's source of truth — track it even
+# The golden set is the regression gate's source of truth â€” track it even
 # though the machine-level global gitignore excludes datasets/.
+!evaluations/rag/datasets/
 !evaluations/rag/datasets/devmate-golden.jsonl
 .coverage
 projects/00-core-foundations/python/*.png
