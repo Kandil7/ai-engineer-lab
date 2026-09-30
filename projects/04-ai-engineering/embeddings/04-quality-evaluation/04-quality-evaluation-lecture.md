@@ -44,9 +44,9 @@ similar wording:
 
 ```python
 pairs = [
-    ("ما هو العدد الأولي", "What is a prime number?", 0.9),   # positive
-    ("النسبة المئوية", "Percentage", 0.85),                    # positive
-    ("النسبة المئوية", "Physics", 0.3),                        # negative
+    ("ما هو العدد الأولي", "What is a prime number?", 0.9),  # positive
+    ("النسبة المئوية", "Percentage", 0.85),  # positive
+    ("النسبة المئوية", "Physics", 0.3),  # negative
 ]
 ```
 

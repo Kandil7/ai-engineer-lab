@@ -107,8 +107,8 @@ can reach. The steps are load-bearing.
 CoT does not help on simple factual questions, creative writing, or translation:
 
 ```python
-assert not cot_helps("simple_fact")   # no steps needed
-assert not cot_helps("translation")   # not a reasoning task
+assert not cot_helps("simple_fact")  # no steps needed
+assert not cot_helps("translation")  # not a reasoning task
 ```
 
 ### Why not

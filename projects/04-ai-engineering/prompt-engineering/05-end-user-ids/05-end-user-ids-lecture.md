@@ -102,6 +102,7 @@ Validate the ID against a strict format before use:
 ```python
 ID_PATTERN = re.compile(r"[a-zA-Z0-9-]{1,64}")
 
+
 def is_valid_id(user_id: str) -> bool:
     """Format validation: strict regex prevents injection."""
     return bool(ID_PATTERN.fullmatch(user_id))

@@ -69,7 +69,9 @@ poorly, so it is not a candidate regardless of its quality score. Language cover
 candidate list before any evaluation.
 
 ```python
-candidates = [m for m, p in MODELS.items() if p["multilingual"] or corpus_language == "en"]
+candidates = [
+    m for m, p in MODELS.items() if p["multilingual"] or corpus_language == "en"
+]
 ```
 
 ### Why it is a filter, not a preference
@@ -91,7 +93,7 @@ A prototype wants speed of iteration and zero cost. The smallest multilingual mo
 the language is the right choice, because it is fast and free and the quality bar is provisional.
 
 ```python
-assert choose("ar", "prototype") == "nomic-embed-text"   # smallest multilingual
+assert choose("ar", "prototype") == "nomic-embed-text"  # smallest multilingual
 ```
 
 ### Production
