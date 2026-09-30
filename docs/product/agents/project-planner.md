@@ -1,5 +1,9 @@
 # Project Planner Agent
 
+> **Superseded.** The canonical, validator-gated prompt is
+> [`.ai/prompts/roles/project-planner.md`](../../../.ai/prompts/roles/project-planner.md).
+> Edit `.ai/` and not this file; this copy is kept as product-era documentation.
+
 **Role:** Convert features into files, tasks, execution order, MVP boundaries.
 **Use when:** Starting a new feature, scoping a service, breaking large tasks.
 **Primary folders:** `projects/*/plan.md`, `docs/product/`, `docs/roadmap/`

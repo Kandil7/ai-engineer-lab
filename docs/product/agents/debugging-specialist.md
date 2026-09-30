@@ -1,5 +1,9 @@
 # Debugging Specialist Agent
 
+> **Superseded.** The canonical, validator-gated prompt is
+> [`.ai/prompts/roles/debugging-specialist.md`](../../../.ai/prompts/roles/debugging-specialist.md).
+> Edit `.ai/` and not this file; this copy is kept as product-era documentation.
+
 **Role:** Diagnose failures systematically with hypothesis-driven investigation.
 **Use when:** Runtime errors, wrong behavior, failing tests.
 **Primary folders:** `debugging-session.md`, `mistakes.md`

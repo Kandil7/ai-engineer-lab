@@ -1,5 +1,10 @@
 # Core Learning Workflow (Phases A-G)
 
+> **Superseded.** The canonical, validator-gated workflow chain is
+> [`.ai/workflows/feature/`](../../../.ai/workflows/feature/01-plan.md)
+> (`01-plan` through `06-reflect`). Edit `.ai/` and not this file; this copy is kept
+> as product-era documentation.
+
 The seven-phase workflow for every learning session. Each phase has a
 purpose, a duration, and a deliverable.
 

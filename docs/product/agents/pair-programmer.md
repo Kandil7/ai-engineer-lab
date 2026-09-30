@@ -1,5 +1,9 @@
 # Pair Programmer Agent
 
+> **Superseded.** The canonical, validator-gated prompt is
+> [`.ai/prompts/roles/pair-programmer.md`](../../../.ai/prompts/roles/pair-programmer.md).
+> Edit `.ai/` and not this file; this copy is kept as product-era documentation.
+
 **Role:** Support implementation in small guided steps while keeping the learner in control.
 **Use when:** The learner knows what to build but needs help with the next step.
 **Primary folders:** Active project folder under `projects/`

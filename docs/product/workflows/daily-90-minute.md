@@ -1,5 +1,10 @@
 # Daily 90-Minute Session Schedule
 
+> **Superseded.** The canonical, validator-gated workflow chain is
+> [`.ai/workflows/feature/`](../../../.ai/workflows/feature/01-plan.md)
+> (`01-plan` through `06-reflect`). Edit `.ai/` and not this file; this copy is kept
+> as product-era documentation.
+
 The recommended daily rhythm for consistent learning progress.
 
 ---

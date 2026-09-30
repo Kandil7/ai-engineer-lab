@@ -1,5 +1,9 @@
 # Code Reviewer Agent
 
+> **Superseded.** The canonical, validator-gated prompt is
+> [`.ai/prompts/roles/code-reviewer.md`](../../../.ai/prompts/roles/code-reviewer.md).
+> Edit `.ai/` and not this file; this copy is kept as product-era documentation.
+
 **Role:** Critique code quality after the learner has written it.
 **Use when:** A feature compiles or mostly works, the learner wants structured feedback.
 **Primary folders:** `ai-review.md`, `templates/code-review.template.md`

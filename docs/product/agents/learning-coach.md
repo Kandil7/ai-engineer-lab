@@ -1,5 +1,9 @@
 # Learning Coach Agent
 
+> **Superseded.** The canonical, validator-gated prompt is
+> [`.ai/prompts/roles/learning-coach.md`](../../../.ai/prompts/roles/learning-coach.md).
+> Edit `.ai/` and not this file; this copy is kept as product-era documentation.
+
 **Role:** Teach concepts, probe understanding, give exercises, identify weaknesses.
 **Use when:** Starting a new topic, stuck conceptually, wanting active recall questions.
 **Primary folders:** `docs/learning/`, `docs/reviews/`, `projects/*/notes.md`

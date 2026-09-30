@@ -10,8 +10,9 @@ maps the manual's concepts to concrete files, commands, and habits.
 | What | Where | When |
 |------|-------|------|
 | The manual | `docs/product/ai-learning-operating-manual.md` | Reference |
-| Agent prompts | `docs/product/agents/` | Before each AI session |
-| Workflows | `docs/product/workflows/` | Every session |
+| Agent prompts (canonical) | `.ai/prompts/roles/` | Before each AI session |
+| Workflows (canonical) | `.ai/workflows/` | Every session |
+| Superseded copies | `docs/product/agents/`, `docs/product/workflows/` | Reference only — edit `.ai/` instead |
 | Templates | `templates/` | When creating artifacts |
 | Learning artifacts | `docs/learning/` | After learning sessions |
 | Mistakes | `mistakes.md` (in project folder) | After a mistake |
@@ -24,10 +25,10 @@ maps the manual's concepts to concrete files, commands, and habits.
 
 ## Starting a Session
 
-1. Open `docs/product/workflows/session-procedure.md`
+1. Open `.ai/workflows/feature/01-plan.md` (the canonical session entry point)
 2. Fill in the Session Goal card
-3. Pick the right agent from `docs/product/agents/`
-4. Copy the prompt template from the agent file
+3. Pick the right role from `.ai/prompts/roles/`
+4. Compose it with `system/workspace-governor.md` and `system/output-format-rules.md`
 5. Start with the smallest question
 
 ## During the Session
@@ -54,12 +55,12 @@ Follow the 7-phase workflow:
 
 | Situation | Agent | Prompt location |
 |-----------|-------|-----------------|
-| Starting a new topic | Learning Coach | `agents/learning-coach.md` |
-| Breaking down a feature | Project Planner | `agents/project-planner.md` |
-| Stuck on the next step | Pair Programmer | `agents/pair-programmer.md` |
-| Code works but is ugly | Code Reviewer | `agents/code-reviewer.md` |
-| Something is broken | Debugging Specialist | `agents/debugging-specialist.md` |
-| Reading docs/repo/article | Source Learning Agent | `agents/source-learning-agent.md` |
+| Starting a new topic | Learning Coach | `.ai/prompts/roles/learning-coach.md` |
+| Breaking down a feature | Project Planner | `.ai/prompts/roles/project-planner.md` |
+| Stuck on the next step | Pair Programmer | `.ai/prompts/roles/pair-programmer.md` |
+| Code works but is ugly | Code Reviewer | `.ai/prompts/roles/code-reviewer.md` |
+| Something is broken | Debugging Specialist | `.ai/prompts/roles/debugging-specialist.md` |
+| Reading docs/repo/article | Source Learning Agent | `.ai/prompts/roles/source-learning-agent.md` |
 
 ---
 
@@ -140,8 +141,8 @@ Track these weekly:
 
 | System | How it connects |
 |--------|----------------|
-| `.ai/prompts/` | Agent prompts can be registered as role prompts |
-| `registries/` | Templates registered in `template-registry.yaml` |
+| `.ai/prompts/` | Canonical role/system/task/critic/repair prompts; the `docs/product/agents/` copies are superseded |
+| `registries/` | Templates registered in `template-registry.yaml` (16 templates, including `mistakes`) |
 | CI validators | Artifacts follow template structure |
 | `/session-log` | Quick capture from any session |
 | `/document-project` | Full documentation sweep |

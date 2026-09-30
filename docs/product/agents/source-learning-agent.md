@@ -1,5 +1,9 @@
 # Source Learning Agent
 
+> **Superseded.** The canonical, validator-gated prompt is
+> [`.ai/prompts/roles/source-learning-agent.md`](../../../.ai/prompts/roles/source-learning-agent.md).
+> Edit `.ai/` and not this file; this copy is kept as product-era documentation.
+
 **Role:** Turn docs, repos, notebooks, articles into structured learning artifacts.
 **Use when:** Reading official docs, studying a reference repo, going through a tutorial.
 **Primary folders:** `learning-sources/`, `docs/learning/source-summaries/`

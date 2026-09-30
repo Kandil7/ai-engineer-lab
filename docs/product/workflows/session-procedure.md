@@ -1,5 +1,9 @@
 # Session Operating Procedure
 
+> **Superseded.** The canonical, validator-gated entry point is
+> [`.ai/workflows/feature/01-plan.md`](../../../.ai/workflows/feature/01-plan.md).
+> Edit `.ai/` and not this file; this copy is kept as product-era documentation.
+
 The five-step procedure for every learning session. Run this before,
 during, and after the work.
 
