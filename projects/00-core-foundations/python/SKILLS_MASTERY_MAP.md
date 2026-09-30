@@ -12,9 +12,11 @@
 1. Pick a skill row. Work through its **Topics** in order.
 2. Each topic is a directory with a runnable `.py` exercise (run with `--verify`),
    a detailed lecture, and a glossary.
-3. Check yourself against the **Mastery evidence** column — it is the acceptance
+3. Check yourself against the **Mastery evidence** column - it is the acceptance
    test for the skill, applied to a real Athar-style pipeline.
-4. The skill is *done* when you can produce the evidence, not when you have read
+4. Prove it with the **Practice** challenge set (Bronze/Silver/Gold) linked in
+   each section — Silver and Gold carry measured guards a naive solution fails.
+5. The skill is *done* when you can produce the evidence, not when you have read
    the lectures.
 
 ---
@@ -46,6 +48,10 @@ unaffected.
 **The importer pattern lives in [NEW] topic 35's section 9** — batch streaming,
 typed `ImportRecordError` with line numbers, and the `on_error` quarantine hook.
 
+**Practice:** [`02-advanced-python/challenges/35-unicode-and-arabic-text/`](02-advanced-python/challenges/35-unicode-and-arabic-text/) —
+Bronze normalization, Silver O(n) dedup with a comparison budget, Gold
+streaming import under an 8 MB `tracemalloc` ceiling.
+
 ---
 
 ## 2. Maintainable Code — كتابة كود قابل للصيانة
@@ -71,6 +77,10 @@ reference-validation rules (and the validator's tests pass unchanged).
 **The engine-swap test lives in [NEW] topic 36's section 7** — identical
 validation errors across two search backends is the mechanical proof.
 
+**Practice:** [`02-advanced-python/challenges/36-separation-of-concerns/`](02-advanced-python/challenges/36-separation-of-concerns/) —
+Bronze DI wiring, Silver spy-guarded call budgets (normalize once per record),
+Gold a new engine with a structural decoupling proof.
+
 ---
 
 ## 3. Testing — الاختبارات
@@ -94,6 +104,12 @@ failure cases never return.
 **The provenance + idempotency + known-failure trio lives in [NEW] topic 38's
 sections 2–5** — byte-for-byte text/book/page assertions, double-ingest row
 count, and the `KF-01…` regression fixtures.
+
+**Practice:** [`02-advanced-python/challenges/38-test-strategy-contract-regression/`](02-advanced-python/challenges/38-test-strategy-contract-regression/) —
+Bronze invariant checker, Silver idempotent ingest under a comparison budget,
+Gold the regression gate with mutation detection and exact call budgets. Also
+[`02-advanced-python/challenges/37-code-review-and-refactoring/`](02-advanced-python/challenges/37-code-review-and-refactoring/)
+for lock tests and structural budgets.
 
 ---
 
@@ -119,6 +135,12 @@ losing the link to the source.
 
 **The lineage criterion lives in [NEW] topic 11's section 5** (migrations) and
 **[NEW] backup topic's section 5** (index is derived, rebuilt not restored).
+
+**Practice:** [`04-databases/sqlalchemy/challenges/11-migrations-alembic/`](04-databases/sqlalchemy/challenges/11-migrations-alembic/) —
+Bronze revision chains, Silver expand-backfill-contract with mixed-version
+safety, Gold a lineage-preserving rebuild under statement and memory budgets.
+And [`04-databases/postgresql/challenges/07-backup-and-restore/`](04-databases/postgresql/challenges/07-backup-and-restore/) —
+verify-by-restore with content-drift detection and point-in-time recovery.
 
 ---
 
@@ -175,6 +197,11 @@ index becomes older than the source.
 **The mastery answer lives in [NEW] topic 04's section 7** (designed stories for
 worker failure and stale index) and **topic 03's section 7** (the staleness
 state machine + rebuild path).
+
+**Practice:** all five sets in [`10-system-design/challenges/`](10-system-design/challenges/) —
+contracts with a rolling-upgrade simulation, queues with retry/DLQ accounting,
+consistency with versioned apply, resilience with bulkheads and a degradation
+ladder, and the ADR lifecycle with an immutability guard.
 
 ---
 

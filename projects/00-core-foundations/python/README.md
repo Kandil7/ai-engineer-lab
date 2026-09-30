@@ -190,10 +190,10 @@ Most Phase 1–2 exercises need **no external packages**.
 
 ## 🔗 Related Resources
 
-- [Fullstack AI Engineer Lab (root)](../../README.md)
-- [Project Plans](../../docs/plan/)
-- [Architecture Docs](../../docs/architecture/)
-- [Infrastructure](../../infra/)
+- [Fullstack AI Engineer Lab (root)](../../../README.md)
+- [Project Plans](../../../docs/plan/)
+- [Architecture Docs](../../../docs/architecture/)
+- [Infrastructure](../../../infra/)
 
 ---
 
