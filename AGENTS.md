@@ -68,13 +68,16 @@ Six YAML inventories; they are the source of truth, not the docs:
   `used_by` (workflow ids or `area/*` globs), constraints.
 - `workflow-registry.yaml` — all 21 workflows: `prompts_used`, template,
   produced artifacts, exit criteria.
-- `template-registry.yaml` — 15 templates with required sections and `used_by`.
+- `template-registry.yaml` — 16 templates with required sections and `used_by`.
 - `skills-registry.yaml` — 8 reusable skills; `reusable_by` must match each
   prompt's `uses_skills` in both directions.
 - `decision-log.yaml` — ADR index mirroring `docs/decisions/`.
 - `review-log.yaml` — review index mirroring `projects/*/ai-review.md`.
 
-Rules: repair entries use a `trigger` with empty `used_by`.
+Rules: every repair entry declares a `trigger` (missing-context, over-engineering,
+invalid-output-shape); `used_by` is optional and names the workflows that invoke it —
+`repair.simplify-overengineered-plan` is wired to `feature/02-design` and `architecture/*`.
+An entry with neither a trigger nor `used_by` fails validation.
 `task.implementation-planner` is deprecated (use `role.project-planner`);
 never wire a deprecated prompt into a workflow. Index scripts own their indexes
 (`new-adr.ps1`, `new-review.ps1`) — don't hand-edit them.

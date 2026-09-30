@@ -32,11 +32,11 @@ templates:
     used_by: [debugging/*]
   - id: daily-log
     path: templates/daily-log.template.md
-    required_sections: ["What I Built", "What I Learned", "Ù…Ù„Ø®Øµ Ø¹Ø±Ø¨ÙŠ (Arabic Summary)"]
+    required_sections: ["What I Built", "What I Learned", "ملخص عربي (Arabic Summary)"]
     used_by: [feature/06-reflect]
   - id: weekly-review
     path: templates/weekly-review.template.md
-    required_sections: ["Self-Assessment (1â€“10)", "Next Week Plan", "Ù…Ù„Ø®Øµ Ø¹Ø±Ø¨ÙŠ (Arabic Summary)"]
+    required_sections: ["Self-Assessment (1–10)", "ملخص عربي (Arabic Summary)"]
     used_by: [feature/06-reflect]
   - id: monthly-review
     path: templates/monthly-review.template.md

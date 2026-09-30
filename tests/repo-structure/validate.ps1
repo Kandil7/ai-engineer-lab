@@ -147,6 +147,7 @@ $requiredTemplates = @(
     "debugging-session.template.md",
     "evaluation-report.template.md",
     "feature-spec.template.md",
+    "mistakes.template.md",
     "monthly-review.template.md",
     "project-plan.template.md",
     "source-book.template.md",
