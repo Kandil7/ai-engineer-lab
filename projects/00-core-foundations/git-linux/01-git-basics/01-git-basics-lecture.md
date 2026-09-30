@@ -152,9 +152,9 @@ history.
 ```python
 repo.add("app.py")
 assert "app.py" in repo.index
-assert "secret.env" not in repo.index        # only the intended file staged
+assert "secret.env" not in repo.index  # only the intended file staged
 repo.commit("feat: add app entry point")
-assert "secret.env" not in repo.head         # secrets never enter the history
+assert "secret.env" not in repo.head  # secrets never enter the history
 ```
 
 The second and third assertions are the ones that matter: deliberate staging and no secrets in
