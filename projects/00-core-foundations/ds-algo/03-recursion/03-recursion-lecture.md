@@ -41,8 +41,8 @@ recursion:
 ```python
 def factorial(n: int) -> int:
     if n <= 1:
-        return 1          # base case
-    return n * factorial(n - 1)   # recursive case
+        return 1  # base case
+    return n * factorial(n - 1)  # recursive case
 ```
 
 ### The recursive case
@@ -135,7 +135,7 @@ Recursion can repeat work. Naive Fibonacci recomputes the same values exponentia
 def fib(n):
     if n <= 1:
         return n
-    return fib(n - 1) + fib(n - 2)   # O(2^n): recomputes
+    return fib(n - 1) + fib(n - 2)  # O(2^n): recomputes
 ```
 
 Every node in the recursion tree recomputes its subtree, so the same value is computed many times.

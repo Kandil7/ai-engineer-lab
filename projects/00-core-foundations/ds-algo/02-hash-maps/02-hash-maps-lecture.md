@@ -39,7 +39,7 @@ so it is O(1) on average:
 
 ```python
 d = {"a": 1, "b": 2}
-d["a"]   # 1, O(1) average
+d["a"]  # 1, O(1) average
 ```
 
 ### Why average

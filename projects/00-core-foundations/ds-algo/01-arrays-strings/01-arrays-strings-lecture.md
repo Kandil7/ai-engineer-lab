@@ -41,7 +41,7 @@ directly, so it is O(1):
 
 ```python
 a = [10, 20, 30, 40]
-a[0]   # 10, O(1)
+a[0]  # 10, O(1)
 ```
 
 ### Slicing is O(k)
@@ -49,7 +49,7 @@ a[0]   # 10, O(1)
 A slice copies a range, so it costs the length of the slice:
 
 ```python
-a[1:3]   # [20, 30], O(k) for k = 2
+a[1:3]  # [20, 30], O(k) for k = 2
 ```
 
 The copy is the subtle part: a slice is a new list, not a view. A loop that slices repeatedly copies

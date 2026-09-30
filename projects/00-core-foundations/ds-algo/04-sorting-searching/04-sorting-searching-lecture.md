@@ -139,7 +139,8 @@ Python's sort handles the sorting, and `bisect` handles the binary search:
 
 ```python
 import bisect
-i = bisect.bisect_left(a, target)   # insertion point, O(log n)
+
+i = bisect.bisect_left(a, target)  # insertion point, O(log n)
 ```
 
 `bisect_left` finds where a value would be inserted to keep the list sorted, which is the building
