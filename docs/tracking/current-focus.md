@@ -5,7 +5,7 @@
 > ⚠️ A staleness gate fails CI if this file is more than 8 days old: `make fresh-check`
 > locally and the Tracking freshness step in `.github/workflows/ci.yml`.
 
-**Last updated:** 2026-09-26
+**Last updated:** 2026-09-29
 
 ---
 
@@ -22,8 +22,8 @@
 lifted the lecture moratorium. Decision made 2026-09-26: the "Master AI Engineering" content
 is adopted as `docs/curriculum/` (4 lecture + workbook modules anchored to DevMate) — no
 separate `projects/04-ai-engineering/master-ai-engineering/` directory will be created.
-`embeddings/`, `prompt-engineering/`, `rag-system/` remain empty; fill them only when a
-DevMate milestone demands the content (A2/A3).
+`embeddings/`, `prompt-engineering/`, `rag-system/` were filled 2026-09-29 with learning
+content (4-6 topics each, lecture + glossary + exercise + quiz).
 
 ---
 
@@ -42,7 +42,7 @@ Python baseline repair and the curriculum module decision above.
 3. Repair Tier 0 backlog R1–R7 + R9 (`../../projects/00-core-foundations/python/admin/mastery-plan/10-remediation-backlog.md`)
 4. ~~Decide the **Master AI Engineering** module~~ — decided 2026-09-26: adopted as
    `docs/curriculum/`; no separate module directory
-5. Fill the empty modules: `embeddings/`, `prompt-engineering/`, `rag-system/`
+5. ~~Fill the empty modules: `embeddings/`, `prompt-engineering/`, `rag-system/`~~ — done 2026-09-29
 6. Write DevMate unit tests for the stats command (no test covers `cli/main.py` yet)
 
 ---
@@ -56,7 +56,7 @@ Python baseline repair and the curriculum module decision above.
 - [x] Tests exist for the stats command (4 tests in `tests/unit/test_cli_stats.py`)
 - [ ] Legacy backlog R1–R7, R9 closed (reproduce + verify each fix)
 - [x] `master-ai-engineering/` decision made — adopted as `docs/curriculum/` (2026-09-26)
-- [ ] `embeddings/`, `prompt-engineering/`, `rag-system/` no longer empty
+- [x] `embeddings/`, `prompt-engineering/`, `rag-system/` no longer empty (filled 2026-09-29)
 
 ---
 

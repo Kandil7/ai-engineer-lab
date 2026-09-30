@@ -17,7 +17,7 @@
 
 ## Tally
 
-Covered 76 · Partial 37 · Missing 6 · Deferred 4 · Divergence 19 · Out of scope 47.
+Covered 84 · Partial 31 · Missing 6 · Deferred 2 · Divergence 19 · Out of scope 47.
 (189 unique slugs, machine-counted; multi-slug rows split on commas, zero duplicates.)
 
 ## 1. Orientation
@@ -85,7 +85,7 @@ Covered 76 · Partial 37 · Missing 6 · Deferred 4 · Divergence 19 · Out of s
 | cot | Covered | Week 1 study block |
 | react-prompting | Covered | Weeks 5–6 agent loop |
 | system-prompting, role--behavior | Covered | Week 1 versioned Jinja templates |
-| robust-prompt-engineering | Partial | No promptfoo-style A/B harness |
+| robust-prompt-engineering | Covered | `prompt-engineering/04-prompt-evaluation` — A/B comparison harness |
 | prompt-caching | Covered | Week 1 explicit deliverable |
 | prompt-vs-context-engineering, context-vs-prompt-eng | Partial | Tied to the context-engineering gap, section 8 |
 | adding-end-user-ids-in-prompts | Missing | Minor; fold into week 7 guardrails |
@@ -175,12 +175,12 @@ Covered 76 · Partial 37 · Missing 6 · Deferred 4 · Divergence 19 · Out of s
 | --- | --- | --- |
 | evaluation-metrics | Covered | recall@5/10, MRR, faithfulness, relevance |
 | llm-evaluations | Covered | Eval harness weeks 2–3 + agent eval weeks 5–6 |
-| deterministic-evals | Partial | Golden sets serve this role; never framed as such |
-| model-based-evals | Partial | Faithfulness/relevance imply a judge; unnamed |
+| deterministic-evals | Covered | `ai-evaluation/01-gold-datasets-annotation` + `06-eval-in-ci` |
+| model-based-evals | Covered | `ai-evaluation/04-llm-as-judge` — judge design + validation |
 | human-evals | Covered | Weeks 2–3 hand-grading round |
 | ragas | Covered | `devmate/eval/run_ragas.py` |
 | deepeval | Divergence | One harness picked; RAGAS |
-| regression-testing | Partial | Prompt snapshots week 7 approximate it |
+| regression-testing | Covered | `ai-evaluation/06-eval-in-ci` — baseline thresholds gate every change |
 | llm-observability | Covered | Langfuse from week 1 |
 | tracing--logging | Covered | `devmate/src/devmate/obs/tracing.py` |
 | langfuse | Covered | Pinned in sources |
@@ -191,9 +191,9 @@ Covered 76 · Partial 37 · Missing 6 · Deferred 4 · Divergence 19 · Out of s
 
 | Roadmap topic | Status | Track home / note |
 | --- | --- | --- |
-| fine-tuning | Deferred | Week 11+ buffer, conditional on postings |
-| training | Deferred | Same as above (ML sprint) |
-| rag-vs-fine-tuning | Partial | Decision implicit; never written as ADR |
+| fine-tuning | Covered | `fine-tuning/` — SFT, LoRA/QLoRA, training data, runs, registry |
+| training | Covered | `fine-tuning/` — 6 topics with verified exercises |
+| rag-vs-fine-tuning | Covered | `fine-tuning/06-rag-vs-fine-tuning` — the ADR is the exercise |
 
 ## 13. Safety and governance
 
@@ -205,7 +205,7 @@ Covered 76 · Partial 37 · Missing 6 · Deferred 4 · Divergence 19 · Out of s
 | prompt-injection-attacks | Covered | Week 7 input guardrails with evidence |
 | constraining-outputs-and-inputs, constrains, constraints | Covered | Schema validation both sides week 7 |
 | content-moderation-apis | Out of scope | Hand-rolled guards chosen |
-| conducting-adversarial-testing | Partial | One payload; not a discipline |
+| conducting-adversarial-testing | Covered | `ai-evaluation/05-adversarial-evaluation` — attack set + resistance rate |
 | data-classification | Out of scope | No sensitive-data flows in vehicle |
 | atlan, datahub | Out of scope | Enterprise catalogs |
 
