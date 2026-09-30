@@ -2,6 +2,10 @@
 
 > Tracks the scaffolding and setup progress of the workspace.
 > Updated as each phase of the workspace build completes.
+>
+> **Long track.** This file records the original workspace scaffold (long track,
+> demoted by [ADR-0004](../decisions/0004-adopt-10-week-ai-engineer-track.md)). For
+> current work see [`.ai`-tracked progress](../tracking/current-focus.md).
 
 ---
 
@@ -13,9 +17,9 @@ The initial workspace scaffolding has been completed. This includes:
 
 - [x] Monorepo directory structure created
 - [x] Documentation framework established (`docs/`)
-- [x] ADR system initialized (3 ADRs recorded)
-- [x] Template library created (15+ templates)
-- [x] Registry system set up (prompt, workflow, template, decision, skills)
+- [x] ADR system initialized (6 ADRs recorded)
+- [x] Template library created (16 templates)
+- [x] Registry system set up (prompt, workflow, template, decision, skills, review)
 - [x] Learning paths defined (Go, FastAPI, Flutter, Next.js, RAG, System Design)
 - [x] Deep dives authored (Auth Service, RAG System, Athar Retrieval, Baligh Training)
 - [x] Cheat sheets created (Git, Docker, PostgreSQL, Qdrant, Prompt Design)
@@ -57,18 +61,3 @@ The initial workspace scaffolding has been completed. This includes:
 - [Master Roadmap](../roadmap/master-roadmap.md)
 - [Progress Dashboard](../roadmap/progress-dashboard.md)
 - [Current Focus](../tracking/current-focus.md)
-ogin`) and `~/.config/git/`, which coul… │
-│                     ▘▘ ▝▝                     │ `acceptEdits` mode now prompts before writing build-tool config files that grant code execution (`.npmrc`, `.yarnrc*`, `bun… │
-│                                               │ Edit no longer requires a separate Read after viewing a file with `grep`: single-file `grep`/`egrep`/`fgrep` commands now s… │
-│   Opus 4.8 (1M context) · API Usage Billing   │ /release-notes for more                                                                                                      │
-│     K:\Projects\fullstack-ai-engineer-lab     │                                                                                                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-
-  8 tasks (4 done, 1 in progress, 3 open)
-  ◼ Group 5 — Registries, docs, decisions, sources, evaluations
-  ◻ Group 6 — Project scaffolds + auth-service demo
-  ◻ Group 7 — Infra, scripts, tests
-  ◻ Verification + commits
-  ✔ Group 1 — Root governance files
-   … +3 completed

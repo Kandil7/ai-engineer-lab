@@ -2,7 +2,7 @@
 
 > Quick-read status summary. Update at weekly and monthly reviews.
 
-**Last updated:** 2026-09-30 (Production AI Systems track added; previous 2026-08-02)
+**Last updated:** 2026-09-30 (skills-mastery content + 11 challenge sets shipped; Production AI Systems track added 2026-09-30; previous 2026-08-02)
 
 ---
 
@@ -32,8 +32,8 @@ gateway/routing, cost enforcement, SLO operations, and experiment tracking. Star
 
 | Area | Evidence | Scale |
 | --- | --- | --- |
-| Core Python | `python/01-core-python/` | 41 topics, lecture + glossary each |
-| Advanced Python | `python/02-advanced-python/` | 20 topics — decorators, generators, context managers, async, type hints, dataclasses, ABC, functools, itertools, descriptors, metaclasses, threading, logging, patterns |
+| Core Python | `python/01-core-python/` | 52 topics, lecture + glossary each |
+| Advanced Python | `python/02-advanced-python/` | 38 topics — decorators, generators, context managers, async, type hints, dataclasses, ABC, functools, itertools, descriptors, metaclasses, threading, logging, patterns + production engineering (Unicode/Arabic text, SoC, code review, test strategy) |
 | Data libraries | `python/03-libraries/` | numpy, pandas, matplotlib, scipy — pandas + matplotlib exercises finished 2026-07-29 |
 | FastAPI | `python/05-web-frameworks/fastapi/` | 25 topics, each with an exercise |
 | AI curriculum | `04-ai-engineering/` | 6,947 lines — LLM APIs, prompting, embeddings, RAG, agents, evaluation, deployment, multi-agent, safety |
@@ -42,6 +42,18 @@ gateway/routing, cost enforcement, SLO operations, and experiment tracking. Star
 | fast.ai track | `04-ai-engineering/fastai-deep-learning/` | 13 modules + quizzes |
 | Workspace system | `.ai/`, `templates/`, `registries/` | 21 prompts, 21 workflows, 16 templates, 6 registries |
 | ADRs | `docs/decisions/` | 5 |
+
+### Skills-mastery delivery (2026-09-30)
+
+Closing the Athar skills-table gaps in `projects/00-core-foundations/python/`:
+
+| Deliverable | Evidence |
+| --- | --- |
+| 11 new topics (3-file format) | `02-advanced-python/35-38`, `04-databases/` migrations + backup, `10-system-design/01-05` |
+| System design phase | contracts, queues, consistency, failure modes, ADRs |
+| 11 challenge sets (Bronze/Silver/Gold) | measured guards (comparison budgets, call counts, tracemalloc ceilings) |
+| Skills mastery map | [SKILLS_MASTERY_MAP.md](../../projects/00-core-foundations/python/SKILLS_MASTERY_MAP.md) |
+| Verification | 186 tests: starter fails with NotImplementedError, solution passes 100% |
 
 ### The gap this dashboard exists to surface
 

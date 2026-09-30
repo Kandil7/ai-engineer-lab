@@ -23,10 +23,10 @@ Targets are the level needed to interview credibly for a remote AI engineer role
 
 | Skill | Target | Current | Evidence | Next step |
 | --- | --- | --- | --- | --- |
-| Python (language) | 7 | **6** | `python/01-core-python/` (41 topics), `02-advanced-python/` (20 topics) | Apply in a real service, not exercises |
-| Python (production) | 7 | **3** | — | DevMate: packaging, config, logging, error handling — week 0 |
-| Clean code / typing | 6 | **4** | lectures exist; no CI enforcement | ruff + mypy green in CI — week 0 |
-| Testing (pytest) | 6 | **4** | `python/tests/`, `02-advanced-python/18-unit-testing.py` | Test a real service; LLM-aware testing — week 7 |
+| Python (language) | 7 | **6** | `python/01-core-python/` (52 topics), `02-advanced-python/` (38 topics) | Apply in a real service, not exercises |
+| Python (production) | 7 | **3** | `02-advanced-python/35-38` (Unicode, SoC, review, test strategy) + challenge sets | Apply in a real service, not exercises — week 0 |
+| Clean code / typing | 6 | **4** | `02-advanced-python/36-37` (SoC, refactoring) + challenge sets with structural guards | ruff + mypy green in CI — week 0 |
+| Testing (pytest) | 6 | **4** | `python/tests/`, `02-advanced-python/18,38` + regression-gate challenge set | Test a real service; LLM-aware testing — week 7 |
 | Git | 7 | **4** | 25+ commits, 3 PRs | Rebase, conflict resolution, 5 clean PRs — week 0 |
 | **CI/CD** | 6 | **1** | none | GitHub Actions green — week 0 |
 | FastAPI | 7 | **4** | `05-web-frameworks/fastapi/` (25 topics + exercises) | Ship a real API — week 4 |
@@ -38,14 +38,14 @@ Targets are the level needed to interview credibly for a remote AI engineer role
 | Vector DB (Qdrant) | 7 | **2** | cheat-sheet, compose service | Ingest and query at scale — week 2 |
 | RAG (end-to-end) | 8 | **2** | 835 lines of exercise code, nothing running | Working pipeline with metrics — weeks 2–3 |
 | **Evaluation** | 7 | **1** | `evaluations/` scaffolded, empty | Golden set + RAGAS — week 2 |
-| **SQL** | 6 | **2** | `04-databases/mysql/` (sqlite-based) | Real schema, indexes, query plans — week 4 |
+| **SQL** | 6 | **2** | `04-databases/` (sql-fundamentals, sqlite, migrations/backup topics) | Real schema, indexes, query plans — week 4 |
 | Docker | 6 | **2** | compose exists; cheat-sheet | Multi-stage build, deploy — week 4 |
 | Deployment | 6 | **1** | none | Public URL — week 4 |
 | Agents | 7 | **2** | 10 exercises + lectures, nothing running | 4 tools, ReAct, step caps — weeks 5–6 |
 | **MCP** | 6 | **1** | mentioned in 2 quizzes | Build an MCP server — week 6 |
 | Caching (Redis) | 5 | **1** | compose service only | Semantic cache with hit rate — week 7 |
 | Guardrails / security | 6 | **2** | 10 security exercises | Block real injection attempts — week 7 |
-| System design | 6 | **3** | 2 design docs, 5 ADRs | Explain DevMate's architecture cold — week 8 |
+| System design | 6 | **3** | `10-system-design/` (5 topics + 5 challenge sets), 2 design docs, 5 ADRs | Explain DevMate's architecture cold — week 8 |
 | Technical English | 7 | **4** | repo docs in English | Recorded explanations, mocks — week 8 |
 
 ### Reading this table
