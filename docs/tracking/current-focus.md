@@ -52,6 +52,7 @@ and the two ADRs are next once Qdrant/ingest are up.
 9. ~~Offline eval harness~~ — `python -m devmate.eval.run_ragas --mode offline` works; 52 unit tests green
 10. Live retrieval eval: start qdrant, ingest repo, run `--mode live`; write chunking ADR with measured numbers
 11. Full DevMate gate after any further code change
+12. ~~Skills-mastery content + challenge sets for the python module~~ — done 2026-09-30 (11 topics, 11 challenge sets, SKILLS_MASTERY_MAP.md; 186 tests verified)
 
 ---
 
@@ -69,6 +70,7 @@ and the two ADRs are next once Qdrant/ingest are up.
 - [x] Offline schema tests for golden cases (`tests/unit/test_prompt_golden.py`)
 - [x] `master-ai-engineering/` decision made — adopted as `docs/curriculum/` (2026-09-26)
 - [x] `embeddings/`, `prompt-engineering/`, `rag-system/` no longer empty (filled 2026-09-29)
+- [x] Skills-mastery gaps closed in `projects/00-core-foundations/python/` — SKILLS_MASTERY_MAP.md + 11 challenge sets (186 tests: starter fails / solution passes, 2026-09-30)
 
 ---
 

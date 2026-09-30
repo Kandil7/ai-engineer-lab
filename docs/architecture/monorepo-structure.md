@@ -32,6 +32,9 @@ fullstack-ai-engineer-lab/
 
   projects/
     00-core-foundations/  go/ git-linux/ ds-algo/ python/
+                          # python/: 10 phases (core→advanced→libraries→databases→
+                          # web→DSA→ML→MLOps→GenAI→system-design) + SKILLS_MASTERY_MAP.md
+                          # + per-module challenge sets (Bronze/Silver/Gold)
     01-backend-go/        01-auth-service/ 02-user-service/ 03-chat-service/
     02-frontend/          flutter-app/ nextjs-web/
     03-databases/         postgres-design/ redis-cache/ qdrant-rag/
