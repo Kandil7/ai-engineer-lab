@@ -43,7 +43,7 @@ python 01-core-python/basics/01-introduction/01-introduction.py
 ## ⚡ Phase 2: Advanced Python
 
 **Directory:** `02-advanced-python/`  
-**Topics:** 34 self-contained topic directories
+**Topics:** 38 self-contained topic directories
 
 | Order | Topics | Key Concepts |
 |-------|--------|--------------|
@@ -240,6 +240,37 @@ skills and their Athar mastery evidence.
 
 ---
 
+## 🎯 Challenge Sets (practice for every production topic)
+
+Each production topic ships a challenge set with Bronze (~15 min, mechanics) →
+Silver (~35 min, right structure) → Gold (~75 min, production constraint).
+Silver/Gold tiers include **measured guards** — comparison budgets, call
+counts, `tracemalloc` ceilings — never wall-clock assertions.
+
+| Set | Location | Mastery target |
+|---|---|---|
+| Unicode & Arabic Text | `02-advanced-python/challenges/35-unicode-and-arabic-text/` | streaming import, located errors |
+| Separation of Concerns | `02-advanced-python/challenges/36-separation-of-concerns/` | engine-swap invariant |
+| Code Review & Refactoring | `02-advanced-python/challenges/37-code-review-and-refactoring/` | lock tests, structural budgets |
+| Test Strategy | `02-advanced-python/challenges/38-test-strategy-contract-regression/` | provenance, idempotency, regression gate |
+| Migrations | `04-databases/sqlalchemy/challenges/11-migrations-alembic/` | expand-backfill-contract, lineage |
+| Backup & Restore | `04-databases/postgresql/challenges/07-backup-and-restore/` | verify-by-restore, PITR |
+| Component Contracts | `10-system-design/challenges/01-component-contracts/` | rolling-upgrade plans |
+| Queues & Workflows | `10-system-design/challenges/02-queues-and-workflows/` | retry policy, worker accounting |
+| Consistency & Staleness | `10-system-design/challenges/03-consistency-and-staleness/` | versioned apply |
+| Failure Modes & Resilience | `10-system-design/challenges/04-failure-modes-and-resilience/` | bulkheads, degradation ladder |
+| ADRs | `10-system-design/challenges/05-architecture-decision-records/` | decision lifecycle |
+
+```powershell
+# default run fails with NotImplementedError until solved
+python -m pytest <path>/test_challenge.py -q
+# validate the reference solution
+$env:CHALLENGE_USE_SOLUTION = "1"
+python -m pytest <path>/test_challenge.py -q
+```
+
+---
+
 ## 🏆 Capstone Projects
 
 **Directory:** `capstones/`
@@ -288,4 +319,4 @@ python run_smoke_tests.py
 
 ---
 
-*Last updated: August 2026*
+*Last updated: September 2026*

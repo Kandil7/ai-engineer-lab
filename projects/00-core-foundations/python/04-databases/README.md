@@ -18,10 +18,14 @@ Each topic directory contains:
 │   └── ... (14 topics)
 │
 ├── sql-sqlite/                  # 12 topics: SQLite exercises
-├── postgresql/                  # 6 topics: PostgreSQL exercises
+├── postgresql/                  # 7 topics: PostgreSQL exercises + backup/restore
+│   ├── 07-backup-and-restore/   # verify-by-restore, PITR, 3-2-1
+│   └── challenges/07-backup-and-restore/   # Bronze/Silver/Gold practice set
 ├── mongodb/                     # 12 topics: MongoDB exercises
 ├── redis/                       # 8 topics: Caching, pub/sub, sessions
-├── sqlalchemy/                  # 10 topics: ORM patterns
+├── sqlalchemy/                  # 11 topics: ORM patterns + migrations
+│   ├── 11-migrations-alembic/   # revision chains, expand-backfill-contract
+│   └── challenges/11-migrations-alembic/   # Bronze/Silver/Gold practice set
 └── vector-stores/               # 8 topics: Embeddings, similarity search
 ```
 
@@ -31,11 +35,16 @@ Each topic directory contains:
 |------------|--------|-------|
 | **SQL Fundamentals** | 14 | Portable SQL (DDL, DML, joins, subqueries) |
 | **SQLite** | 12 | Portable exercises (built-in sqlite3) |
-| **PostgreSQL** | 6 | Advanced features (JSONB, indexes, pooling) |
+| **PostgreSQL** | 7 | Advanced features (JSONB, indexes, pooling) + backup/restore |
 | **MongoDB** | 12 | Document database (dict stand-in) |
 | **Redis** | 8 | Caching, pub/sub, distributed locks |
-| **SQLAlchemy** | 10 | ORM patterns (Core + ORM) |
+| **SQLAlchemy** | 11 | ORM patterns (Core + ORM) + migrations/Alembic |
 | **Vector Stores** | 8 | Embeddings, similarity search |
+
+New in this phase's Athar track: **`postgresql/07-backup-and-restore`**
+(verify-by-restore, RPO/RTO, PITR, the derived-index rule) and
+**`sqlalchemy/11-migrations-alembic`** (revision chains, expand-backfill-contract,
+lineage-preserving rebuilds). Both ship with challenge sets.
 
 ## 🚀 Quick Start
 
@@ -62,6 +71,10 @@ python sqlalchemy/01-core-vs-orm/01-core-vs-orm.py
 
 # Vector Stores (embeddings)
 python vector-stores/01-vector-search-fundamentals/01-vector-search-fundamentals.py
+
+# Challenge sets (starter fails until solved; solution validates with env var)
+python -m pytest sqlalchemy/challenges/11-migrations-alembic/test_challenge.py -q
+python -m pytest postgresql/challenges/07-backup-and-restore/test_challenge.py -q
 ```
 
 ## 📝 Notes
@@ -71,9 +84,11 @@ python vector-stores/01-vector-search-fundamentals/01-vector-search-fundamentals
 - **postgresql/** requires real PostgreSQL (Docker recommended)
 - **mongodb/** uses Python dicts as stand-ins (no MongoDB needed)
 - **redis/** requires Redis server (Docker recommended)
-- **sqlalchemy/** covers ORM patterns for any database
+- **sqlalchemy/** covers ORM patterns for any database, plus migrations
 - **vector-stores/** covers modern vector database patterns
+- **backup/restore** and **migrations** carry the Athar mastery criteria:
+  source-of-truth vs derived index, lineage keys, and restore drills
 
 ---
 
-*Last updated: August 2026*
+*Last updated: September 2026*

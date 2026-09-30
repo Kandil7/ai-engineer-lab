@@ -41,6 +41,40 @@ question using 02 and 03; topic 05 records the decisions 01–04 produce.
 
 ---
 
+## Challenge sets
+
+Every topic has a Bronze/Silver/Gold practice set in `challenges/`:
+
+| Challenge | Measured guard that separates naive from correct |
+|---|---|
+| `01-component-contracts` | pairwise field comparison is O(n²) — fails the budget |
+| `02-queues-and-workflows` | per-job result histories blow the 8 MB ceiling |
+| `03-consistency-and-staleness` | arrival-order apply lets old overwrite new |
+| `04-failure-modes-and-resilience` | run-then-check timeouts invoke the handler |
+| `05-architecture-decision-records` | per-action deep copies blow the 8 MB ceiling |
+
+Run each with `python -m pytest challenges/<name>/test_challenge.py -q` (starter
+fails with `NotImplementedError` until solved) and validate the reference with
+`$env:CHALLENGE_USE_SOLUTION = "1"` first.
+
+---
+
+## Mastery criteria
+
+| Question | Where answered | Evidence you can produce |
+|---|---|---|
+| What do producer and consumer promise? | topic 01 | a producer-side contract test fails at CI on schema drift |
+| How does slow work survive crashes without duplicating? | topic 02 | redelivered job is a no-op; poison job reaches the DLQ |
+| What happens when truth and index disagree? | topic 03 | drift is a number; rebuild restores healthy; late updates rejected |
+| What happens when a worker fails / the index goes stale? | topic 04 | the designed story: detections, blast radii, runbooks |
+| How do decisions survive the people who made them? | topic 05 | a validated ADR with alternatives and an enforcement link |
+
+The master answer to the Athar question — *what happens if a worker fails or the
+index becomes older than the source* — is `04-failure-modes-and-resilience`
+section 7 of the lecture, backed by the state machine in topic 03.
+
+---
+
 ## Each topic directory contains
 
 - `NN-topic-name.py` — self-contained exercise (run `python NN-topic-name.py`,

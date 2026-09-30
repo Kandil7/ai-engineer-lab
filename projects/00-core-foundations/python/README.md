@@ -132,9 +132,9 @@ python/
 
 ## 📖 Learning Path
 
-See **[learning_path.md](learning_path.md)** for the complete, week-by-week learning schedule covering all 9 phases.
+See **[learning_path.md](learning_path.md)** for the complete, week-by-week learning schedule covering all 10 phases.
 
-**Recommended order:** Phase 1 → Phase 2 → Phase 3 → Phase 5 → Phase 4 → Phase 6 → Phase 7 → Phase 8 → Phase 9 → Projects
+**Recommended order:** Phase 1 → Phase 2 → Phase 3 → Phase 5 → Phase 4 → Phase 6 → Phase 7 → Phase 8 → Phase 9 → Phase 10 → Projects
 
 ---
 
@@ -151,6 +151,12 @@ See **[learning_path.md](learning_path.md)** for the complete, week-by-week lear
 | Build ML models | `07-machine-learning/fundamentals/01-getting-started/01-getting-started.py` |
 | Ship ML to production | `08-mlops/01-reproducibility.py` |
 | Build LLM/RAG/agents | `09-genai/01-llm-fundamentals.py` |
+| Learn system design (contracts, queues, consistency, ADRs) | `10-system-design/01-component-contracts/` |
+| Master the Athar skills track | `SKILLS_MASTERY_MAP.md` |
+| Practice production Python (Arabic text, batching) | `02-advanced-python/challenges/35-unicode-and-arabic-text/` |
+| Practice maintainable code (swappable engines) | `02-advanced-python/challenges/36-separation-of-concerns/` |
+| Practice testing (provenance, idempotency) | `02-advanced-python/challenges/38-test-strategy-contract-regression/` |
+| Practice database ops (migrations, backups) | `04-databases/sqlalchemy/challenges/11-migrations-alembic/` |
 | Prep for interviews | `supplementary/interviews/` |
 | Test yourself | `supplementary/quizzes/` |
 | Build a project | `projects/01-calculator/` |
@@ -168,6 +174,10 @@ See **[learning_path.md](learning_path.md)** for the complete, week-by-week lear
 - Quiz files are `.md` — edit them or use as flashcards
 - Interview files contain both questions AND solutions
 - Run the suite: `python -m pytest tests -q`
+- **Challenge sets** (Bronze/Silver/Gold) live in each module's `challenges/`
+  directory. Default runs target `starter.py` and fail with
+  `NotImplementedError` until solved; validate a reference with
+  `$env:CHALLENGE_USE_SOLUTION = "1"` before `python -m pytest`
 
 ---
 
@@ -187,4 +197,4 @@ Most Phase 1–2 exercises need **no external packages**.
 
 ---
 
-*Last updated: August 2026*
+*Last updated: September 2026*
