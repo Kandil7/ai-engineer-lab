@@ -2,7 +2,7 @@
 
 ### Context
 
-Repo fullstack-ai-engineer-lab. User asked for a Production AI Systems Engineer roadmap plus an audit of current content and what is left. Used researcher (job market) and architect (repo audit) agents in parallel. Wrote docs/roadmap/production-ai-systems-engineer.md and updated tracking files.
+Repo fullstack-ai-engineer-lab. User asked for a Production AI Systems Engineer roadmap plus an audit of current content and what is left. Used researcher (job market) and architect (repo audit) agents in parallel. Wrote docs/roadmap/production-ai-systems-engineer-roadmap.md and updated tracking files.
 
 ### Explanation
 
@@ -18,7 +18,7 @@ Production AI Systems roles require evidence that the current repo mostly lacks 
 
 ### Exercises
 
-1) Run gap tables in production-ai-systems-engineer.md §3 against the repo every monthly review. 2) When A4 lands, open P1 and implement the eval gate first. 3) In the P5 lab, measure TTFT/TPOT on Ollama vs vLLM and record numbers. 4) Draft interview answers for the system-design prompts in §8 using DevMate architecture. 5) Track remote postings weekly for AI Platform / LLMOps titles and note location clauses.
+1) Run gap tables in production-ai-systems-engineer-roadmap.md §3 against the repo every monthly review. 2) When A4 lands, open P1 and implement the eval gate first. 3) In the P5 lab, measure TTFT/TPOT on Ollama vs vLLM and record numbers. 4) Draft interview answers for the system-design prompts in §8 using DevMate architecture. 5) Track remote postings weekly for AI Platform / LLMOps titles and note location clauses.
 
 ### Next Steps
 
