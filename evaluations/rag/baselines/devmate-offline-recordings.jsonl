@@ -1,0 +1,10 @@
+{"id": "dev-golden-001", "retrieved": ["src/devmate/ingest/chunker.py", "src/devmate/ingest/chunker.py", "src/devmate/ingest/chunker.py", "src/devmate/ingest/chunker.py", "src/devmate/ingest/chunker.py"]}
+{"id": "dev-golden-002", "retrieved": ["src/devmate/api/main.py", "src/devmate/obs/__init__.py", "src/devmate/obs/cost.py", "src/devmate/llm/client.py", "src/devmate/llm/client.py"]}
+{"id": "dev-golden-003", "retrieved": ["src/devmate/api/main.py", "src/devmate/api/main.py", "tests/unit/test_api_sse.py", "tests/unit/test_api_sse.py", "tests/unit/test_api_sse.py"]}
+{"id": "dev-golden-004", "retrieved": ["src/devmate/index/vector_store.py", "ai-review.md", "src/devmate/config.py", "pyproject.toml", "ai-review.md"]}
+{"id": "dev-golden-005", "retrieved": ["src/devmate/ingest/chunker.py", "src/devmate/ingest/chunker.py", "src/devmate/ingest/chunker.py", "src/devmate/ingest/chunker.py", "src/devmate/ingest/chunker.py"]}
+{"id": "dev-golden-006", "retrieved": ["src/devmate/llm/client.py", "src/devmate/llm/client.py", "src/devmate/llm/client.py", "src/devmate/retrieve/rag.py", "src/devmate/api/main.py"]}
+{"id": "dev-golden-007", "retrieved": ["src/devmate.egg-info/top_level.txt", "src/devmate/guards/guardrails.py", "src/devmate/guards/__init__.py", "src/devmate.egg-info/entry_points.txt", "README.md"]}
+{"id": "dev-golden-008", "retrieved": ["src/devmate/retrieve/retriever.py", "src/devmate/retrieve/retriever.py", "src/devmate/retrieve/retriever.py", "src/devmate/retrieve/retriever.py", "src/devmate/retrieve/rag.py"]}
+{"id": "dev-golden-009", "retrieved": ["tests/unit/test_db_models.py", "tests/unit/test_db_models.py", "src/devmate/db/models.py", "tests/unit/test_db_models.py", "src/devmate/db/models.py"]}
+{"id": "dev-golden-010", "retrieved": ["src/devmate/mcp/server.py", "src/devmate/mcp/server.py", "src/devmate/mcp/__init__.py", "src/devmate.egg-info/top_level.txt", "src/devmate/mcp/server.py"]}

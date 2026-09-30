@@ -6,7 +6,7 @@
 
 <!-- Features/artifacts that actually work. Link to projects + reviews. -->
 
-## Self-Assessment (1–10)
+## Self-Assessment (1-10)
 
 | Skill | Score | Notes |
 | ----- | ----- | ----- |

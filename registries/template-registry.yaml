@@ -32,31 +32,31 @@ templates:
     used_by: [debugging/*]
   - id: daily-log
     path: templates/daily-log.template.md
-    required_sections: ["What I Built", "What I Learned", "ملخص عربي (Arabic Summary)"]
+    required_sections: ["What I Built", "What I Learned"]
     used_by: [feature/06-reflect]
   - id: weekly-review
     path: templates/weekly-review.template.md
-    required_sections: ["Self-Assessment (1–10)", "ملخص عربي (Arabic Summary)"]
+    required_sections: ["Self-Assessment (1-10)", "Next Week Plan"]
     used_by: [feature/06-reflect]
   - id: monthly-review
     path: templates/monthly-review.template.md
-    required_sections: ["The 30-Day Rule", "Next Month Focus", "Ù…Ù„Ø®Øµ Ø¹Ø±Ø¨ÙŠ (Arabic Summary)"]
+    required_sections: ["The 30-Day Rule", "Next Month Focus"]
     used_by: []
   - id: source-doc
     path: templates/source-doc.template.md
-    required_sections: ["Key Concepts (confirmed)", "My Inferences (not stated, my interpretation)", "Link to Project Task", "Ù…Ù„Ø®Øµ Ø¹Ø±Ø¨ÙŠ (Arabic Summary)"]
+    required_sections: ["Key Concepts (confirmed)", "My Inferences (not stated, my interpretation)", "Link to Project Task", "Link to Project Task"]
     used_by: [learning/learn-from-docs]
   - id: source-repo
     path: templates/source-repo.template.md
-    required_sections: ["Patterns Worth Adopting", "Link to Project Task", "Ù…Ù„Ø®Øµ Ø¹Ø±Ø¨ÙŠ (Arabic Summary)"]
+    required_sections: ["Patterns Worth Adopting", "Link to Project Task", "Link to Project Task"]
     used_by: [learning/learn-from-repo]
   - id: source-book
     path: templates/source-book.template.md
-    required_sections: ["Core Ideas (confirmed)", "Link to Project Task", "Ù…Ù„Ø®Øµ Ø¹Ø±Ø¨ÙŠ (Arabic Summary)"]
+    required_sections: ["Core Ideas (confirmed)", "Link to Project Task", "Link to Project Task"]
     used_by: [learning/learn-from-book]
   - id: source-notebook
     path: templates/source-notebook.template.md
-    required_sections: ["What It Demonstrates (confirmed)", "Link to Project Task", "Ù…Ù„Ø®Øµ Ø¹Ø±Ø¨ÙŠ (Arabic Summary)"]
+    required_sections: ["What It Demonstrates (confirmed)", "Link to Project Task", "Link to Project Task"]
     used_by: [learning/learn-from-notebook]
   - id: evaluation-report
     path: templates/evaluation-report.template.md
