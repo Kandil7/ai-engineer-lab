@@ -81,7 +81,7 @@ classical ML *(week 11+)* · MCP *(weeks 5–6)*.
 
 | Metric | Count | Notes |
 | --- | --- | --- |
-| Active-track milestones | 0 / 10 | A1 in progress |
+| Active-track milestones | 1 / 10 | A1 done; A2/A3 in progress |
 | Long-track milestones | 0 / 13 | deferred under ADR-0004 |
 | ADRs | 5 | 0004 and 0005 added 2026-08-02 |
 | Python files | 354 | foundations |
@@ -110,9 +110,9 @@ classical ML *(week 11+)* · MCP *(weeks 5–6)*.
 
 | Week | Milestone | Deliverable | Status |
 | --- | --- | --- | --- |
-| 0 | A1 | CI green + `devmate stats` | 🔄 In Progress |
-| 1 | A2 | LLM layer, traced and costed | 🔲 Planned |
-| 2–3 | A3 | RAG + eval harness + 2 ADRs | 🔲 Planned |
+| 0 | A1 | CI green + `devmate stats` | ✅ Done |
+| 1 | A2 | LLM layer, traced and costed | 🔄 In Progress |
+| 2–3 | A3 | RAG + eval harness + 2 ADRs | 🔄 In Progress |
 | 4 | A4 | **Public URL** + SQL sprint | 🔲 Planned |
 | 5–6 | A5 | Agent, 4 tools, MCP server | 🔲 Planned |
 | 7 | A6 | Cache, guardrails, hardening | 🔲 Planned |

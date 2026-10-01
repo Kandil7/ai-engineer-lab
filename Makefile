@@ -53,9 +53,9 @@ test-int:  ## Integration tests (needs `make up`)
 
 ## ---------------------------------------------------------------- devmate
 
-eval:  ## Run the RAG evaluation harness (week 2+)
-	@test -f $(DEVMATE)/eval/run_ragas.py || { echo "eval harness not implemented yet (tracked for week 2+, milestone A3)"; exit 1; }
-	$(PY) eval/run_ragas.py
+eval:  ## Run the RAG evaluation harness (offline by default)
+	@test -f $(DEVMATE)/src/devmate/eval/run_ragas.py || { echo "eval harness missing: expected src/devmate/eval/run_ragas.py"; exit 1; }
+	$(PY) -m devmate.eval.run_ragas
 
 run:  ## Serve the DevMate API locally
 	$(PY) -m uvicorn devmate.api.main:app --reload

@@ -1,5 +1,9 @@
 # AI Learning Operating Manual
 
+> **Long-track context.** Written 2026-08-06, before the 10-week active track. The plan
+> of record is [`active-track-10-week.md`](../roadmap/active-track-10-week.md); treat
+> roadmap-specific claims here as historical (the AI usage principles themselves remain valid).
+
 **Last updated:** 2026-08-06
 
 How to use AI agents inside `fullstack-ai-engineer-lab` to accelerate learning **without** outsourcing understanding.

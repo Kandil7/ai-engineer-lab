@@ -1,5 +1,9 @@
 # Feature Priorities
 
+> **Long-track context.** Written 2026-08-06, before the 10-week active track. The plan
+> of record is [`active-track-10-week.md`](../roadmap/active-track-10-week.md); treat
+> roadmap-specific claims here as historical.
+
 **Last updated:** 2026-08-06
 
 ## Overview

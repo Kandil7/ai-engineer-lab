@@ -23,9 +23,9 @@ employment, and M1/M3/M6 are partially satisfied already.
 
 | ID | Milestone | Week | Evidence | Status |
 | --- | --- | --- | --- | --- |
-| A1 | CI green + `devmate stats` CLI | 0 | `.github/workflows/ci.yml`, `devmate/src/` | In Progress |
-| A2 | LLM layer traced and costed | 1 | `devmate/src/devmate/obs/` | Planned |
-| A3 | RAG with measured eval + 2 ADRs | 2–3 | `evaluations/rag/reports/` | Planned |
+| A1 | CI green + `devmate stats` CLI | 0 | `.github/workflows/ci.yml`, `devmate/src/` | Done |
+| A2 | LLM layer traced and costed | 1 | `devmate/src/devmate/obs/` | In Progress |
+| A3 | RAG with measured eval + 2 ADRs | 2–3 | `evaluations/rag/reports/` | In Progress |
 | A4 | **Deployed at a public URL** | 4 | live link in `devmate/README.md` | Planned |
 | A5 | Agent with 4 tools + MCP server | 5–6 | `devmate/src/devmate/agent/`, `devmate/mcp/` | Planned |
 | A6 | Production hardening | 7 | `devmate/docs/failure-modes.md` | Planned |
@@ -220,7 +220,7 @@ weeks (11–12) absorb slippage.
 
 | Track | Total | Done | In Progress | Planned | Deferred / Superseded |
 | --- | --- | --- | --- | --- | --- |
-| Active (A) | 10 | 1 | 1 | 8 | 0 |
+| Active (A) | 10 | 1 | 2 | 7 | 0 |
 | Production (P) | 9 | 0 | 0 | 9 | 0 |
 | Long (M) | 13 | 0 | 0 | 0 | 13 |
 

@@ -101,7 +101,9 @@ Run `tests/registries/validate.ps1` after any prompt, workflow, or registry edit
   bump one side without the other.
 - Full `docker compose up -d` also starts `devmate-api/mcp/ui`, but `devmate/ui/` does
   not exist yet, so that service fails. Start only the infra you need (see above).
-- `make eval`, `eval/run_ragas.py`, and `devmate/eval/` don't exist yet (week 2+, A3).
+- Offline RAG eval harness: `devmate/src/devmate/eval/run_ragas.py`, run as
+  `python -m devmate.eval.run_ragas` (offline default); `make eval` wraps it. Live mode
+  (`--mode live`) needs Qdrant + ingest, and LLM answer scoring is not wired yet. A3 is in progress.
 
 ## Style
 
