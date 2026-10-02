@@ -62,8 +62,8 @@ Aliases matter for computed columns (`SELECT price * qty AS line_total`) and for
 
 ```python
 cur = conn.execute("SELECT name FROM users")
-first = cur.fetchone()      # one row or None
-rest = cur.fetchall()       # everything remaining
+first = cur.fetchone()  # one row or None
+rest = cur.fetchall()  # everything remaining
 for row in conn.execute("SELECT name FROM users"):  # streaming, no full list
     print(row)
 ```
