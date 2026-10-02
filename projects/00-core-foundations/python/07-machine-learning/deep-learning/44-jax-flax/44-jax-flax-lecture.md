@@ -21,7 +21,8 @@ emerging choice for large-scale, TPU-oriented research.
 Because JAX is not installed in this environment, the exercise demonstrates the
 *functional-transform philosophy* using PyTorch's analogues (`torch.autograd.grad`,
 `torch.vmap`, `torch.compile`) so the ideas are concrete, then maps them to their
-JAX counterparts.
+JAX counterparts. The philosophy — pure functions that transforms act on — is
+the durable lesson; the syntax is a detail.
 
 ## Learning Objectives
 
@@ -34,6 +35,7 @@ By the end of this lecture, you will be able to:
 5. Use `grad` to take a derivative and `vmap` to vectorize without a loop.
 6. State when JAX's TPU/large-scale strengths justify the learning curve.
 7. Decide whether to adopt JAX for a given project.
+8. Explain the `init`/`apply` split and why purity requires it.
 
 ## Prerequisites
 
@@ -57,12 +59,27 @@ def predict(params, x):
 There is no `self` holding weights. The function is *pure*: same input, same
 output, no hidden state, no side effects.
 
+### The real-world analogy
+
+Think of a function as a recipe card: it has no memory of previous meals, only
+instructions that turn ingredients (parameters + input) into a dish (output).
+Because the card is self-contained, you can photocopy it (vmap), hire a faster
+chef (jit), or calculate how the dish changes with the recipe (grad) — none of
+which works if the card scribbles on shared state.
+
 ### Why purity matters
 
 Because the function is pure, JAX can transform it. `grad(predict)` is a new
 function that returns derivatives; `jit(predict)` compiles it; `vmap(predict)`
 batches it. Each transform is a function from functions to functions — a
 composable algebra over your model.
+
+### When it works, when it fails
+
+Purity works beautifully for numerical models that are functions of their
+parameters. It grates when the model has dynamic, data-dependent control flow
+(loops whose trip count depends on the input), which JAX handles via `lax`
+primitives but which feels awkward compared to PyTorch's imperative freedom.
 
 ## 2. The Three Transforms
 
@@ -73,7 +90,7 @@ code. Subsequent calls reuse the compiled kernel:
 
 ```python
 fast = jax.jit(predict)
-fast(params, x)  # first call compiles; later calls are fast
+fast(params, x)          # first call compiles; later calls are fast
 ```
 
 ### grad — automatic differentiation
@@ -100,7 +117,8 @@ outs = batch_predict(params, X_batch)
 
 `jax.jit(jax.vmap(jax.grad(loss)))` is a single, compilable training step. That
 composition is JAX's signature superpower — no other framework makes transforms
-stack so cleanly.
+stack so cleanly, because no other framework models the network as a pure
+function.
 
 ## 3. Flax — Modules on Top
 
@@ -114,13 +132,11 @@ value — while giving you familiar building blocks:
 ```python
 import flax.linen as nn
 
-
 class MLP(nn.Module):
     @nn.compact
     def __call__(self, x):
         x = nn.Dense(64)(x)
         return nn.Dense(1)(nn.relu(x))
-
 
 params = MLP().init(rng, x)
 out = MLP().apply(params, x)
@@ -164,7 +180,8 @@ research tooling. The choice is a trade of ergonomics for composability.
 
 The exercise runs these PyTorch analogues so the *transform philosophy* is
 concrete even without JAX installed. The ideas — pure functions, grad, vmap —
-transfer one-to-one; only the syntax differs.
+transfer one-to-one; only the syntax differs. Learn the ideas here, and JAX's
+syntax is a lookup away.
 
 ## 6. When JAX Wins
 
@@ -186,7 +203,18 @@ For a full-stack AI engineer, PyTorch remains the workhorse; JAX is the tool you
 reach for when transforms and TPU scale are the bottleneck. Learn the ideas, and
 the syntax follows.
 
-## 7. Common Mistakes to Avoid
+## Real-World Application
+
+- **Large-model research** — diffusion and RL pipelines that lean on `pmap` and
+  XLA compilation.
+- **Ensembles** — `vmap` over a batch of seeds to run many models in one kernel.
+- **Custom autodiff** — expressing a loss and getting `grad` without a framework
+  loop.
+- **TPU-scale training** — where JAX's multi-device story is decisive.
+- **The DevMate case** — the functional-transform mental model applies even when
+  you stay on PyTorch for its ecosystem.
+
+## Common Mistakes to Avoid
 
 ### Mistake 1: Hidden state in a "pure" function
 ```
@@ -218,7 +246,13 @@ the syntax follows.
 # CORRECT — measure steady-state after the first trace/compile
 ```
 
-## 8. Best Practices
+### Mistake 6: Forgetting JAX's functional no-in-place rule
+```
+# WRONG — in-place updates (x[i] = ...) which break JAX's purity contract
+# CORRECT — use .at[i].set(...) or build new arrays
+```
+
+## Best Practices
 
 1. Write models as pure functions of `(params, x)`.
 2. Compose transforms — `jit(vmap(grad(loss)))` — rather than calling separately.
@@ -231,7 +265,7 @@ the syntax follows.
 9. Stay with PyTorch for dynamic control flow and ecosystem tooling.
 10. Learn the ideas first; syntax is a detail.
 
-## 9. Complexity and Cost
+## Complexity and Cost
 
 | Operation | Time | Space | Notes |
 |---|---|---|---|
@@ -241,7 +275,7 @@ the syntax follows.
 | vmap | one vectorized pass | batched | Replaces a Python loop |
 | pmap across TPUs | parallel | per-device | JAX's scale story |
 
-## 10. AI Engineering Relevance
+## AI Engineering Relevance
 
 **Where this shows up:** large-scale model training and TPU research. On this
 workstation (a single RTX 5000, no TPU) the practical value of JAX is narrower,
@@ -259,7 +293,25 @@ vmap as composable transforms — sharpens how you reason about any framework.
 matters at TPU-pod scale. For a 16 GB single GPU, the transforms still apply but
 the ecosystem overhead may not justify the switch — a decision, not a default.
 
-## 11. Summary
+## Key Takeaways
+
+1. In JAX, the model is a pure function and parameters are a value you pass in.
+2. `jit` compiles, `grad` differentiates, `vmap` vectorizes — and they compose.
+3. Purity is what makes `jit(vmap(grad(loss)))` a valid, compilable expression.
+4. Flax adds modules with an `init`/`apply` split while staying functional.
+5. JAX wins at TPU scale; PyTorch remains the ergonomic default.
+6. The functional-transform mental model sharpens reasoning in any framework.
+
+## Self-Check Questions
+
+1. Why does making the model a pure function enable transform composition?
+2. What is the difference between `jit`, `grad`, and `vmap`, and what does each return?
+3. Why does Flax separate `init` from `apply`?
+4. How does JAX's "no in-place mutation" rule change how you write code?
+5. When does JAX's overhead not justify the switch from PyTorch?
+6. What is the PyTorch analogue of each JAX transform?
+
+## Summary
 
 | Concept | Description |
 |---|---|
@@ -279,10 +331,14 @@ the ecosystem overhead may not justify the switch — a decision, not a default.
 | Vectorize | `jax.vmap(f, in_axes=(None,0))` | `torch.vmap(f)` |
 | Module | `MLP().apply(params, x)` | `model(x)` |
 
+## Further Reading / Connections
+
+- `36-pytorch-tensors-lecture.md` — the autograd JAX's `grad` generalizes.
+- `38-neural-network-basics-lecture.md` — the layers Flax provides.
+- Official docs: <https://jax.readthedocs.io/> and <https://flax.readthedocs.io/>
+
 ## Next Steps
 
 Next: **[45 — Data Augmentation](45-data-augmentation-lecture.md)** — synthesizing more training signal.
 
 Continues in: **[09-genai — 21 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** — where framework choice recurs.
-
-Official docs: <https://jax.readthedocs.io/>
