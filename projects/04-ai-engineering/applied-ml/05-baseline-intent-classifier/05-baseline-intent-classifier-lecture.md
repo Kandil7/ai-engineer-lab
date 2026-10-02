@@ -97,6 +97,7 @@ RULES = {
     "who": ("من هو", "من هي", "أين", "متى", "من "),
 }
 
+
 def rule_classify(text):
     for label, words in RULES.items():
         if any(w in text for w in words):
@@ -123,7 +124,9 @@ class NaiveBayes:
         scores = {label: self.log_prior[label] for label in LABELS}
         for tok in text.split():
             for label in LABELS:
-                scores[label] += self.log_likelihood[label].get(tok, self._default[label])
+                scores[label] += self.log_likelihood[label].get(
+                    tok, self._default[label]
+                )
         return max(scores, key=lambda label: scores[label])
 ```
 
@@ -173,9 +176,11 @@ label, and source:
 
 ```python
 def error_analysis(rows, preds):
-    return [(text, gold, pred, src)
-            for (text, gold, src), pred in zip(rows, preds)
-            if pred != gold]
+    return [
+        (text, gold, pred, src)
+        for (text, gold, src), pred in zip(rows, preds)
+        if pred != gold
+    ]
 ```
 
 ### What it reveals
