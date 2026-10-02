@@ -21,7 +21,8 @@ gradient, the LSTM/GRU gates, and how to shape sequence data for `torch.nn`.
 Modern transformers (`40-transformers-from-scratch`) have largely replaced RNNs
 for language, but RNNs remain the right tool for compact streaming models — real-time
 audio, sensor telemetry, and on-device sequence models where attention's
-quadratic cost does not fit.
+quadratic cost does not fit. Understanding the recurrence is also the conceptual
+bridge to transformers, which relax the sequential bottleneck RNNs impose.
 
 ## Learning Objectives
 
@@ -34,6 +35,7 @@ By the end of this lecture, you will be able to:
 5. Build an LSTM or GRU classifier in `torch.nn`.
 6. Explain when an RNN beats a transformer and vice versa.
 7. State why RNNs are the compact streaming choice.
+8. Choose between LSTM and GRU by parameter budget.
 
 ## Prerequisites
 
@@ -58,11 +60,26 @@ The same weights `W_ih` and `W_hh` are reused at every step — recurrence is th
 temporal analogue of a convolution's shared weights. The hidden state is the
 network's *memory*: a running summary of the sequence so far.
 
+### The real-world analogy
+
+Reading a sentence word by word, you carry a running understanding in your head.
+Each new word updates that understanding; you never start over from scratch.
+That carried understanding is the hidden state, and the fixed rule you use to
+update it is the recurrent weights — the same rule applied at every word.
+
 ### Why order matters
 
 A feed-forward net would see tokens independently; the RNN sees them in order,
 so "not good" and "good not" produce different hidden states. That order
-sensitivity is exactly what sequence tasks need.
+sensitivity is exactly what sequence tasks need, and it is what a bag-of-words
+model throws away.
+
+### When it works, when it fails
+
+Recurrence works when the sequence is the unit of meaning and order matters. It
+fails when the sequence is extremely long, because the single hidden state is a
+bottleneck — the RNN must compress everything into a fixed vector, and
+information far in the past gets crowded out. That is the transformer's opening.
 
 ## 2. Shaping Sequence Data
 
@@ -75,7 +92,7 @@ import torch
 import torch.nn as nn
 
 batch, seq_len, feat = 4, 10, 8
-x = torch.randn(batch, seq_len, feat)  # 4 sequences of 10 steps, 8 features
+x = torch.randn(batch, seq_len, feat)   # 4 sequences of 10 steps, 8 features
 ```
 
 ### The output contract
@@ -89,7 +106,9 @@ out, h_n = rnn(x)
 # h_n: (num_layers, batch, 16) — final hidden state
 ```
 
-`batch_first=True` is the conventional choice; the default is seq-first.
+`batch_first=True` is the conventional choice; the default is seq-first. The
+distinction between `out` (per-step) and `h_n` (final) is the single most common
+source of confusion, and it matters for which one you feed to the classifier.
 
 ## 3. The Vanishing Gradient
 
@@ -100,11 +119,19 @@ Backpropagation through time multiplies gradients across every step. With
 steps the gradient is near zero, and the network stops learning long-range
 dependencies.
 
+### The numerical demonstration
+
+A gradient scaled by 0.5 per step becomes 0.5^50 ≈ 8.9e-16 after 50 steps —
+numerically zero. This is not a small effect; it is why a plain RNN is, in
+practice, a "last few tokens" model and nothing more.
+
 ### Why it matters in practice
 
 A plain RNN can learn "the last few tokens" but not "a word that appeared three
 sentences ago." That is the gap LSTM and GRU close, and the reason the plain
-RNN is rarely used in production.
+RNN is rarely used in production. The exploding counterpart — gradients growing
+unboundedly — is handled by gradient clipping, but vanishing cannot be clipped
+away; it requires gating.
 
 ## 4. LSTM — Gated Memory
 
@@ -121,7 +148,15 @@ control it:
 
 The cell state is updated by *addition* through the forget and input gates,
 giving the gradient a highway that does not vanish across many steps. The LSTM
-learns to keep the cell state steady when a long-range dependency is at play.
+learns to keep the cell state steady when a long-range dependency is at play,
+which is exactly what a plain RNN cannot do.
+
+### The analogy
+
+The LSTM's cell state is a conveyor belt that information rides across time.
+Gates are the traffic controls: one decides what to drop, one what to add, one
+what to read out. Because the belt mostly adds (not multiplies), the signal
+does not decay the way it does in a plain RNN.
 
 ## 5. GRU — The Lighter Alternative
 
@@ -135,7 +170,8 @@ dependencies with fewer parameters than an LSTM.
 
 GRU is the default when the dataset is small or the model must be compact — its
 smaller parameter count trains slightly faster and generalizes comparably. LSTM
-is the choice when maximum capacity per cell matters.
+is the choice when maximum capacity per cell matters. The parameter difference
+is roughly 3/4 (GRU) versus 4/4 (LSTM) per cell, which adds up across layers.
 
 ## 6. An RNN Classifier
 
@@ -152,7 +188,7 @@ class SeqClassifier(nn.Module):
         self.head = nn.Linear(hid, n_classes)
 
     def forward(self, x):
-        out, (h_n, c_n) = self.lstm(x)  # h_n: (1, batch, hid)
+        out, (h_n, c_n) = self.lstm(x)   # h_n: (1, batch, hid)
         return self.head(h_n.squeeze(0))
 ```
 
@@ -160,7 +196,8 @@ class SeqClassifier(nn.Module):
 
 For sequence classification you can use the last hidden state, the mean of all
 outputs, or the max over time. The last hidden state is the classic choice; the
-mean is more robust when the whole sequence matters.
+mean is more robust when the whole sequence matters and not just its end. The
+choice is a hyperparameter, not a correctness issue.
 
 ## 7. RNN vs Transformer
 
@@ -175,9 +212,20 @@ dependencies better but do not stream cheaply.
 
 Use a transformer when the sequence is long and you have compute; use an
 RNN/GRU when the model must be compact, low-latency, or process an unbounded
-stream. The two are not rivals but tools matched to constraints.
+stream. The two are not rivals but tools matched to constraints, and the
+O(seq) vs O(seq²) distinction is the deciding line.
 
-## 8. Common Mistakes to Avoid
+## Real-World Application
+
+- **Keyword spotting / wake words** — a tiny GRU on-device for "hey device"
+  detection, where a transformer would not fit.
+- **Sensor telemetry** — streaming anomaly detection on time-series readings.
+- **Speech / audio** — compact streaming models for real-time transcription.
+- **Text classification** — sentiment or intent on short, ordered sequences.
+- **The DevMate case** — any streaming usage signal aggregated over time, where
+  constant memory in sequence length is the requirement.
+
+## Common Mistakes to Avoid
 
 ### Mistake 1: Forgetting batch_first
 ```
@@ -209,7 +257,13 @@ stream. The two are not rivals but tools matched to constraints.
 # CORRECT — default None hidden state per forward, or explicit reset
 ```
 
-## 9. Best Practices
+### Mistake 6: No gradient clipping
+```
+# WRONG — an RNN whose gradients explode and NaN the training run
+# CORRECT — torch.nn.utils.clip_grad_norm_(params, 1.0)
+```
+
+## Best Practices
 
 1. Use `batch_first=True` and document the (batch, seq, feat) convention.
 2. Reach for LSTM/GRU, not the plain RNN.
@@ -222,7 +276,7 @@ stream. The two are not rivals but tools matched to constraints.
 9. Record sequence length and vocabulary in the experiment tracker.
 10. Consider a transformer only when long-range dependencies actually matter.
 
-## 10. Complexity and Cost
+## Complexity and Cost
 
 | Operation | Time | Space | Notes |
 |---|---|---|---|
@@ -232,7 +286,7 @@ stream. The two are not rivals but tools matched to constraints.
 | Backprop through time | O(seq · hidden²) | activations | Vanishing gradient in plain RNN |
 | Transformer (baseline) | O(seq²) | attention matrix | Parallel, but quadratic |
 
-## 11. AI Engineering Relevance
+## AI Engineering Relevance
 
 **Where this shows up:** real-time audio/keyword spotting, sensor telemetry,
 streaming speech, and compact on-device sequence models. On the RTX 5000 the
@@ -250,7 +304,25 @@ long-sequence batch in 16 GB, where an RNN's constant memory still runs.
 O(1) in sequence length — an unbounded audio stream never outgrows the state.
 That is the argument transformers lost until streaming-attention tricks arrived.
 
-## 12. Summary
+## Key Takeaways
+
+1. Recurrence reuses weights across steps and carries memory as a hidden state.
+2. The sequence tensor is (batch, seq_len, features) with `batch_first=True`.
+3. The plain RNN's gradients vanish; LSTM/GRU gate their way around it.
+4. LSTM has a cell state and three gates; GRU is lighter with two.
+5. RNNs are O(seq) time and O(1) state — the streaming/on-device choice.
+6. Choose a transformer only when long-range dependencies and compute justify it.
+
+## Self-Check Questions
+
+1. What does the hidden state carry forward, and why is it order-sensitive?
+2. Why does the plain RNN's gradient vanish, and how do LSTM/GRU fix it?
+3. What is the difference between the LSTM's cell state and hidden state?
+4. Why is the GRU cheaper than the LSTM, and when do you prefer it?
+5. What is the O(seq) vs O(seq²) argument for choosing RNN over transformer?
+6. Why is `out` per-step but `h_n` the final state, and which feeds the classifier?
+
+## Summary
 
 | Concept | Description |
 |---|---|
@@ -271,10 +343,15 @@ That is the argument transformers lost until streaming-attention tricks arrived.
 | Gradient clip | `torch.nn.utils.clip_grad_norm_(params, 1.0)` |
 | Input tensor | `torch.randn(batch, seq, feat)` |
 
+## Further Reading / Connections
+
+- `40-transformers-from-scratch-lecture.md` — the attention alternative to recurrence.
+- `38-neural-network-basics-lecture.md` — the layers and losses used here.
+- `45-data-augmentation-lecture.md` — sequence augmentation for text/audio.
+- Official docs: <https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html>
+
 ## Next Steps
 
 Next: **[43 — TensorFlow and Keras](43-tensorflow-keras-lecture.md)** — the other framework, and when to choose it.
 
 Continues in: **[09-genai — 21 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** — sequence models in production.
-
-Official docs: <https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html>
