@@ -243,6 +243,58 @@ Without seeds, budget logs, and a frozen space, "the best config was
 unreproducible — you cannot re-run the search or compare it to the next
 one.
 
+## 8. A Worked Hyperband Example
+
+### The setup
+
+Suppose `max_budget = 27` epochs and `min_budget = 1`, with `eta = 3`. Then
+`s_max = floor(log_3(27)) = 3`, giving four brackets. Each bracket runs
+successive halving at a different starting configuration count.
+
+### The brackets
+
+Bracket `s = 0` is the most aggressive: `n = ceil(4/1 * 3^0) = 4` configs, each
+getting little budget, halving to 1 survivor quickly. Bracket `s = 3` is the most
+conservative: `n = ceil(4/4 * 3^3) = 27` configs, run nearly to completion. The
+middle brackets span the tradeoff.
+
+### What you observe
+
+Across the four brackets, Hyperband explores a wide range of configs cheaply and
+confirms the best few expensively, all in one sweep. The aggressive brackets find
+promising regions; the conservative brackets confirm them. The total budget is
+bounded and far below a full 27-epoch grid over every config.
+
+### The intuition to keep
+
+Hyperband is not magic — it is a *budget scheduler*. The intelligence comes from
+the observation that cheap rankings are usually good enough to discard the
+bottom half, and the brackets exist to cover the cases where that observation is
+wrong.
+
+## 9. Choosing eta and Budgets
+
+### The eta dial
+
+`eta` is the halving factor — how aggressively you cut. `eta = 3` is the
+standard; larger `eta` (more aggressive) spends less per round but risks more on
+early noise, smaller `eta` is gentler but pricier. In practice `eta = 3` is
+rarely worth changing.
+
+### The budget floor
+
+The `min_budget` floor is the single most important choice, because it is the
+guard against the "good config looks bad early" failure. A floor of 1 epoch is
+pure noise; a floor of a few epochs is a real signal. Set it to the smallest
+budget at which a cheap evaluation still *correlates* with a full one.
+
+### The reproducibility tie-in
+
+Whatever you choose, record `eta`, `min_budget`, `max_budget`, and the seed.
+Because Hyperband's result is a function of its schedule, the budget parameters
+are part of the answer, not an implementation detail — the same point the
+reproducibility section (`7`) makes about the whole search.
+
 ## Real-World Application
 
 - **Fine-tuning hyperparameters** — a LoRA or full fine-tune where one run is hours
