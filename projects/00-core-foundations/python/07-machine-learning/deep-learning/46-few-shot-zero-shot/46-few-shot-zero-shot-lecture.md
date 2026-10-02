@@ -214,6 +214,54 @@ metric like top-k) on a held-out set — but the *held-out* guarantee only
 holds
 if you did not tune against it.
 
+## 7. CLIP and Multimodal Alignment
+
+### The model that made zero-shot real
+
+CLIP trains a contrastive objective over (image, text) pairs: the image encoder
+and the text encoder are pulled together for matching pairs and pushed apart for
+mismatched ones. The result is a *joint* space where an image and its caption
+are neighbors. This is `47-self-supervised-learning`'s contrastive idea applied
+across modalities — and it is what makes zero-shot image classification by text
+description work at all.
+
+### Why it generalizes
+
+Because CLIP learned from arbitrary captions, not a fixed class list, it can be
+prompted with any text at test time. "A photo of a cat" is a point in the space,
+and the nearest image wins. New classes are new prompts, which is the whole
+zero-shot story compressed into one model.
+
+### The engineering lesson
+
+The valuable artifact is the *alignment*, not the classifier. Once you have an
+aligned multimodal space, every downstream task — retrieval, classification,
+search — becomes a similarity query. That is why CLIP-style models are
+foundational, not task-specific.
+
+## 8. Prompt Design for Zero-Shot
+
+### Prompts are the tuning knob
+
+Zero-shot accuracy swings wildly with the prompt. "A photo of a {class}" beats
+the bare class name for CLIP; a well-crafted instruction beats a vague one for
+LLMs. Prompt design is the zero-shot analogue of hyperparameter tuning — the
+model is fixed, but the input that conditions it is a search space.
+
+### The evaluation discipline
+
+Because prompts are a search space, tuning them against the test set is leakage
+(`6`). The correct loop is: design prompts on a dev split, freeze them, measure
+once on test. This is the same discipline as `33`'s "tune inside CV," applied to
+text instead of hyperparameters.
+
+### The practical default
+
+Start with a simple template, evaluate, and iterate only if the task warrants
+it. The marginal gain from prompt engineering is real but bounded, and it is
+often cheaper to move one rung up the cost ladder (few-shot or fine-tune) than
+to squeeze the last point out of a zero-shot prompt.
+
 ## Real-World Application
 
 - **Adding a category without retraining** — a live classifier gains a new class
