@@ -2,22 +2,27 @@
 
 ## 🎯 Topic Overview
 
-Sorting with ORDER BY — ORDER BY Basics
+Unordered query results are not random — they are arbitrary, which is worse, because they look stable until they change. `ORDER BY` is what makes output deterministic, pages stable, and "top N" meaningful. This lecture covers sort direction, multi-column ordering, NULL placement, and why sorting interacts with indexes and pagination.
 
 ## 📚 Learning Objectives
 
 By the end of this lecture, you will be able to:
-1. Understand the syntax and purpose of sorting with order by
-2. Write correct SQL statements
-3. Combine with other SQL clauses
-4. Handle edge cases and common errors
-5. Apply best practices
+1. Sort ascending and descending with `ORDER BY`
+2. Order by multiple columns with mixed directions
+3. Control NULL placement explicitly
+4. Explain why pagination requires `ORDER BY`
+5. Use indexes to avoid sort steps
+
+## Prerequisites
+
+- `SELECT` and `WHERE` (Lectures 05–06).
+- What an index is (SQL Fundamentals 10).
 
 ---
 
 ## 1. Introduction
 
-This lecture covers sorting with order by in MySQL using Python's sqlite3 as a learning companion.
+This lecture covers sorting with order by in MySQL using Python's sqlite3 as a learning companion. Without `ORDER BY` the engine returns rows in whatever order is cheapest — valid SQL, useless contract.
 
 ---
 
@@ -27,17 +32,35 @@ This lecture covers sorting with order by in MySQL using Python's sqlite3 as a l
 
 `SELECT * FROM users ORDER BY age;` sorts ascending. `ORDER BY age DESC` descending.
 
+```python
+rows = conn.execute(
+    "SELECT name, age FROM users ORDER BY age DESC, name ASC"
+).fetchall()
+```
+
+Direction is per column, not per query: `ORDER BY a DESC, b` sorts `a` descending, `b` ascending.
+
 ### 2. Multiple Columns
 
 `ORDER BY last_name ASC, first_name ASC` sorts by last then first name.
+
+Later keys break ties left by earlier ones. The first key should be the coarsest grouping, the last a unique tiebreaker — ideally the primary key, so the order is fully deterministic.
 
 ### 3. NULLS Handling
 
 NULLs sort first (ASC) or last (DESC) by default in MySQL.
 
+Defaults differ by engine (PostgreSQL puts NULLs last on ASC by default). State it explicitly — `ORDER BY x ASC NULLS LAST` — whenever NULLs are possible and the consumer cares.
+
 ### 4. Index Impact
 
 ORDER BY on indexed columns is significantly faster.
+
+An index on `(last_name, first_name)` serves `ORDER BY last_name, first_name` directly; otherwise the engine sorts in memory (or on disk for large results). `EXPLAIN QUERY PLAN` shows whether a sort step exists.
+
+### 5. Sorting and pagination
+
+A page is only a page with a deterministic order. `ORDER BY id LIMIT 10 OFFSET 20` is stable; `LIMIT 10 OFFSET 20` alone is not. For deep pages, keyset pagination (`WHERE id > ? ORDER BY id LIMIT 10`) replaces the rescanning `OFFSET`.
 
 ---
 
@@ -83,6 +106,12 @@ finally:
         conn.close()
 ```
 
+### Paginating without ORDER BY
+Pages overlap and skip rows silently. The order is the page's identity.
+
+### Sorting by column position (`ORDER BY 2`)
+Positional references break when the select list changes. Name the column.
+
 ---
 
 ## 4. Best Practices
@@ -118,3 +147,25 @@ Write a function that executes any SQL query safely with error handling and alwa
 | Transactions | Commit saves changes, rollback undoes them |
 | Error Handling | Always use try/except/finally
 | Cleanup | Close connections to free resources
+
+## Key Takeaways
+
+1. No `ORDER BY` means no order guarantee — arbitrary, not random.
+2. Direction is per column; end with a unique tiebreaker.
+3. State NULL placement explicitly; defaults vary.
+4. Pagination without a deterministic order is broken.
+5. A matching composite index can eliminate the sort step.
+
+## Self-Check Questions
+
+1. Why is unordered output worse than random output?
+2. How do you sort one column up and the next down?
+3. Why end a sort key list with the primary key?
+4. What does an index on the sort columns save?
+5. Why is keyset pagination better than deep `OFFSET`?
+
+## Further Reading / Connections
+
+- Next: Lecture 08, Deleting Data.
+- SQL Fundamentals 04 (NULL ordering) and 14 (keyset pagination).
+- Exercise: `07-order-by.py`.
