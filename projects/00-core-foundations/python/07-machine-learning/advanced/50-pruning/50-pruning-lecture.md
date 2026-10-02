@@ -252,7 +252,7 @@ passes.
 ```python
 for _ in range(n_rounds):
     prune.l1_unstructured(model, name="weight", amount=0.1)
-    fine_tune(model)          # recover after this round's cut
+    fine_tune(model)  # recover after this round's cut
 ```
 
 ### The cost-accuracy trade
@@ -515,5 +515,6 @@ applied together, not in isolation.
 Next: **[51 — Knowledge
 Distillation](../advanced/51-distillation-lecture.md)** — compress a big
 teacher into a small student.
+
 
 
