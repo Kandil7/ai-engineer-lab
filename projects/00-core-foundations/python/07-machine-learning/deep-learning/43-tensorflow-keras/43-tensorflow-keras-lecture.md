@@ -500,18 +500,27 @@ explicit.
 
 ## History and Motivation
 
-The framework landscape has consolidated in waves. Theano and Caffe were the
-first deep-learning frameworks; TensorFlow 1 (2015) introduced the static graph
-and won industry adoption; Keras (2015) wrapped it with a friendly API; TensorFlow
-2 (2019) made eager execution the default and folded Keras in as `tf.keras`.
-Meanwhile PyTorch (2016) made eager execution and dynamic graphs its identity
+The framework landscape has consolidated in waves. Theano and Caffe were
+the
+first deep-learning frameworks; TensorFlow 1 (2015) introduced the
+static graph
+and won industry adoption; Keras (2015) wrapped it with a friendly API;
+TensorFlow
+2 (2019) made eager execution the default and folded Keras in as
+`tf.keras`.
+Meanwhile PyTorch (2016) made eager execution and dynamic graphs its
+identity
 and won research.
 
-The current picture is a duopoly with a division of labor: PyTorch for research
-and LLM tooling, TensorFlow/Keras for the serving and edge ecosystem it built
-first. JAX (`44`) is the emerging third option for large-scale, functional
+The current picture is a duopoly with a division of labor: PyTorch for
+research
+and LLM tooling, TensorFlow/Keras for the serving and edge ecosystem it
+built
+first. JAX (`44`) is the emerging third option for large-scale,
+functional
 research. The history explains the present: framework choice is often a
-consequence of which ecosystem a team joined years ago, not a fresh technical
+consequence of which ecosystem a team joined years ago, not a fresh
+technical
 evaluation.
 
 ## Next Steps
@@ -522,5 +531,6 @@ transforms and composable modules.
 Continues in:
 **[model-serving](../../../04-ai-engineering/model-serving/)** — serving
 Keras and PyTorch artifacts.
+
 
 
