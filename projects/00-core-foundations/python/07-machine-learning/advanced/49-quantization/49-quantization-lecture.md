@@ -496,9 +496,34 @@ upgrading hardware.
 - `model-serving` (in `04-ai-engineering`) — quantized models in production.
 - Official docs: <https://pytorch.org/docs/stable/quantization.html>
 
+## History and Motivation
+
+Quantization is borrowed from signal processing, where fixed-point
+arithmetic
+predates deep learning. The deep-learning version arrived with the need
+to run
+networks on mobile: INT8 inference on phones in the mid-2010s
+established the
+PTQ/QAT toolkit. The LLM era pushed it further — 4-bit weight-only
+schemes
+(GPTQ, AWQ, GGUF) made large models fit consumer GPUs, and quantization
+became
+the difference between "cloud-only" and "runs locally."
+
+The pattern repeats across the field: a technique invented for a
+constrained
+setting (phones) turns out to matter at the frontier (LLM serving),
+because the
+frontier is always resource-constrained too — just at a larger scale.
+That is
+why quantization sits in this curriculum's memory-budget discipline, not
+in a
+"mobile-only" corner.
+
 ## Next Steps
 
 Next: **[50 — Pruning](../advanced/50-pruning-lecture.md)** — remove the
 weights you don't need.
+
 
 
