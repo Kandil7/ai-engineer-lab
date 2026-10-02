@@ -36,7 +36,7 @@ Every insert assigns an `_id`; every bulk insert chooses what happens when one d
 
 ```python
 result = db["users"].insert_one({"name": "Alice", "age": 25})
-print(result.inserted_id)   # the _id, generated or supplied
+print(result.inserted_id)  # the _id, generated or supplied
 ```
 
 ### 2. insert_many
@@ -44,9 +44,7 @@ print(result.inserted_id)   # the _id, generated or supplied
 `db.users.insert_many([doc1, doc2])` inserts multiple documents efficiently and returns InsertManyResult.
 
 ```python
-result = db["users"].insert_many(
-    [{"name": "Bob"}, {"name": "Cleo"}], ordered=False
-)
+result = db["users"].insert_many([{"name": "Bob"}, {"name": "Cleo"}], ordered=False)
 print(result.inserted_ids)
 ```
 
