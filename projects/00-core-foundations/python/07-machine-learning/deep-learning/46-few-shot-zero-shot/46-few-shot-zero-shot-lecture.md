@@ -218,24 +218,34 @@ if you did not tune against it.
 
 ### The model that made zero-shot real
 
-CLIP trains a contrastive objective over (image, text) pairs: the image encoder
-and the text encoder are pulled together for matching pairs and pushed apart for
-mismatched ones. The result is a *joint* space where an image and its caption
-are neighbors. This is `47-self-supervised-learning`'s contrastive idea applied
-across modalities — and it is what makes zero-shot image classification by text
+CLIP trains a contrastive objective over (image, text) pairs: the image
+encoder
+and the text encoder are pulled together for matching pairs and pushed
+apart for
+mismatched ones. The result is a *joint* space where an image and its
+caption
+are neighbors. This is `47-self-supervised-learning`'s contrastive idea
+applied
+across modalities — and it is what makes zero-shot image classification
+by text
 description work at all.
 
 ### Why it generalizes
 
-Because CLIP learned from arbitrary captions, not a fixed class list, it can be
-prompted with any text at test time. "A photo of a cat" is a point in the space,
-and the nearest image wins. New classes are new prompts, which is the whole
+Because CLIP learned from arbitrary captions, not a fixed class list, it
+can be
+prompted with any text at test time. "A photo of a cat" is a point in
+the space,
+and the nearest image wins. New classes are new prompts, which is the
+whole
 zero-shot story compressed into one model.
 
 ### The engineering lesson
 
-The valuable artifact is the *alignment*, not the classifier. Once you have an
-aligned multimodal space, every downstream task — retrieval, classification,
+The valuable artifact is the *alignment*, not the classifier. Once you
+have an
+aligned multimodal space, every downstream task — retrieval,
+classification,
 search — becomes a similarity query. That is why CLIP-style models are
 foundational, not task-specific.
 
@@ -243,24 +253,117 @@ foundational, not task-specific.
 
 ### Prompts are the tuning knob
 
-Zero-shot accuracy swings wildly with the prompt. "A photo of a {class}" beats
-the bare class name for CLIP; a well-crafted instruction beats a vague one for
-LLMs. Prompt design is the zero-shot analogue of hyperparameter tuning — the
+Zero-shot accuracy swings wildly with the prompt. "A photo of a {class}"
+beats
+the bare class name for CLIP; a well-crafted instruction beats a vague
+one for
+LLMs. Prompt design is the zero-shot analogue of hyperparameter tuning —
+the
 model is fixed, but the input that conditions it is a search space.
 
 ### The evaluation discipline
 
-Because prompts are a search space, tuning them against the test set is leakage
-(`6`). The correct loop is: design prompts on a dev split, freeze them, measure
-once on test. This is the same discipline as `33`'s "tune inside CV," applied to
+Because prompts are a search space, tuning them against the test set is
+leakage
+(`6`). The correct loop is: design prompts on a dev split, freeze them,
+measure
+once on test. This is the same discipline as `33`'s "tune inside CV,"
+applied to
 text instead of hyperparameters.
 
 ### The practical default
 
-Start with a simple template, evaluate, and iterate only if the task warrants
-it. The marginal gain from prompt engineering is real but bounded, and it is
-often cheaper to move one rung up the cost ladder (few-shot or fine-tune) than
+Start with a simple template, evaluate, and iterate only if the task
+warrants
+it. The marginal gain from prompt engineering is real but bounded, and
+it is
+often cheaper to move one rung up the cost ladder (few-shot or
+fine-tune) than
 to squeeze the last point out of a zero-shot prompt.
+
+## 9. Evaluation Metrics for Few/Zero-Shot
+
+### Accuracy is not enough
+
+Top-1 accuracy hides the structure of the errors. In few/zero-shot, two
+extra
+metrics matter: **top-k accuracy** (is the right class in the top k
+nearest
+prototypes?) and the **margin** (how much closer is the chosen class
+than the
+runner-up?). A high-accuracy model with tiny margins is fragile; a
+slightly
+lower-accuracy model with large margins is robust.
+
+### Why margins matter
+
+Similarity-based classifiers have no calibrated probability — the cosine
+score
+is a ranking, not a confidence. A large margin between the top two
+classes says
+"the decision was easy"; a small margin says "this example is
+ambiguous," which
+is exactly the case a human should review. Reporting margins turns a
+classifier
+into a triage tool.
+
+### The class-balance check
+
+Few-shot support sets are tiny, so a single mislabeled example can
+dominate a
+class's prototype. Always inspect per-class accuracy, not just the
+average — an
+80% overall score can hide a class at 20% because its one support example was
+wrong.
+
+### The held-out discipline
+
+Every metric here is only honest if measured on a set you did not tune
+the
+prompts or prototypes against. The metrics are easy; the discipline is
+what makes
+them mean something.
+
+## 10. Failure Analysis for Similarity Classifiers
+
+### The three failure modes
+
+When a similarity classifier fails, it is almost always one of three
+things: the
+embedding space does not separate the classes (a domain gap), the
+prototype is
+bad (too few or mislabeled support examples), or the class descriptions
+are
+ambiguous (poor prompts). The fix differs for each, so the first job is
+diagnosis.
+
+### Diagnosing the domain gap
+
+If the failure is uniform across classes and the confusions are
+semantically
+unrelated, the space likely does not cover the domain — a candidate for
+fine-tuning. If the failures cluster around specific class pairs, the
+space
+*does* separate most things and the problem is local, which suggests better
+prototypes or descriptions.
+
+### The confusions matrix
+
+For few-shot, plot the confusion matrix over classes. A block of
+confusions
+between two classes says their prototypes are too close; a scattered
+matrix says
+the space is weak. The matrix is the fastest way to tell "one bad class"
+from
+"the whole space is wrong."
+
+### The escalation trigger
+
+The diagnosis decides the ladder rung: local failures → better prompts
+or more
+support examples; global failures → fine-tune (`39`). Failure analysis
+is what
+turns "it does not work" into a specific, cheap next step.
 
 ## Real-World Application
 
@@ -396,9 +499,26 @@ rung; reserve fine-tuning for where it demonstrably fails.
 - `06-embeddings` module — the embedding models this relies on.
 - Official docs: <https://pytorch.org/docs/stable/nn.functional.html#cosine-similarity>
 
+## History and Motivation
+
+Zero-shot learning began with attribute-based methods: describe a class by
+attributes ("has stripes, is a mammal") and classify by matching attributes,
+with no examples of the class. It was a niche idea until CLIP (2021) showed that
+a contrastive image-text model could do zero-shot classification at scale, simply
+by comparing embeddings. CLIP turned a research curiosity into a product
+primitive.
+
+Few-shot learning followed a parallel path — prototypical networks and matching
+networks (2016-2017) formalized "classify by comparing to a few examples." Then
+GPT-3 (2020) introduced in-context learning: few-shot via the prompt, no gradient
+step, which reframed few-shot as conditioning rather than metric learning. The
+two lineages — embedding similarity and in-context conditioning — are both live
+today, and this topic covers both.
+
 ## Next Steps
 
 Next: **[47 — Self-Supervised
 Learning](47-self-supervised-learning-lecture.md)** — learning without
 labels at all.
+
 
