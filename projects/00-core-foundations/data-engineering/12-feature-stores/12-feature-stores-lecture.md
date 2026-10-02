@@ -159,7 +159,7 @@ created, never later. The feature store keeps feature history with timestamps an
 ```python
 # join features as of each label's timestamp, not as of now
 training = feature_store.get_historical_features(
-    entity_df=labels,               # entity + label_timestamp
+    entity_df=labels,  # entity + label_timestamp
     features=["repo:chunk_count"],
 )
 ```
