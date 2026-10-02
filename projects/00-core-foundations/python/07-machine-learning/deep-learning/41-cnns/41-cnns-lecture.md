@@ -298,35 +298,52 @@ it is.
 ### The layered abstraction
 
 A CNN builds meaning in layers. The first layer detects edges and simple
-gradients; the second combines edges into corners and textures; the third
-combines textures into parts (a wheel, an eye); the last combines parts into
-objects. This hierarchy is *emergent*, not programmed — the training data and
-the architecture's inductive bias produce it, and it is the same hierarchy
-regardless of whether the input is a photo, a spectrogram, or a document tile.
+gradients; the second combines edges into corners and textures; the
+third
+combines textures into parts (a wheel, an eye); the last combines parts
+into
+objects. This hierarchy is *emergent*, not programmed — the training
+data and
+the architecture's inductive bias produce it, and it is the same
+hierarchy
+regardless of whether the input is a photo, a spectrogram, or a document
+tile.
 
 ### The analogy
 
-Think of an assembly line: the first station cuts raw shapes, the next assembles
-them into components, the next into subassemblies, the last into the finished
-product. Each station only sees the previous station's output, and no one
-station understands the whole — but the line as a whole produces the object.
+Think of an assembly line: the first station cuts raw shapes, the next
+assembles
+them into components, the next into subassemblies, the last into the
+finished
+product. Each station only sees the previous station's output, and no
+one
+station understands the whole — but the line as a whole produces the
+object.
 
 ### Why it matters for transfer
 
-Because the hierarchy is layered, the early layers are generic (edges, textures)
-and the later layers are task-specific (faces, cars). That is exactly why
-transfer learning (`39`) freezes early layers and retrains only the head: the
-generic layers transfer, the specific layers do not. Understanding the hierarchy
+Because the hierarchy is layered, the early layers are generic (edges,
+textures)
+and the later layers are task-specific (faces, cars). That is exactly
+why
+transfer learning (`39`) freezes early layers and retrains only the
+head: the
+generic layers transfer, the specific layers do not. Understanding the
+hierarchy
 is what makes "freeze the backbone" intuitive rather than arbitrary.
 
 ## 9. BatchNorm and Normalization
 
 ### What normalization does
 
-Normalization keeps activations on a stable scale so training does not fight
-exploding or vanishing values. BatchNorm normalizes each channel's activations
-across the batch, then re-scales with learned parameters. It speeds convergence
-and, by injecting mild noise through the batch statistics, acts as a regularizer.
+Normalization keeps activations on a stable scale so training does not
+fight
+exploding or vanishing values. BatchNorm normalizes each channel's
+activations
+across the batch, then re-scales with learned parameters. It speeds
+convergence
+and, by injecting mild noise through the batch statistics, acts as a
+regularizer.
 
 ```python
 conv_block = nn.Sequential(
@@ -339,26 +356,36 @@ conv_block = nn.Sequential(
 
 ### The standard order
 
-The canonical order in a modern block is conv → BatchNorm → ReLU → pool. Putting
-the normalization *before* the non-linearity keeps the ReLU from receiving
-unstable pre-activations. This order is a convention, but a nearly universal one,
+The canonical order in a modern block is conv → BatchNorm → ReLU → pool.
+Putting
+the normalization *before* the non-linearity keeps the ReLU from
+receiving
+unstable pre-activations. This order is a convention, but a nearly
+universal one,
 and deviating from it without reason is a smell.
 
 ### The normalization discipline
 
-Whatever normalization you apply in training, the *identical* transform must be
-applied at inference — BatchNorm needs its running statistics frozen, not the
-batch's, at eval time. This is the same "train and eval pipelines must agree"
+Whatever normalization you apply in training, the *identical* transform
+must be
+applied at inference — BatchNorm needs its running statistics frozen,
+not the
+batch's, at eval time. This is the same "train and eval pipelines must
+agree"
 discipline that `45-data-augmentation` applies to transforms.
 
 ## 10. 1D, 2D, and Depthwise Convolutions
 
 ### The dimensionality
 
-The convolution generalizes across dimensions. A **1D** convolution slides over a
-single axis — time-series, audio waveforms, text token sequences. A **2D**
-convolution slides over two axes — images, spectrograms. A **3D** convolution
-slides over three — video (time plus two space), medical volumes. The kernel and
+The convolution generalizes across dimensions. A **1D** convolution
+slides over a
+single axis — time-series, audio waveforms, text token sequences. A
+**2D**
+convolution slides over two axes — images, spectrograms. A **3D**
+convolution
+slides over three — video (time plus two space), medical volumes. The
+kernel and
 the sliding rule are identical; only the number of axes changes.
 
 ```python
@@ -368,25 +395,36 @@ nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3)   # image data
 
 ### Depthwise separable convolutions
 
-A standard conv mixes *spatial* and *channel* information in one operation. A
-depthwise separable conv splits it: a depthwise conv filters each channel
-independently (spatial only), then a pointwise 1×1 conv mixes channels. This is
-the building block of MobileNet and other efficient architectures, and it cuts
+A standard conv mixes *spatial* and *channel* information in one
+operation. A
+depthwise separable conv splits it: a depthwise conv filters each
+channel
+independently (spatial only), then a pointwise 1×1 conv mixes channels.
+This is
+the building block of MobileNet and other efficient architectures, and
+it cuts
 the parameter count by roughly a factor of the kernel size squared.
 
 ### Why this matters on constrained hardware
 
-On a 16 GB GPU — or a phone — the difference between a standard conv and a
-depthwise separable one is the difference between a model that fits (and runs)
-and one that does not. The efficient-conv family is the CNN analogue of the
-quantization and pruning levers (`49`, `50`): a footprint reduction achieved by
+On a 16 GB GPU — or a phone — the difference between a standard conv and
+a
+depthwise separable one is the difference between a model that fits (and
+runs)
+and one that does not. The efficient-conv family is the CNN analogue of
+the
+quantization and pruning levers (`49`, `50`): a footprint reduction
+achieved by
 changing the architecture, not just the numbers.
 
 ### The truncation note
 
-Depthwise separable convs trade a little accuracy for a large efficiency win, the
-same tradeoff as every other compression technique. MobileNet's success showed
-the trade is usually favorable: modern mobile vision is depthwise almost by
+Depthwise separable convs trade a little accuracy for a large efficiency
+win, the
+same tradeoff as every other compression technique. MobileNet's success
+showed
+the trade is usually favorable: modern mobile vision is depthwise almost
+by
 default.
 
 ## Real-World Application
@@ -540,4 +578,5 @@ sequences and the models that read them.
 Continues in: **[09-genai — 21
 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** —
 fine-tune a pretrained backbone.
+
 
