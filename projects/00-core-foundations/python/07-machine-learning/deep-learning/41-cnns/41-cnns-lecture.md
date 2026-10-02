@@ -389,8 +389,8 @@ kernel and
 the sliding rule are identical; only the number of axes changes.
 
 ```python
-nn.Conv1d(in_channels=1, out_channels=8, kernel_size=3)   # sequence data
-nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3)   # image data
+nn.Conv1d(in_channels=1, out_channels=8, kernel_size=3)  # sequence data
+nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3)  # image data
 ```
 
 ### Depthwise separable convolutions
@@ -578,5 +578,6 @@ sequences and the models that read them.
 Continues in: **[09-genai — 21
 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** —
 fine-tune a pretrained backbone.
+
 
 
