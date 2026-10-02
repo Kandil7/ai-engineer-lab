@@ -57,10 +57,10 @@ Nested dicts and arrays are first-class: an address sub-document and a tags arra
 Create (insert), Read (find), Update (update), Delete (delete) are the four basic operations.
 
 ```python
-users.insert_one({"name": "Bob", "age": 30})          # create
-users.find_one({"name": "Bob"})                        # read
+users.insert_one({"name": "Bob", "age": 30})  # create
+users.find_one({"name": "Bob"})  # read
 users.update_one({"name": "Bob"}, {"$set": {"age": 31}})  # update
-users.delete_one({"name": "Bob"})                      # delete
+users.delete_one({"name": "Bob"})  # delete
 ```
 
 Each operation takes a filter document plus, for writes, an update document. The filter language (`{"age": {"$gte": 18}}`) is shared across read, update, and delete.
@@ -73,7 +73,7 @@ Each operation takes a filter document plus, for writes, an update document. The
 from pymongo import MongoClient
 
 client = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=5000)
-client.admin.command("ping")   # fail fast if no server
+client.admin.command("ping")  # fail fast if no server
 db = client["mydb"]
 ```
 
