@@ -22,6 +22,8 @@ from __future__ import annotations
 import torch
 import torch.nn.functional as F
 
+# ruff: noqa: N812
+
 torch.manual_seed(0)
 
 
