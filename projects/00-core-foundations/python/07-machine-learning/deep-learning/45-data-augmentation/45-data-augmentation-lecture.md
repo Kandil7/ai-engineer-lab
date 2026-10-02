@@ -237,52 +237,116 @@ training.
 
 ### The techniques
 
-Text augmentation is subtler than image augmentation because every word carries
-meaning. The safe transforms are lexical, not semantic: synonym replacement
+Text augmentation is subtler than image augmentation because every word
+carries
+meaning. The safe transforms are lexical, not semantic: synonym
+replacement
 (swap a word for a near-synonym), random deletion (drop a word), random
-insertion, and back-translation (translate to another language and back to get a
+insertion, and back-translation (translate to another language and back
+to get a
 paraphrase). These preserve the label most of the time.
 
 ### The unsafe transforms
 
-Anything that flips the meaning is unsafe: negating a verb, swapping sentiment
-words, or replacing an entity with a different one. "The film was great" must not
-become "the film was terrible." The label-invariance rule (`2`) is harder to
-guarantee for text, which is why text augmentation is validated more carefully.
+Anything that flips the meaning is unsafe: negating a verb, swapping
+sentiment
+words, or replacing an entity with a different one. "The film was great"
+must not
+become "the film was terrible." The label-invariance rule (`2`) is
+harder to
+guarantee for text, which is why text augmentation is validated more
+carefully.
 
 ### Why it matters for low-resource languages
 
 For languages with little labeled data — Arabic dialects, for instance —
-augmentation is disproportionately valuable. Back-translation and paraphrase are
-how a small Arabic corpus is stretched into a viable training set, and the same
-discipline (split first, augment only training, verify the label survives)
+augmentation is disproportionately valuable. Back-translation and
+paraphrase are
+how a small Arabic corpus is stretched into a viable training set, and
+the same
+discipline (split first, augment only training, verify the label
+survives)
 applies exactly as it does for images.
 
 ## 9. Audio and Tabular Augmentation
 
 ### Audio: warping the signal, not the meaning
 
-Audio augmentation warps the signal without changing the content: pitch shift,
-time stretch, background noise, and SpecAugment (masking frequency/time bands
-of a spectrogram). These make a speech or sound model robust to recording
-variation. The guardrail is the same — a pitch shift must not change *what was
+Audio augmentation warps the signal without changing the content: pitch
+shift,
+time stretch, background noise, and SpecAugment (masking frequency/time
+bands
+of a spectrogram). These make a speech or sound model robust to
+recording
+variation. The guardrail is the same — a pitch shift must not change
+*what was
 said*.
 
 ### Tabular: the hardest case
 
-Tabular data has no obvious spatial or temporal structure, so augmentation is
-harder and riskier. SMOTE synthesizes minority-class examples by interpolating
-between neighbors; noise injection perturbs features slightly. But feature
-semantics vary — perturbing a "has_disease" binary is not like perturbing a
+Tabular data has no obvious spatial or temporal structure, so
+augmentation is
+harder and riskier. SMOTE synthesizes minority-class examples by
+interpolating
+between neighbors; noise injection perturbs features slightly. But
+feature
+semantics vary — perturbing a "has_disease" binary is not like
+perturbing a
 pixel — so every tabular transform needs a human to confirm it is label-
 preserving.
 
 ### The common thread
 
-Across every domain the principle is identical: choose a perturbation that a
-human would still label the same way, apply it only to training, and verify it
-empirically. The mechanism is generic; the invariant is domain-specific, and
-getting the invariant wrong is the failure mode that survives every framework.
+Across every domain the principle is identical: choose a perturbation
+that a
+human would still label the same way, apply it only to training, and
+verify it
+empirically. The mechanism is generic; the invariant is domain-specific,
+and
+getting the invariant wrong is the failure mode that survives every
+framework.
+
+## 10. Measuring Whether Augmentation Helps
+
+### The experiment
+
+Augmentation is not free — it changes the training distribution, and
+sometimes it
+hurts. The only way to know is an ablation: train the same model with
+and without
+augmentation, on the same split, and compare the held-out metric. The
+difference
+is the augmentation's contribution, positive or negative.
+
+### The confound to avoid
+
+Do not compare an augmented model against a number you remember from
+last week.
+Change one thing, hold everything else fixed (seed, architecture,
+epochs), and
+compare on the same held-out set. Otherwise the "augmentation gain" is
+really a
+seed or schedule difference.
+
+### When it does not help
+
+Augmentation does not help when the real data already covers the
+variance (large,
+diverse datasets), when the transform is too weak to matter, or when it
+is so
+strong it distorts the label. The ablation tells you which case you are
+in, and
+"augmentation made it worse" is a real, common result.
+
+### The tie to reproducibility
+
+Record the exact augmentation recipe alongside the metric — which
+transforms,
+what magnitudes, applied to which split. An augmentation result without
+the
+recipe is not reproducible, which is the same discipline the rest of
+this
+curriculum applies to every experiment.
 
 ## Real-World Application
 
@@ -417,6 +481,21 @@ the right trade on a 16 GB single-GPU budget.
 - `47-self-supervised-learning-lecture.md` — augmentation as the "view" in contrastive learning.
 - Official docs: <https://pytorch.org/vision/stable/transforms.html>
 
+## History and Motivation
+
+Augmentation is as old as the modern CNN. LeNet and AlexNet trained on
+translated and mirrored digits; the insight that a valid transformation
+multiplies the effective dataset is decades old. What changed is automation:
+AutoAugment (2018) and RandAugment learned augmentation policies by search, and
+mixup/cutmix (2018-2019) introduced label interpolation. Augmentation went from
+a hand-tuned trick to a searched, principled component.
+
+The modern view is that augmentation encodes a *prior* about invariances — the
+same role architecture and regularization play. That reframing is why the field
+treats augmentation as a first-class part of the model's inductive bias, not an
+afterthought, and why self-supervised learning (`47`) could turn augmentation
+into the core training signal rather than a side dish.
+
 ## Next Steps
 
 Next: **[46 — Few-Shot and Zero-Shot
@@ -426,4 +505,5 @@ handful of examples.
 Continues in: **[39 — Transfer
 Learning](39-transfer-learning-lecture.md)** — the pretrained-model
 sibling of augmentation.
+
 
