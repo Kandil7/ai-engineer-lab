@@ -208,24 +208,34 @@ pretraining on in-domain text can beat a generic encoder.
 
 ### The large-batch problem
 
-SimCLR's contrastive loss needs a large batch of negatives to work well — the
-more negatives, the harder it is to satisfy the objective by collapsing. But a
-large batch is expensive, which put contrastive learning out of reach on modest
+SimCLR's contrastive loss needs a large batch of negatives to work well
+— the
+more negatives, the harder it is to satisfy the objective by collapsing.
+But a
+large batch is expensive, which put contrastive learning out of reach on
+modest
 hardware.
 
 ### The momentum-encoder fix
 
-MoCo keeps a *queue* of past embeddings as negatives, so you get many negatives
-without a large batch. BYOL goes further: it trains an online network to predict
-a *momentum* (slowly moving) target network's output, and — surprisingly — avoids
-collapse with *no negative pairs at all*. These two techniques are what made
+MoCo keeps a *queue* of past embeddings as negatives, so you get many
+negatives
+without a large batch. BYOL goes further: it trains an online network to
+predict
+a *momentum* (slowly moving) target network's output, and — surprisingly
+— avoids
+collapse with *no negative pairs at all*. These two techniques are what
+made
 self-supervised vision practical on a single GPU.
 
 ### Why this matters here
 
-On a 16 GB card, a SimCLR batch that fits is too small for stable contrastive
-learning. MoCo/BYOL are the reason self-supervised pretraining is not reserved
-for data centers — the momentum/queue tricks are the "small-batch" story of SSL,
+On a 16 GB card, a SimCLR batch that fits is too small for stable
+contrastive
+learning. MoCo/BYOL are the reason self-supervised pretraining is not
+reserved
+for data centers — the momentum/queue tricks are the "small-batch" story
+of SSL,
 the same spirit as the memory-budget discipline this curriculum applies
 everywhere.
 
@@ -233,25 +243,116 @@ everywhere.
 
 ### Two generative routes
 
-The two dominant generative pretext tasks are **masked** (predict a hidden token
-from both sides, BERT) and **next-token** (predict the following token from the
-left context, GPT). They differ in what context each prediction sees and,
+The two dominant generative pretext tasks are **masked** (predict a
+hidden token
+from both sides, BERT) and **next-token** (predict the following token
+from the
+left context, GPT). They differ in what context each prediction sees
+and,
 therefore, in what kind of encoder they produce.
 
 ### What each produces
 
-Masked training produces a bidirectional encoder — great for understanding tasks
-like classification and retrieval. Next-token training produces a decoder — great
-for generation, and the architecture behind every modern LLM. The choice of
-pretext task *is* the choice of model type, which is why "BERT vs GPT" is
+Masked training produces a bidirectional encoder — great for
+understanding tasks
+like classification and retrieval. Next-token training produces a
+decoder — great
+for generation, and the architecture behind every modern LLM. The choice
+of
+pretext task *is* the choice of model type, which is why "BERT vs GPT"
+is
 fundamentally a self-supervision decision.
 
 ### The unifying view
 
-Both are the same idea — invent a prediction task whose answer is in the data —
-with a different window onto the context. Once you see them as two instances of
-one principle, the entire foundation-model landscape (encoders, decoders, and
-the contrastive multimodal models of `46`) reads as variations on a single theme.
+Both are the same idea — invent a prediction task whose answer is in the
+data —
+with a different window onto the context. Once you see them as two
+instances of
+one principle, the entire foundation-model landscape (encoders,
+decoders, and
+the contrastive multimodal models of `46`) reads as variations on a
+single theme.
+
+## 9. Contrastive vs Predictive — Which to Choose
+
+### The decision
+
+Contrastive learning (SimCLR, MoCo, CLIP) learns by *discrimination* —
+pull
+positives together, push negatives apart. Predictive learning (BERT,
+GPT)
+learns by *reconstruction* or *generation* — predict a hidden or future
+token.
+The choice depends on what the downstream task needs.
+
+### When contrastive wins
+
+Contrastive wins when the downstream task is retrieval, matching, or
+classification by similarity, because the objective *directly* shapes a
+metric
+space where similar things are close. CLIP's retrieval power comes from
+this: the
+objective is the task.
+
+### When predictive wins
+
+Predictive wins when the downstream task is generation or understanding
+of
+structure, because reconstructing masked or next tokens forces the model
+to learn
+grammar, semantics, and long-range structure. BERT and GPT are the
+evidence.
+
+### The hybrid
+
+Modern systems blend them: CLIP-style alignment for retrieval plus
+generative
+objectives for understanding. The choice is not binary — it is a
+question of
+which objective's learned structure your downstream task actually
+consumes.
+
+## 10. Assessing Representation Quality
+
+### Why the pretext metric lies
+
+A low contrastive loss or high mask accuracy does not mean the
+representation is
+good for your task. The pretext task can be solved without learning
+anything
+transferable, so the pretext metric is a weak proxy. The real measure is
+downstream performance after fine-tuning.
+
+### Linear probing
+
+The standard diagnostic is a *linear probe*: freeze the SSL encoder and
+train a
+single linear layer on the labeled task. If a linear probe does well,
+the
+representation is linearly separable for the task — a strong sign of
+quality.
+If it does not, the features need non-linear adaptation or the encoder
+is wrong
+for the domain.
+
+### k-NN evaluation
+
+An even cheaper probe is k-nearest-neighbors on the frozen embeddings.
+It needs
+no training at all, and its accuracy tracks representation quality
+closely enough
+to be a fast sanity check before committing to a fine-tune.
+
+### The transfer metric
+
+The bottom line: judge SSL by the downstream metric, using a linear
+probe or kNN
+as the fast proxy. The pretext loss is for monitoring training, not for
+judging
+the product — the product is the representation, and only the downstream
+task
+measures it.
 
 ## Real-World Application
 
@@ -393,4 +494,5 @@ why the RTX 5000's 16 GB is usually enough.
 Next: **[48 — Hyperband and
 BOHB](../advanced/48-hyperband-bohb-lecture.md)** — multi-fidelity
 tuning.
+
 
