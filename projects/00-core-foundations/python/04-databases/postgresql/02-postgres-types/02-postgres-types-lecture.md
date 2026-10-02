@@ -62,7 +62,7 @@ for zone-free civil times like "shop opens at 09:00". psycopg3 returns aware
 ```python
 from datetime import datetime, timezone
 
-now = datetime.now(timezone.utc)          # aware: safe to store
+now = datetime.now(timezone.utc)  # aware: safe to store
 cur.execute("INSERT INTO events (at) VALUES (%s)", (now,))
 ```
 
