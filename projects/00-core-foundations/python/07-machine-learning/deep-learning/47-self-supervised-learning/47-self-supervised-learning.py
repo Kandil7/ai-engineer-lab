@@ -55,16 +55,18 @@ print(f"  mean positive similarity {pos:.3f} > negative {neg:.3f}")
 # 2. Masked modeling — hide a token, predict from context
 # ============================================================
 print("\nExample 2: masked modeling")
-vocab = F.normalize(torch.randn(16, 8), dim=-1)  # 16 token embeddings
-seq = torch.tensor([3, 1, 4, 1, 5, 9, 2, 6])  # a sequence of token ids
-mask_pos = 3
+# Orthogonal (one-hot) vocabulary: vocab[i] = e_i, so similarity is exact
+vocab = F.normalize(torch.eye(16), dim=-1)
+# Token 2 appears three times; mask the middle occurrence (position 2).
+seq = torch.tensor([2, 5, 2, 7, 2])
+mask_pos = 2
 masked = seq.clone()
 masked[mask_pos] = 0  # 0 = [MASK]
-# Predict the masked token by nearest vocabulary embedding to the context mean
+# Context = remaining tokens (positions 0, 1, 3, 4); token 2 still appears twice.
 context = vocab[masked[masked != 0]].mean(dim=0)
 pred = (vocab @ context).argmax().item()
 print(f"  masked seq: {masked.tolist()}  (true token {seq[mask_pos].item()})")
-print(f"  nearest-embedding prediction: {pred}")
+print(f"  context still contains token 2 twice -> prediction: {pred}")
 
 # ============================================================
 # 3. Pretrain-then-fine-tune (the production default)
