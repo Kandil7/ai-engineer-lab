@@ -6,22 +6,35 @@ Companion exercise: `43-tensorflow-keras.py`
 
 ## Topic Overview
 
-PyTorch asks you to write the loop; Keras asks you to describe the model.
-TensorFlow/Keras is the *declarative* side of deep learning — you stack layers,
-call `compile` with an optimizer and loss, then `fit`, and the framework runs the
-training loop for you. That ergonomics difference, not raw performance, is why
-Keras dominates applied ML and tutorials while PyTorch dominates research.
+PyTorch asks you to write the loop; Keras asks you to describe the
+model.
+TensorFlow/Keras is the *declarative* side of deep learning — you stack
+layers,
+call `compile` with an optimizer and loss, then `fit`, and the framework
+runs the
+training loop for you. That ergonomics difference, not raw performance,
+is why
+Keras dominates applied ML and tutorials while PyTorch dominates
+research.
 
-This topic maps the two frameworks to each other so you can read either. Keras
-offers two APIs — the Sequential API for linear stacks and the Functional API
-for branching graphs — plus the same primitives (layers, optimizers, losses)
-under different names. Because TensorFlow is not installed in this environment,
-the exercise runs the Keras *mental model* in PyTorch so the comparison is
+This topic maps the two frameworks to each other so you can read either.
+Keras
+offers two APIs — the Sequential API for linear stacks and the
+Functional API
+for branching graphs — plus the same primitives (layers, optimizers,
+losses)
+under different names. Because TensorFlow is not installed in this
+environment,
+the exercise runs the Keras *mental model* in PyTorch so the comparison
+is
 concrete, not theoretical.
 
-The payoff is fluency: a production ML system may embed a Keras model for
-serving, a PyTorch model for research, and you must move between the two without
-losing the plot. The mapping table in this topic is the durable skill — the rest
+The payoff is fluency: a production ML system may embed a Keras model
+for
+serving, a PyTorch model for research, and you must move between the two
+without
+losing the plot. The mapping table in this topic is the durable skill —
+the rest
 is syntax that any reference will show you.
 
 ## Learning Objectives
@@ -48,16 +61,19 @@ By the end of this lecture, you will be able to:
 
 ### The Keras way
 
-Keras describes the model and the training *configuration*, and the framework
+Keras describes the model and the training *configuration*, and the
+framework
 runs the loop:
 
 ```python
 from tensorflow import keras
 
-model = keras.Sequential([
-    keras.layers.Dense(64, activation="relu"),
-    keras.layers.Dense(1),
-])
+model = keras.Sequential(
+    [
+        keras.layers.Dense(64, activation="relu"),
+        keras.layers.Dense(1),
+    ]
+)
 model.compile(optimizer="adam", loss="mse")
 model.fit(X_train, y_train, epochs=10)
 ```
@@ -71,37 +87,49 @@ model = nn.Sequential(nn.Linear(8, 64), nn.ReLU(), nn.Linear(64, 1))
 opt = torch.optim.Adam(model.parameters())
 for _ in range(10):
     loss = nn.functional.mse_loss(model(X_train), y_train)
-    opt.zero_grad(); loss.backward(); opt.step()
+    opt.zero_grad()
+    loss.backward()
+    opt.step()
 ```
 
 ### The real difference
 
-The difference is control versus convenience. Keras hides the loop; PyTorch
-exposes it. Research that needs a custom gradient or a novel loop reaches for
+The difference is control versus convenience. Keras hides the loop;
+PyTorch
+exposes it. Research that needs a custom gradient or a novel loop
+reaches for
 PyTorch; a standard supervised task reaches for Keras. The analogy is a
-fully-automatic camera versus manual controls: the automatic gets you a good
+fully-automatic camera versus manual controls: the automatic gets you a
+good
 picture fast; the manual lets you do things the automatic cannot.
 
 ### When each style wins
 
 Declarative wins when the standard loop is all you need — the 90% case.
-Explicit wins when you need to change *how* training happens, not just what the
-model is. The moment your loss or update rule is nonstandard, the hidden loop
+Explicit wins when you need to change *how* training happens, not just
+what the
+model is. The moment your loss or update rule is nonstandard, the hidden
+loop
 becomes a wall you must climb over.
 
 ## 2. The Sequential API
 
 ### Linear stacks
 
-`Sequential` is a list of layers applied in order — the right choice when data
-flows straight through. Each layer's output feeds the next, and shapes are
+`Sequential` is a list of layers applied in order — the right choice
+when data
+flows straight through. Each layer's output feeds the next, and shapes
+are
 inferred from the input.
 
 ### What it cannot express
 
-A Sequential model cannot branch, merge, or share layers. The moment a model has
-a residual connection or two inputs, Sequential is out and the Functional API is
-in. This limitation is not a flaw but a scope: Sequential is the 80% convenience,
+A Sequential model cannot branch, merge, or share layers. The moment a
+model has
+a residual connection or two inputs, Sequential is out and the
+Functional API is
+in. This limitation is not a flaw but a scope: Sequential is the 80%
+convenience,
 Functional is the 100% generality.
 
 ## 3. The Functional API
@@ -120,25 +148,34 @@ model = keras.Model(inputs=inputs, outputs=out)
 
 ### Why it matters
 
-Almost every non-trivial architecture (ResNet, U-Net, multi-modal models) needs
-the Functional API. Sequential is a convenience; Functional is the general tool.
-The same "layers as callables" idea appears in PyTorch as calling modules
+Almost every non-trivial architecture (ResNet, U-Net, multi-modal
+models) needs
+the Functional API. Sequential is a convenience; Functional is the
+general tool.
+The same "layers as callables" idea appears in PyTorch as calling
+modules
 directly in `forward`.
 
 ## 4. compile and fit
 
 ### What compile does
 
-`compile` binds the optimizer, loss, and metrics to the model — it *configures*
-training but does not run it. It is the analogue of choosing an optimizer and
+`compile` binds the optimizer, loss, and metrics to the model — it
+*configures*
+training but does not run it. It is the analogue of choosing an
+optimizer and
 loss function in PyTorch.
 
 ### What fit does
 
-`fit` runs the training loop: batches, forward, backward, optimizer step, and
-metric logging — all hidden. Callbacks (`EarlyStopping`, `ModelCheckpoint`)
-hook into the loop, which is how Keras gets early stopping without you writing
-the condition. This is the single abstraction that defines the framework; every
+`fit` runs the training loop: batches, forward, backward, optimizer
+step, and
+metric logging — all hidden. Callbacks (`EarlyStopping`,
+`ModelCheckpoint`)
+hook into the loop, which is how Keras gets early stopping without you
+writing
+the condition. This is the single abstraction that defines the
+framework; every
 other difference is cosmetic.
 
 ## 5. Mapping the Two Frameworks
@@ -157,51 +194,112 @@ other difference is cosmetic.
 
 ### The channels convention
 
-Keras defaults to channels-last `(batch, H, W, C)` for images; PyTorch defaults
-to channels-first `(batch, C, H, W)`. This is the most common silent bug when
-porting a vision model between frameworks — the same tensor means different
+Keras defaults to channels-last `(batch, H, W, C)` for images; PyTorch
+defaults
+to channels-first `(batch, C, H, W)`. This is the most common silent bug
+when
+porting a vision model between frameworks — the same tensor means
+different
 things. Pin `data_format` (Keras) or transpose the tensor explicitly.
 
 ### The single most important row
 
-`fit` versus the loop. If you need to write the loop, use PyTorch; if the
+`fit` versus the loop. If you need to write the loop, use PyTorch; if
+the
 standard loop suffices, Keras saves you from rewriting it every time.
 
 ## 6. Serving a Keras Model
 
 ### The SavedModel artifact
 
-A trained Keras model exports to a SavedModel directory — a self-contained
-bundle of graph and weights that TensorFlow Serving or `tf.keras` can load
+A trained Keras model exports to a SavedModel directory — a
+self-contained
+bundle of graph and weights that TensorFlow Serving or `tf.keras` can
+load
 without the training code. That artifact shape matters for deployment
 (`model-serving` in this curriculum).
 
 ### The comparison
 
-PyTorch ships weights plus your model class; Keras ships a self-describing
-artifact. Each has an edge: Keras's artifact is more portable to its serving
-stack; PyTorch's class keeps the logic inspectable. Neither is wrong; they are
+PyTorch ships weights plus your model class; Keras ships a
+self-describing
+artifact. Each has an edge: Keras's artifact is more portable to its
+serving
+stack; PyTorch's class keeps the logic inspectable. Neither is wrong;
+they are
 different deployment contracts.
 
 ## 7. Choosing a Framework
 
 ### When to choose TensorFlow/Keras
 
-Choose Keras for standard supervised models, for deployment into the TensorFlow
-serving ecosystem (TF Serving, TF Lite for edge), and for teams that want
+Choose Keras for standard supervised models, for deployment into the
+TensorFlow
+serving ecosystem (TF Serving, TF Lite for edge), and for teams that
+want
 low-ceremony training.
 
 ### When to choose PyTorch
 
-Choose PyTorch for research, novel architectures, and tight control of the
-training loop. Most modern LLM and research code is PyTorch, so it is the
+Choose PyTorch for research, novel architectures, and tight control of
+the
+training loop. Most modern LLM and research code is PyTorch, so it is
+the
 default in this curriculum.
 
 ### The honest rule
 
 Both compute the same math. The choice is ecosystem and ergonomics, not
-capability — and the ability to read both is worth more than loyalty to one. A
+capability — and the ability to read both is worth more than loyalty to
+one. A
 full-stack AI engineer is bilingual by necessity, not by preference.
+
+## 8. Eager vs Graph Execution
+
+### Two execution modes
+
+TensorFlow has two ways to run a model. **Graph mode** builds a static
+computation graph first, then executes it — the original design, optimized for
+production and portability. **Eager mode** executes operations immediately, like
+PyTorch — the modern default, friendlier for debugging. The trade is
+productivity versus optimization.
+
+### Why it matters to you
+
+Eager is what you write in; graph is what you ship. `tf.function` decorates a
+Python function and traces it into a graph, giving you eager-style development
+with graph-style speed. Understanding the two modes explains why TF code
+sometimes behaves differently under `tf.function` — a classic source of
+"works in debugging, differs in production" confusion.
+
+### The PyTorch parallel
+
+PyTorch is eager by default and compiles opt-in via `torch.compile` (the JAX
+`jit` analogue from `44`). The direction of travel in every framework is the
+same: write eagerly, compile for speed. TF just made the split explicit first.
+
+## 9. TF Lite and TF Serving
+
+### The serving ecosystem
+
+Keras's real advantage is the deployment ecosystem. **TF Serving** hosts a
+SavedModel behind a gRPC/REST endpoint; **TF Lite** converts a model to a small
+format for mobile and embedded devices. These are mature, managed paths that
+have no PyTorch equivalent of the same age.
+
+### The conversion trade
+
+TF Lite trades accuracy for size by quantizing (`49`) and pruning the graph. The
+conversion is one call, but the result must be re-validated — a model that
+passes in full precision can fail the quantized edge form, which is why the
+quantization ladder (`49`) matters even when the framework hands you the button.
+
+### The honest comparison
+
+PyTorch serving is increasingly strong (TorchServe, ONNX, torch.compile), but
+TF's edge story — TF Lite on phones — remains the most battle-tested path for
+mobile deployment. If the target is a phone, Keras/TF is often the pragmatic
+choice regardless of your training preference.
 
 ## Real-World Application
 
@@ -276,8 +374,10 @@ full-stack AI engineer is bilingual by necessity, not by preference.
 ## AI Engineering Relevance
 
 **Where this shows up:** legacy production models are often Keras/TF (SavedModels
-and TF Lite edge deployments), while new research and LLM tooling is PyTorch. A
-full-stack AI engineer must read both. On this workstation both run on the RTX
+and TF Lite edge deployments), while new research and LLM tooling is
+PyTorch. A
+full-stack AI engineer must read both. On this workstation both run on
+the RTX
 5000; the deciding factor is the serving target, not the GPU.
 
 | Concept here | Used for |
@@ -288,8 +388,10 @@ full-stack AI engineer must read both. On this workstation both run on the RTX
 | Framework fluency | Reading and porting either codebase |
 
 **Scale note:** framework choice is often inherited from the team or the serving
-stack, not picked fresh. The skill is translation — moving a model between the
-two without changing its behavior, which this topic's mapping table makes
+stack, not picked fresh. The skill is translation — moving a model
+between the
+two without changing its behavior, which this topic's mapping table
+makes
 explicit.
 
 ## Key Takeaways
@@ -340,6 +442,10 @@ explicit.
 
 ## Next Steps
 
-Next: **[44 — JAX and Flax](44-jax-flax-lecture.md)** — functional transforms and composable modules.
+Next: **[44 — JAX and Flax](44-jax-flax-lecture.md)** — functional
+transforms and composable modules.
 
-Continues in: **[model-serving](../../../04-ai-engineering/model-serving/)** — serving Keras and PyTorch artifacts.
+Continues in:
+**[model-serving](../../../04-ai-engineering/model-serving/)** — serving
+Keras and PyTorch artifacts.
+
