@@ -216,49 +216,154 @@ verify the speed on your target.
 
 ### Why static quantization needs calibration
 
-Static PTQ quantizes activations with a *fixed* scale, chosen before inference.
-That scale must be estimated from a representative sample of real data — the
-calibration set — because the activation range is what determines the step size.
-A calibration set that does not resemble production gives a bad scale and a big
+Static PTQ quantizes activations with a *fixed* scale, chosen before
+inference.
+That scale must be estimated from a representative sample of real data —
+the
+calibration set — because the activation range is what determines the
+step size.
+A calibration set that does not resemble production gives a bad scale
+and a big
 accuracy drop.
 
 ### The calibration methods
 
-The simplest method takes the min/max of the calibration activations; more
+The simplest method takes the min/max of the calibration activations;
+more
 robust methods use percentiles (discarding outliers) or minimize the
-quantization error directly. The choice matters most when activations have
-outliers, which stretch the range and coarsen the step for the common case.
+quantization error directly. The choice matters most when activations
+have
+outliers, which stretch the range and coarsen the step for the common
+case.
 
 ### The practical rule
 
-Calibrate on data that matches the serving distribution, use a few hundred
-examples, and re-calibrate if the distribution drifts (`monitoring`). Calibration
-is the difference between PTQ that "just works" and PTQ that silently degrades —
+Calibrate on data that matches the serving distribution, use a few
+hundred
+examples, and re-calibrate if the distribution drifts (`monitoring`).
+Calibration
+is the difference between PTQ that "just works" and PTQ that silently
+degrades —
 and it is the part of quantization most people skip.
 
 ## 9. LLM Quantization Schemes
 
 ### The weight-only INT4 world
 
-Large language models are usually quantized *weight-only* to 4 bits — the
-activations stay higher-precision, and only the weight matrices shrink. This is
-the GGUF/GPTQ/AWQ family, and it is how a 7B model fits in a consumer GPU. The
-reason is that LLM activations have extreme outliers, so quantizing them is
+Large language models are usually quantized *weight-only* to 4 bits —
+the
+activations stay higher-precision, and only the weight matrices shrink.
+This is
+the GGUF/GPTQ/AWQ family, and it is how a 7B model fits in a consumer
+GPU. The
+reason is that LLM activations have extreme outliers, so quantizing them
+is
 risky, while weights are more benign.
 
 ### The grouping trick
 
-INT4 per-tensor would be too coarse, so these schemes group weights into small
-blocks (say, 64 or 128), each with its own scale. That localizes the error and
-is what makes 4-bit weights accurate enough to serve. The trade is a little
+INT4 per-tensor would be too coarse, so these schemes group weights into
+small
+blocks (say, 64 or 128), each with its own scale. That localizes the
+error and
+is what makes 4-bit weights accurate enough to serve. The trade is a
+little
 extra metadata per block.
 
 ### The connection to this curriculum
 
-This is the same affine mechanism (`1`) with per-channel/group scales (`6`)
-pushed to the limit, and the same cost-accuracy ladder (`3`, `4`) — INT4 needs
-more care (calibration, sometimes QAT-style fine-tuning) than INT8. On the RTX
+This is the same affine mechanism (`1`) with per-channel/group scales
+(`6`)
+pushed to the limit, and the same cost-accuracy ladder (`3`, `4`) — INT4
+needs
+more care (calibration, sometimes QAT-style fine-tuning) than INT8. On
+the RTX
 5000, a 4-bit 7B model is how "run a real LLM locally" becomes possible at all.
+
+## 10. Diagnosing Quantization Accuracy Loss
+
+### The layer-by-layer method
+
+When a quantized model loses accuracy, the first job is localization.
+Quantize
+one layer at a time (or one block at a time) and measure the accuracy
+drop.
+The layer whose quantization causes the drop is the culprit — usually a
+layer
+with activation outliers or a sensitive operation like LayerNorm or the
+final
+classifier.
+
+### The outlier hypothesis
+
+Most quantization failures trace to *outliers*: a few activation values
+orders of
+magnitude larger than the rest. A single outlier stretches the scale and
+coarsens
+the step for every other value, wrecking precision. The fix is
+per-channel
+scales (`6`), clipping the outliers, or leaving that layer in higher
+precision.
+
+### The mixed-precision escape
+
+You do not have to quantize uniformly. Mixed precision leaves the
+sensitive
+layers in FP16 and quantizes the rest — a targeted fix that recovers
+most of the
+accuracy at most of the size win. Knowing *which* layers to spare is the
+whole
+skill, and the layer-by-layer diagnostic is how you find them.
+
+### The decision
+
+If the drop is small, accept it. If it is localized, use mixed
+precision. If it
+is global, the model is quantization-sensitive and QAT (`4`) is the real
+answer.
+Diagnosis before remedy, every time.
+
+## 11. When Not to Quantize
+
+### The case against
+
+Quantization is not free: it adds a calibration step, a possible
+accuracy drop,
+and a hardware-support dependency. If the model already fits the target
+and runs
+fast enough, quantizing is added risk for no benefit. The discipline is
+to
+quantize when size or latency is the *actual* bottleneck, not by reflex.
+
+### The preconditions
+
+Quantization is a poor fit when the target hardware has no INT8 kernels
+(the size
+win remains, but the speed win vanishes), when the model is already
+tiny, or when
+the task is extremely precision-sensitive (some scientific or financial
+models).
+Check the target before committing.
+
+### The measurement
+
+The honest test is an A/B: full-precision versus quantized, same data,
+measuring
+accuracy, latency, and memory. If the latency win is not real on your
+hardware,
+quantization is a size optimization only — which may still be enough if
+VRAM is
+the constraint, but it is a different decision than "make it faster."
+
+### The toolbox view
+
+Quantization is one of three levers (`49`, `50`, `51`), and the right
+question is
+always "which constraint am I actually under?" VRAM → quantize.
+Redundancy →
+prune. Capacity → distill. Applying a lever without a constraint is
+motion
+without progress.
 
 ## Real-World Application
 
@@ -395,4 +500,5 @@ upgrading hardware.
 
 Next: **[50 — Pruning](../advanced/50-pruning-lecture.md)** — remove the
 weights you don't need.
+
 
