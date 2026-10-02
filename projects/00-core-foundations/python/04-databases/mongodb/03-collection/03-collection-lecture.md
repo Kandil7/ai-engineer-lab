@@ -2,22 +2,29 @@
 
 ## 🎯 Topic Overview
 
-Working with Collections — core concepts and Python implementation.
+Collections are where documents live and where most operational decisions attach: creation options, capped behavior for logs, listing, and dropping. This lecture covers the collection lifecycle with PyMongo.
 
 ## 📚 Learning Objectives
 
 By the end of this lecture, you will be able to:
-1. Understand MongoDB working with collections concepts
-2. Implement operations using PyMongo
-3. Handle edge cases and common errors
-4. Apply best practices
-5. Compare with relational database equivalents
+1. Create collections implicitly and explicitly with options
+2. Use capped collections for fixed-size logs and queues
+3. List collections with `list_collection_names()`
+4. Drop a collection and understand its finality
+5. Compare a collection to a relational table
+
+## Prerequisites
+
+- Databases in MongoDB (Lecture 02).
+- What a document is (Lecture 01).
 
 ---
 
 ## 1. Introduction
 
 MongoDB is a NoSQL document database that stores data in flexible, JSON-like documents. This lecture covers working with collections with Python using PyMongo.
+
+A collection is roughly a table without a fixed schema. The differences that matter are creation semantics (lazy), capped collections (fixed-size, ordered), and the lack of server-side schema enforcement by default.
 
 ---
 
@@ -27,17 +34,39 @@ MongoDB is a NoSQL document database that stores data in flexible, JSON-like doc
 
 Collections are created implicitly on first insert: `db.create_collection('users')` or explicitly with options.
 
+```python
+db.create_collection("users")                       # explicit, default options
+db.create_collection("events", capped=True, size=1024 * 1024)  # capped: 1 MB
+db["logs"].insert_one({"msg": "boot"})              # implicit on first write
+```
+
+Explicit creation is for options (capped, validation rules); otherwise let the first insert create it.
+
 ### 2. Capped Collections
 
 Fixed-size collections that maintain insertion order and automatically remove oldest documents.
+
+Capped collections are the log/queue primitive: bounded disk, natural insertion order, no manual cleanup. They cannot be sharded by default and documents cannot grow beyond their allocation — size them for the retention window.
 
 ### 3. Listing Collections
 
 `db.list_collection_names()` returns all collection names in the current database.
 
+```python
+print(db.list_collection_names())
+```
+
+System collections (`system.*`) appear; filter them in tooling output.
+
 ### 4. Dropping Collections
 
 `db.users.drop()` removes a collection and all its documents permanently.
+
+Like database drops, this is final. In migrations, dropping a collection is a reviewed, backed-up operation — not a REPL experiment.
+
+### 5. Collection vs table
+
+A table enforces one schema on every row; a collection holds whatever documents arrive. The application (or schema validation rules) owns shape discipline. Indexes, by contrast, work the same way: declared per collection, serving the same query shapes.
 
 ---
 
@@ -63,41 +92,34 @@ col = client.mydb.users
 col = client["mydb"]["users"]
 ```
 
-### Not handling connection errors
-Always handle connection failures:
-```python
-from pymongo.errors import ConnectionFailure
+### Growing documents in a capped collection
+Updates that grow a document fail in capped collections. Size documents once, or do not cap.
 
-try:
-    client = MongoClient("localhost", 27017)
-    client.admin.command("ping")
-except ConnectionFailure:
-    print("Server not available")
-```
+### Assuming schema enforcement
+Without validation rules, any shape inserts. Add `$jsonSchema` validation once the shape stabilizes.
 
 ---
 
 ## 4. Best Practices
 
-1. Use **explicit** database/collection references `client['db']['col']`
-2. Handle **connection errors** with try/except
-3. Create **indexes** for frequently queried fields
-4. Use **projections** to limit returned fields
-5. **Close connections** in production code
-6. **Validate input** before database operations
+1. Create explicitly only when options (capped, validation) are needed.
+2. Use capped collections for bounded logs and queues.
+3. Verify with `list_collection_names()` after setup.
+4. Gate drops behind confirmation and backups.
+5. Add schema validation once shapes stabilize.
 
 ---
 
 ## 5. Practice Exercises
 
-### Exercise 1: Basic CRUD
-Implement all CRUD operations (Create, Read, Update, Delete) for a simple document collection.
+### Exercise 1: Implicit vs Explicit
+Create one collection by insert and one by `create_collection` with a capped option; compare their stats.
 
-### Exercise 2: Error Handling
-Add proper error handling, input validation, and connection management to your CRUD operations.
+### Exercise 2: Capped Log
+Write 10k log lines to a 1 MB capped collection and show the oldest are evicted while order holds.
 
-### Exercise 3: SQL Comparison
-Write the equivalent SQL queries for each MongoDB operation and compare the approaches.
+### Exercise 3: Safe Drop
+Write a drop helper that refuses collections not prefixed `tmp_` without `confirm=True`.
 
 ---
 
@@ -105,9 +127,29 @@ Write the equivalent SQL queries for each MongoDB operation and compare the appr
 
 | Concept | Key Takeaway |
 |---------|-------------|
-| MongoDB | NoSQL document database - flexible, scalable |
-| Document | JSON-like data structure (Python dict) |
-| Collection | Group of related documents (like SQL table) |
-| PyMongo | Official Python driver for MongoDB |
-| CRUD | Create, Read, Update, Delete operations |
-| Performance | Use indexes and projections for speed |
+| Creation | Lazy, or explicit with options |
+| Capped | Fixed-size, ordered, self-evicting |
+| Listing | `list_collection_names()` |
+| Dropping | Permanent; gate and back up |
+| Validation | Opt-in `$jsonSchema` for shape discipline |
+
+## Key Takeaways
+
+1. Collections are schema-flexible tables; creation is lazy.
+2. Capped collections are the bounded-log primitive.
+3. Drops are final — confirm and back up.
+4. Validation rules, not hope, keep shapes consistent.
+
+## Self-Check Questions
+
+1. What creates a collection?
+2. When must creation be explicit?
+3. What evicts from a capped collection, and what cannot change there?
+4. How do you verify setup created what you expected?
+5. Where does shape discipline live without a fixed schema?
+
+## Further Reading / Connections
+
+- Next: Lecture 04, Inserting Documents.
+- Lecture 12 (`12-mongo-vs-sql`) for schema-flexibility costs.
+- Exercise: `03-collection.py`.
