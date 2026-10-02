@@ -6,23 +6,33 @@ Companion exercise: `46-few-shot-zero-shot.py`
 
 ## Topic Overview
 
-Classical supervised learning needs thousands of labeled examples per class.
-Zero-shot learning needs *none*: it classifies by matching an input's embedding
-against a textual description of each class. Few-shot learning needs only a
-handful — it classifies by comparing to a small set of labeled examples. Both
-are possible because a pretrained model already embeds meaning into a shared
+Classical supervised learning needs thousands of labeled examples per
+class.
+Zero-shot learning needs *none*: it classifies by matching an input's
+embedding
+against a textual description of each class. Few-shot learning needs
+only a
+handful — it classifies by comparing to a small set of labeled examples.
+Both
+are possible because a pretrained model already embeds meaning into a
+shared
 space, so "similarity" can substitute for "training."
 
-This is the mechanism behind CLIP-style image-text matching, prompt-based
-classification with LLMs, and the ability to add a new category to a deployed
-system without retraining. The core primitive is *similarity in embedding
+This is the mechanism behind CLIP-style image-text matching,
+prompt-based
+classification with LLMs, and the ability to add a new category to a
+deployed
+system without retraining. The core primitive is *similarity in
+embedding
 space*: zero-shot compares to class descriptions, few-shot compares to a
 prototype (the mean of a few support examples), and both are a distance
 computation, not a training run.
 
 The topic covers the shared-space premise, zero-shot classification by
-description matching, few-shot classification by prototypical networks, the
-in-context few-shot of LLMs, and the honest limits — when similarity is not
+description matching, few-shot classification by prototypical networks,
+the
+in-context few-shot of LLMs, and the honest limits — when similarity is
+not
 enough and you still need real fine-tuning.
 
 ## Learning Objectives
@@ -50,36 +60,49 @@ By the end of this lecture, you will be able to:
 
 ### Why similarity works
 
-Few/zero-shot works because a pretrained model maps inputs *and* class concepts
-into one space where related things are close. An image of a cat and the text
-"a cat" land near each other; so classification becomes nearest-neighbor search
+Few/zero-shot works because a pretrained model maps inputs *and* class
+concepts
+into one space where related things are close. An image of a cat and the
+text
+"a cat" land near each other; so classification becomes nearest-neighbor
+search
 rather than a trained decision boundary.
 
 ### The real-world analogy
 
-Think of a dictionary plus a shared language. You know what "cat" means in
-language and you know what a cat looks like in the world; the shared space is
-the alignment that lets you match the word to the image. Once that alignment
-exists, a new word (a new class) is just another entry — no new training needed.
+Think of a dictionary plus a shared language. You know what "cat" means
+in
+language and you know what a cat looks like in the world; the shared
+space is
+the alignment that lets you match the word to the image. Once that
+alignment
+exists, a new word (a new class) is just another entry — no new training
+needed.
 
 ### The enabling model
 
-This is what CLIP (contrastive image-text) and embedding models provide: a space
-where *meaning* is geometry. Once that space exists, a new class is just a new
+This is what CLIP (contrastive image-text) and embedding models provide:
+a space
+where *meaning* is geometry. Once that space exists, a new class is just
+a new
 point (or prototype) in it — no gradient descent required.
 
 ### When it works, when it fails
 
-Similarity works when the pretrained space actually covers the task's domain —
-the classes are things the model's text/vision encoder has seen. It fails when
-the domain is niche or the vocabulary is out-of-distribution, because then the
+Similarity works when the pretrained space actually covers the task's
+domain —
+the classes are things the model's text/vision encoder has seen. It
+fails when
+the domain is niche or the vocabulary is out-of-distribution, because
+then the
 embeddings carry no signal about the distinction you need.
 
 ## 2. Zero-Shot Classification
 
 ### Match to a description
 
-Zero-shot embeds the query and each class name (or description), and predicts
+Zero-shot embeds the query and each class name (or description), and
+predicts
 the class whose embedding is closest:
 
 ```python
@@ -90,21 +113,27 @@ def zero_shot(query, class_embeds):
 
 ### The "zero" in zero-shot
 
-There are zero *labeled examples* of the target classes — only their names or
-descriptions. The model relies entirely on the alignment between input space
+There are zero *labeled examples* of the target classes — only their
+names or
+descriptions. The model relies entirely on the alignment between input
+space
 and text space learned during pretraining.
 
 ### Descriptions beat names
 
-A class *name* can be ambiguous ("crane" — bird or machine); a short description
-("a crane, the bird") disambiguates. Good zero-shot performance depends on good
-prompts, which is why prompt design is a first-class skill in this regime.
+A class *name* can be ambiguous ("crane" — bird or machine); a short
+description
+("a crane, the bird") disambiguates. Good zero-shot performance depends
+on good
+prompts, which is why prompt design is a first-class skill in this
+regime.
 
 ## 3. Few-Shot Classification
 
 ### Prototypical networks
 
-Few-shot uses a small *support set* — k labeled examples per class — and builds a
+Few-shot uses a small *support set* — k labeled examples per class — and
+builds a
 prototype as their mean embedding. A query is classified by its nearest
 prototype:
 
@@ -112,60 +141,77 @@ prototype:
 def prototype(support):
     return support.mean(dim=0)
 
+
 def few_shot(query, prototypes):
     return min(prototypes, key=lambda c: -cosine(query, prototypes[c]))
 ```
 
 ### Why the mean
 
-The mean of a few examples averages out their individual noise, giving a robust
+The mean of a few examples averages out their individual noise, giving a
+robust
 class center from very few samples. This is the "prototype" idea from
-Prototypical Networks, and it is the workhorse of few-shot learning. A single
+Prototypical Networks, and it is the workhorse of few-shot learning. A
+single
 noisy example is a bad prototype; several clean ones are a good one.
 
 ## 4. In-Context Learning (LLM few-shot)
 
 ### A different mechanism
 
-LLMs do few-shot *in context*: you put a few examples in the prompt, and the
-model infers the pattern by attention, with no weight update at all. This is
+LLMs do few-shot *in context*: you put a few examples in the prompt, and
+the
+model infers the pattern by attention, with no weight update at all.
+This is
 few-shot as *conditioning*, distinct from the embedding-prototype view.
 
 ### Why it is powerful but different
 
-In-context few-shot needs no gradient step and generalizes across tasks, but it
-burns context length and is not always as precise as a fine-tuned model. It is
-the LLM-era face of the same "generalize from a few examples" idea, and the
+In-context few-shot needs no gradient step and generalizes across tasks,
+but it
+burns context length and is not always as precise as a fine-tuned model.
+It is
+the LLM-era face of the same "generalize from a few examples" idea, and
+the
 distinction (no weight change) is a common source of confusion.
 
 ## 5. When Similarity Is Not Enough
 
 ### The honest limits
 
-Few/zero-shot fails when the pretrained space does not align with the target
-task — a niche domain, a vocabulary the model never saw, or a fine-grained
-distinction the embedding does not capture. Then a handful of examples is not
+Few/zero-shot fails when the pretrained space does not align with the
+target
+task — a niche domain, a vocabulary the model never saw, or a
+fine-grained
+distinction the embedding does not capture. Then a handful of examples
+is not
 enough, and you fall back to fine-tuning (`39-transfer-learning`).
 
 ### The decision rule
 
 Start zero-shot (free). If insufficient, try few-shot (cheap). If still
-insufficient, fine-tune (the real cost). The ladder matches cost to difficulty,
+insufficient, fine-tune (the real cost). The ladder matches cost to
+difficulty,
 and each rung is tried only after the cheaper one demonstrably fails.
 
 ## 6. Evaluation Discipline
 
 ### The description-tuning trap
 
-It is tempting to tune the class descriptions until the eval score rises. That
-is leakage — the descriptions are a hyperparameter, and tuning them against the
-test set inflates the metric. The discipline is the same as `33`: fix the
+It is tempting to tune the class descriptions until the eval score
+rises. That
+is leakage — the descriptions are a hyperparameter, and tuning them
+against the
+test set inflates the metric. The discipline is the same as `33`: fix
+the
 prompts/prototypes on a dev split, measure once on test.
 
 ### The metric
 
-For zero/few-shot, the metric is standard classification accuracy (or a ranking
-metric like top-k) on a held-out set — but the *held-out* guarantee only holds
+For zero/few-shot, the metric is standard classification accuracy (or a
+ranking
+metric like top-k) on a held-out set — but the *held-out* guarantee only
+holds
 if you did not tune against it.
 
 ## Real-World Application
@@ -240,8 +286,10 @@ if you did not tune against it.
 ## AI Engineering Relevance
 
 **Where this shows up:** adding a category to a live system without retraining,
-CLIP-style multimodal retrieval, and prompt-based classification. On this
-workstation, embedding models run cheaply on the RTX 5000, so zero/few-shot is
+CLIP-style multimodal retrieval, and prompt-based classification. On
+this
+workstation, embedding models run cheaply on the RTX 5000, so
+zero/few-shot is
 the first thing to try before spending GPU hours on fine-tuning.
 
 | Concept here | Used for |
@@ -252,7 +300,8 @@ the first thing to try before spending GPU hours on fine-tuning.
 | Cost ladder | zero-shot -> few-shot -> fine-tune |
 
 **Scale note:** the economics are the point — similarity is a forward pass and a
-few dot products, orders of magnitude cheaper than training. Use it as the first
+few dot products, orders of magnitude cheaper than training. Use it as
+the first
 rung; reserve fine-tuning for where it demonstrably fails.
 
 ## Key Takeaways
@@ -301,4 +350,7 @@ rung; reserve fine-tuning for where it demonstrably fails.
 
 ## Next Steps
 
-Next: **[47 — Self-Supervised Learning](47-self-supervised-learning-lecture.md)** — learning without labels at all.
+Next: **[47 — Self-Supervised
+Learning](47-self-supervised-learning-lecture.md)** — learning without
+labels at all.
+
