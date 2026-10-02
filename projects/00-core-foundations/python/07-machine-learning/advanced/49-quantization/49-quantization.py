@@ -49,6 +49,7 @@ def main() -> None:
     q8, s8, z8 = quantize(x, 8)
     x_hat8 = dequantize(q8, s8, z8)
     print(f"  INT8  error {round_trip_error(x, 8):.2e}")
+    print(f"  sample: {x[0]:.3f} -> {x_hat8[0]:.3f} (dequantized)")
     print(f"  quantized values are integers in [0,255]: {(q8 == q8.round()).all().item()}")
 
     print("\nExample 2: fewer bits, more error")
