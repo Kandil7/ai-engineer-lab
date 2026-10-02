@@ -1,30 +1,32 @@
 # 🤖 Phase 7: Machine Learning
 
-40 self-contained topic directories organized into 3 levels covering ML from fundamentals through deep learning.
+51 self-contained topic directories organized into 3 levels covering ML from fundamentals through deep learning and model optimization.
 
 ## 📋 Directory Structure
 
 Each topic directory contains:
-- `NN-topic-name.py` — Exercise (runnable code)
-- `NN-topic-name-lecture.md` — Lecture (detailed explanation)
+- `NN-topic-name.py` — Exercise (runnable code, `--verify` self-checks)
+- `NN-topic-name-lecture.md` — Lecture (detailed explanation, 400+ lines)
 - `NN-topic-name-glossary.md` — Glossary (key terms)
+- `NN-topic-name-quiz.md` — Quiz (8 questions + scoring guide)
 
 ```
 07-machine-learning/
-├── fundamentals/                 # 23 topics: Basic ML concepts
+├── fundamentals/                 # 23 topics: Basic ML concepts (01-23)
 │   ├── 01-getting-started/
 │   │   ├── 01-getting-started.py
 │   │   ├── 01-getting-started-lecture.md
-│   │   └── 01-getting-started-glossary.md
+│   │   ├── 01-getting-started-glossary.md
+│   │   └── 01-getting-started-quiz.md
 │   └── ... (23 topics)
 │
-├── advanced/                     # 12 topics: Pipelines, metrics, tuning
+├── advanced/                     # 16 topics: pipelines, metrics, tuning, optimization (24-35, 48-51)
 │   ├── 24-sklearn-pipelines/
-│   └── ... (12 topics)
+│   └── ... (16 topics)
 │
-└── deep-learning/                # 5 topics: PyTorch, neural nets, transformers
+└── deep-learning/                # 12 topics: PyTorch, architectures, frameworks, training strategies (36-47)
     ├── 36-pytorch-tensors/
-    └── ... (5 topics)
+    └── ... (12 topics)
 ```
 
 ## 📚 Topics
@@ -71,8 +73,12 @@ Each topic directory contains:
 | 33 | Hyperparameter Tuning | Grid/random search |
 | 34 | Ensembling | Model ensembles |
 | 35 | Explainability | SHAP, LIME |
+| 48 | Hyperband and BOHB | Multi-fidelity tuning |
+| 49 | Quantization | PTQ/QAT, INT8/INT4 |
+| 50 | Pruning | Structured/unstructured sparsity |
+| 51 | Distillation | Teacher-student compression |
 
-### deep-learning/ (36-40): PyTorch & Neural Networks
+### deep-learning/ (36-47): PyTorch, Architectures, Frameworks
 | # | Topic | Description |
 |---|-------|-------------|
 | 36 | PyTorch Tensors | Tensor operations |
@@ -80,6 +86,13 @@ Each topic directory contains:
 | 38 | Neural Network Basics | NN architecture |
 | 39 | Transfer Learning | Pre-trained models |
 | 40 | Transformers from Scratch | Transformer architecture |
+| 41 | CNNs | Convolutions, pooling, receptive field |
+| 42 | RNNs | Recurrence, LSTM/GRU, sequences |
+| 43 | TensorFlow and Keras | Declarative framework, SavedModel |
+| 44 | JAX and Flax | Functional transforms, jit/grad/vmap |
+| 45 | Data Augmentation | Label-preserving transforms |
+| 46 | Few-Shot and Zero-Shot | Similarity, prototypes, in-context |
+| 47 | Self-Supervised Learning | Pretext tasks, contrastive, masked |
 
 ## 🚀 Quick Start
 
@@ -105,9 +118,14 @@ Start with the basics of ML algorithms and workflows.
 ### Level 2: Advanced (24-35)
 Learn production ML techniques: pipelines, metrics, tuning.
 
-### Level 3: Deep Learning (36-40)
-Introduce PyTorch and neural network architectures.
+### Level 3: Deep Learning (36-47)
+PyTorch, architectures (CNN, RNN, Transformer), frameworks (Keras, JAX),
+and training strategies (augmentation, few/zero-shot, self-supervised).
+
+### Level 4: Model Optimization (48-51)
+Compress and tune at scale: multi-fidelity tuning (Hyperband/BOHB),
+quantization, pruning, and knowledge distillation.
 
 ---
 
-*Last updated: August 2026*
+*Last updated: October 2026*
