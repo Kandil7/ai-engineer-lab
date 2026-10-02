@@ -483,6 +483,32 @@ behaves well.
 - `39-transfer-learning-lecture.md` — the pretrained-teacher sibling pattern.
 - Hinton, Vinyals, Dean — "Distilling the Knowledge in a Neural Network."
 
+## History and Motivation
+
+Distillation was introduced by Hinton, Vinyals, and Dean in 2015 as a
+way to
+compress an ensemble into a single model — the original motivation was
+serving
+cost, not research novelty. The temperature and soft-label mechanism
+turned out
+to have a second life: as a regularizer (self-distillation), as the
+basis for
+student-teacher training in many later systems, and finally as the
+dominant
+compression route for LLMs, where a small model imitates a frontier
+model's
+outputs.
+
+The arc is instructive: a technique invented for a narrow engineering
+problem
+(serving an ensemble) became a general tool because the underlying idea
+— that a
+distribution carries more information than a label — is general. That is
+the
+pattern behind most of the compression toolbox (`49`, `50`, `51`): a
+practical
+fix that reveals a principle.
+
 ## Next Steps
 
 This completes the model-optimization trio (49-51). Continue to
@@ -491,5 +517,6 @@ This completes the model-optimization trio (49-51). Continue to
 
 Official docs:
 <https://pytorch.org/docs/stable/generated/torch.nn.functional.kl_div.html>
+
 
 
