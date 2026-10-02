@@ -6,23 +6,36 @@ Companion exercise: `42-rnns.py`
 
 ## Topic Overview
 
-A feed-forward network maps one fixed-size input to one output; it has no memory
-between calls. A recurrent neural network (RNN) processes a *sequence* by
-carrying a hidden state forward at each step, so the network's output at step `t`
-depends on everything before it. That recurrence is what makes RNNs the natural
+A feed-forward network maps one fixed-size input to one output; it has
+no memory
+between calls. A recurrent neural network (RNN) processes a *sequence*
+by
+carrying a hidden state forward at each step, so the network's output at
+step `t`
+depends on everything before it. That recurrence is what makes RNNs the
+natural
 fit for text, audio, and time series — data whose order matters.
 
-The plain RNN has a fatal flaw: gradients vanish or explode over long sequences,
-so it cannot learn long-range dependencies. LSTM and GRU are the two fixes that
-became industry standard — gated architectures that learn what to remember and
-what to forget. This topic covers the recurrence mechanics, the vanishing
-gradient, the LSTM/GRU gates, and how to shape sequence data for `torch.nn`.
+The plain RNN has a fatal flaw: gradients vanish or explode over long
+sequences,
+so it cannot learn long-range dependencies. LSTM and GRU are the two
+fixes that
+became industry standard — gated architectures that learn what to
+remember and
+what to forget. This topic covers the recurrence mechanics, the
+vanishing
+gradient, the LSTM/GRU gates, and how to shape sequence data for
+`torch.nn`.
 
-Modern transformers (`40-transformers-from-scratch`) have largely replaced RNNs
-for language, but RNNs remain the right tool for compact streaming models — real-time
+Modern transformers (`40-transformers-from-scratch`) have largely
+replaced RNNs
+for language, but RNNs remain the right tool for compact streaming
+models — real-time
 audio, sensor telemetry, and on-device sequence models where attention's
-quadratic cost does not fit. Understanding the recurrence is also the conceptual
-bridge to transformers, which relax the sequential bottleneck RNNs impose.
+quadratic cost does not fit. Understanding the recurrence is also the
+conceptual
+bridge to transformers, which relax the sequential bottleneck RNNs
+impose.
 
 ## Learning Objectives
 
@@ -49,37 +62,49 @@ By the end of this lecture, you will be able to:
 
 ### The recurrent step
 
-At each step, an RNN cell takes the current input and the previous hidden state,
+At each step, an RNN cell takes the current input and the previous
+hidden state,
 and produces a new hidden state:
 
 ```python
 h_t = tanh(W_ih @ x_t + b_ih + W_hh @ h_{t-1} + b_hh)
 ```
 
-The same weights `W_ih` and `W_hh` are reused at every step — recurrence is the
-temporal analogue of a convolution's shared weights. The hidden state is the
+The same weights `W_ih` and `W_hh` are reused at every step — recurrence
+is the
+temporal analogue of a convolution's shared weights. The hidden state is
+the
 network's *memory*: a running summary of the sequence so far.
 
 ### The real-world analogy
 
-Reading a sentence word by word, you carry a running understanding in your head.
-Each new word updates that understanding; you never start over from scratch.
-That carried understanding is the hidden state, and the fixed rule you use to
-update it is the recurrent weights — the same rule applied at every word.
+Reading a sentence word by word, you carry a running understanding in
+your head.
+Each new word updates that understanding; you never start over from
+scratch.
+That carried understanding is the hidden state, and the fixed rule you
+use to
+update it is the recurrent weights — the same rule applied at every
+word.
 
 ### Why order matters
 
-A feed-forward net would see tokens independently; the RNN sees them in order,
+A feed-forward net would see tokens independently; the RNN sees them in
+order,
 so "not good" and "good not" produce different hidden states. That order
-sensitivity is exactly what sequence tasks need, and it is what a bag-of-words
+sensitivity is exactly what sequence tasks need, and it is what a
+bag-of-words
 model throws away.
 
 ### When it works, when it fails
 
-Recurrence works when the sequence is the unit of meaning and order matters. It
-fails when the sequence is extremely long, because the single hidden state is a
+Recurrence works when the sequence is the unit of meaning and order
+matters. It
+fails when the sequence is extremely long, because the single hidden
+state is a
 bottleneck — the RNN must compress everything into a fixed vector, and
-information far in the past gets crowded out. That is the transformer's opening.
+information far in the past gets crowded out. That is the transformer's
+opening.
 
 ## 2. Shaping Sequence Data
 
@@ -92,7 +117,7 @@ import torch
 import torch.nn as nn
 
 batch, seq_len, feat = 4, 10, 8
-x = torch.randn(batch, seq_len, feat)   # 4 sequences of 10 steps, 8 features
+x = torch.randn(batch, seq_len, feat)  # 4 sequences of 10 steps, 8 features
 ```
 
 ### The output contract
@@ -106,38 +131,51 @@ out, h_n = rnn(x)
 # h_n: (num_layers, batch, 16) — final hidden state
 ```
 
-`batch_first=True` is the conventional choice; the default is seq-first. The
-distinction between `out` (per-step) and `h_n` (final) is the single most common
-source of confusion, and it matters for which one you feed to the classifier.
+`batch_first=True` is the conventional choice; the default is seq-first.
+The
+distinction between `out` (per-step) and `h_n` (final) is the single
+most common
+source of confusion, and it matters for which one you feed to the
+classifier.
 
 ## 3. The Vanishing Gradient
 
 ### The problem
 
-Backpropagation through time multiplies gradients across every step. With
-`tanh` squashing into `(-1, 1)`, the product shrinks geometrically — after 50
-steps the gradient is near zero, and the network stops learning long-range
+Backpropagation through time multiplies gradients across every step.
+With
+`tanh` squashing into `(-1, 1)`, the product shrinks geometrically —
+after 50
+steps the gradient is near zero, and the network stops learning
+long-range
 dependencies.
 
 ### The numerical demonstration
 
-A gradient scaled by 0.5 per step becomes 0.5^50 ≈ 8.9e-16 after 50 steps —
-numerically zero. This is not a small effect; it is why a plain RNN is, in
+A gradient scaled by 0.5 per step becomes 0.5^50 ≈ 8.9e-16 after 50
+steps —
+numerically zero. This is not a small effect; it is why a plain RNN is,
+in
 practice, a "last few tokens" model and nothing more.
 
 ### Why it matters in practice
 
-A plain RNN can learn "the last few tokens" but not "a word that appeared three
-sentences ago." That is the gap LSTM and GRU close, and the reason the plain
-RNN is rarely used in production. The exploding counterpart — gradients growing
-unboundedly — is handled by gradient clipping, but vanishing cannot be clipped
+A plain RNN can learn "the last few tokens" but not "a word that
+appeared three
+sentences ago." That is the gap LSTM and GRU close, and the reason the
+plain
+RNN is rarely used in production. The exploding counterpart — gradients
+growing
+unboundedly — is handled by gradient clipping, but vanishing cannot be
+clipped
 away; it requires gating.
 
 ## 4. LSTM — Gated Memory
 
 ### The three gates
 
-An LSTM adds a *cell state* `c_t` (the long-term memory) and three gates that
+An LSTM adds a *cell state* `c_t` (the long-term memory) and three gates
+that
 control it:
 
 - **Forget gate** — how much of the old cell state to keep.
@@ -146,38 +184,51 @@ control it:
 
 ### Why gates fix vanishing gradients
 
-The cell state is updated by *addition* through the forget and input gates,
-giving the gradient a highway that does not vanish across many steps. The LSTM
-learns to keep the cell state steady when a long-range dependency is at play,
+The cell state is updated by *addition* through the forget and input
+gates,
+giving the gradient a highway that does not vanish across many steps.
+The LSTM
+learns to keep the cell state steady when a long-range dependency is at
+play,
 which is exactly what a plain RNN cannot do.
 
 ### The analogy
 
-The LSTM's cell state is a conveyor belt that information rides across time.
-Gates are the traffic controls: one decides what to drop, one what to add, one
-what to read out. Because the belt mostly adds (not multiplies), the signal
+The LSTM's cell state is a conveyor belt that information rides across
+time.
+Gates are the traffic controls: one decides what to drop, one what to
+add, one
+what to read out. Because the belt mostly adds (not multiplies), the
+signal
 does not decay the way it does in a plain RNN.
 
 ## 5. GRU — The Lighter Alternative
 
 ### Two gates instead of three
 
-The GRU (Gated Recurrent Unit) merges the cell state and hidden state and uses
-two gates: a reset gate and an update gate. It learns to remember long-range
+The GRU (Gated Recurrent Unit) merges the cell state and hidden state
+and uses
+two gates: a reset gate and an update gate. It learns to remember
+long-range
 dependencies with fewer parameters than an LSTM.
 
 ### When to prefer it
 
-GRU is the default when the dataset is small or the model must be compact — its
-smaller parameter count trains slightly faster and generalizes comparably. LSTM
-is the choice when maximum capacity per cell matters. The parameter difference
-is roughly 3/4 (GRU) versus 4/4 (LSTM) per cell, which adds up across layers.
+GRU is the default when the dataset is small or the model must be
+compact — its
+smaller parameter count trains slightly faster and generalizes
+comparably. LSTM
+is the choice when maximum capacity per cell matters. The parameter
+difference
+is roughly 3/4 (GRU) versus 4/4 (LSTM) per cell, which adds up across
+layers.
 
 ## 6. An RNN Classifier
 
 ### The stack
 
-A sequence classifier feeds the final hidden state (or the mean over steps) into
+A sequence classifier feeds the final hidden state (or the mean over
+steps) into
 a dense head:
 
 ```python
@@ -188,32 +239,93 @@ class SeqClassifier(nn.Module):
         self.head = nn.Linear(hid, n_classes)
 
     def forward(self, x):
-        out, (h_n, c_n) = self.lstm(x)   # h_n: (1, batch, hid)
+        out, (h_n, c_n) = self.lstm(x)  # h_n: (1, batch, hid)
         return self.head(h_n.squeeze(0))
 ```
 
 ### Choosing the pooled representation
 
-For sequence classification you can use the last hidden state, the mean of all
-outputs, or the max over time. The last hidden state is the classic choice; the
-mean is more robust when the whole sequence matters and not just its end. The
+For sequence classification you can use the last hidden state, the mean
+of all
+outputs, or the max over time. The last hidden state is the classic
+choice; the
+mean is more robust when the whole sequence matters and not just its
+end. The
 choice is a hyperparameter, not a correctness issue.
 
 ## 7. RNN vs Transformer
 
 ### Where each wins
 
-RNNs process a sequence in one pass with constant memory in the sequence length
-— O(seq) time, O(1) state — which makes them ideal for streaming and on-device
-models. Transformers attend over all pairs — O(seq²) — so they capture long-range
+RNNs process a sequence in one pass with constant memory in the sequence
+length
+— O(seq) time, O(1) state — which makes them ideal for streaming and
+on-device
+models. Transformers attend over all pairs — O(seq²) — so they capture
+long-range
 dependencies better but do not stream cheaply.
 
 ### The production rule
 
 Use a transformer when the sequence is long and you have compute; use an
-RNN/GRU when the model must be compact, low-latency, or process an unbounded
+RNN/GRU when the model must be compact, low-latency, or process an
+unbounded
 stream. The two are not rivals but tools matched to constraints, and the
 O(seq) vs O(seq²) distinction is the deciding line.
+
+## 8. Bidirectional and Deep RNNs
+
+### Seeing the future
+
+A unidirectional RNN reads left to right, so at position `t` it has seen only
+positions `1..t`. A bidirectional RNN runs a second pass right to left and
+concatenates the two hidden states, so each position sees its full context —
+before *and* after. This is the standard trick for whole-sequence tasks like
+classification, where the entire sequence is available at once.
+
+```python
+bilstm = nn.LSTM(8, 16, batch_first=True, bidirectional=True)
+# output is now (batch, seq, 2 * hidden) — both directions concatenated
+```
+
+### Stacking layers
+
+Deeper RNNs stack multiple recurrent layers, where each layer's output feeds the
+next layer's input across time. Stacking helps capture higher-level structure,
+but two layers are usually the point of diminishing returns — depth in an RNN is
+far less important than it is in a CNN or transformer.
+
+### When bidirectionality is illegal
+
+Bidirectional is *illegal* for streaming and generation, where the future is not
+available — a live transcription cannot see the next word. That is the tension:
+bidirectional helps accuracy when you have the whole sequence, and breaks the
+moment you must process it online.
+
+## 9. From RNN to Attention
+
+### The bottleneck recurrence imposes
+
+The RNN's hidden state is a fixed-size vector that must summarize everything
+seen so far. That bottleneck is why RNNs struggle with very long sequences —
+early information is compressed away. Attention (`40`) removes the bottleneck by
+letting each output look directly at *every* input position, at the cost of
+quadratic compute.
+
+### The conceptual bridge
+
+The RNN's hidden state is "everything I have read, compressed into one vector";
+attention is "the specific parts I need right now, looked up on demand." The
+former is a summary; the latter is an index. Understanding the RNN makes
+attention's motivation — escaping the compression bottleneck — concrete.
+
+### The practical takeaway
+
+This is why transformers replaced RNNs for language: long documents defeat a
+fixed-size summary, and attention scales to them (with a compute cost). RNNs
+remain for the streaming/compact cases where the summary is enough, which is the
+O(seq) vs O(seq²) decision restated as a representational, not just a
+computational, choice.
 
 ## Real-World Application
 
@@ -289,8 +401,10 @@ O(seq) vs O(seq²) distinction is the deciding line.
 ## AI Engineering Relevance
 
 **Where this shows up:** real-time audio/keyword spotting, sensor telemetry,
-streaming speech, and compact on-device sequence models. On the RTX 5000 the
-constraint is not training an RNN — it is that a *transformer* may not fit a
+streaming speech, and compact on-device sequence models. On the RTX 5000
+the
+constraint is not training an RNN — it is that a *transformer* may not
+fit a
 long-sequence batch in 16 GB, where an RNN's constant memory still runs.
 
 | Concept here | Used for |
@@ -301,8 +415,10 @@ long-sequence batch in 16 GB, where an RNN's constant memory still runs.
 | O(seq) vs O(seq²) | Choosing RNN over transformer on budget |
 
 **Scale note:** RNNs are the streaming default precisely because memory is
-O(1) in sequence length — an unbounded audio stream never outgrows the state.
-That is the argument transformers lost until streaming-attention tricks arrived.
+O(1) in sequence length — an unbounded audio stream never outgrows the
+state.
+That is the argument transformers lost until streaming-attention tricks
+arrived.
 
 ## Key Takeaways
 
@@ -352,6 +468,10 @@ That is the argument transformers lost until streaming-attention tricks arrived.
 
 ## Next Steps
 
-Next: **[43 — TensorFlow and Keras](43-tensorflow-keras-lecture.md)** — the other framework, and when to choose it.
+Next: **[43 — TensorFlow and Keras](43-tensorflow-keras-lecture.md)** —
+the other framework, and when to choose it.
 
-Continues in: **[09-genai — 21 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** — sequence models in production.
+Continues in: **[09-genai — 21
+Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** —
+sequence models in production.
+
