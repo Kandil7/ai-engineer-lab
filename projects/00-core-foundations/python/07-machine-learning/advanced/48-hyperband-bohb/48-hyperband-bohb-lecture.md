@@ -36,6 +36,7 @@ By the end of this lecture, you will be able to:
 5. Use early stopping as a budget-allocation mechanism, not just a safety net.
 6. Reason about the resource-efficiency win over full-grid evaluation.
 7. Apply reproducibility controls: seeds, budget logs, and frozen search spaces.
+8. Choose multi-fidelity versus plain search by the cost of one evaluation.
 
 ## Prerequisites
 
@@ -60,6 +61,21 @@ early signal, though noisy, is enough to *rank* configs and discard the bottom
 half. Ranking is a much weaker requirement than accurate scoring, and it is all
 successive halving needs.
 
+### The real-world analogy
+
+A hiring pipeline screens a hundred resumes with a five-minute skim, then
+interviews the ten that survived, then does a full-day interview for the two
+finalists. You do not give every candidate the full-day interview. Multi-fidelity
+tuning is the same: a cheap screen, then progressively more expensive rounds for
+the survivors.
+
+### When it fails
+
+The cheap screen only works if the early signal correlates with the final one. If
+a config's first-epoch score says nothing about its hundredth-epoch score, the
+screen discards good configs by accident. Verifying that correlation is the
+precondition for trusting multi-fidelity search.
+
 ## 2. Successive Halving
 
 ### The loop
@@ -82,7 +98,7 @@ def successive_halving(configs, min_budget, max_budget, eta, eval_fn):
 
 Successive halving spends most of its budget on the survivors, so it reaches a
 good config with far less total compute than evaluating every config at full
-fidelity.
+fidelity. The saving is a constant factor per round, and it compounds.
 
 ## 3. Hyperband — Automating the Brackets
 
@@ -98,6 +114,12 @@ in one sweep, so it does not have to choose.
 For `s_max = floor(log_eta(max_budget / min_budget))`, bracket `s` starts with
 `n_s = ceil((s_max+1)/(s+1) * eta^s)` configs and runs successive halving. The
 early brackets are aggressive, the later ones conservative.
+
+### Why it is clean
+
+Hyperband has essentially one knob (`eta`, usually 3) and a budget, and it
+allocates across the aggressiveness spectrum automatically. That is why it became
+the standard multi-fidelity baseline — you get the tradeoff handled for you.
 
 ## 4. BOHB — Bayesian + Hyperband
 
@@ -129,7 +151,8 @@ the point here is that it is *essential*, not optional.
 
 Early stopping needs a well-defined rule (metric plateau, percentile of running
 trials) and a floor (never stop before a minimum budget), or a noisy early
-signal stops a config that would have won.
+signal stops a config that would have won. The floor is what protects against the
+"good config looks bad early" failure.
 
 ## 6. Resource-Efficient Exploration
 
@@ -162,7 +185,17 @@ Tuning is a *search*, so its result is a function of the search configuration.
 Without seeds, budget logs, and a frozen space, "the best config was 0.92" is
 unreproducible — you cannot re-run the search or compare it to the next one.
 
-## 8. Common Mistakes to Avoid
+## Real-World Application
+
+- **Fine-tuning hyperparameters** — a LoRA or full fine-tune where one run is hours
+  on a single GPU.
+- **Neural architecture search** — treating architecture choices as the search
+  space, with multi-fidelity ranking.
+- **Slow training pipelines** — any job where a full evaluation is the bottleneck.
+- **The DevMate case** — tuning retrieval chunking/embedding parameters where a
+  full eval run is expensive.
+
+## Common Mistakes to Avoid
 
 ### Mistake 1: Full-grid evaluation of expensive models
 ```
@@ -194,7 +227,13 @@ unreproducible — you cannot re-run the search or compare it to the next one.
 # CORRECT — plain random/Bayesian for cheap fits; multi-fidelity for slow ones
 ```
 
-## 9. Best Practices
+### Mistake 6: A single bracket as a poor man's Hyperband
+```
+# WRONG — one successive-halving run, which must pick an aggressiveness it cannot know
+# CORRECT — the full bracket sweep, which is the whole point of Hyperband
+```
+
+## Best Practices
 
 1. Match the method to the cost of one full evaluation.
 2. Verify the cheap-signal assumption before committing to multi-fidelity.
@@ -205,7 +244,7 @@ unreproducible — you cannot re-run the search or compare it to the next one.
 7. Re-run the search with different seeds to check stability.
 8. Report the budget used, not just the final metric.
 
-## 10. Complexity and Cost
+## Complexity and Cost
 
 | Method | Evals | Notes |
 |---|---|---|
@@ -214,7 +253,7 @@ unreproducible — you cannot re-run the search or compare it to the next one.
 | Hyperband | multiple brackets | No single aggressiveness choice |
 | BOHB | Hyperband + TPE | Best budget + sample efficiency |
 
-## 11. AI Engineering Relevance
+## AI Engineering Relevance
 
 **Where this shows up:** tuning a fine-tune or a large model where one full run is
 hours on a GPU. On this workstation a single RTX 5000 makes every full evaluation
@@ -232,7 +271,25 @@ tuning in a month.
 search (Bayesian + pruning) cuts GPU hours. Hyperband/BOHB is that argument
 taken to its logical conclusion for expensive models.
 
-## 12. Summary
+## Key Takeaways
+
+1. Multi-fidelity ranks many configs cheaply and spends budget on survivors.
+2. Successive halving keeps the top 1/eta and multiplies budget by eta each round.
+3. Hyperband runs aggressive and conservative brackets so you don't choose.
+4. BOHB adds a Bayesian sampler to Hyperband for sample efficiency.
+5. Early stopping is the budget-freeing mechanism; a floor protects against noise.
+6. Reproducibility needs seeds, a budget log, and a frozen search space.
+
+## Self-Check Questions
+
+1. What is the multi-fidelity premise, and what precondition must hold for it to work?
+2. Walk through one round of successive halving with eta = 3.
+3. Why does Hyperband run multiple brackets instead of one halving run?
+4. What does BOHB add to Hyperband, and why does the combination matter?
+5. Why is a minimum-budget floor needed before early stopping?
+6. Which three controls make a tuning search reproducible?
+
+## Summary
 
 | Concept | Description |
 |---|---|
@@ -251,10 +308,13 @@ taken to its logical conclusion for expensive models.
 | BOHB in Optuna | `HyperbandPruner` + `TPESampler` |
 | Reproduce | seed everything + log budget |
 
+## Further Reading / Connections
+
+- `33-hyperparameter-tuning-lecture.md` — the single-fidelity search this extends.
+- `22-cross-validation-lecture.md` — the honest-evaluation discipline.
+- Li et al., "Hyperband"; Falkner et al., "BOHB".
+- Official docs: <https://optuna.readthedocs.io/en/stable/reference/pruners.html>
+
 ## Next Steps
 
 Next: **[49 — Quantization](../advanced/49-quantization-lecture.md)** — shrink the model, not the quality.
-
-Continues in: **[33 — Hyperparameter Tuning](33-hyperparameter-tuning-lecture.md)** — the single-fidelity search this extends.
-
-Official docs: <https://optuna.readthedocs.io/en/stable/reference/pruners.html>
