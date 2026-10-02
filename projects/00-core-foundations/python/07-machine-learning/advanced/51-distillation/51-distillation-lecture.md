@@ -234,7 +234,65 @@ accuracy). Each step builds on the last, and the final artifact is a
 fraction of
 the teacher's size.
 
-## 8. Common Mistakes to Avoid
+## 8. Offline vs Online Distillation
+
+### Offline distillation
+
+Offline distillation is the classic two-stage flow: train the teacher to
+completion, freeze it, then train the student against its soft outputs. The
+teacher's inference is a fixed, reusable signal, and the student trains exactly
+like a supervised model — just with soft targets instead of hard ones. This is
+the version the exercise demonstrates.
+
+### Online distillation
+
+Online distillation trains teacher and student *together*, so the student learns
+from the teacher's evolving outputs during a single run. It saves the cost of a
+separate teacher pass but couples the two, which is harder to reason about and
+less common in production, where a frozen teacher is simpler to version.
+
+### The production default
+
+Use offline distillation: a frozen, versioned teacher and a separately trained
+student. The teacher becomes an artifact you can swap and re-use, and the
+student's training is reproducible against that pinned teacher. The two-stage
+flow is why distillation slots cleanly into the "pretrain big, distill small"
+pipeline.
+
+## 9. Distilling Large Language Models
+
+### The modern case
+
+Distilling an LLM means training a small model to imitate a large one's outputs —
+either its next-token distribution or, in instruction distillation, its
+responses to prompts. This is how "small model with big-model behavior" is
+produced, and it is the dominant compression route for language models.
+
+### What changes at LLM scale
+
+The temperature/KL mechanism is the same, but the teacher's full distribution
+over a 100k-token vocabulary is expensive to capture, so practical LLM
+distillation often approximates it — sampling a subset of the distribution or
+distilling on outputs alone. The soft-label principle survives; the scale forces
+approximation.
+
+### The connection to this curriculum
+
+This is distillation, transfer learning (`39`), and the compression toolbox
+(`7`) combined at scale — and it is the reason a small, servable model can
+inherit a frontier model's competence. On a 16 GB GPU, distilling a small
+student from a cloud teacher is a realistic path to a local, private model.
+
+## Real-World Application
+
+- **Compressing a model for deployment** — a big ensemble teacher into a small,
+  fast student that fits the serving budget.
+- **On-device models** — distilling a large model into a phone-sized student.
+- **LLM compression** — a small model that imitates a frontier model's outputs.
+- **The DevMate case** — distilling a heavy retrieval ranker into a light one
+  that runs locally on the RTX 5000.
+
+## 10. Common Mistakes to Avoid
 
 ### Mistake 1: Training the student on hard labels and calling it distillation
 ```
@@ -272,7 +330,7 @@ the teacher's size.
 # CORRECT — a small hard-label term (alpha < 1) keeps the student honest
 ```
 
-## 9. Best Practices
+## 11. Best Practices
 
 1. Train the teacher first, and keep its weights frozen during distillation.
 2. Use a moderate temperature (2-10) and tune it.
@@ -285,7 +343,7 @@ the teacher's size.
 9. Distill to a small model, then quantize and prune it.
 10. Record the temperature, alpha, and teacher architecture for reproducibility.
 
-## 10. Complexity and Cost
+## 12. Complexity and Cost
 
 | Operation | Time | Space | Notes |
 |---|---|---|---|
@@ -294,7 +352,7 @@ the teacher's size.
 | Serve student | fast | small | The point of the exercise |
 | Combined toolbox | distill + prune + quantize | smallest | Compounding wins |
 
-## 11. AI Engineering Relevance
+## 13. AI Engineering Relevance
 
 **Where this shows up:** compressing a large model for deployment — the classic
 case is taking a big ensemble or LLM and producing a small, fast
@@ -317,7 +375,16 @@ footprint.
 Together they are how a 7B teacher becomes a 1B student that still
 behaves well.
 
-## 12. Summary
+## Key Takeaways
+
+1. Soft labels carry more signal per example than hard labels.
+2. The temperature exposes dark knowledge by softening the teacher's logits.
+3. The distillation loss is KL divergence on temperature-scaled distributions.
+4. Offline (frozen teacher) is the production default; online is the coupled variant.
+5. Distill -> prune -> quantize is the compression toolbox, applied in order.
+6. The teacher must be meaningfully better than the student, or there is nothing to transfer.
+
+## 14. Summary
 
 | Concept | Description |
 |---|---|
