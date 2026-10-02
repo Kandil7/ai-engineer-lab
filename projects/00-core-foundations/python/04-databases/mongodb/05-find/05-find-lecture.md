@@ -64,6 +64,7 @@ Use `pprint` from pprint module for readable output of nested documents.
 
 ```python
 from pprint import pprint
+
 pprint(db["users"].find_one({"name": "Alice"}))
 ```
 
@@ -74,7 +75,7 @@ For JSON output (APIs, logs), serialize with `bson.json_util`, not `json.dumps` 
 ```python
 cursor = db["users"].find({}).batch_size(100)
 for doc in cursor:
-    process(doc)   # bounded memory, streaming
+    process(doc)  # bounded memory, streaming
 ```
 
 Set `batch_size` for large scans, `limit()` for top-N, and never `list()` an unbounded cursor. Cursors time out server-side if idle — process steadily or use `no_cursor_timeout` with explicit close.
