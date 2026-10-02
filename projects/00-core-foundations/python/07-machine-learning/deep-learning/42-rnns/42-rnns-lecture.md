@@ -327,6 +327,44 @@ remain for the streaming/compact cases where the summary is enough, which is the
 O(seq) vs O(seq²) decision restated as a representational, not just a
 computational, choice.
 
+## 10. Sequence-to-Sequence and Encoder-Decoder
+
+### The problem it solves
+
+Many tasks map one sequence to another of *different length*: translating a
+sentence, summarizing a document, transcribing speech. A single RNN maps a
+sequence to one output, which cannot express a variable-length output. The
+encoder-decoder architecture splits the job: an encoder compresses the input
+sequence into a context vector, and a decoder generates the output sequence from
+it, one token at a time.
+
+```text
+encoder: reads the input sequence -> final hidden state (the context)
+decoder: takes the context -> generates output tokens, feeding each back in
+```
+
+### The context bottleneck
+
+The encoder must compress the *entire* input into a single fixed-size vector —
+and that vector is the bottleneck. For a long sentence, the beginning is
+squeezed out. This is precisely the bottleneck that attention (`40`) was invented
+to remove: instead of one context vector, the decoder attends to *all* encoder
+states.
+
+### The bridge to transformers
+
+The original transformer is an encoder-decoder with attention replacing the
+recurrent context. Seeing the RNN encoder-decoder first makes the transformer's
+design intelligible: it is the same architecture with the bottleneck removed.
+That is why this is the conceptual capstone of the RNN topic — the sequence
+modeling problem, solved first with recurrence and then without it.
+
+### The still-useful case
+
+Encoder-decoder RNNs remain useful for small, streaming, on-device translation
+or transcription, where a transformer's size and quadratic cost are not
+justified. They are the compact form of the same idea.
+
 ## Real-World Application
 
 - **Keyword spotting / wake words** — a tiny GRU on-device for "hey device"
