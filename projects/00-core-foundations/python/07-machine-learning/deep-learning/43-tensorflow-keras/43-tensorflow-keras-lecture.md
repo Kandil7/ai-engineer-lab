@@ -301,6 +301,40 @@ TF's edge story — TF Lite on phones — remains the most battle-tested path fo
 mobile deployment. If the target is a phone, Keras/TF is often the pragmatic
 choice regardless of your training preference.
 
+## 10. A Decision Procedure — Keras or PyTorch?
+
+### The questions, in order
+
+A short procedure removes the guesswork:
+
+1. **Is the training loop standard?** If yes, Keras is a candidate. If you need a
+   custom loop, custom gradient, or unusual loss, PyTorch.
+2. **What is the serving target?** A phone or a TF Serving endpoint favors Keras;
+   a PyTorch/ONNX stack favors PyTorch.
+3. **What does the team already use?** Inherited codebases decide more framework
+   choices than benchmarks do.
+4. **Is the architecture novel or well-trodden?** Novel architectures and research
+   code are PyTorch; standard supervised models are either.
+
+### The default
+
+When the answers are genuinely balanced, default to PyTorch — it is the
+curriculum's workhorse and the dominant ecosystem for LLM tooling. Choose Keras
+when the serving target or the team's existing stack points there.
+
+### The meta-lesson
+
+The decision procedure matters more than the answer, because frameworks change
+and the questions do not. A team that reasons this way can adopt whatever
+framework tomorrow brings; a team that picked by fashion will re-litigate the
+choice every year.
+
+### The porting safety net
+
+Whichever you choose, the mapping table (`5`) is the safety net: any model in one
+framework can be expressed in the other, and the ability to translate is the
+durable skill. Framework loyalty is a liability; framework fluency is an asset.
+
 ## Real-World Application
 
 - **Legacy production models** — many are Keras/TF SavedModels; you inherit them
