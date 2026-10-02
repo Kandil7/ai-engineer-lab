@@ -212,6 +212,54 @@ size win is unconditional; the speed win is not. Quantize for size
 first, and
 verify the speed on your target.
 
+## 8. Calibration in Detail
+
+### Why static quantization needs calibration
+
+Static PTQ quantizes activations with a *fixed* scale, chosen before inference.
+That scale must be estimated from a representative sample of real data — the
+calibration set — because the activation range is what determines the step size.
+A calibration set that does not resemble production gives a bad scale and a big
+accuracy drop.
+
+### The calibration methods
+
+The simplest method takes the min/max of the calibration activations; more
+robust methods use percentiles (discarding outliers) or minimize the
+quantization error directly. The choice matters most when activations have
+outliers, which stretch the range and coarsen the step for the common case.
+
+### The practical rule
+
+Calibrate on data that matches the serving distribution, use a few hundred
+examples, and re-calibrate if the distribution drifts (`monitoring`). Calibration
+is the difference between PTQ that "just works" and PTQ that silently degrades —
+and it is the part of quantization most people skip.
+
+## 9. LLM Quantization Schemes
+
+### The weight-only INT4 world
+
+Large language models are usually quantized *weight-only* to 4 bits — the
+activations stay higher-precision, and only the weight matrices shrink. This is
+the GGUF/GPTQ/AWQ family, and it is how a 7B model fits in a consumer GPU. The
+reason is that LLM activations have extreme outliers, so quantizing them is
+risky, while weights are more benign.
+
+### The grouping trick
+
+INT4 per-tensor would be too coarse, so these schemes group weights into small
+blocks (say, 64 or 128), each with its own scale. That localizes the error and
+is what makes 4-bit weights accurate enough to serve. The trade is a little
+extra metadata per block.
+
+### The connection to this curriculum
+
+This is the same affine mechanism (`1`) with per-channel/group scales (`6`)
+pushed to the limit, and the same cost-accuracy ladder (`3`, `4`) — INT4 needs
+more care (calibration, sometimes QAT-style fine-tuning) than INT8. On the RTX
+5000, a 4-bit 7B model is how "run a real LLM locally" becomes possible at all.
+
 ## Real-World Application
 
 - **Running a 7B model on a 16 GB GPU** — INT8/INT4 turns "OOM" into "fits."
