@@ -35,8 +35,8 @@ Unlike MySQL's explicit `CREATE DATABASE` or sqlite's file-per-database, MongoDB
 In MongoDB, databases are created implicitly on first use: `db = client['mydb']`.
 
 ```python
-db = client["mydb"]          # reference; nothing created yet
-db["users"].insert_one({"name": "Alice"})   # first write creates db + collection
+db = client["mydb"]  # reference; nothing created yet
+db["users"].insert_one({"name": "Alice"})  # first write creates db + collection
 ```
 
 Referencing alone creates nothing — a typo in the name silently targets an empty database. Verify with a list call after setup scripts.
