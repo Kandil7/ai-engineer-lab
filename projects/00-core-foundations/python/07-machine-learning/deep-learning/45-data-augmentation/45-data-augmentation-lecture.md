@@ -233,6 +233,57 @@ and complicate the loss, but they are a standard ingredient in modern
 image
 training.
 
+## 8. Text Augmentation in Depth
+
+### The techniques
+
+Text augmentation is subtler than image augmentation because every word carries
+meaning. The safe transforms are lexical, not semantic: synonym replacement
+(swap a word for a near-synonym), random deletion (drop a word), random
+insertion, and back-translation (translate to another language and back to get a
+paraphrase). These preserve the label most of the time.
+
+### The unsafe transforms
+
+Anything that flips the meaning is unsafe: negating a verb, swapping sentiment
+words, or replacing an entity with a different one. "The film was great" must not
+become "the film was terrible." The label-invariance rule (`2`) is harder to
+guarantee for text, which is why text augmentation is validated more carefully.
+
+### Why it matters for low-resource languages
+
+For languages with little labeled data — Arabic dialects, for instance —
+augmentation is disproportionately valuable. Back-translation and paraphrase are
+how a small Arabic corpus is stretched into a viable training set, and the same
+discipline (split first, augment only training, verify the label survives)
+applies exactly as it does for images.
+
+## 9. Audio and Tabular Augmentation
+
+### Audio: warping the signal, not the meaning
+
+Audio augmentation warps the signal without changing the content: pitch shift,
+time stretch, background noise, and SpecAugment (masking frequency/time bands
+of a spectrogram). These make a speech or sound model robust to recording
+variation. The guardrail is the same — a pitch shift must not change *what was
+said*.
+
+### Tabular: the hardest case
+
+Tabular data has no obvious spatial or temporal structure, so augmentation is
+harder and riskier. SMOTE synthesizes minority-class examples by interpolating
+between neighbors; noise injection perturbs features slightly. But feature
+semantics vary — perturbing a "has_disease" binary is not like perturbing a
+pixel — so every tabular transform needs a human to confirm it is label-
+preserving.
+
+### The common thread
+
+Across every domain the principle is identical: choose a perturbation that a
+human would still label the same way, apply it only to training, and verify it
+empirically. The mechanism is generic; the invariant is domain-specific, and
+getting the invariant wrong is the failure mode that survives every framework.
+
 ## Real-World Application
 
 - **Image classification on small datasets** — augmentation is the difference
