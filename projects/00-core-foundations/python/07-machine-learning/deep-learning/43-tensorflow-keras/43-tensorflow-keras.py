@@ -59,7 +59,7 @@ print(f"  input {tuple(X.shape)} -> output {tuple(model(X).shape)}")
 # 2. The training loop Keras's fit hides
 # ============================================================
 loss = torch.tensor(float("inf"))
-for epoch in range(5):
+for _ in range(5):
     opt.zero_grad()
     loss = loss_fn(model(X), y)
     loss.backward()
