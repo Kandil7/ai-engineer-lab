@@ -6,24 +6,37 @@ Companion exercise: `41-cnns.py`
 
 ## Topic Overview
 
-A fully-connected network sees an image as a bag of pixels with no notion of
+A fully-connected network sees an image as a bag of pixels with no
+notion of
 *where* things are. A convolutional neural network (CNN) imposes the two priors
-that make images tractable: **translation invariance** (a cat is a cat anywhere
-in the frame) and **locality** (nearby pixels are related, distant ones are
-not). A CNN learns filters that slide across the image, detecting edges, then
+that make images tractable: **translation invariance** (a cat is a cat
+anywhere
+in the frame) and **locality** (nearby pixels are related, distant ones
+are
+not). A CNN learns filters that slide across the image, detecting edges,
+then
 textures, then parts, then objects, layer by layer.
 
-This topic covers the mechanics: the convolution operation, stride and padding,
-pooling, channels, and how a stack of conv + pool + dense layers becomes an
-image classifier. Because `torchvision` ships without GPU pretrained weights in
-this environment, the exercise builds a CNN from `torch.nn` primitives and
-verifies the shapes, parameter counts, and the receptive-field arithmetic that
+This topic covers the mechanics: the convolution operation, stride and
+padding,
+pooling, channels, and how a stack of conv + pool + dense layers becomes
+an
+image classifier. Because `torchvision` ships without GPU pretrained
+weights in
+this environment, the exercise builds a CNN from `torch.nn` primitives
+and
+verifies the shapes, parameter counts, and the receptive-field
+arithmetic that
 govern why CNNs are cheap and fast.
 
-CNNs are not just for photos. Any grid-structured signal — spectrograms for
-audio, time-frequency maps, document-layout tiles, even 1D sensor streams — is a
-candidate. Understanding the convolution is the bridge from "ML on tables" to
-"ML on structured signals," and the same filter/slide/receptive-field reasoning
+CNNs are not just for photos. Any grid-structured signal — spectrograms
+for
+audio, time-frequency maps, document-layout tiles, even 1D sensor
+streams — is a
+candidate. Understanding the convolution is the bridge from "ML on
+tables" to
+"ML on structured signals," and the same filter/slide/receptive-field
+reasoning
 carries over to every modern vision and audio model.
 
 ## Learning Objectives
@@ -51,8 +64,10 @@ By the end of this lecture, you will be able to:
 
 ### What a filter does
 
-A convolution slides a small learned filter (a weight matrix, e.g. 3×3) across
-the input, computing a weighted sum at each position. One filter produces one
+A convolution slides a small learned filter (a weight matrix, e.g. 3×3)
+across
+the input, computing a weighted sum at each position. One filter
+produces one
 feature map that lights up wherever the pattern it learned appears:
 
 ```python
@@ -61,34 +76,44 @@ import torch.nn as nn
 
 # 1 input channel -> 8 output channels, 3x3 kernel
 conv = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3)
-x = torch.randn(2, 1, 28, 28)   # (batch, channels, height, width)
+x = torch.randn(2, 1, 28, 28)  # (batch, channels, height, width)
 y = conv(x)
-print(y.shape)                  # torch.Size([2, 8, 26, 26])
+print(y.shape)  # torch.Size([2, 8, 26, 26])
 ```
 
-The 28×28 input becomes 26×26 because a 3×3 kernel has no room at the borders:
+The 28×28 input becomes 26×26 because a 3×3 kernel has no room at the
+borders:
 `out = in - kernel + 1 = 28 - 3 + 1 = 26`.
 
 ### The real-world analogy
 
-Imagine a magnifying glass scanning a page left-to-right, top-to-bottom. The
-glass is the kernel; each time it stops, it reports one number — how much the
-text under it matches a specific shape. Slide the glass over the whole page and
-you get a map of "where this shape appears." The CNN learns which shapes to look
+Imagine a magnifying glass scanning a page left-to-right, top-to-bottom.
+The
+glass is the kernel; each time it stops, it reports one number — how
+much the
+text under it matches a specific shape. Slide the glass over the whole
+page and
+you get a map of "where this shape appears." The CNN learns which shapes
+to look
 for, not where — the where is handled by sliding.
 
 ### Why shared weights
 
 The same filter is applied at every position — that is the translation
-invariance prior. One filter's 9 weights (plus a bias) serve the entire image,
-which is why a CNN has orders of magnitude fewer parameters than a dense layer
+invariance prior. One filter's 9 weights (plus a bias) serve the entire
+image,
+which is why a CNN has orders of magnitude fewer parameters than a dense
+layer
 on the same input, and why it generalizes from few examples.
 
 ### When it works, when it fails
 
-A convolution works when the signal has *local, translation-invariant* structure
-— an object is the same object shifted by a few pixels. It fails when the signal
-is permutation-invariant or long-range (where attention or a dense model wins),
+A convolution works when the signal has *local, translation-invariant*
+structure
+— an object is the same object shifted by a few pixels. It fails when
+the signal
+is permutation-invariant or long-range (where attention or a dense model
+wins),
 or when the relevant pattern is genuinely position-specific.
 
 ## 2. Stride and Padding
@@ -102,54 +127,68 @@ out = floor((in + 2p - k) / s) + 1
 ```
 
 ```python
-same = nn.Conv2d(1, 8, kernel_size=3, padding=1)   # keeps 28 -> 28
-down = nn.Conv2d(1, 8, kernel_size=3, stride=2)    # downsamples 28 -> 13
+same = nn.Conv2d(1, 8, kernel_size=3, padding=1)  # keeps 28 -> 28
+down = nn.Conv2d(1, 8, kernel_size=3, stride=2)  # downsamples 28 -> 13
 ```
 
 ### Why you control these
 
-Padding without care shrinks the map and throws away border information; a large
-stride collapses resolution. Both are design dials: pad to preserve, stride to
-summarize. Getting this arithmetic right is the difference between a model that
+Padding without care shrinks the map and throws away border information;
+a large
+stride collapses resolution. Both are design dials: pad to preserve,
+stride to
+summarize. Getting this arithmetic right is the difference between a
+model that
 runs and a shape-mismatch crash at the dense head.
 
 ### The analogy
 
-Padding is a picture mat — it adds a neutral border so the frame (kernel) can
-reach the edges without cropping them. Stride is how far you move the frame
-each step; a stride of 2 skips every other position, so you see a coarser view
+Padding is a picture mat — it adds a neutral border so the frame
+(kernel) can
+reach the edges without cropping them. Stride is how far you move the
+frame
+each step; a stride of 2 skips every other position, so you see a
+coarser view
 and produce a smaller map.
 
 ## 3. Pooling
 
 ### Max pooling
 
-Pooling downsamples a feature map by taking the max (or average) over a window.
-Max pooling keeps the *strongest* activation and discards its precise location:
+Pooling downsamples a feature map by taking the max (or average) over a
+window.
+Max pooling keeps the *strongest* activation and discards its precise
+location:
 
 ```python
-pool = nn.MaxPool2d(kernel_size=2, stride=2)   # 26x26 -> 13x13
+pool = nn.MaxPool2d(kernel_size=2, stride=2)  # 26x26 -> 13x13
 ```
 
 ### Why it aids invariance
 
-By discarding exact positions, pooling makes the representation robust to small
-shifts — a strong edge a pixel to the left still wins the max. It also cuts the
+By discarding exact positions, pooling makes the representation robust
+to small
+shifts — a strong edge a pixel to the left still wins the max. It also
+cuts the
 activation size in half each application, reducing compute and, via the
 subsequent flatten, the parameter count of the dense head.
 
 ### The analogy
 
-Pooling is summarizing a photo into a thumbnail — you keep the strongest, most
-salient content and lose the exact coordinates. The thumbnail still tells you
+Pooling is summarizing a photo into a thumbnail — you keep the
+strongest, most
+salient content and lose the exact coordinates. The thumbnail still
+tells you
 "there is a face here," which is enough for classification.
 
 ## 4. Channels and Depth
 
 ### The channel dimension
 
-Early layers have few channels (1 for grayscale, 3 for RGB). Each conv layer
-expands channels while shrinking space, so the representation goes from "raw
+Early layers have few channels (1 for grayscale, 3 for RGB). Each conv
+layer
+expands channels while shrinking space, so the representation goes from
+"raw
 intensities" to "many abstract feature maps":
 
 ```text
@@ -158,37 +197,48 @@ intensities" to "many abstract feature maps":
 
 ### The depth trade
 
-Deeper channels = richer features but more parameters. A standard small CNN
+Deeper channels = richer features but more parameters. A standard small
+CNN
 doubles channels while halving spatial size each block, keeping total
-activation roughly constant — a rule of thumb, not a law. The channels are where
+activation roughly constant — a rule of thumb, not a law. The channels
+are where
 "what kind of feature" lives, while the spatial axes are "where."
 
 ## 5. Receptive Field
 
 ### What a neuron sees
 
-The receptive field is the region of the input that influences one output
-neuron. A 3×3 filter sees 9 pixels; stacking two 3×3 convs gives the second
+The receptive field is the region of the input that influences one
+output
+neuron. A 3×3 filter sees 9 pixels; stacking two 3×3 convs gives the
+second
 layer a 5×5 receptive field over the original input.
 
 ### Why it matters
 
-The receptive field must be large enough to cover the relevant object part
-before the classifier can recognize it. Two 3×3 convs match one 5×5 conv's
-field with fewer parameters and more non-linearity — a classic reason modern
+The receptive field must be large enough to cover the relevant object
+part
+before the classifier can recognize it. Two 3×3 convs match one 5×5
+conv's
+field with fewer parameters and more non-linearity — a classic reason
+modern
 nets favor stacks of small kernels over one big one.
 
 ### When it fails
 
-If the receptive field is smaller than the object, the network literally cannot
-see enough of it to classify it — no amount of training fixes that. The fix is
-more depth or larger strides, and the receptive-field math tells you how much.
+If the receptive field is smaller than the object, the network literally
+cannot
+see enough of it to classify it — no amount of training fixes that. The
+fix is
+more depth or larger strides, and the receptive-field math tells you how
+much.
 
 ## 6. The Classic Classifier Stack
 
 ### The shape
 
-A CNN classifier is conv blocks (conv → ReLU → pool) followed by a flatten and a
+A CNN classifier is conv blocks (conv → ReLU → pool) followed by a
+flatten and a
 dense head:
 
 ```python
@@ -196,10 +246,14 @@ class TinyCNN(nn.Module):
     def __init__(self):
         super().__init__()
         self.features = nn.Sequential(
-            nn.Conv2d(1, 8, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
-            nn.Conv2d(8, 16, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(1, 8, 3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(8, 16, 3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
         )
-        self.classifier = nn.Linear(16 * 7 * 7, 10)   # 28 -> 14 -> 7
+        self.classifier = nn.Linear(16 * 7 * 7, 10)  # 28 -> 14 -> 7
 
     def forward(self, x):
         return self.classifier(self.features(x).flatten(1))
@@ -207,26 +261,95 @@ class TinyCNN(nn.Module):
 
 ### The cost story
 
-The conv layers are cheap (shared weights); the dense head is where parameters
-concentrate. Flattening `16×7×7 = 784` features into a linear layer is why
-parameter counts spike at the head. Global average pooling can replace that
+The conv layers are cheap (shared weights); the dense head is where
+parameters
+concentrate. Flattening `16×7×7 = 784` features into a linear layer is
+why
+parameter counts spike at the head. Global average pooling can replace
+that
 large flatten and cut the head's parameters dramatically.
 
 ## 7. When CNNs Help
 
 ### The right-shaped data
 
-CNNs shine on grid data with local structure: images, spectrograms, and layout
-tiles. They are the wrong tool for tabular data or permutation-invariant sets,
-where a dense or attention model is more natural. The filter assumption — local,
-translation-invariant structure — is either present or not, and that is the test.
+CNNs shine on grid data with local structure: images, spectrograms, and
+layout
+tiles. They are the wrong tool for tabular data or permutation-invariant
+sets,
+where a dense or attention model is more natural. The filter assumption
+— local,
+translation-invariant structure — is either present or not, and that is
+the test.
 
 ### The pretrained shortcut
 
-In practice you rarely train a CNN from scratch — you fine-tune a pretrained one
-(ResNet, EfficientNet), the pattern of `39-transfer-learning`. The from-scratch
-exercise here teaches the mechanism so the pretrained shortcut is not a black box,
-and so you can reason about *why* the pretrained backbone is shaped as it is.
+In practice you rarely train a CNN from scratch — you fine-tune a
+pretrained one
+(ResNet, EfficientNet), the pattern of `39-transfer-learning`. The
+from-scratch
+exercise here teaches the mechanism so the pretrained shortcut is not a
+black box,
+and so you can reason about *why* the pretrained backbone is shaped as
+it is.
+
+## 8. Feature Hierarchy — From Edges to Objects
+
+### The layered abstraction
+
+A CNN builds meaning in layers. The first layer detects edges and simple
+gradients; the second combines edges into corners and textures; the third
+combines textures into parts (a wheel, an eye); the last combines parts into
+objects. This hierarchy is *emergent*, not programmed — the training data and
+the architecture's inductive bias produce it, and it is the same hierarchy
+regardless of whether the input is a photo, a spectrogram, or a document tile.
+
+### The analogy
+
+Think of an assembly line: the first station cuts raw shapes, the next assembles
+them into components, the next into subassemblies, the last into the finished
+product. Each station only sees the previous station's output, and no one
+station understands the whole — but the line as a whole produces the object.
+
+### Why it matters for transfer
+
+Because the hierarchy is layered, the early layers are generic (edges, textures)
+and the later layers are task-specific (faces, cars). That is exactly why
+transfer learning (`39`) freezes early layers and retrains only the head: the
+generic layers transfer, the specific layers do not. Understanding the hierarchy
+is what makes "freeze the backbone" intuitive rather than arbitrary.
+
+## 9. BatchNorm and Normalization
+
+### What normalization does
+
+Normalization keeps activations on a stable scale so training does not fight
+exploding or vanishing values. BatchNorm normalizes each channel's activations
+across the batch, then re-scales with learned parameters. It speeds convergence
+and, by injecting mild noise through the batch statistics, acts as a regularizer.
+
+```python
+conv_block = nn.Sequential(
+    nn.Conv2d(1, 8, 3, padding=1),
+    nn.BatchNorm2d(8),
+    nn.ReLU(),
+    nn.MaxPool2d(2),
+)
+```
+
+### The standard order
+
+The canonical order in a modern block is conv → BatchNorm → ReLU → pool. Putting
+the normalization *before* the non-linearity keeps the ReLU from receiving
+unstable pre-activations. This order is a convention, but a nearly universal one,
+and deviating from it without reason is a smell.
+
+### The normalization discipline
+
+Whatever normalization you apply in training, the *identical* transform must be
+applied at inference — BatchNorm needs its running statistics frozen, not the
+batch's, at eval time. This is the same "train and eval pipelines must agree"
+discipline that `45-data-augmentation` applies to transforms.
 
 ## Real-World Application
 
@@ -303,8 +426,10 @@ and so you can reason about *why* the pretrained backbone is shaped as it is.
 ## AI Engineering Relevance
 
 **Where this shows up:** document layout analysis for corpus ingestion, image
-classification behind visual search, audio tagging via spectrograms, and OCR
-preprocessing. On this workstation the relevant numbers are the RTX 5000's
+classification behind visual search, audio tagging via spectrograms, and
+OCR
+preprocessing. On this workstation the relevant numbers are the RTX
+5000's
 16 GB — a small CNN trains in minutes, while a ResNet-50 fine-tune fits in
 VRAM only with a reduced batch or mixed precision.
 
@@ -316,8 +441,10 @@ VRAM only with a reduced batch or mixed precision.
 | Pretrained CNN + fine-tune | The production default, not from-scratch |
 
 **Scale note:** CNNs are the cheapest deep model to serve — a quantized CNN
-(`49-quantization`) can run on a phone. The receptive-field and parameter
-reasoning here is the same math you use when sizing a model for a 16 GB budget.
+(`49-quantization`) can run on a phone. The receptive-field and
+parameter
+reasoning here is the same math you use when sizing a model for a 16 GB
+budget.
 
 ## Key Takeaways
 
@@ -369,6 +496,10 @@ reasoning here is the same math you use when sizing a model for a 16 GB budget.
 
 ## Next Steps
 
-Next: **[42 — Recurrent Neural Networks](42-rnns-lecture.md)** — sequences and the models that read them.
+Next: **[42 — Recurrent Neural Networks](42-rnns-lecture.md)** —
+sequences and the models that read them.
 
-Continues in: **[09-genai — 21 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** — fine-tune a pretrained backbone.
+Continues in: **[09-genai — 21
+Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** —
+fine-tune a pretrained backbone.
+
