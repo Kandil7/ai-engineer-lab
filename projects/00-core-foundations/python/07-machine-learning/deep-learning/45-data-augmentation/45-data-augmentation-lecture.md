@@ -22,7 +22,8 @@ never the validation or test set, or your eval numbers become dishonest.
 Augmentation is not just for images: text (synonym replacement, back-translation),
 audio (pitch shift, time stretch), and tabular data (SMOTE, noise injection) all
 use the same principle. The exercise demonstrates the image case in pure PyTorch
-so the mechanism is visible.
+so the mechanism is visible, but the rule — choose a label-preserving transform
+per domain — is universal.
 
 ## Learning Objectives
 
@@ -35,6 +36,7 @@ By the end of this lecture, you will be able to:
 5. Recognize augmentation across text, audio, and tabular data.
 6. State when augmentation helps most (small data) and least (huge data).
 7. Implement a basic augmentation pipeline in PyTorch.
+8. Explain mixup and cutmix as stronger, label-mixing augmentations.
 
 ## Prerequisites
 
@@ -52,11 +54,19 @@ Instead of adding a penalty to the loss, augmentation injects the invariance int
 the data itself. A model trained on both the original and flipped versions learns
 that "flipped" is not a signal — which is exactly the prior a vision model needs.
 
+### The real-world analogy
+
+A child learns to recognize a cat not from one photograph but from many angles,
+lighting conditions, and crops. Augmentation is showing the model the same
+object under many valid variations, so it latches onto the object's essence
+rather than the photograph's accidents.
+
 ### Why it beats hand-engineering
 
 Hand-coding "the model should be flip-invariant" is hard; showing it flipped
 examples is automatic. Augmentation encodes domain knowledge (what a valid
-perturbation is) as *data*, and the optimizer does the rest.
+perturbation is) as *data*, and the optimizer does the rest. It is the cheapest
+way to inject a prior without touching the architecture or the loss.
 
 ## 2. The Label-Invariance Rule
 
@@ -74,6 +84,12 @@ which breaks the label. The rule is: would a human still give the same label?
 - Audio: pitch shift, time stretch, noise — safe; reversing speech — unsafe.
 - Tabular: SMOTE, noise injection — needs care because feature semantics vary.
 
+### When it breaks
+
+Augmentation breaks when the transform crosses a class boundary — the "6" to "9"
+rotation, the "not good" to "good" negation. Every domain has such boundaries,
+and the human-in-the-loop check is the only reliable guard.
+
 ## 3. The Transform Pipeline
 
 ### Composition
@@ -84,7 +100,7 @@ sees a slightly different dataset every pass:
 ```python
 def augment(x):
     x = random_hflip(x)
-    x = x + 0.05 * torch.randn_like(x)  # gaussian noise
+    x = x + 0.05 * torch.randn_like(x)   # gaussian noise
     return x
 ```
 
@@ -92,7 +108,8 @@ def augment(x):
 
 On-the-fly augmentation (applied in the dataloader) costs compute but stores
 nothing extra; offline augmentation (materialized to disk) stores an inflated
-dataset but is a one-time cost. On-the-fly is the default for images.
+dataset but is a one-time cost. On-the-fly is the default for images, because
+the transform is cheap and the disk is better spent on the raw data.
 
 ## 4. Training Only, Never Eval
 
@@ -106,9 +123,16 @@ training pipeline is the *augmented* one.
 ### The code shape
 
 ```python
-train_loader = DataLoader(train_set, ...)  # augmented transforms
-eval_loader = DataLoader(val_set, ...)  # only normalization, no augmentation
+train_loader = DataLoader(train_set, ...)   # augmented transforms
+eval_loader = DataLoader(val_set, ...)      # only normalization, no augmentation
 ```
+
+### Why it is subtle
+
+The leak is invisible — the augmented eval examples still have correct labels,
+so nothing crashes; the metric just looks a bit too good. That is exactly the
+kind of bug that survives a smoke test and only shows up in production
+degradation, which is why the train/eval transform split must be structural.
 
 ## 5. Augmentation as a Regularizer
 
@@ -139,7 +163,33 @@ Audio: pitch shift, time stretch, background noise. Tabular: SMOTE for class
 imbalance, noise injection, and mixup. Each domain needs a human to decide what
 perturbation is label-preserving — the mechanism is generic, the invariant is not.
 
-## 7. Common Mistakes to Avoid
+## 7. Mixup and Cutmix
+
+### Label-mixing augmentations
+
+Mixup blends two examples *and their labels* in proportion; cutmix cuts a region
+from one image and pastes it into another, mixing labels by area. Both go beyond
+label-preserving transforms to *label-interpolating* ones, which encourages
+smoother decision boundaries and strong regularization.
+
+### When to use them
+
+Mixup/cutmix are the "strong" end of augmentation, most useful when the base
+transforms are not enough and the model is large. They cost a little more compute
+and complicate the loss, but they are a standard ingredient in modern image
+training.
+
+## Real-World Application
+
+- **Image classification on small datasets** — augmentation is the difference
+  between a memorized and a generalizing model.
+- **Text/NLP** — back-translation and paraphrase for low-resource languages.
+- **Speech/audio** — pitch and time warping for robust recognition.
+- **Imbalanced tabular data** — SMOTE to synthesize minority examples.
+- **The Athar/DevMate case** — Arabic text augmentation (paraphrase, dialect
+  variants) where labeled data is scarce.
+
+## Common Mistakes to Avoid
 
 ### Mistake 1: Augmenting the test set
 ```
@@ -171,7 +221,13 @@ perturbation is label-preserving — the mechanism is generic, the invariant is 
 # CORRECT — keep the normalization transform last and identical for train/eval
 ```
 
-## 8. Best Practices
+### Mistake 6: Over-augmenting past the point of realism
+```
+# WRONG — transforms so extreme the "augmented" examples no longer resemble reality
+# CORRECT — stay within the distribution of plausible real variations
+```
+
+## Best Practices
 
 1. Split first, then augment only the training fold.
 2. Verify each transform is label-preserving for the specific domain.
@@ -184,7 +240,7 @@ perturbation is label-preserving — the mechanism is generic, the invariant is 
 9. Consider mixup/cutmix for stronger image regularization.
 10. For text/audio, sanity-check the label survives the transform.
 
-## 9. Complexity and Cost
+## Complexity and Cost
 
 | Operation | Time | Space | Notes |
 |---|---|---|---|
@@ -193,7 +249,7 @@ perturbation is label-preserving — the mechanism is generic, the invariant is 
 | Mixup/cutmix | per-batch | none | Stronger, slightly more compute |
 | Augmentation benefit | — | — | Largest on small data |
 
-## 10. AI Engineering Relevance
+## AI Engineering Relevance
 
 **Where this shows up:** any model trained on a modest dataset — which on a
 single RTX 5000 is most of what you will train locally. Augmentation is the
@@ -210,7 +266,25 @@ cheapest accuracy win before you buy more data or a bigger model.
 hours are the constraint, augmentation buys generalization without more compute —
 the right trade on a 16 GB single-GPU budget.
 
-## 11. Summary
+## Key Takeaways
+
+1. Augmentation is regularization in the data domain — it teaches invariances.
+2. The one hard rule: the transform must not change the label.
+3. The one discipline: augment training only, never eval.
+4. Split first, then augment, so no example leaks across folds.
+5. It helps most on small data and least on huge diverse data.
+6. Mixup/cutmix are the strong, label-interpolating end of augmentation.
+
+## Self-Check Questions
+
+1. Why is augmentation considered regularization, and where does it differ from weight decay?
+2. What is the one hard rule for a valid transform, and what is an example of breaking it?
+3. Why must augmentation be applied only to the training set, and what makes the leak subtle?
+4. Why must you split before augmenting, not after?
+5. When does augmentation add the least value, and why?
+6. How do mixup and cutmix differ from ordinary label-preserving augmentation?
+
+## Summary
 
 | Concept | Description |
 |---|---|
@@ -229,10 +303,15 @@ the right trade on a 16 GB single-GPU budget.
 | Compose | a list of transforms applied in order |
 | Eval pipeline | normalization only |
 
+## Further Reading / Connections
+
+- `39-transfer-learning-lecture.md` — the pretrained-model sibling of augmentation.
+- `22-cross-validation-lecture.md` — the overfitting regime augmentation fights.
+- `47-self-supervised-learning-lecture.md` — augmentation as the "view" in contrastive learning.
+- Official docs: <https://pytorch.org/vision/stable/transforms.html>
+
 ## Next Steps
 
 Next: **[46 — Few-Shot and Zero-Shot Learning](46-few-shot-zero-shot-lecture.md)** — generalizing from a handful of examples.
 
 Continues in: **[39 — Transfer Learning](39-transfer-learning-lecture.md)** — the pretrained-model sibling of augmentation.
-
-Official docs: <https://pytorch.org/vision/stable/transforms.html>
