@@ -489,10 +489,37 @@ why the RTX 5000's 16 GB is usually enough.
 - `46-few-shot-zero-shot-lecture.md` — the shared space contrastive learning builds.
 - Chen et al., "A Simple Framework for Contrastive Learning" (SimCLR).
 
+## History and Motivation
+
+Self-supervision predates the name. Word2vec (2013) learned word
+embeddings by
+predicting context words — a pretext task with no labels. Autoencoders
+learned
+representations by reconstruction. The modern era began with BERT and
+GPT
+(2018-2020), which scaled masked and next-token prediction to huge
+corpora and
+showed the resulting encoders transfer everywhere. SimCLR and MoCo
+(2019-2020)
+brought the contrastive idea to vision, and CLIP (2021) extended it
+across
+modalities.
+
+The through-line is economic: labels are expensive, raw data is not, so
+the
+field moved the learning onto the data and left a small labeled budget
+for
+adaptation. Every foundation model today — the LLMs and embedding models
+you
+serve — is the product of that shift, which is why SSL is the origin
+story of the
+entire modern stack rather than one technique among many.
+
 ## Next Steps
 
 Next: **[48 — Hyperband and
 BOHB](../advanced/48-hyperband-bohb-lecture.md)** — multi-fidelity
 tuning.
+
 
 
