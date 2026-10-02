@@ -24,6 +24,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+# ruff: noqa: N803, N806, N812
+
 torch.manual_seed(0)
 
 
