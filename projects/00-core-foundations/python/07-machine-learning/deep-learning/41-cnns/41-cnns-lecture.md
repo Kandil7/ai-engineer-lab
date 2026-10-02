@@ -351,6 +351,44 @@ applied at inference — BatchNorm needs its running statistics frozen, not the
 batch's, at eval time. This is the same "train and eval pipelines must agree"
 discipline that `45-data-augmentation` applies to transforms.
 
+## 10. 1D, 2D, and Depthwise Convolutions
+
+### The dimensionality
+
+The convolution generalizes across dimensions. A **1D** convolution slides over a
+single axis — time-series, audio waveforms, text token sequences. A **2D**
+convolution slides over two axes — images, spectrograms. A **3D** convolution
+slides over three — video (time plus two space), medical volumes. The kernel and
+the sliding rule are identical; only the number of axes changes.
+
+```python
+nn.Conv1d(in_channels=1, out_channels=8, kernel_size=3)   # sequence data
+nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3)   # image data
+```
+
+### Depthwise separable convolutions
+
+A standard conv mixes *spatial* and *channel* information in one operation. A
+depthwise separable conv splits it: a depthwise conv filters each channel
+independently (spatial only), then a pointwise 1×1 conv mixes channels. This is
+the building block of MobileNet and other efficient architectures, and it cuts
+the parameter count by roughly a factor of the kernel size squared.
+
+### Why this matters on constrained hardware
+
+On a 16 GB GPU — or a phone — the difference between a standard conv and a
+depthwise separable one is the difference between a model that fits (and runs)
+and one that does not. The efficient-conv family is the CNN analogue of the
+quantization and pruning levers (`49`, `50`): a footprint reduction achieved by
+changing the architecture, not just the numbers.
+
+### The truncation note
+
+Depthwise separable convs trade a little accuracy for a large efficiency win, the
+same tradeoff as every other compression technique. MobileNet's success showed
+the trade is usually favorable: modern mobile vision is depthwise almost by
+default.
+
 ## Real-World Application
 
 - **Document layout analysis** — treating scanned-page tiles as images for OCR
