@@ -116,12 +116,16 @@ Every gap is in the legacy `00-core-foundations/python` curriculum (481 lectures
 | `python/04-databases` | 73 | 5 | **68** | 32 |
 | `python/05-web-frameworks` | 74 | 1 | **73** | 20 |
 | `python/06-data-structures-algorithms` | 20 | 0 | **20** | 1 |
-| `python/07-machine-learning` | 40 | 0 | **40** | 9 |
+| `python/07-machine-learning` | 51 | 51 | 0 (done) | 0 |
 | `python/08-mlops` | 16 | 16 | 0 (done) | 0 |
 | `python/09-genai` | 25 | 25 | 0 (done) | 0 |
 | `python/10-system-design` | 5 | 5 | 0 (done) | 0 |
 | `prompt-engineering/03-chain-of-thought` | 1 | 1 | 0 (done) | 0 |
-| **Total** | **482** | **71** | **411** | **99** |
+| **Total** | **493** | **122** | **371** | **90** |
+
+The totals are the 2026-10-02 audit snapshot; §8 logs the completion work that followed
+(which closed further gaps in `02-advanced-python`, `06-data-structures-algorithms`, and
+`07-machine-learning`).
 
 Thin lists (exact files) are in §5; they are dominated by `03-libraries` (matplotlib 3-D
 and numpy/scipy plotting), `04-databases` (PostgreSQL/Redis/SQL basics), and
@@ -138,7 +142,7 @@ Status legend: **Provable** (evidence exists) · **Partial** (some evidence) · 
 | # | Area | Learning home | Proof artifact | Status | Action |
 | --- | --- | --- | --- | --- | --- |
 | 1 | **Data engineering** | `00-core-foundations/data-engineering/` (15), `03-databases/*`, `athar-lab/` | athar contracts + deterministic CLI; `devmate/ingest/` | Partial | New units done: 08-15 (batch/streaming, ETL/CDC, lakehouse, data quality, feature stores/pipelines, versioning/lineage, storage/DB); remaining: real Shamela ingestion (A3) |
-| 2 | **ML development** | `python/07-machine-learning/` (40), `applied-ml/` (5), `fine-tuning/` (6) | `applied-ml/05-baseline-intent-classifier/` (12/12, macro-F1 1.0) | Partial | Quizzes + 9 thin in 07-ml; add pruning/distillation unit |
+| 2 | **ML development** | `python/07-machine-learning/` (51), `applied-ml/` (5), `fine-tuning/` (6) | `applied-ml/05-baseline-intent-classifier/` (12/12, macro-F1 1.0) | Partial | Deep-learning + optimization units added (41-51): CNNs, RNNs, Keras, JAX, augmentation, few/zero-shot, self-supervised, Hyperband/BOHB, quantization, pruning, distillation; remaining: real applied pruning/distillation artifact |
 | 3 | **MLOps core** | `python/08-mlops/` (16), `06-devops/{ci-cd,deployment,llmops}/` | ruff/mypy/pytest CI; prompt golden tests | Partial | Experiment-tracking lab; eval CI gate (P1); registry + promote/rollback (P6) |
 | 4 | **Cloud infra** | `06-devops/docker/`, `infra/docker/`, `devmate/docker/Dockerfile` | compose stack; image builds | Partial | K8s manifests (P7, demand-gated); cloud notes post-employment |
 | 5 | **Serving & APIs** | `model-serving/` (4), `python/08-mlops/07-08`, `devmate/api/` | `devmate` `/ask` SSE + health | Partial | vLLM/TTFT lab (P5); Docker for the API; gRPC note |
@@ -315,6 +319,11 @@ A6 (hardening) done; `eval/` harness prints a table; P-track does not steal buil
   35–38 already had `challenges/NN/quiz.md`. All 38 lectures now have a quiz.
 - 2026-10-02 — `python/07-machine-learning` complete: 40 quizzes; the 9 thin advanced
   lectures (24–32) expanded to full detail. Module now 0 thin.
+- 2026-10-02 — `python/07-machine-learning` extended to 51 units (41–51) covering the roadmap's
+  Machine Learning Development gaps: 41 CNNs, 42 RNNs, 43 TensorFlow/Keras, 44 JAX/Flax,
+  45 data augmentation, 46 few/zero-shot, 47 self-supervised, 48 Hyperband/BOHB, 49 quantization,
+  50 pruning, 51 distillation. Each has lecture (400+ lines), glossary, quiz, and a `--verify`
+  exercise; all 11 exercises exit 0, ruff clean, module format check clean.
 - 2026-10-02 — `prompt-engineering/03-chain-of-thought` quiz written; that area is now
   5/5 complete. Non-Python content has no remaining gaps.
 - 2026-10-02 — Python content work paused by request; `01-core-python` and the remaining
