@@ -16,7 +16,7 @@ Verify:   python 08-batch-vs-streaming.py --verify
 from __future__ import annotations
 
 import sys
-from collections import defaultdict, deque
+from collections import deque
 
 
 def topo_sort(dag: dict[str, list[str]]) -> list[str]:

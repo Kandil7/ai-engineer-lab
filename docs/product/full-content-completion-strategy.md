@@ -137,7 +137,7 @@ Status legend: **Provable** (evidence exists) · **Partial** (some evidence) · 
 
 | # | Area | Learning home | Proof artifact | Status | Action |
 | --- | --- | --- | --- | --- | --- |
-| 1 | **Data engineering** | `00-core-foundations/data-engineering/` (7), `03-databases/*`, `athar-lab/` | athar contracts + deterministic CLI; `devmate/ingest/` | Partial | New units: versioning/lineage manifest, CDC + lakehouse; real Shamela ingestion (A3) |
+| 1 | **Data engineering** | `00-core-foundations/data-engineering/` (15), `03-databases/*`, `athar-lab/` | athar contracts + deterministic CLI; `devmate/ingest/` | Partial | New units done: 08-15 (batch/streaming, ETL/CDC, lakehouse, data quality, feature stores/pipelines, versioning/lineage, storage/DB); remaining: real Shamela ingestion (A3) |
 | 2 | **ML development** | `python/07-machine-learning/` (40), `applied-ml/` (5), `fine-tuning/` (6) | `applied-ml/05-baseline-intent-classifier/` (12/12, macro-F1 1.0) | Partial | Quizzes + 9 thin in 07-ml; add pruning/distillation unit |
 | 3 | **MLOps core** | `python/08-mlops/` (16), `06-devops/{ci-cd,deployment,llmops}/` | ruff/mypy/pytest CI; prompt golden tests | Partial | Experiment-tracking lab; eval CI gate (P1); registry + promote/rollback (P6) |
 | 4 | **Cloud infra** | `06-devops/docker/`, `infra/docker/`, `devmate/docker/Dockerfile` | compose stack; image builds | Partial | K8s manifests (P7, demand-gated); cloud notes post-employment |
@@ -219,7 +219,8 @@ phases are gated by the active track (§5.2) and must not steal Build time from 
 | done | `python/09-genai` | 25 | 0 | 0 | 25 quizzes ✅ |
 | done | `python/06-data-structures-algorithms` | 20 | 0 | 0 | 20 quizzes + 1 lecture ✅ |
 | done | `python/02-advanced-python` | 38 | 0 | 0 | 34 quizzes (+4 existing) ✅ |
-| 1 | `python/07-machine-learning` | 40 | 40 | 9 | 2 |
+| done | `python/07-machine-learning` | 40 | 0 | 0 | 40 quizzes + 9 lectures ✅ |
+| 1 | `python/01-core-python` | 53 | 39 | 1 | 2 |
 | 4 | `python/01-core-python` | 53 | 39 | 1 | 2 |
 | 5 | `python/05-web-frameworks` | 74 | 73 | 20 | fastapi (52), django (22) |
 | 6 | `python/04-databases` | 73 | 68 | 32 | 7 sub-folders |
@@ -305,8 +306,15 @@ A6 (hardening) done; `eval/` harness prints a table; P-track does not steal buil
   roadmaps and `docs/product/`.
 - 2026-10-02 — `python/06-data-structures-algorithms` complete: 20 quizzes; the truncated
   `12-linear-search-lecture.md` expanded (1.8 KB → 12.5 KB); exercise runs, exit 0.
+- 2026-10-02 — `00-core-foundations/data-engineering` complete to 15 units: added 08 (batch vs
+  streaming, Lambda/Kappa), 09 (ETL vs ELT + CDC), 10 (lakehouse, Iceberg/Delta), 11 (data quality
+  frameworks), 12 (feature stores), 13 (feature pipelines), 14 (data versioning + lineage), 15
+  (storage + database selection). Each has lecture, glossary, quiz, and a `--verify` exercise;
+  all eight exercises exit 0, ruff clean, five validators green.
 - 2026-10-02 — `python/02-advanced-python` complete: 34 quizzes added (topics 01–34); topics
   35–38 already had `challenges/NN/quiz.md`. All 38 lectures now have a quiz.
+- 2026-10-02 — `python/07-machine-learning` complete: 40 quizzes; the 9 thin advanced
+  lectures (24–32) expanded to full detail. Module now 0 thin.
 
 *Created 2026-10-01 as a 12-axis content strategy. Rewritten 2026-10-02 to cover the whole
 roadmap. Update §2 and §8 when a block of units completes.*
