@@ -90,7 +90,8 @@ def main() -> None:
 
     print(f"history: {' -> '.join(table.history)}")
     print(
-        f"time travel: snap_v1 first row = {table.time_travel('snap_v1')[0]['original']}"
+        f"time travel: snap_v1 resolves "
+        f"({len(table.time_travel('snap_v1'))} rows, all source_version v1)"
     )
     print("additive schema evolution: old rows read the new column as null")
     print("all asserts passed")
