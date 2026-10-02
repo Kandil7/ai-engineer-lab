@@ -6,22 +6,34 @@ Companion exercise: `44-jax-flax.py`
 
 ## Topic Overview
 
-JAX is NumPy with three magic functions — `jit`, `grad`, and `vmap` — built on a
-single idea: your model is a *pure function* of its parameters, so the framework
-can transform it freely. `jit` compiles it, `grad` differentiates it, `vmap`
-vectorizes it, and the three compose. Flax is the neural-network layer on top of
-JAX that packages that function into reusable modules while staying explicit.
+JAX is NumPy with three magic functions — `jit`, `grad`, and `vmap` —
+built on a
+single idea: your model is a *pure function* of its parameters, so the
+framework
+can transform it freely. `jit` compiles it, `grad` differentiates it,
+`vmap`
+vectorizes it, and the three compose. Flax is the neural-network layer
+on top of
+JAX that packages that function into reusable modules while staying
+explicit.
 
-The contrast with PyTorch is philosophical. PyTorch is object-oriented — the
-model is an object holding state. JAX is functional — the parameters are a
-plain value passed in, and the model is a pure function `params -> predictions`.
-That purity is what lets JAX's transforms compose cleanly and what makes JAX the
+The contrast with PyTorch is philosophical. PyTorch is object-oriented —
+the
+model is an object holding state. JAX is functional — the parameters are
+a
+plain value passed in, and the model is a pure function `params ->
+predictions`.
+That purity is what lets JAX's transforms compose cleanly and what makes
+JAX the
 emerging choice for large-scale, TPU-oriented research.
 
-Because JAX is not installed in this environment, the exercise demonstrates the
+Because JAX is not installed in this environment, the exercise
+demonstrates the
 *functional-transform philosophy* using PyTorch's analogues (`torch.autograd.grad`,
-`torch.vmap`, `torch.compile`) so the ideas are concrete, then maps them to their
-JAX counterparts. The philosophy — pure functions that transforms act on — is
+`torch.vmap`, `torch.compile`) so the ideas are concrete, then maps them
+to their
+JAX counterparts. The philosophy — pure functions that transforms act on
+— is
 the durable lesson; the syntax is a detail.
 
 ## Learning Objectives
@@ -48,7 +60,8 @@ By the end of this lecture, you will be able to:
 
 ### Parameters as a value
 
-In JAX, the model's parameters are an ordinary value — a dict or pytree — and the
+In JAX, the model's parameters are an ordinary value — a dict or pytree
+— and the
 model is a function that takes parameters and input and returns output:
 
 ```python
@@ -56,46 +69,59 @@ def predict(params, x):
     return jnp.tanh(params["W"] @ x + params["b"])
 ```
 
-There is no `self` holding weights. The function is *pure*: same input, same
+There is no `self` holding weights. The function is *pure*: same input,
+same
 output, no hidden state, no side effects.
 
 ### The real-world analogy
 
-Think of a function as a recipe card: it has no memory of previous meals, only
-instructions that turn ingredients (parameters + input) into a dish (output).
-Because the card is self-contained, you can photocopy it (vmap), hire a faster
-chef (jit), or calculate how the dish changes with the recipe (grad) — none of
+Think of a function as a recipe card: it has no memory of previous
+meals, only
+instructions that turn ingredients (parameters + input) into a dish
+(output).
+Because the card is self-contained, you can photocopy it (vmap), hire a
+faster
+chef (jit), or calculate how the dish changes with the recipe (grad) —
+none of
 which works if the card scribbles on shared state.
 
 ### Why purity matters
 
-Because the function is pure, JAX can transform it. `grad(predict)` is a new
-function that returns derivatives; `jit(predict)` compiles it; `vmap(predict)`
+Because the function is pure, JAX can transform it. `grad(predict)` is a
+new
+function that returns derivatives; `jit(predict)` compiles it;
+`vmap(predict)`
 batches it. Each transform is a function from functions to functions — a
 composable algebra over your model.
 
 ### When it works, when it fails
 
-Purity works beautifully for numerical models that are functions of their
-parameters. It grates when the model has dynamic, data-dependent control flow
-(loops whose trip count depends on the input), which JAX handles via `lax`
-primitives but which feels awkward compared to PyTorch's imperative freedom.
+Purity works beautifully for numerical models that are functions of
+their
+parameters. It grates when the model has dynamic, data-dependent control
+flow
+(loops whose trip count depends on the input), which JAX handles via
+`lax`
+primitives but which feels awkward compared to PyTorch's imperative
+freedom.
 
 ## 2. The Three Transforms
 
 ### jit — just-in-time compile
 
-`jit` traces the function once per input shape and compiles it to fast device
+`jit` traces the function once per input shape and compiles it to fast
+device
 code. Subsequent calls reuse the compiled kernel:
 
 ```python
 fast = jax.jit(predict)
-fast(params, x)          # first call compiles; later calls are fast
+fast(params, x)  # first call compiles; later calls are fast
 ```
 
 ### grad — automatic differentiation
 
-`grad` returns the gradient of a function with respect to its first argument:
+`grad` returns the gradient of a function with respect to its first
+argument:
 
 ```python
 loss = lambda params, x, y: jnp.mean((predict(params, x) - y) ** 2)
@@ -105,7 +131,8 @@ grads = dloss(params, x, y)
 
 ### vmap — automatic vectorization
 
-`vmap` lifts a function over an extra batch dimension, replacing a Python loop
+`vmap` lifts a function over an extra batch dimension, replacing a
+Python loop
 with a vectorized kernel:
 
 ```python
@@ -115,22 +142,29 @@ outs = batch_predict(params, X_batch)
 
 ### They compose
 
-`jax.jit(jax.vmap(jax.grad(loss)))` is a single, compilable training step. That
-composition is JAX's signature superpower — no other framework makes transforms
-stack so cleanly, because no other framework models the network as a pure
+`jax.jit(jax.vmap(jax.grad(loss)))` is a single, compilable training
+step. That
+composition is JAX's signature superpower — no other framework makes
+transforms
+stack so cleanly, because no other framework models the network as a
+pure
 function.
 
 ## 3. Flax — Modules on Top
 
 ### What Flax adds
 
-Flax provides the neural-network conveniences JAX deliberately omits: a `Module`
-with an `apply` method, layer primitives (`nn.Dense`), and a `params` dict
-returned by `init`. It keeps the functional core — parameters stay an external
+Flax provides the neural-network conveniences JAX deliberately omits: a
+`Module`
+with an `apply` method, layer primitives (`nn.Dense`), and a `params`
+dict
+returned by `init`. It keeps the functional core — parameters stay an
+external
 value — while giving you familiar building blocks:
 
 ```python
 import flax.linen as nn
+
 
 class MLP(nn.Module):
     @nn.compact
@@ -138,30 +172,39 @@ class MLP(nn.Module):
         x = nn.Dense(64)(x)
         return nn.Dense(1)(nn.relu(x))
 
+
 params = MLP().init(rng, x)
 out = MLP().apply(params, x)
 ```
 
 ### Why init/apply split
 
-Flax separates `init` (produce the parameter dict) from `apply` (run the forward
-pass on parameters). That split keeps the module pure — the same function can be
-applied to different parameter values, which is what enables clean `vmap` over
+Flax separates `init` (produce the parameter dict) from `apply` (run the
+forward
+pass on parameters). That split keeps the module pure — the same
+function can be
+applied to different parameter values, which is what enables clean
+`vmap` over
 parameter ensembles and `grad` over parameters.
 
 ## 4. PyTorch vs JAX
 
 ### The philosophical split
 
-PyTorch: the model is an object; `model.parameters()` returns tensors that
-autograd tracks in place. JAX: the model is a function; parameters are a value
+PyTorch: the model is an object; `model.parameters()` returns tensors
+that
+autograd tracks in place. JAX: the model is a function; parameters are a
+value
 you pass; gradients are returned, not accumulated.
 
 ### The practical consequences
 
-JAX's purity gives cleaner transforms and trivial parallelism across TPUs, but it
-demands a different mental model and is less ergonomic for stateful, dynamic
-Python control flow. PyTorch's object model is more intuitive and dominates
+JAX's purity gives cleaner transforms and trivial parallelism across
+TPUs, but it
+demands a different mental model and is less ergonomic for stateful,
+dynamic
+Python control flow. PyTorch's object model is more intuitive and
+dominates
 research tooling. The choice is a trade of ergonomics for composability.
 
 ## 5. The PyTorch Analogues
@@ -178,29 +221,38 @@ research tooling. The choice is a trade of ergonomics for composability.
 
 ### Why the analogues matter
 
-The exercise runs these PyTorch analogues so the *transform philosophy* is
-concrete even without JAX installed. The ideas — pure functions, grad, vmap —
-transfer one-to-one; only the syntax differs. Learn the ideas here, and JAX's
+The exercise runs these PyTorch analogues so the *transform philosophy*
+is
+concrete even without JAX installed. The ideas — pure functions, grad,
+vmap —
+transfer one-to-one; only the syntax differs. Learn the ideas here, and
+JAX's
 syntax is a lookup away.
 
 ## 6. When JAX Wins
 
 ### The scale argument
 
-JAX was built for TPUs and huge, parallel, XLA-compiled workloads. When you need
-to `vmap` over many seeds, `pmap`/`jit` over many devices, or express a model as
+JAX was built for TPUs and huge, parallel, XLA-compiled workloads. When
+you need
+to `vmap` over many seeds, `pmap`/`jit` over many devices, or express a
+model as
 a pure function for research, JAX's transforms pay for themselves.
 
 ### The research argument
 
-Cutting-edge work — large model training, diffusion, reinforcement learning with
-massive parallelism — increasingly ships in JAX. If you are entering that space,
+Cutting-edge work — large model training, diffusion, reinforcement
+learning with
+massive parallelism — increasingly ships in JAX. If you are entering
+that space,
 JAX fluency is a differentiator, not a nicety.
 
 ### The honest default
 
-For a full-stack AI engineer, PyTorch remains the workhorse; JAX is the tool you
-reach for when transforms and TPU scale are the bottleneck. Learn the ideas, and
+For a full-stack AI engineer, PyTorch remains the workhorse; JAX is the
+tool you
+reach for when transforms and TPU scale are the bottleneck. Learn the
+ideas, and
 the syntax follows.
 
 ## Real-World Application
@@ -278,9 +330,12 @@ the syntax follows.
 ## AI Engineering Relevance
 
 **Where this shows up:** large-scale model training and TPU research. On this
-workstation (a single RTX 5000, no TPU) the practical value of JAX is narrower,
-but the *functional-transform mental model* — model as pure function, grad and
-vmap as composable transforms — sharpens how you reason about any framework.
+workstation (a single RTX 5000, no TPU) the practical value of JAX is
+narrower,
+but the *functional-transform mental model* — model as pure function,
+grad and
+vmap as composable transforms — sharpens how you reason about any
+framework.
 
 | Concept here | Used for |
 |---|---|
@@ -290,8 +345,10 @@ vmap as composable transforms — sharpens how you reason about any framework.
 | init/apply split | Pure, reusable modules |
 
 **Scale note:** JAX's advantage is XLA compilation and multi-device `pmap`, which
-matters at TPU-pod scale. For a 16 GB single GPU, the transforms still apply but
-the ecosystem overhead may not justify the switch — a decision, not a default.
+matters at TPU-pod scale. For a 16 GB single GPU, the transforms still
+apply but
+the ecosystem overhead may not justify the switch — a decision, not a
+default.
 
 ## Key Takeaways
 
@@ -339,6 +396,10 @@ the ecosystem overhead may not justify the switch — a decision, not a default.
 
 ## Next Steps
 
-Next: **[45 — Data Augmentation](45-data-augmentation-lecture.md)** — synthesizing more training signal.
+Next: **[45 — Data Augmentation](45-data-augmentation-lecture.md)** —
+synthesizing more training signal.
 
-Continues in: **[09-genai — 21 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** — where framework choice recurs.
+Continues in: **[09-genai — 21
+Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** —
+where framework choice recurs.
+
