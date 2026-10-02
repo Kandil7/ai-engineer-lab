@@ -228,6 +228,58 @@ redundancy to remove without real accuracy loss. Pruning a tiny,
 efficient model
 is cutting into muscle, not fat.
 
+## 7. Iterative Pruning in Detail
+
+### The one-shot problem
+
+Removing 90% of weights in a single step destroys too much structure at once,
+and the accuracy collapse is hard to recover from. One-shot pruning is fast but
+fragile, and it is the mistake most first attempts make.
+
+### The iterative loop
+
+Iterative pruning removes a small fraction (say 10%), fine-tunes to recover,
+and repeats until the target sparsity is reached. Each step cuts a little and
+lets the surviving weights adapt before the next cut. The same total sparsity is
+reached with far less accuracy loss, at the cost of several training passes.
+
+```python
+for _ in range(n_rounds):
+    prune.l1_unstructured(model, name="weight", amount=0.1)
+    fine_tune(model)          # recover after this round's cut
+```
+
+### The cost-accuracy trade
+
+Iterative pruning trades wall-clock time for accuracy — the same ladder that
+appears throughout this curriculum (zero-shot to fine-tune, PTQ to QAT). When
+the model is expensive to deploy, the extra fine-tuning passes are a small price
+for a smaller, still-accurate model.
+
+## 8. Per-Layer Sensitivity
+
+### Layers are not equal
+
+Some layers tolerate heavy pruning; others — often the first and last, or
+bottleneck layers — collapse under it. A uniform cut ignores this and hurts the
+sensitive layers as much as the redundant ones. Global pruning (`3`) addresses
+this implicitly by finding least-important weights anywhere.
+
+### The sensitivity-analysis approach
+
+A more explicit method prunes each layer independently and measures the accuracy
+drop, producing a per-layer sensitivity curve. Layers that tolerate pruning get
+cut hard; sensitive layers are spared. This is the principled version of "not
+all layers are equal," and it is how you push sparsity further than a uniform
+cut allows.
+
+### The practical default
+
+Start with global magnitude pruning — it captures most of the per-layer
+sensitivity benefit for free. Reach for explicit sensitivity analysis only when
+you need to push sparsity to the edge and the uniform/global cut is hurting a
+specific layer.
+
 ## Real-World Application
 
 - **Shrinking a model for a latency budget** — structured pruning to meet a
