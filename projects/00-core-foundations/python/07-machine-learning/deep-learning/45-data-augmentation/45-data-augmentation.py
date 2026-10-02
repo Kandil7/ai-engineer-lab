@@ -44,7 +44,7 @@ img = torch.randn(3, 32, 32)  # (C, H, W)
 aug = augment(img)
 print("Example 1: label-preserving transforms")
 print(f"  original shape {tuple(img.shape)} -> augmented {tuple(aug.shape)}")
-print(f"  flip+noise changed the image but not its identity")
+print("  flip+noise changed the image but not its identity")
 
 # ============================================================
 # 2. Train-only discipline: eval uses the clean pipeline
