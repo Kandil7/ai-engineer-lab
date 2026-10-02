@@ -2,22 +2,27 @@
 
 ## 🎯 Topic Overview
 
-Set Operations with UNION — UNION
+Some questions span tables with the same shape: employees plus contractors, this year's orders plus last year's archive. `UNION` stacks result sets vertically where `JOIN` widens them horizontally. This lecture covers `UNION`, `UNION ALL`, `INTERSECT`, `EXCEPT`, and the column-compatibility rules that make set operations work.
 
 ## 📚 Learning Objectives
 
 By the end of this lecture, you will be able to:
-1. Understand the syntax and purpose of set operations with union
-2. Write correct SQL statements
-3. Combine with other SQL clauses
-4. Handle edge cases and common errors
-5. Apply best practices
+1. Combine result sets with `UNION` and `UNION ALL`
+2. Choose correctly between deduplicating and preserving duplicates
+3. Use `INTERSECT` and `EXCEPT` for overlap and difference
+4. Align column counts and types across branches
+5. Sort the combined result correctly
+
+## Prerequisites
+
+- `SELECT` basics (Lecture 05).
+- What duplicates mean for counts (SQL Fundamentals 04–06).
 
 ---
 
 ## 1. Introduction
 
-This lecture covers set operations with union in MySQL using Python's sqlite3 as a learning companion.
+This lecture covers set operations with union in MySQL using Python's sqlite3 as a learning companion. If a join answers "side by side", a union answers "one list after another".
 
 ---
 
@@ -27,17 +32,48 @@ This lecture covers set operations with union in MySQL using Python's sqlite3 as
 
 `SELECT name FROM employees UNION SELECT name FROM contractors;` combines results, removing duplicates.
 
+```python
+rows = conn.execute(
+    "SELECT name FROM employees UNION SELECT name FROM contractors ORDER BY name"
+).fetchall()
+```
+
+`UNION` (distinct) sorts-and-deduplicates, which costs. Use it when duplicates across the branches are possible and wrong.
+
 ### 2. UNION ALL
 
 `SELECT name FROM employees UNION ALL SELECT name FROM contractors;` — keeps duplicates, faster.
+
+When the branches cannot overlap (different years, different regions), `UNION ALL` skips the dedup pass and is strictly better. Default to `ALL` unless you need dedup.
 
 ### 3. INTERSECT / EXCEPT
 
 INTERSECT returns common rows. EXCEPT returns rows in first but not second query.
 
+```sql
+SELECT user_id FROM signups
+INTERSECT
+SELECT user_id FROM purchasers;   -- signed up AND purchased
+
+SELECT user_id FROM signups
+EXCEPT
+SELECT user_id FROM purchasers;   -- signed up but never purchased
+```
+
+`EXCEPT` is the set-difference behind churn and funnel analysis.
+
 ### 4. UNION Rules
 
 Same number of columns. Compatible data types. ORDER BY applies to final result.
+
+```sql
+SELECT name, email FROM employees
+UNION
+SELECT name, NULL AS email FROM contractors
+ORDER BY name;   -- one ORDER BY, at the end, by output position or alias
+```
+
+Column *names* in the output come from the first branch; align types explicitly with casts when engines differ.
 
 ---
 
@@ -83,6 +119,12 @@ finally:
         conn.close()
 ```
 
+### UNION when you meant UNION ALL (or vice versa)
+Dedup by default hides real duplicates; `ALL` preserves duplicates you did not want. Choose deliberately.
+
+### ORDER BY inside a branch
+Only the final `ORDER BY` is meaningful. Put it last.
+
 ---
 
 ## 4. Best Practices
@@ -91,7 +133,7 @@ finally:
 2. **Commit** only when all operations succeed - use transactions
 3. **Close connections** with try/finally or context managers
 4. **Validate input** before database operations
-5. Use **appropriate indexes** for query performance
+5. **Use appropriate indexes** for query performance
 6. **Test with in-memory databases** before using real ones
 
 ---
@@ -118,3 +160,24 @@ Write a function that executes any SQL query safely with error handling and alwa
 | Transactions | Commit saves changes, rollback undoes them |
 | Error Handling | Always use try/except/finally
 | Cleanup | Close connections to free resources
+
+## Key Takeaways
+
+1. `UNION` stacks result sets and deduplicates; `UNION ALL` skips the dedup.
+2. Default to `ALL` when branches cannot overlap.
+3. `INTERSECT` finds overlap; `EXCEPT` finds difference.
+4. Branches must align in column count and compatible types.
+5. One `ORDER BY`, at the end, applies to the combined result.
+
+## Self-Check Questions
+
+1. When is `UNION ALL` strictly better than `UNION`?
+2. How do you find users who signed up but never purchased?
+3. Why must branches have the same number of columns?
+4. Where does `ORDER BY` go in a union, and what can it reference?
+5. Why do output column names come from the first branch?
+
+## Further Reading / Connections
+
+- SQL Fundamentals 04–06 for the set semantics behind unions.
+- Exercise: `12-union.py`.
