@@ -120,8 +120,8 @@ Every gap is in the legacy `00-core-foundations/python` curriculum (481 lectures
 | `python/08-mlops` | 16 | 16 | 0 (done) | 0 |
 | `python/09-genai` | 25 | 25 | 0 (done) | 0 |
 | `python/10-system-design` | 5 | 5 | 0 (done) | 0 |
-| `prompt-engineering/03-chain-of-thought` | 1 | 0 | **1** | 0 |
-| **Total** | **482** | **70** | **412** | **99** |
+| `prompt-engineering/03-chain-of-thought` | 1 | 1 | 0 (done) | 0 |
+| **Total** | **482** | **71** | **411** | **99** |
 
 Thin lists (exact files) are in §5; they are dominated by `03-libraries` (matplotlib 3-D
 and numpy/scipy plotting), `04-databases` (PostgreSQL/Redis/SQL basics), and
@@ -315,6 +315,10 @@ A6 (hardening) done; `eval/` harness prints a table; P-track does not steal buil
   35–38 already had `challenges/NN/quiz.md`. All 38 lectures now have a quiz.
 - 2026-10-02 — `python/07-machine-learning` complete: 40 quizzes; the 9 thin advanced
   lectures (24–32) expanded to full detail. Module now 0 thin.
+- 2026-10-02 — `prompt-engineering/03-chain-of-thought` quiz written; that area is now
+  5/5 complete. Non-Python content has no remaining gaps.
+- 2026-10-02 — Python content work paused by request; `01-core-python` and the remaining
+  legacy modules are not started.
 
 *Created 2026-10-01 as a 12-axis content strategy. Rewritten 2026-10-02 to cover the whole
 roadmap. Update §2 and §8 when a block of units completes.*
