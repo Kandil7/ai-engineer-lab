@@ -41,7 +41,7 @@ lstm_params = sum(p.numel() for p in lstm.parameters())
 gru_params = sum(p.numel() for p in gru.parameters())
 print("\nExample 2: LSTM vs GRU")
 print(f"  LSTM params: {lstm_params:,}   GRU params: {gru_params:,}")
-print(f"  -> GRU is lighter (~3/4 of LSTM) with comparable quality")
+print("  -> GRU is lighter (~3/4 of LSTM) with comparable quality")
 
 
 # ============================================================
