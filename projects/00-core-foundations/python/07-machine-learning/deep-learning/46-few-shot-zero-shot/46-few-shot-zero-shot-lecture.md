@@ -501,18 +501,27 @@ rung; reserve fine-tuning for where it demonstrably fails.
 
 ## History and Motivation
 
-Zero-shot learning began with attribute-based methods: describe a class by
-attributes ("has stripes, is a mammal") and classify by matching attributes,
-with no examples of the class. It was a niche idea until CLIP (2021) showed that
-a contrastive image-text model could do zero-shot classification at scale, simply
+Zero-shot learning began with attribute-based methods: describe a class
+by
+attributes ("has stripes, is a mammal") and classify by matching
+attributes,
+with no examples of the class. It was a niche idea until CLIP (2021)
+showed that
+a contrastive image-text model could do zero-shot classification at
+scale, simply
 by comparing embeddings. CLIP turned a research curiosity into a product
 primitive.
 
-Few-shot learning followed a parallel path — prototypical networks and matching
-networks (2016-2017) formalized "classify by comparing to a few examples." Then
-GPT-3 (2020) introduced in-context learning: few-shot via the prompt, no gradient
-step, which reframed few-shot as conditioning rather than metric learning. The
-two lineages — embedding similarity and in-context conditioning — are both live
+Few-shot learning followed a parallel path — prototypical networks and
+matching
+networks (2016-2017) formalized "classify by comparing to a few
+examples." Then
+GPT-3 (2020) introduced in-context learning: few-shot via the prompt, no
+gradient
+step, which reframed few-shot as conditioning rather than metric
+learning. The
+two lineages — embedding similarity and in-context conditioning — are
+both live
 today, and this topic covers both.
 
 ## Next Steps
@@ -520,5 +529,6 @@ today, and this topic covers both.
 Next: **[47 — Self-Supervised
 Learning](47-self-supervised-learning-lecture.md)** — learning without
 labels at all.
+
 
 
