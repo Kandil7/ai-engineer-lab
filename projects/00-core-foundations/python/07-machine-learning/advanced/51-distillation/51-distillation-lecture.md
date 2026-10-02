@@ -239,49 +239,113 @@ the teacher's size.
 ### Offline distillation
 
 Offline distillation is the classic two-stage flow: train the teacher to
-completion, freeze it, then train the student against its soft outputs. The
-teacher's inference is a fixed, reusable signal, and the student trains exactly
-like a supervised model — just with soft targets instead of hard ones. This is
+completion, freeze it, then train the student against its soft outputs.
+The
+teacher's inference is a fixed, reusable signal, and the student trains
+exactly
+like a supervised model — just with soft targets instead of hard ones.
+This is
 the version the exercise demonstrates.
 
 ### Online distillation
 
-Online distillation trains teacher and student *together*, so the student learns
-from the teacher's evolving outputs during a single run. It saves the cost of a
-separate teacher pass but couples the two, which is harder to reason about and
+Online distillation trains teacher and student *together*, so the
+student learns
+from the teacher's evolving outputs during a single run. It saves the
+cost of a
+separate teacher pass but couples the two, which is harder to reason
+about and
 less common in production, where a frozen teacher is simpler to version.
 
 ### The production default
 
-Use offline distillation: a frozen, versioned teacher and a separately trained
-student. The teacher becomes an artifact you can swap and re-use, and the
-student's training is reproducible against that pinned teacher. The two-stage
-flow is why distillation slots cleanly into the "pretrain big, distill small"
+Use offline distillation: a frozen, versioned teacher and a separately
+trained
+student. The teacher becomes an artifact you can swap and re-use, and
+the
+student's training is reproducible against that pinned teacher. The
+two-stage
+flow is why distillation slots cleanly into the "pretrain big, distill
+small"
 pipeline.
 
 ## 9. Distilling Large Language Models
 
 ### The modern case
 
-Distilling an LLM means training a small model to imitate a large one's outputs —
+Distilling an LLM means training a small model to imitate a large one's
+outputs —
 either its next-token distribution or, in instruction distillation, its
-responses to prompts. This is how "small model with big-model behavior" is
+responses to prompts. This is how "small model with big-model behavior"
+is
 produced, and it is the dominant compression route for language models.
 
 ### What changes at LLM scale
 
-The temperature/KL mechanism is the same, but the teacher's full distribution
+The temperature/KL mechanism is the same, but the teacher's full
+distribution
 over a 100k-token vocabulary is expensive to capture, so practical LLM
-distillation often approximates it — sampling a subset of the distribution or
-distilling on outputs alone. The soft-label principle survives; the scale forces
+distillation often approximates it — sampling a subset of the
+distribution or
+distilling on outputs alone. The soft-label principle survives; the
+scale forces
 approximation.
 
 ### The connection to this curriculum
 
-This is distillation, transfer learning (`39`), and the compression toolbox
-(`7`) combined at scale — and it is the reason a small, servable model can
-inherit a frontier model's competence. On a 16 GB GPU, distilling a small
-student from a cloud teacher is a realistic path to a local, private model.
+This is distillation, transfer learning (`39`), and the compression
+toolbox
+(`7`) combined at scale — and it is the reason a small, servable model
+can
+inherit a frontier model's competence. On a 16 GB GPU, distilling a
+small
+student from a cloud teacher is a realistic path to a local, private
+model.
+
+## 10. Self-Distillation and Ensembles
+
+### Distilling an ensemble
+
+The strongest teacher is often not one model but an *ensemble* — several
+models
+voted together. An ensemble is accurate but expensive to serve, since
+every
+prediction runs every member. Distillation compresses the ensemble into
+one
+student that approximates the vote, which is one of the original
+motivations for
+the technique (Hinton et al.).
+
+### Self-distillation
+
+Self-distillation uses the *same* architecture for teacher and student —
+a model
+distills its own softened predictions (or an earlier checkpoint's) back
+into
+itself. Surprisingly, this often improves accuracy: the soft targets act
+as a
+regularizer, smoothing the decision boundary beyond what the hard labels
+provide.
+
+### Why ensembles distill so well
+
+An ensemble's averaged soft output is a smoother, better-calibrated
+distribution
+than any single member's — it averages out each member's idiosyncratic
+confidence. That smooth distribution is exactly the "dark knowledge"
+(`3`) a
+student can absorb, which is why ensemble-to-student distillation is so
+effective.
+
+### The cost view
+
+Ensembles and distillation are complementary: the ensemble buys accuracy
+at
+serving cost, and distillation buys back the serving cost at a small
+accuracy
+loss. The pair is a standard production pattern — train big and diverse,
+serve
+small and single.
 
 ## Real-World Application
 
@@ -292,7 +356,7 @@ student from a cloud teacher is a realistic path to a local, private model.
 - **The DevMate case** — distilling a heavy retrieval ranker into a light one
   that runs locally on the RTX 5000.
 
-## 10. Common Mistakes to Avoid
+## 11. Common Mistakes to Avoid
 
 ### Mistake 1: Training the student on hard labels and calling it distillation
 ```
@@ -330,7 +394,7 @@ student from a cloud teacher is a realistic path to a local, private model.
 # CORRECT — a small hard-label term (alpha < 1) keeps the student honest
 ```
 
-## 11. Best Practices
+## 12. Best Practices
 
 1. Train the teacher first, and keep its weights frozen during distillation.
 2. Use a moderate temperature (2-10) and tune it.
@@ -343,7 +407,7 @@ student from a cloud teacher is a realistic path to a local, private model.
 9. Distill to a small model, then quantize and prune it.
 10. Record the temperature, alpha, and teacher architecture for reproducibility.
 
-## 12. Complexity and Cost
+## 13. Complexity and Cost
 
 | Operation | Time | Space | Notes |
 |---|---|---|---|
@@ -352,7 +416,7 @@ student from a cloud teacher is a realistic path to a local, private model.
 | Serve student | fast | small | The point of the exercise |
 | Combined toolbox | distill + prune + quantize | smallest | Compounding wins |
 
-## 13. AI Engineering Relevance
+## 14. AI Engineering Relevance
 
 **Where this shows up:** compressing a large model for deployment — the classic
 case is taking a big ensemble or LLM and producing a small, fast
@@ -384,7 +448,7 @@ behaves well.
 5. Distill -> prune -> quantize is the compression toolbox, applied in order.
 6. The teacher must be meaningfully better than the student, or there is nothing to transfer.
 
-## 14. Summary
+## 15. Summary
 
 | Concept | Description |
 |---|---|
@@ -427,4 +491,5 @@ This completes the model-optimization trio (49-51). Continue to
 
 Official docs:
 <https://pytorch.org/docs/stable/generated/torch.nn.functional.kl_div.html>
+
 
