@@ -35,9 +35,9 @@ A collection is roughly a table without a fixed schema. The differences that mat
 Collections are created implicitly on first insert: `db.create_collection('users')` or explicitly with options.
 
 ```python
-db.create_collection("users")                       # explicit, default options
+db.create_collection("users")  # explicit, default options
 db.create_collection("events", capped=True, size=1024 * 1024)  # capped: 1 MB
-db["logs"].insert_one({"msg": "boot"})              # implicit on first write
+db["logs"].insert_one({"msg": "boot"})  # implicit on first write
 ```
 
 Explicit creation is for options (capped, validation rules); otherwise let the first insert create it.
