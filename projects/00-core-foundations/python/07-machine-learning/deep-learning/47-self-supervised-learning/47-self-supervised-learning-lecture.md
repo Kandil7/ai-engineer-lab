@@ -204,6 +204,55 @@ domain data and no labels — a real case for specialized corpora, where
 continued
 pretraining on in-domain text can beat a generic encoder.
 
+## 7. MoCo and BYOL — Avoiding Collapse Without Huge Batches
+
+### The large-batch problem
+
+SimCLR's contrastive loss needs a large batch of negatives to work well — the
+more negatives, the harder it is to satisfy the objective by collapsing. But a
+large batch is expensive, which put contrastive learning out of reach on modest
+hardware.
+
+### The momentum-encoder fix
+
+MoCo keeps a *queue* of past embeddings as negatives, so you get many negatives
+without a large batch. BYOL goes further: it trains an online network to predict
+a *momentum* (slowly moving) target network's output, and — surprisingly — avoids
+collapse with *no negative pairs at all*. These two techniques are what made
+self-supervised vision practical on a single GPU.
+
+### Why this matters here
+
+On a 16 GB card, a SimCLR batch that fits is too small for stable contrastive
+learning. MoCo/BYOL are the reason self-supervised pretraining is not reserved
+for data centers — the momentum/queue tricks are the "small-batch" story of SSL,
+the same spirit as the memory-budget discipline this curriculum applies
+everywhere.
+
+## 8. Next-Token vs Masked Objectives
+
+### Two generative routes
+
+The two dominant generative pretext tasks are **masked** (predict a hidden token
+from both sides, BERT) and **next-token** (predict the following token from the
+left context, GPT). They differ in what context each prediction sees and,
+therefore, in what kind of encoder they produce.
+
+### What each produces
+
+Masked training produces a bidirectional encoder — great for understanding tasks
+like classification and retrieval. Next-token training produces a decoder — great
+for generation, and the architecture behind every modern LLM. The choice of
+pretext task *is* the choice of model type, which is why "BERT vs GPT" is
+fundamentally a self-supervision decision.
+
+### The unifying view
+
+Both are the same idea — invent a prediction task whose answer is in the data —
+with a different window onto the context. Once you see them as two instances of
+one principle, the entire foundation-model landscape (encoders, decoders, and
+the contrastive multimodal models of `46`) reads as variations on a single theme.
+
 ## Real-World Application
 
 - **Foundation models** — GPT (next-token), BERT (masked), CLIP (contrastive).
