@@ -259,10 +259,13 @@ the syntax follows.
 
 ### Parameters as a tree
 
-A pytree is any nested container of arrays — a dict of dicts of tensors. JAX
+A pytree is any nested container of arrays — a dict of dicts of tensors.
+JAX
 treats a pytree as one value, so `grad`, `jit`, and `vmap` traverse it
-automatically. Your model's parameters are a pytree, which is why you can pass
-"all the weights" as a single argument and get "all the gradients" back as a
+automatically. Your model's parameters are a pytree, which is why you
+can pass
+"all the weights" as a single argument and get "all the gradients" back
+as a
 matching tree.
 
 ```python
@@ -272,25 +275,34 @@ grads = jax.grad(loss)(params, x, y)   # grads has the same tree shape
 
 ### Why the tree shape matters
 
-Because transforms preserve the pytree structure, the gradient of a nested
-parameter dict is a nested gradient dict, and you update weights by walking both
-trees together. This is the functional analogue of `optimizer.step()` — but
+Because transforms preserve the pytree structure, the gradient of a
+nested
+parameter dict is a nested gradient dict, and you update weights by
+walking both
+trees together. This is the functional analogue of `optimizer.step()` —
+but
 explicit, with no hidden state in an optimizer object.
 
 ### The state you cannot put in the tree
 
-Pure functions have no hidden state, so anything stateful — the running mean in
-BatchNorm, the optimizer's momentum — must be *passed in and returned out*
-explicitly. Flax handles this with `Mutable` collections. This is the cost of
-purity: state is visible, not hidden, which is a feature for debugging and a
+Pure functions have no hidden state, so anything stateful — the running
+mean in
+BatchNorm, the optimizer's momentum — must be *passed in and returned
+out*
+explicitly. Flax handles this with `Mutable` collections. This is the
+cost of
+purity: state is visible, not hidden, which is a feature for debugging
+and a
 burden for ergonomics.
 
 ## 8. pmap and Multi-Device
 
 ### Parallelism as a transform
 
-Just as `vmap` vectorizes over a batch axis, `pmap` parallelizes over devices —
-the same function is compiled and run on each accelerator, with the data sharded
+Just as `vmap` vectorizes over a batch axis, `pmap` parallelizes over
+devices —
+the same function is compiled and run on each accelerator, with the data
+sharded
 across them. This is JAX's scale story: multi-GPU and multi-TPU training
 expressed as one more function transform.
 
@@ -301,16 +313,65 @@ parallel_step = jax.pmap(update_step, axis_name="devices")
 
 ### Why it composes with the others
 
-`pmap` composes with `jit`, `grad`, and `vmap` the way they compose with each
-other, because they are all transformations over pure functions. That uniformity
-is the real reason JAX attracted large-scale research: going from one GPU to a
+`pmap` composes with `jit`, `grad`, and `vmap` the way they compose with
+each
+other, because they are all transformations over pure functions. That
+uniformity
+is the real reason JAX attracted large-scale research: going from one
+GPU to a
 thousand TPUs is one more transform, not a rewrite.
 
 ### The honest caveat on this machine
 
-On a single RTX 5000 there is no `pmap` across devices to exploit, so this
-advantage is theoretical here. It matters when you scale to a cluster — which is
+On a single RTX 5000 there is no `pmap` across devices to exploit, so
+this
+advantage is theoretical here. It matters when you scale to a cluster —
+which is
 exactly the moment the JAX learning curve pays for itself.
+
+## 9. Debugging in a Compiled World
+
+### Why JAX debugging is different
+
+Tracing breaks the assumptions of a normal Python debugger. When `jit`
+traces a
+function, it runs it once with abstract values to build the graph — so
+`print`
+statements fire only during tracing, Python control flow is evaluated at
+trace
+time, and a traced function cannot see runtime values. This is the cost
+of
+compilation, and it surprises everyone who arrives from PyTorch.
+
+### The tools
+
+`jax.debug.print` prints at *runtime* (inside the compiled kernel),
+unlike plain
+`print` which fires at trace time. `jax.config.update("jax_disable_jit",
+True)`
+runs eagerly for step-through debugging. The pattern is: debug eagerly,
+then
+re-enable `jit` once the logic is right.
+
+### The failure it causes
+
+The classic JAX bug: a Python `if` on a traced value, which raises or
+silently
+takes one branch because the condition is a tracer, not a boolean. The
+fix is
+`jax.lax.cond` — the traced equivalent of `if`. Knowing this before you
+hit it
+saves an afternoon.
+
+### The transferable lesson
+
+Every compiled framework — `torch.compile`, `tf.function`, `jax.jit` —
+has this
+same trace-vs-runtime split. Learning to reason about "what runs at
+trace time
+versus runtime" is a skill that pays off across all three, and it is the
+hidden
+cost of the speed that compilation buys.
 
 ## Real-World Application
 
@@ -459,4 +520,5 @@ synthesizing more training signal.
 Continues in: **[09-genai — 21
 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** —
 where framework choice recurs.
+
 
