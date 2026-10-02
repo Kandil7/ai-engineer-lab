@@ -33,9 +33,7 @@ This lecture covers filtering with where in MySQL using Python's sqlite3 as a le
 `SELECT * FROM users WHERE age >= 18;` filters rows by conditions.
 
 ```python
-adults = conn.execute(
-    "SELECT name, age FROM users WHERE age >= ?", (18,)
-).fetchall()
+adults = conn.execute("SELECT name, age FROM users WHERE age >= ?", (18,)).fetchall()
 ```
 
 The value travels as a parameter. The day a value is formatted into the string is the day injection becomes possible.
