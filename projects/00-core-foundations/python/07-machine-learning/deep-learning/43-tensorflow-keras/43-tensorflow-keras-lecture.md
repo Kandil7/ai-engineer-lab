@@ -259,46 +259,63 @@ full-stack AI engineer is bilingual by necessity, not by preference.
 ### Two execution modes
 
 TensorFlow has two ways to run a model. **Graph mode** builds a static
-computation graph first, then executes it — the original design, optimized for
-production and portability. **Eager mode** executes operations immediately, like
+computation graph first, then executes it — the original design,
+optimized for
+production and portability. **Eager mode** executes operations
+immediately, like
 PyTorch — the modern default, friendlier for debugging. The trade is
 productivity versus optimization.
 
 ### Why it matters to you
 
-Eager is what you write in; graph is what you ship. `tf.function` decorates a
-Python function and traces it into a graph, giving you eager-style development
+Eager is what you write in; graph is what you ship. `tf.function`
+decorates a
+Python function and traces it into a graph, giving you eager-style
+development
 with graph-style speed. Understanding the two modes explains why TF code
 sometimes behaves differently under `tf.function` — a classic source of
 "works in debugging, differs in production" confusion.
 
 ### The PyTorch parallel
 
-PyTorch is eager by default and compiles opt-in via `torch.compile` (the JAX
-`jit` analogue from `44`). The direction of travel in every framework is the
-same: write eagerly, compile for speed. TF just made the split explicit first.
+PyTorch is eager by default and compiles opt-in via `torch.compile` (the
+JAX
+`jit` analogue from `44`). The direction of travel in every framework is
+the
+same: write eagerly, compile for speed. TF just made the split explicit
+first.
 
 ## 9. TF Lite and TF Serving
 
 ### The serving ecosystem
 
-Keras's real advantage is the deployment ecosystem. **TF Serving** hosts a
-SavedModel behind a gRPC/REST endpoint; **TF Lite** converts a model to a small
-format for mobile and embedded devices. These are mature, managed paths that
+Keras's real advantage is the deployment ecosystem. **TF Serving** hosts
+a
+SavedModel behind a gRPC/REST endpoint; **TF Lite** converts a model to
+a small
+format for mobile and embedded devices. These are mature, managed paths
+that
 have no PyTorch equivalent of the same age.
 
 ### The conversion trade
 
-TF Lite trades accuracy for size by quantizing (`49`) and pruning the graph. The
-conversion is one call, but the result must be re-validated — a model that
-passes in full precision can fail the quantized edge form, which is why the
-quantization ladder (`49`) matters even when the framework hands you the button.
+TF Lite trades accuracy for size by quantizing (`49`) and pruning the
+graph. The
+conversion is one call, but the result must be re-validated — a model
+that
+passes in full precision can fail the quantized edge form, which is why
+the
+quantization ladder (`49`) matters even when the framework hands you the
+button.
 
 ### The honest comparison
 
-PyTorch serving is increasingly strong (TorchServe, ONNX, torch.compile), but
-TF's edge story — TF Lite on phones — remains the most battle-tested path for
-mobile deployment. If the target is a phone, Keras/TF is often the pragmatic
+PyTorch serving is increasingly strong (TorchServe, ONNX,
+torch.compile), but
+TF's edge story — TF Lite on phones — remains the most battle-tested
+path for
+mobile deployment. If the target is a phone, Keras/TF is often the
+pragmatic
 choice regardless of your training preference.
 
 ## 10. A Decision Procedure — Keras or PyTorch?
@@ -319,21 +336,28 @@ A short procedure removes the guesswork:
 ### The default
 
 When the answers are genuinely balanced, default to PyTorch — it is the
-curriculum's workhorse and the dominant ecosystem for LLM tooling. Choose Keras
+curriculum's workhorse and the dominant ecosystem for LLM tooling.
+Choose Keras
 when the serving target or the team's existing stack points there.
 
 ### The meta-lesson
 
-The decision procedure matters more than the answer, because frameworks change
-and the questions do not. A team that reasons this way can adopt whatever
-framework tomorrow brings; a team that picked by fashion will re-litigate the
+The decision procedure matters more than the answer, because frameworks
+change
+and the questions do not. A team that reasons this way can adopt
+whatever
+framework tomorrow brings; a team that picked by fashion will
+re-litigate the
 choice every year.
 
 ### The porting safety net
 
-Whichever you choose, the mapping table (`5`) is the safety net: any model in one
-framework can be expressed in the other, and the ability to translate is the
-durable skill. Framework loyalty is a liability; framework fluency is an asset.
+Whichever you choose, the mapping table (`5`) is the safety net: any
+model in one
+framework can be expressed in the other, and the ability to translate is
+the
+durable skill. Framework loyalty is a liability; framework fluency is an
+asset.
 
 ## Real-World Application
 
@@ -474,6 +498,22 @@ explicit.
 - `model-serving` (in `04-ai-engineering`) — deploying either artifact.
 - Official docs: <https://keras.io/guides/>
 
+## History and Motivation
+
+The framework landscape has consolidated in waves. Theano and Caffe were the
+first deep-learning frameworks; TensorFlow 1 (2015) introduced the static graph
+and won industry adoption; Keras (2015) wrapped it with a friendly API; TensorFlow
+2 (2019) made eager execution the default and folded Keras in as `tf.keras`.
+Meanwhile PyTorch (2016) made eager execution and dynamic graphs its identity
+and won research.
+
+The current picture is a duopoly with a division of labor: PyTorch for research
+and LLM tooling, TensorFlow/Keras for the serving and edge ecosystem it built
+first. JAX (`44`) is the emerging third option for large-scale, functional
+research. The history explains the present: framework choice is often a
+consequence of which ecosystem a team joined years ago, not a fresh technical
+evaluation.
+
 ## Next Steps
 
 Next: **[44 — JAX and Flax](44-jax-flax-lecture.md)** — functional
@@ -482,4 +522,5 @@ transforms and composable modules.
 Continues in:
 **[model-serving](../../../04-ai-engineering/model-serving/)** — serving
 Keras and PyTorch artifacts.
+
 
