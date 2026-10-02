@@ -72,7 +72,7 @@ def main() -> None:
     assert index2 == index
 
     print("elt: transform re-runs against the raw layer, not the source")
-    print(f"cdc final index: {index}")
+    print(f"cdc final index keys: {sorted(index.keys())} (id 2 deleted)")
     print("cdc replay is idempotent (upsert/delete, not counts)")
     print("all asserts passed")
 
