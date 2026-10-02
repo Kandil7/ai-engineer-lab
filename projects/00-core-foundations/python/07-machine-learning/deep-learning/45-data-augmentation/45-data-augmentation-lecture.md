@@ -485,15 +485,22 @@ the right trade on a 16 GB single-GPU budget.
 
 Augmentation is as old as the modern CNN. LeNet and AlexNet trained on
 translated and mirrored digits; the insight that a valid transformation
-multiplies the effective dataset is decades old. What changed is automation:
-AutoAugment (2018) and RandAugment learned augmentation policies by search, and
-mixup/cutmix (2018-2019) introduced label interpolation. Augmentation went from
+multiplies the effective dataset is decades old. What changed is
+automation:
+AutoAugment (2018) and RandAugment learned augmentation policies by
+search, and
+mixup/cutmix (2018-2019) introduced label interpolation. Augmentation
+went from
 a hand-tuned trick to a searched, principled component.
 
-The modern view is that augmentation encodes a *prior* about invariances — the
-same role architecture and regularization play. That reframing is why the field
-treats augmentation as a first-class part of the model's inductive bias, not an
-afterthought, and why self-supervised learning (`47`) could turn augmentation
+The modern view is that augmentation encodes a *prior* about invariances
+— the
+same role architecture and regularization play. That reframing is why
+the field
+treats augmentation as a first-class part of the model's inductive bias,
+not an
+afterthought, and why self-supervised learning (`47`) could turn
+augmentation
 into the core training signal rather than a side dish.
 
 ## Next Steps
@@ -505,5 +512,6 @@ handful of examples.
 Continues in: **[39 — Transfer
 Learning](39-transfer-learning-lecture.md)** — the pretrained-model
 sibling of augmentation.
+
 
 
