@@ -64,9 +64,7 @@ Skip becomes slow on large datasets. Use cursor-based pagination for production.
 ```python
 # keyset: continue from the last seen _id — no rescanning
 def page_after(last_id, size=20):
-    return list(
-        db["users"].find({"_id": {"$gt": last_id}}).sort("_id").limit(size)
-    )
+    return list(db["users"].find({"_id": {"$gt": last_id}}).sort("_id").limit(size))
 ```
 
 A ranged filter on an indexed, unique key is O(page size) on every page. The client keeps the last id instead of a page number.
