@@ -36,7 +36,7 @@ The rule for this topic: never run a delete you have not already run as a `find`
 
 ```python
 result = db["users"].delete_one({"_id": user_id})
-assert result.deleted_count == 1   # prove it hit
+assert result.deleted_count == 1  # prove it hit
 ```
 
 Deleting by `_id` is the precise case; deleting by a non-unique filter removes an arbitrary first match — usually a bug.
