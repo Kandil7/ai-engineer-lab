@@ -1,7 +1,7 @@
 # Full-Stack AI Engineer Lab
 
-[![Code Intelligence](https://img.shields.io/badge/Structural%20Graph-60%2C751%20nodes%20%2F%20141%2C083%20edges-blue)](docs/CODEBASE-INTELLIGENCE.md)
-[![Review Graph](https://img.shields.io/badge/Review%20Graph-11%2C590%20nodes%20%2F%2087%2C721%20edges-green)](docs/CODEBASE-INTELLIGENCE.md)
+[![Code Intelligence](https://img.shields.io/badge/Structural%20Graph-67%2C084%20nodes%20%2F%20148%2C492%20edges-blue)](docs/CODEBASE-INTELLIGENCE.md)
+[![Review Graph](https://img.shields.io/badge/Review%20Graph-12%2C984%20nodes%20%2F%2095%2C601%20edges-green)](docs/CODEBASE-INTELLIGENCE.md)
 [![Multimodal Graph](https://img.shields.io/badge/Multimodal%20Graph-49%2C856%20nodes%20%2F%2054%2C483%20edges-purple)](docs/CODEBASE-INTELLIGENCE.md)
 [![DevMate Gate](https://img.shields.io/badge/DevMate-42%20tests%20green-brightgreen)](projects/04-ai-engineering/devmate/)
 [![Eval Harness](https://img.shields.io/badge/Eval-Offline%20Hit%405%201.0-orange)](projects/04-ai-engineering/devmate/eval/)

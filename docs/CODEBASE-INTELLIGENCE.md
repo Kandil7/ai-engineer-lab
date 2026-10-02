@@ -7,14 +7,27 @@ graphify, and repomix.
 
 | Layer | Status | Details |
 |-------|--------|---------|
-| **Structural Graph** | ✅ Reindexed 2026-09-30 | `D-AI-Projects-fullstack-ai-engineer-lab`, **60,751 nodes, 141,083 edges**, 8 languages |
-| **Review Graph** | ✅ Built | 11,590 nodes, 87,721 edges, 23 communities, 1,147 flows |
+| **Structural Graph** | ✅ Refreshed 2026-10-02 | `D-AI-Projects-fullstack-ai-engineer-lab`, **67,084 nodes, 148,492 edges**, 8 languages |
+| **Review Graph** | ✅ Rebuilt 2026-10-02 | 12,984 nodes, 95,601 edges, 23 communities, 1,147 flows; built at `78d12fb`, `head_matches_build: true` |
 | **Multimodal Graph** | ✅ Built | 49,856 nodes, 54,483 edges, 2,833 communities (AST-only, no LLM) |
 | **Context Pack** | ✅ Ready | 1,244,995 tokens (compressed), 1,082 files |
 | **Watcher** | ⏳ Manual | Re-index with `codebase-memory index_repository` after large edits |
 
 **Structural project name:** `D-AI-Projects-fullstack-ai-engineer-lab`
 **Root:** `D:/AI/Projects/fullstack-ai-engineer-lab` · branch `master`
+
+### Refresh notes (2026-10-02)
+
+- Growth from lecture/quiz commits: nodes 60,751 → **67,084** (+6,333),
+  edges 141,083 → **148,492** (+7,409).
+- `parse_partial`: 7 files (infra sql/conf/ps1, `practice_no_solutions.py`,
+  `pytest.ini`, auth-service `notes.md`). `skipped`: 0.
+- Review graph rebuilt same day at `78d12fb`: nodes 11,590 → **12,984**,
+  edges 87,721 → **95,601**; files 932 → 1,180. Communities (23) and
+  flows (1,147) unchanged.
+- Graphify unchanged: 49,856 nodes / 54,483 edges / 2,833 communities.
+- Hotspots, boundaries, and clusters re-pulled from `get_architecture`
+  (`len` fan-in 1,211 → 1,350; `print` 893 → 1,016; cluster IDs renumbered).
 
 ### Reindex notes (2026-09-30)
 
@@ -44,58 +57,104 @@ graphify, and repomix.
 
 ```mermaid
 graph TD
-    subgraph "Python Foundations"
-        CHALLENGES["challenges-demo"]
-        PRACTICE["practice-problem"]
-        EXERCISES_USER["exercises-user"]
+    subgraph EP["Entry points"]
+        EP_DATA["main: data-engineering x15"]:::entry
+        EP_DS["main: ds-algo x4"]:::entry
+        EP_CLI["devmate cli.ask"]:::entry
+        EP_API["devmate api.ask"]:::entry
+        EP_GO["auth-service main (Go)"]:::entry
+        MAIN["main() across exercises"]:::god
     end
 
-    subgraph "AI Engineering"
-        AGENT_EX["exercises-agent"]
-        DEV["devmate eval / llm / rag"]
+    subgraph CORE["00-core-foundations"]
+        PY_CORE["python core + advanced"]
+        PY_LIBS["numpy / pandas / polars"]
+        PY_DSA["DSA + hash tables"]
+        PY_ML["ML + deep learning"]
+        PY_WEB["fastapi web track"]
+        REDIS["RedisClient capstone"]:::god
+        SESSION["SQLAlchemy Session"]:::god
     end
 
-    subgraph "Entry points"
-        ASK["cli.ask / api.ask"]
-        EVAL["python -m devmate.eval.run_ragas"]
+    subgraph HOT["Hotspots by fan-in"]
+        H_LEN["len 1,350"]:::hot
+        H_PRINT["print 1,016"]:::hot
+        H_APPEND["list.append 586"]:::hot
+        H_METHODS["Printable.print 582"]:::hot
     end
 
-    ASK --> DEV
-    EVAL --> DEV
-    DEV -.->|"Tracer.trace 47 callers"| OBS["obs.tracing + cost"]
+    subgraph AI["04-ai-engineering"]
+        DEVMATE["devmate rag / llm / eval"]
+        OBS["obs.tracing + cost"]
+        FASTAI["fastai exercises"]
+        ATHAR["athar-lab"]
+        SPY["SpyClient mock"]:::god
+    end
+
+    subgraph GO["01-backend-go (deferred)"]
+        GO_AUTH["auth: handlers / jwt / pgx"]
+    end
+
+    EP_DATA --> PY_LIBS
+    EP_DS --> PY_DSA
+    EP_CLI --> DEVMATE
+    EP_API --> DEVMATE
+    EP_GO --> GO_AUTH
+    DEVMATE -.->|"406 calls"| PY_CORE
+    PY_CORE -.->|"249 calls"| DEVMATE
+    DEVMATE -.->|"Tracer.trace 47 callers"| OBS
+    PY_ML --> PY_LIBS
+    PY_WEB --> SESSION
+    PY_CORE -->|"fan-in 1,350"| H_LEN
+    PY_LIBS -->|"fan-in 1,016"| H_PRINT
+    PY_CORE -->|"fan-in 586"| H_APPEND
+    PY_CORE -->|"fan-in 582"| H_METHODS
+
+    classDef entry fill:#1e6fd9,color:#fff,stroke:#0d47a1
+    classDef hot fill:#d93025,color:#fff,stroke:#b71c1c
+    classDef god fill:#f2994a,color:#fff,stroke:#e65100
 ```
 
 ### Key Hotspots
 
 | Symbol | Type | Fan-in | Why |
 |--------|------|--------|-----|
-| `print` | builtin | 893 | Used everywhere for output |
-| `len` | builtin | 1,211 | Most-called function in Python exercises |
-| `list.append` | builtin | 498 | Core data structure operation |
-| `Printable.print` | method | 490 | ABC pattern demo in `08-abc` |
-| `HashTable.items` | method | 234 | DSA hash table exercise |
-| `DatabaseConnection.execute` | method | 187 | Context manager exercise |
+| `len` | builtin | 1,350 | Most-called function across exercises |
+| `print` | builtin | 1,016 | Output everywhere |
+| `list.append` | builtin | 586 | Core data-structure operation |
+| `Printable.print` | method | 582 | ABC pattern demo in `08-abc` |
+| `HashTable.items` | method | 258 | DSA hash-table exercise |
+| `FileManager.append` | method | 199 | File-manager capstone |
+| `dict.get` | builtin | 190 | Dictionary lookup pattern |
+| `AsyncDB.close` | method | 159 | FastAPI async-DB exercise |
+| `ConnectionManager.connect` | method | 158 | FastAPI websockets exercise |
 
 ### Cross-Package Boundaries
 
 | From | To | Calls |
 |------|----|-------|
-| 00-core-foundations | (builtins) | 2,026 |
-| 04-ai-engineering | 00-core-foundations | 377 |
-| 04-ai-engineering | (builtins) | 841 |
-| 00-core-foundations | 04-ai-engineering | 228 |
+| 00-core-foundations | builtins (`len`) | 763 |
+| 00-core-foundations | builtins (`print`) | 715 |
+| 04-ai-engineering | 00-core-foundations | 406 |
+| 04-ai-engineering | builtins (`len`) | 406 |
+| 00-core-foundations | 04-ai-engineering | 249 |
 
 ### Clusters (12 from codebase-memory)
 
 | Cluster | Size | Cohesion | Dominant |
 |---------|------|----------|----------|
-| 3 | 480 | 0.45 | len, range, copy, _verify, main |
-| 2 | 470 | 0.54 | append, str, search, resolve, main |
-| 7 | 421 | 0.57 | print, close, sin, llm_call, _verify_async |
-| 112 | 267 | 0.73 | connect, Session, close, execute, add |
-| 52 | 228 | 0.76 | get, filter, query, info, render |
-| 12 | 227 | 0.59 | list, select, where, run, _verify |
-| 10 | 224 | 0.60 | append, get, run_communication_demo, add_task |
+| 5 | 548 | 0.47 | len, range, split, main, analyze |
+| 16 | 534 | 0.57 | print, connect, execute, close, get |
+| 9 | 279 | 0.46 | append, pop, main, _verify |
+| 21 | 255 | 0.67 | get, _purge, _verify, append |
+| 6 | 251 | 0.53 | str, search, stats, resolve, _ingest_async |
+| 18 | 243 | 0.62 | list, _verify, parse_sse_stream, dedupe_chunks |
+| 29 | 214 | 0.71 | commit, select, Session, add |
+| 19 | 170 | 0.61 | dict, collect, _verify, execute |
+| 20 | 155 | 0.61 | lower, main, upper, _verify, run |
+| 17 | 153 | 0.57 | int, _verify, run_with_bulkhead |
+| 37 | 147 | 0.77 | filter, count, ValidationError, is_valid |
+| 107 | 146 | 0.66 | encode, decode, _verify, main |
 
 ### Communities (23 from code-review-graph)
 
@@ -179,4 +238,4 @@ graphify update . --force
 | **Verify** | Task-directed evidence | graph + coverage checks + exact snippets |
 | **Auditor** | Full bounded verification | All tools, complete pagination |
 
-*Last updated: 2026-09-30 (structural reindex + DevMate retrace)*
+*Last updated: 2026-10-02 (cbm-refresh: structural 67,084 nodes, review graph rebuilt)*
