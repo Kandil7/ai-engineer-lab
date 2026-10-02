@@ -6,23 +6,36 @@ Companion exercise: `50-pruning.py`
 
 ## Topic Overview
 
-A trained network is full of weights that barely matter — near-zero entries that
-contribute nothing to the output. Pruning removes them, shrinking the model and
-often speeding it up, with little loss. The two families are **unstructured**
-pruning (zero individual weights, producing sparse matrices) and **structured**
-pruning (remove entire channels or filters, producing smaller dense matrices).
+A trained network is full of weights that barely matter — near-zero
+entries that
+contribute nothing to the output. Pruning removes them, shrinking the
+model and
+often speeding it up, with little loss. The two families are
+**unstructured**
+pruning (zero individual weights, producing sparse matrices) and
+**structured**
+pruning (remove entire channels or filters, producing smaller dense
+matrices).
 The distinction decides whether you actually get a speedup.
 
-The simplest criterion is magnitude: weights closest to zero are removed first,
-on the assumption that small weights matter least. This is the workhorse, and it
-is built into PyTorch via `torch.nn.utils.prune`. The deeper result is the
-lottery-ticket hypothesis — inside a dense network sits a sparse subnetwork that
-trains to the same accuracy — which motivates pruning as a way to find that
+The simplest criterion is magnitude: weights closest to zero are removed
+first,
+on the assumption that small weights matter least. This is the
+workhorse, and it
+is built into PyTorch via `torch.nn.utils.prune`. The deeper result is
+the
+lottery-ticket hypothesis — inside a dense network sits a sparse
+subnetwork that
+trains to the same accuracy — which motivates pruning as a way to find
+that
 subnetwork.
 
-For a 16 GB GPU, pruning is a size and speed lever that pairs naturally with
-quantization (`49`) and distillation (`51`) — the three tools of the compression
-toolbox. The exercise applies magnitude, global, and structured pruning so the
+For a 16 GB GPU, pruning is a size and speed lever that pairs naturally
+with
+quantization (`49`) and distillation (`51`) — the three tools of the
+compression
+toolbox. The exercise applies magnitude, global, and structured pruning
+so the
 difference between sparsity and actual speedup is concrete.
 
 ## Learning Objectives
@@ -36,6 +49,7 @@ By the end of this lecture, you will be able to:
 5. Describe the lottery-ticket hypothesis and its implication.
 6. Choose structured pruning when a real speedup is the goal.
 7. Combine pruning with fine-tuning to recover accuracy.
+8. Reason about iterative versus one-shot pruning.
 
 ## Prerequisites
 
@@ -48,30 +62,50 @@ By the end of this lecture, you will be able to:
 
 ### Unstructured
 
-Unstructured pruning zeroes individual weights — any entry, anywhere. It can
-reach very high sparsity (say 90%) with little accuracy loss, but the result is
-a sparse matrix, which is hard to accelerate on standard hardware without
+Unstructured pruning zeroes individual weights — any entry, anywhere. It
+can
+reach very high sparsity (say 90%) with little accuracy loss, but the
+result is
+a sparse matrix, which is hard to accelerate on standard hardware
+without
 special support.
 
 ### Structured
 
-Structured pruning removes whole units — entire channels, filters, or rows — so
-the result is a smaller *dense* model. It is easier to speed up because the
-model just got smaller in a hardware-friendly way, but it is coarser and drops
+Structured pruning removes whole units — entire channels, filters, or
+rows — so
+the result is a smaller *dense* model. It is easier to speed up because
+the
+model just got smaller in a hardware-friendly way, but it is coarser and
+drops
 more accuracy per unit of sparsity.
+
+### The real-world analogy
+
+Unstructured pruning is removing scattered words from a book — you save
+paper but
+the book is harder to read quickly. Structured pruning is removing whole
+chapters
+— the book is genuinely shorter and faster to read, but you might lose
+something
+important. Sparsity is the words removed; speedup is the chapters
+removed.
 
 ### The deciding question
 
 Sparsity is a number; speedup is a goal. If you need the speedup, prefer
-structured. If you need maximum compression, unstructured wins but the speedup
+structured. If you need maximum compression, unstructured wins but the
+speedup
 is not guaranteed.
 
 ## 2. Magnitude Pruning
 
 ### The criterion
 
-Magnitude pruning removes weights with the smallest absolute value — they
-contribute least to the output. It is simple, effective, and the default.
+Magnitude pruning removes weights with the smallest absolute value —
+they
+contribute least to the output. It is simple, effective, and the
+default.
 
 ### The code
 
@@ -81,20 +115,35 @@ import torch.nn.utils.prune as prune
 prune.l1_unstructured(lin, name="weight", amount=0.5)  # zero the bottom 50%
 ```
 
-The `amount` is the fraction removed. After pruning, `lin.weight_mask` records
+The `amount` is the fraction removed. After pruning, `lin.weight_mask`
+records
 what was kept, and the pruned weights read as zero.
+
+### Why it works
+
+The assumption is that the output is most sensitive to the largest
+weights, so
+removing the smallest changes the output least. This is exactly true for
+a
+linear layer, and approximately true for the nonlinear case — which is
+why
+magnitude pruning is both simple and surprisingly effective.
 
 ## 3. Global vs Local Pruning
 
 ### Local
 
-Local pruning applies a fixed fraction per layer — every layer loses, say, 50%.
-Simple, but it over-prunes layers that matter and under-prunes layers that don't.
+Local pruning applies a fixed fraction per layer — every layer loses,
+say, 50%.
+Simple, but it over-prunes layers that matter and under-prunes layers
+that don't.
 
 ### Global
 
-Global pruning applies one fraction across the whole network, letting the
-criterion find the least-important weights *anywhere*. It reaches the same
+Global pruning applies one fraction across the whole network, letting
+the
+criterion find the least-important weights *anywhere*. It reaches the
+same
 sparsity with less accuracy loss, at the cost of more bookkeeping.
 
 ```python
@@ -103,36 +152,93 @@ prune.global_unstructured(
 )
 ```
 
+### Why global wins on accuracy
+
+Some layers are more sensitive than others. Global pruning lets the
+criterion
+spend sparsity where it hurts least, rather than imposing a uniform cut
+that
+hits a critical bottleneck layer as hard as a redundant one.
+
 ## 4. The Lottery-Ticket Hypothesis
 
 ### The claim
 
-Inside a randomly-initialized dense network there is a sparse subnetwork that,
+Inside a randomly-initialized dense network there is a sparse subnetwork
+that,
 trained alone, matches the full network's accuracy. Pruning finds an
-approximation of that "winning ticket." The implication is that over-parameterized
-networks hide efficient subnetworks — and pruning is how you surface them.
+approximation of that "winning ticket." The implication is that
+over-parameterized
+networks hide efficient subnetworks — and pruning is how you surface
+them.
 
 ### The practical takeaway
 
-Pruning is not just compression; it is evidence that much of a network's capacity
-is redundant. The practical result is the same — smaller, faster models — but the
+Pruning is not just compression; it is evidence that much of a network's
+capacity
+is redundant. The practical result is the same — smaller, faster models
+— but the
 reason is deeper than "drop the small weights."
 
 ## 5. Prune, Then Fine-Tune
 
 ### The two-step
 
-Pruning usually drops some accuracy. The standard remedy is a short fine-tuning
-pass after pruning, so the surviving weights adapt to the new, smaller structure.
-Prune → fine-tune → repeat (iterative pruning) recovers most of the loss.
+Pruning usually drops some accuracy. The standard remedy is a short
+fine-tuning
+pass after pruning, so the surviving weights adapt to the new, smaller
+structure.
+Prune → fine-tune → repeat (iterative pruning) recovers most of the
+loss.
+
+### Iterative vs one-shot
+
+One-shot pruning (remove a big fraction at once) is fast but fragile.
+Iterative
+pruning removes a little, fine-tunes, and repeats, which reaches the
+same
+sparsity with much less accuracy loss. The trade is wall-clock time
+versus
+accuracy.
 
 ### Why it matters
 
-Pruning without fine-tuning leaves accuracy on the floor; fine-tuning without
-pruning buys nothing. The two are a pair, and the recipe is what makes pruning
+Pruning without fine-tuning leaves accuracy on the floor; fine-tuning
+without
+pruning buys nothing. The two are a pair, and the recipe is what makes
+pruning
 viable in practice.
 
-## 6. Common Mistakes to Avoid
+## 6. When Pruning Helps and Hurts
+
+### When it helps
+
+Pruning helps when the model is over-parameterized for the task — the
+common
+case — and the goal is smaller size or lower latency. It compounds with
+quantization: a pruned INT8 model is small on both the redundancy and
+precision
+axes.
+
+### When it hurts
+
+Pruning hurts when the model is already small and well-fit, because
+there is no
+redundancy to remove without real accuracy loss. Pruning a tiny,
+efficient model
+is cutting into muscle, not fat.
+
+## Real-World Application
+
+- **Shrinking a model for a latency budget** — structured pruning to meet a
+  serving SLO on a tight edge device.
+- **Compounding with quantization** — prune the redundancy, then quantize the
+  representation.
+- **Finding winning tickets** — sparse subnetworks for deployment.
+- **The DevMate case** — pruning a small classifier or embedding projection that
+  is over-parameterized for its retrieval task.
+
+## Common Mistakes to Avoid
 
 ### Mistake 1: Expecting speedup from unstructured sparsity
 ```
@@ -164,7 +270,13 @@ viable in practice.
 # CORRECT — report latency, memory, and accuracy, not sparsity alone
 ```
 
-## 7. Best Practices
+### Mistake 6: Pruning an already-small, well-fit model
+```
+# WRONG — cutting into a compact model with no redundancy to spare
+# CORRECT — prune only when over-parameterization is real
+```
+
+## Best Practices
 
 1. Use magnitude (L1) pruning as the default criterion.
 2. Prefer structured pruning when speedup is the goal.
@@ -175,7 +287,7 @@ viable in practice.
 7. Keep the unpruned model for comparison and rollback.
 8. Combine pruning with quantization for compounding wins.
 
-## 8. Complexity and Cost
+## Complexity and Cost
 
 | Operation | Time | Space | Notes |
 |---|---|---|---|
@@ -184,11 +296,13 @@ viable in practice.
 | Fine-tune after prune | minutes | — | Recovers accuracy |
 | Iterative pruning | N x prune+fine-tune | — | Best accuracy per sparsity |
 
-## 9. AI Engineering Relevance
+## AI Engineering Relevance
 
 **Where this shows up:** shrinking a model for a tight VRAM or latency budget.
-On the RTX 5000, pruning is the lever you pull alongside quantization when a
-model is too big or too slow — and the structured/unstructured distinction is
+On the RTX 5000, pruning is the lever you pull alongside quantization
+when a
+model is too big or too slow — and the structured/unstructured
+distinction is
 what decides whether the shrink actually makes it faster.
 
 | Concept here | Used for |
@@ -199,10 +313,29 @@ what decides whether the shrink actually makes it faster.
 | Lottery ticket | Why over-parameterized nets compress well |
 
 **Scale note:** pruning pairs with quantization — a pruned INT8 model is smaller
-and faster on both axes. The compression toolbox (quantize, prune, distill) is
+and faster on both axes. The compression toolbox (quantize, prune,
+distill) is
 applied together, not in isolation.
 
-## 10. Summary
+## Key Takeaways
+
+1. Unstructured pruning gives sparsity; structured pruning gives real speedup.
+2. Magnitude (smallest |w| first) is the default criterion.
+3. Global pruning respects per-layer sensitivity better than a uniform cut.
+4. The lottery ticket says sparse subnetworks match dense nets.
+5. Prune-then-fine-tune (iteratively) recovers accuracy.
+6. Report latency and memory, not sparsity alone.
+
+## Self-Check Questions
+
+1. Why does unstructured sparsity not guarantee a speedup?
+2. Why is magnitude a good default criterion for what to remove?
+3. How does global pruning improve on a uniform per-layer cut?
+4. What is the lottery-ticket hypothesis, and what does it imply?
+5. Why is iterative pruning better than one-shot over-pruning?
+6. Why should you report latency and memory rather than sparsity?
+
+## Summary
 
 | Concept | Description |
 |---|---|
@@ -221,10 +354,16 @@ applied together, not in isolation.
 | Structured | `prune.ln_structured(lin, name="weight", amount=0.5, n=1, dim=0)` |
 | Make permanent | `prune.remove(lin, "weight")` |
 
+## Further Reading / Connections
+
+- `49-quantization-lecture.md` — the representation lever this pairs with.
+- `51-distillation-lecture.md` — the knowledge lever of the compression toolbox.
+- Frankle & Carbin, "The Lottery Ticket Hypothesis".
+- Official docs: <https://pytorch.org/docs/stable/generated/torch.nn.utils.prune.l1_unstructured.html>
+
 ## Next Steps
 
-Next: **[51 — Knowledge Distillation](../advanced/51-distillation-lecture.md)** — compress a big teacher into a small student.
+Next: **[51 — Knowledge
+Distillation](../advanced/51-distillation-lecture.md)** — compress a big
+teacher into a small student.
 
-Continues in: **[49 — Quantization](49-quantization-lecture.md)** — the size lever this pairs with.
-
-Official docs: <https://pytorch.org/docs/stable/generated/torch.nn.utils.prune.l1_unstructured.html>
