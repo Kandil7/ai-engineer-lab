@@ -277,10 +277,14 @@ O(seq) vs O(seq²) distinction is the deciding line.
 
 ### Seeing the future
 
-A unidirectional RNN reads left to right, so at position `t` it has seen only
-positions `1..t`. A bidirectional RNN runs a second pass right to left and
-concatenates the two hidden states, so each position sees its full context —
-before *and* after. This is the standard trick for whole-sequence tasks like
+A unidirectional RNN reads left to right, so at position `t` it has seen
+only
+positions `1..t`. A bidirectional RNN runs a second pass right to left
+and
+concatenates the two hidden states, so each position sees its full
+context —
+before *and* after. This is the standard trick for whole-sequence tasks
+like
 classification, where the entire sequence is available at once.
 
 ```python
@@ -290,40 +294,55 @@ bilstm = nn.LSTM(8, 16, batch_first=True, bidirectional=True)
 
 ### Stacking layers
 
-Deeper RNNs stack multiple recurrent layers, where each layer's output feeds the
-next layer's input across time. Stacking helps capture higher-level structure,
-but two layers are usually the point of diminishing returns — depth in an RNN is
+Deeper RNNs stack multiple recurrent layers, where each layer's output
+feeds the
+next layer's input across time. Stacking helps capture higher-level
+structure,
+but two layers are usually the point of diminishing returns — depth in
+an RNN is
 far less important than it is in a CNN or transformer.
 
 ### When bidirectionality is illegal
 
-Bidirectional is *illegal* for streaming and generation, where the future is not
-available — a live transcription cannot see the next word. That is the tension:
-bidirectional helps accuracy when you have the whole sequence, and breaks the
+Bidirectional is *illegal* for streaming and generation, where the
+future is not
+available — a live transcription cannot see the next word. That is the
+tension:
+bidirectional helps accuracy when you have the whole sequence, and
+breaks the
 moment you must process it online.
 
 ## 9. From RNN to Attention
 
 ### The bottleneck recurrence imposes
 
-The RNN's hidden state is a fixed-size vector that must summarize everything
-seen so far. That bottleneck is why RNNs struggle with very long sequences —
-early information is compressed away. Attention (`40`) removes the bottleneck by
-letting each output look directly at *every* input position, at the cost of
+The RNN's hidden state is a fixed-size vector that must summarize
+everything
+seen so far. That bottleneck is why RNNs struggle with very long
+sequences —
+early information is compressed away. Attention (`40`) removes the
+bottleneck by
+letting each output look directly at *every* input position, at the cost
+of
 quadratic compute.
 
 ### The conceptual bridge
 
-The RNN's hidden state is "everything I have read, compressed into one vector";
-attention is "the specific parts I need right now, looked up on demand." The
+The RNN's hidden state is "everything I have read, compressed into one
+vector";
+attention is "the specific parts I need right now, looked up on demand."
+The
 former is a summary; the latter is an index. Understanding the RNN makes
 attention's motivation — escaping the compression bottleneck — concrete.
 
 ### The practical takeaway
 
-This is why transformers replaced RNNs for language: long documents defeat a
-fixed-size summary, and attention scales to them (with a compute cost). RNNs
-remain for the streaming/compact cases where the summary is enough, which is the
+This is why transformers replaced RNNs for language: long documents
+defeat a
+fixed-size summary, and attention scales to them (with a compute cost).
+RNNs
+remain for the streaming/compact cases where the summary is enough,
+which is the
 O(seq) vs O(seq²) decision restated as a representational, not just a
 computational, choice.
 
@@ -331,11 +350,16 @@ computational, choice.
 
 ### The problem it solves
 
-Many tasks map one sequence to another of *different length*: translating a
-sentence, summarizing a document, transcribing speech. A single RNN maps a
-sequence to one output, which cannot express a variable-length output. The
-encoder-decoder architecture splits the job: an encoder compresses the input
-sequence into a context vector, and a decoder generates the output sequence from
+Many tasks map one sequence to another of *different length*:
+translating a
+sentence, summarizing a document, transcribing speech. A single RNN maps
+a
+sequence to one output, which cannot express a variable-length output.
+The
+encoder-decoder architecture splits the job: an encoder compresses the
+input
+sequence into a context vector, and a decoder generates the output
+sequence from
 it, one token at a time.
 
 ```text
@@ -345,23 +369,31 @@ decoder: takes the context -> generates output tokens, feeding each back in
 
 ### The context bottleneck
 
-The encoder must compress the *entire* input into a single fixed-size vector —
+The encoder must compress the *entire* input into a single fixed-size
+vector —
 and that vector is the bottleneck. For a long sentence, the beginning is
-squeezed out. This is precisely the bottleneck that attention (`40`) was invented
-to remove: instead of one context vector, the decoder attends to *all* encoder
+squeezed out. This is precisely the bottleneck that attention (`40`) was
+invented
+to remove: instead of one context vector, the decoder attends to *all*
+encoder
 states.
 
 ### The bridge to transformers
 
-The original transformer is an encoder-decoder with attention replacing the
-recurrent context. Seeing the RNN encoder-decoder first makes the transformer's
-design intelligible: it is the same architecture with the bottleneck removed.
-That is why this is the conceptual capstone of the RNN topic — the sequence
+The original transformer is an encoder-decoder with attention replacing
+the
+recurrent context. Seeing the RNN encoder-decoder first makes the
+transformer's
+design intelligible: it is the same architecture with the bottleneck
+removed.
+That is why this is the conceptual capstone of the RNN topic — the
+sequence
 modeling problem, solved first with recurrence and then without it.
 
 ### The still-useful case
 
-Encoder-decoder RNNs remain useful for small, streaming, on-device translation
+Encoder-decoder RNNs remain useful for small, streaming, on-device
+translation
 or transcription, where a transformer's size and quadratic cost are not
 justified. They are the compact form of the same idea.
 
@@ -512,4 +544,5 @@ the other framework, and when to choose it.
 Continues in: **[09-genai — 21
 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** —
 sequence models in production.
+
 
