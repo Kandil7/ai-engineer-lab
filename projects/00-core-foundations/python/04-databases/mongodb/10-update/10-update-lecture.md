@@ -52,11 +52,14 @@ Preview the filter as a `find` first; bulk rewrites without a preview are how wh
 `$set` (set field), `$unset` (remove field), `$inc` (increment), `$push` (add to array), `$pull` (remove from array).
 
 ```python
-db["users"].update_one({"_id": uid}, {
-    "$set": {"status": "active"},
-    "$inc": {"logins": 1},
-    "$push": {"tags": "returning"},
-})
+db["users"].update_one(
+    {"_id": uid},
+    {
+        "$set": {"status": "active"},
+        "$inc": {"logins": 1},
+        "$push": {"tags": "returning"},
+    },
+)
 ```
 
 `$inc` is atomic — concurrent increments do not lose counts, unlike read-modify-write in Python. Array operators with `$each` and `$slice` bound array growth.
@@ -67,7 +70,8 @@ db["users"].update_one({"_id": uid}, {
 
 ```python
 db["users"].update_one(
-    {"email": "a@x.com"}, {"$setOnInsert": {"created": now}, "$set": {"last": now}},
+    {"email": "a@x.com"},
+    {"$setOnInsert": {"created": now}, "$set": {"last": now}},
     upsert=True,
 )
 ```
