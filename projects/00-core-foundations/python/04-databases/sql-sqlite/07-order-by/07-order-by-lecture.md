@@ -33,9 +33,7 @@ This lecture covers sorting with order by in MySQL using Python's sqlite3 as a l
 `SELECT * FROM users ORDER BY age;` sorts ascending. `ORDER BY age DESC` descending.
 
 ```python
-rows = conn.execute(
-    "SELECT name, age FROM users ORDER BY age DESC, name ASC"
-).fetchall()
+rows = conn.execute("SELECT name, age FROM users ORDER BY age DESC, name ASC").fetchall()
 ```
 
 Direction is per column, not per query: `ORDER BY a DESC, b` sorts `a` descending, `b` ascending.
