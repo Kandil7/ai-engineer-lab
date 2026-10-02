@@ -6,24 +6,37 @@ Companion exercise: `47-self-supervised-learning.py`
 
 ## Topic Overview
 
-Supervised learning is bottlenecked by labels; self-supervised learning (SSL)
-removes that bottleneck by *inventing* the labels from the data itself. The
-model learns a pretext task — predict the next token, mask and reconstruct a
+Supervised learning is bottlenecked by labels; self-supervised learning
+(SSL)
+removes that bottleneck by *inventing* the labels from the data itself.
+The
+model learns a pretext task — predict the next token, mask and
+reconstruct a
 word, or match two views of the same image — and in doing so learns
-representations that transfer to real tasks. This is how BERT, GPT, and CLIP
+representations that transfer to real tasks. This is how BERT, GPT, and
+CLIP
 learned to embed language and vision without a single human label.
 
-The two families are contrastive and generative. **Contrastive** learning pulls
-different views of the same example together and pushes different examples
-apart, learning invariances. **Generative** (masked) learning hides part of the
-input and asks the model to reconstruct it, learning structure. Both produce a
-pretrained encoder whose features are then reused with little labeled data —
+The two families are contrastive and generative. **Contrastive**
+learning pulls
+different views of the same example together and pushes different
+examples
+apart, learning invariances. **Generative** (masked) learning hides part
+of the
+input and asks the model to reconstruct it, learning structure. Both
+produce a
+pretrained encoder whose features are then reused with little labeled
+data —
 the engine behind `39-transfer-learning`.
 
-The topic covers the pretext-task premise, contrastive (SimCLR/InfoNCE) and
-masked (BERT-style) objectives, and why SSL-pretrained encoders are the default
-starting point for downstream fine-tuning. The economics are the through-line:
-unlabeled data is abundant and free, so SSL moves the learning cost onto data
+The topic covers the pretext-task premise, contrastive (SimCLR/InfoNCE)
+and
+masked (BERT-style) objectives, and why SSL-pretrained encoders are the
+default
+starting point for downstream fine-tuning. The economics are the
+through-line:
+unlabeled data is abundant and free, so SSL moves the learning cost onto
+data
 that costs nothing.
 
 ## Learning Objectives
@@ -51,31 +64,43 @@ By the end of this lecture, you will be able to:
 
 ### Labels without a labeler
 
-SSL defines a *pretext task* whose answer is already in the data. "What is the
-masked word?" or "Are these two views the same example?" require no annotation —
-the data supplies the answer. Training on that task forces the model to learn
+SSL defines a *pretext task* whose answer is already in the data. "What
+is the
+masked word?" or "Are these two views the same example?" require no
+annotation —
+the data supplies the answer. Training on that task forces the model to
+learn
 structure that a supervised task can later reuse.
 
 ### The real-world analogy
 
-A child learns language by hearing it and predicting what comes next — no one
-labels each sentence. The task (predict the next word) is self-generated, and
-the byproduct is a working understanding of the language. SSL does the same for
-models: the pretext task is the engine, the learned representation is the fuel.
+A child learns language by hearing it and predicting what comes next —
+no one
+labels each sentence. The task (predict the next word) is
+self-generated, and
+the byproduct is a working understanding of the language. SSL does the
+same for
+models: the pretext task is the engine, the learned representation is
+the fuel.
 
 ### Why it transfers
 
-A model that can reconstruct a masked word knows syntax and semantics; a model
-that can match two views of an image knows visual invariance. Those learned
-features — not the pretext task itself — are the product. The pretext task is
+A model that can reconstruct a masked word knows syntax and semantics; a
+model
+that can match two views of an image knows visual invariance. Those
+learned
+features — not the pretext task itself — are the product. The pretext
+task is
 discarded; the encoder is kept.
 
 ## 2. Contrastive Learning
 
 ### Positive and negative pairs
 
-Contrastive learning treats two augmented views of the *same* example as a
-positive pair (must be close), and views of *different* examples as negative
+Contrastive learning treats two augmented views of the *same* example as
+a
+positive pair (must be close), and views of *different* examples as
+negative
 pairs (must be far). The InfoNCE loss implements this as a softmax over
 similarities:
 
@@ -85,55 +110,75 @@ loss = -log( exp(sim(z_i, z_j)/tau) / sum_k exp(sim(z_i, z_k)/tau) )
 
 ### What it learns
 
-By pulling positives together and pushing negatives apart, the encoder learns the
-invariances that define "the same thing" — the same object under different
-lighting, the same sentence paraphrased. SimCLR and CLIP are the canonical
-examples; CLIP adds text as the second view, which is the shared space behind
+By pulling positives together and pushing negatives apart, the encoder
+learns the
+invariances that define "the same thing" — the same object under
+different
+lighting, the same sentence paraphrased. SimCLR and CLIP are the
+canonical
+examples; CLIP adds text as the second view, which is the shared space
+behind
 `46-few-shot-zero-shot`.
 
 ## 3. Masked (Generative) Learning
 
 ### Hide and reconstruct
 
-Masked modeling hides part of the input and asks the model to predict it from
-context. BERT masks 15% of tokens; the model predicts the masked words. The task
-is generative — reconstruct the hidden part — but the product is the encoder.
+Masked modeling hides part of the input and asks the model to predict it
+from
+context. BERT masks 15% of tokens; the model predicts the masked words.
+The task
+is generative — reconstruct the hidden part — but the product is the
+encoder.
 
 ### What it learns
 
-To predict a masked word, the model must learn bidirectional context and deep
-semantics. BERT's success on downstream tasks proved that this single pretext
-task yields transferable representations. GPT's next-token prediction is the
+To predict a masked word, the model must learn bidirectional context and
+deep
+semantics. BERT's success on downstream tasks proved that this single
+pretext
+task yields transferable representations. GPT's next-token prediction is
+the
 autoregressive cousin — predict the future, not the middle.
 
 ## 4. SSL Pretraining, Then Fine-Tuning
 
 ### The production flow
 
-The real workflow is two-stage: SSL-pretrain on a large unlabeled corpus (cheap,
-no labels), then fine-tune on a small labeled task (`39-transfer-learning`).
-The SSL step buys a general encoder; the fine-tune step specializes it cheaply.
+The real workflow is two-stage: SSL-pretrain on a large unlabeled corpus
+(cheap,
+no labels), then fine-tune on a small labeled task
+(`39-transfer-learning`).
+The SSL step buys a general encoder; the fine-tune step specializes it
+cheaply.
 
 ### The economic logic
 
-Unlabeled data is abundant and free; labels are scarce and expensive. SSL moves
-most of the learning cost onto the free data, leaving a small labeled budget for
-the actual task. That is the economic argument behind BERT, GPT, and every
+Unlabeled data is abundant and free; labels are scarce and expensive.
+SSL moves
+most of the learning cost onto the free data, leaving a small labeled
+budget for
+the actual task. That is the economic argument behind BERT, GPT, and
+every
 foundation model.
 
 ## 5. Representation Collapse
 
 ### The failure mode
 
-Contrastive learning has a degenerate solution: map everything to the same
+Contrastive learning has a degenerate solution: map everything to the
+same
 point. Then every similarity is 1, the loss is trivially zero, and the
-representation is useless. This is *collapse*, and it is the central challenge of
+representation is useless. This is *collapse*, and it is the central
+challenge of
 contrastive methods.
 
 ### How to avoid it
 
-The standard guards are enough negative pairs (so the model cannot satisfy the
-objective by collapsing), a temperature that keeps the distribution sharp, and
+The standard guards are enough negative pairs (so the model cannot
+satisfy the
+objective by collapsing), a temperature that keeps the distribution
+sharp, and
 normalization that keeps vectors on the hypersphere. Architectures like
 SimCLR's momentum encoder and BYOL avoid collapse by design.
 
@@ -141,16 +186,22 @@ SimCLR's momentum encoder and BYOL avoid collapse by design.
 
 ### The cost and the ceiling
 
-SSL pretraining is itself expensive — pretraining a large model on a big corpus
-is a data-center-scale job. For a small task, you rarely pretrain from scratch;
-you download a pretrained encoder. SSL is the *idea* you inherit from, not a step
+SSL pretraining is itself expensive — pretraining a large model on a big
+corpus
+is a data-center-scale job. For a small task, you rarely pretrain from
+scratch;
+you download a pretrained encoder. SSL is the *idea* you inherit from,
+not a step
 you rerun every project.
 
 ### The honest role
 
-For an application engineer, SSL matters as the origin story of every pretrained
-model you fine-tune, and as the technique to reach for when you have unlabeled
-domain data and no labels — a real case for specialized corpora, where continued
+For an application engineer, SSL matters as the origin story of every
+pretrained
+model you fine-tune, and as the technique to reach for when you have
+unlabeled
+domain data and no labels — a real case for specialized corpora, where
+continued
 pretraining on in-domain text can beat a generic encoder.
 
 ## Real-World Application
@@ -224,9 +275,12 @@ pretraining on in-domain text can beat a generic encoder.
 ## AI Engineering Relevance
 
 **Where this shows up:** every foundation model you serve is an SSL product —
-GPT (next-token), BERT (masked), CLIP (contrastive). On this workstation you
-fine-tune these, not pretrain them; but understanding the pretext task is what
-tells you *why* a pretrained encoder generalizes and when to continue pretraining
+GPT (next-token), BERT (masked), CLIP (contrastive). On this workstation
+you
+fine-tune these, not pretrain them; but understanding the pretext task
+is what
+tells you *why* a pretrained encoder generalizes and when to continue
+pretraining
 on in-domain data.
 
 | Concept here | Used for |
@@ -237,7 +291,8 @@ on in-domain data.
 | In-domain continued pretraining | Adapting to a niche corpus |
 
 **Scale note:** SSL is where the "pretrain big, fine-tune small" economics come
-from. You inherit the big pretraining; your budget is the fine-tune, which is
+from. You inherit the big pretraining; your budget is the fine-tune,
+which is
 why the RTX 5000's 16 GB is usually enough.
 
 ## Key Takeaways
@@ -286,4 +341,7 @@ why the RTX 5000's 16 GB is usually enough.
 
 ## Next Steps
 
-Next: **[48 — Hyperband and BOHB](../advanced/48-hyperband-bohb-lecture.md)** — multi-fidelity tuning.
+Next: **[48 — Hyperband and
+BOHB](../advanced/48-hyperband-bohb-lecture.md)** — multi-fidelity
+tuning.
+
