@@ -232,16 +232,22 @@ is cutting into muscle, not fat.
 
 ### The one-shot problem
 
-Removing 90% of weights in a single step destroys too much structure at once,
-and the accuracy collapse is hard to recover from. One-shot pruning is fast but
+Removing 90% of weights in a single step destroys too much structure at
+once,
+and the accuracy collapse is hard to recover from. One-shot pruning is
+fast but
 fragile, and it is the mistake most first attempts make.
 
 ### The iterative loop
 
-Iterative pruning removes a small fraction (say 10%), fine-tunes to recover,
-and repeats until the target sparsity is reached. Each step cuts a little and
-lets the surviving weights adapt before the next cut. The same total sparsity is
-reached with far less accuracy loss, at the cost of several training passes.
+Iterative pruning removes a small fraction (say 10%), fine-tunes to
+recover,
+and repeats until the target sparsity is reached. Each step cuts a
+little and
+lets the surviving weights adapt before the next cut. The same total
+sparsity is
+reached with far less accuracy loss, at the cost of several training
+passes.
 
 ```python
 for _ in range(n_rounds):
@@ -251,34 +257,125 @@ for _ in range(n_rounds):
 
 ### The cost-accuracy trade
 
-Iterative pruning trades wall-clock time for accuracy — the same ladder that
-appears throughout this curriculum (zero-shot to fine-tune, PTQ to QAT). When
-the model is expensive to deploy, the extra fine-tuning passes are a small price
+Iterative pruning trades wall-clock time for accuracy — the same ladder
+that
+appears throughout this curriculum (zero-shot to fine-tune, PTQ to QAT).
+When
+the model is expensive to deploy, the extra fine-tuning passes are a
+small price
 for a smaller, still-accurate model.
 
 ## 8. Per-Layer Sensitivity
 
 ### Layers are not equal
 
-Some layers tolerate heavy pruning; others — often the first and last, or
-bottleneck layers — collapse under it. A uniform cut ignores this and hurts the
-sensitive layers as much as the redundant ones. Global pruning (`3`) addresses
+Some layers tolerate heavy pruning; others — often the first and last,
+or
+bottleneck layers — collapse under it. A uniform cut ignores this and
+hurts the
+sensitive layers as much as the redundant ones. Global pruning (`3`)
+addresses
 this implicitly by finding least-important weights anywhere.
 
 ### The sensitivity-analysis approach
 
-A more explicit method prunes each layer independently and measures the accuracy
-drop, producing a per-layer sensitivity curve. Layers that tolerate pruning get
-cut hard; sensitive layers are spared. This is the principled version of "not
-all layers are equal," and it is how you push sparsity further than a uniform
+A more explicit method prunes each layer independently and measures the
+accuracy
+drop, producing a per-layer sensitivity curve. Layers that tolerate
+pruning get
+cut hard; sensitive layers are spared. This is the principled version of
+"not
+all layers are equal," and it is how you push sparsity further than a
+uniform
 cut allows.
 
 ### The practical default
 
 Start with global magnitude pruning — it captures most of the per-layer
-sensitivity benefit for free. Reach for explicit sensitivity analysis only when
-you need to push sparsity to the edge and the uniform/global cut is hurting a
+sensitivity benefit for free. Reach for explicit sensitivity analysis
+only when
+you need to push sparsity to the edge and the uniform/global cut is
+hurting a
 specific layer.
+
+## 9. Combining Pruning with Quantization and Distillation
+
+### The three levers
+
+Compression has three orthogonal levers. **Pruning** removes redundant
+weights.
+**Quantization** shrinks the representation of the remaining weights.
+**Distillation** transfers a big model's knowledge into a small one. They attack
+different axes: redundancy, precision, and capacity. Because they are
+orthogonal,
+they compose — and the composition multiplies the size reduction.
+
+### The pipeline order
+
+The common order is distill → prune → quantize → fine-tune. Distill
+first to get
+a small, capable model (knowledge). Prune it to remove redundancy
+(structure).
+Quantize the result to shrink the representation (precision). Fine-tune
+once at
+the end to recover any accuracy lost along the way. Each step starts
+from the
+previous step's output.
+
+### Why order matters
+
+Quantizing before pruning means pruning a coarser representation, where
+the
+magnitude signal is noisier — so prune first. Distilling before pruning
+means the
+student inherits the teacher's redundancy, which pruning then removes —
+so
+distill first. The order is not arbitrary; each step assumes the prior
+step's
+output.
+
+### The measurement at each step
+
+Measure accuracy and size after *every* step, not just at the end. If a
+step
+costs more accuracy than it saves in size, drop it. The pipeline is a
+sequence of
+trades, and each trade must be justified on its own — the same
+discipline as
+every ablation in this curriculum.
+
+## 10. When Pruning Fails and What to Do
+
+### Failure 1: Accuracy collapse from over-pruning
+
+Removing too much at once collapses accuracy beyond recovery. The fix is
+iterative pruning (`7`) — smaller cuts with fine-tuning between — rather
+than one
+big cut.
+
+### Failure 2: No speedup from unstructured sparsity
+
+A sparse matrix without sparse-kernel support runs no faster. If speedup
+is the
+goal, switch to structured pruning (`1`) even at the cost of some
+accuracy.
+
+### Failure 3: Fine-tuning cannot recover
+
+Sometimes the fine-tune does not bring accuracy back, which means the
+pruned
+structure was genuinely needed. The fix is to prune less, or to use
+per-layer
+sensitivity (`8`) to spare the critical layers.
+
+### Failure 4: Pruning a model with no redundancy
+
+A small, well-fit model has no fat to cut, and pruning it only removes
+muscle.
+The diagnostic is the baseline: if a same-sized model trained from
+scratch
+matches the pruned one, there was nothing to gain. Prune only where
+over-parameterization is real.
 
 ## Real-World Application
 
@@ -418,4 +515,5 @@ applied together, not in isolation.
 Next: **[51 — Knowledge
 Distillation](../advanced/51-distillation-lecture.md)** — compress a big
 teacher into a small student.
+
 
