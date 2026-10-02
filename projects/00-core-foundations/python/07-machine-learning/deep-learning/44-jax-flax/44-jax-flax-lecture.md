@@ -270,7 +270,7 @@ matching tree.
 
 ```python
 params = {"layer1": {"W": ..., "b": ...}, "layer2": {"W": ..., "b": ...}}
-grads = jax.grad(loss)(params, x, y)   # grads has the same tree shape
+grads = jax.grad(loss)(params, x, y)  # grads has the same tree shape
 ```
 
 ### Why the tree shape matters
@@ -520,5 +520,6 @@ synthesizing more training signal.
 Continues in: **[09-genai — 21
 Fine-Tuning](../../09-genai/lectures/21-fine-tuning-lecture.md)** —
 where framework choice recurs.
+
 
 
