@@ -247,29 +247,39 @@ one.
 
 ### The setup
 
-Suppose `max_budget = 27` epochs and `min_budget = 1`, with `eta = 3`. Then
+Suppose `max_budget = 27` epochs and `min_budget = 1`, with `eta = 3`.
+Then
 `s_max = floor(log_3(27)) = 3`, giving four brackets. Each bracket runs
 successive halving at a different starting configuration count.
 
 ### The brackets
 
-Bracket `s = 0` is the most aggressive: `n = ceil(4/1 * 3^0) = 4` configs, each
-getting little budget, halving to 1 survivor quickly. Bracket `s = 3` is the most
-conservative: `n = ceil(4/4 * 3^3) = 27` configs, run nearly to completion. The
+Bracket `s = 0` is the most aggressive: `n = ceil(4/1 * 3^0) = 4`
+configs, each
+getting little budget, halving to 1 survivor quickly. Bracket `s = 3` is
+the most
+conservative: `n = ceil(4/4 * 3^3) = 27` configs, run nearly to
+completion. The
 middle brackets span the tradeoff.
 
 ### What you observe
 
-Across the four brackets, Hyperband explores a wide range of configs cheaply and
-confirms the best few expensively, all in one sweep. The aggressive brackets find
-promising regions; the conservative brackets confirm them. The total budget is
+Across the four brackets, Hyperband explores a wide range of configs
+cheaply and
+confirms the best few expensively, all in one sweep. The aggressive
+brackets find
+promising regions; the conservative brackets confirm them. The total
+budget is
 bounded and far below a full 27-epoch grid over every config.
 
 ### The intuition to keep
 
-Hyperband is not magic — it is a *budget scheduler*. The intelligence comes from
-the observation that cheap rankings are usually good enough to discard the
-bottom half, and the brackets exist to cover the cases where that observation is
+Hyperband is not magic — it is a *budget scheduler*. The intelligence
+comes from
+the observation that cheap rankings are usually good enough to discard
+the
+bottom half, and the brackets exist to cover the cases where that
+observation is
 wrong.
 
 ## 9. Choosing eta and Budgets
@@ -277,23 +287,114 @@ wrong.
 ### The eta dial
 
 `eta` is the halving factor — how aggressively you cut. `eta = 3` is the
-standard; larger `eta` (more aggressive) spends less per round but risks more on
-early noise, smaller `eta` is gentler but pricier. In practice `eta = 3` is
+standard; larger `eta` (more aggressive) spends less per round but risks
+more on
+early noise, smaller `eta` is gentler but pricier. In practice `eta = 3`
+is
 rarely worth changing.
 
 ### The budget floor
 
-The `min_budget` floor is the single most important choice, because it is the
-guard against the "good config looks bad early" failure. A floor of 1 epoch is
-pure noise; a floor of a few epochs is a real signal. Set it to the smallest
+The `min_budget` floor is the single most important choice, because it
+is the
+guard against the "good config looks bad early" failure. A floor of 1
+epoch is
+pure noise; a floor of a few epochs is a real signal. Set it to the
+smallest
 budget at which a cheap evaluation still *correlates* with a full one.
 
 ### The reproducibility tie-in
 
-Whatever you choose, record `eta`, `min_budget`, `max_budget`, and the seed.
-Because Hyperband's result is a function of its schedule, the budget parameters
-are part of the answer, not an implementation detail — the same point the
+Whatever you choose, record `eta`, `min_budget`, `max_budget`, and the
+seed.
+Because Hyperband's result is a function of its schedule, the budget
+parameters
+are part of the answer, not an implementation detail — the same point
+the
 reproducibility section (`7`) makes about the whole search.
+
+## 10. Common Failure Modes of Multi-Fidelity Search
+
+### Failure 1: No cheap-signal correlation
+
+If a config's score at low fidelity does not predict its score at high
+fidelity,
+the screen discards good configs by accident. This is the precondition
+failure,
+and it is silent — the search runs, returns a config, and the config is
+simply
+not the best. Diagnose it by measuring the rank correlation between
+cheap and
+full evaluations on a sample.
+
+### Failure 2: A floor that is too low
+
+A minimum budget of one epoch is noise, and the first halving round is
+then a
+coin flip. Good configs get eliminated early, and the search converges
+on
+whichever config got lucky. The fix is a floor at which cheap evals are
+at least
+weakly predictive.
+
+### Failure 3: Too few negatives for the Bayesian sampler
+
+BOHB's TPE needs enough completed trials to build a meaningful
+surrogate. In a
+tiny budget, the Bayesian component has nothing to learn from and
+behaves like
+random search. The fix is either more trials or accepting random search
+for the
+first bracket.
+
+### Failure 4: Ignoring the fixed-cost overhead
+
+Every trial has a fixed startup cost (data loading, compilation)
+separate from
+its budget. When that fixed cost dominates, multi-fidelity's
+proportional saving
+evaporates. The fix is to measure the fixed cost and include it in the
+decision.
+
+### Failure 5: Reporting the best trial, not the search result
+
+The best trial's score is optimistically biased — you selected it. The
+honest
+report is the search's budget, the search space, and a fresh evaluation
+of the
+chosen config. This is the selection-optimism trap (`33`) in
+multi-fidelity form.
+
+## 11. Multi-Fidelity vs Plain Search — A Decision Table
+
+### The table
+
+| Situation | Best method |
+|---|---|
+| Fast model, small space | Grid or random search |
+| Fast model, many dimensions | Random search |
+| Slow model, bounded budget | Successive halving |
+| Slow model, unknown aggressiveness | Hyperband |
+| Slow model, want sample efficiency | BOHB (TPE + Hyperband) |
+| No cheap-signal correlation | Plain search on full budget |
+
+### How to read it
+
+The first question is the cost of one full evaluation: cheap models do
+not need
+multi-fidelity. The second is whether cheap evals rank correctly: if
+not, plain
+search is the only honest option. Only when the model is slow *and* the
+signal
+correlates does multi-fidelity pay.
+
+### The one-line rule
+
+Multi-fidelity is a bet that a cheap ranking predicts an expensive one.
+When that
+bet is good, it saves most of the budget; when it is bad, it is worse
+than doing
+nothing. Verify the bet before making it.
 
 ## Real-World Application
 
@@ -432,4 +533,5 @@ taken to its logical conclusion for expensive models.
 
 Next: **[49 — Quantization](../advanced/49-quantization-lecture.md)** —
 shrink the model, not the quality.
+
 
