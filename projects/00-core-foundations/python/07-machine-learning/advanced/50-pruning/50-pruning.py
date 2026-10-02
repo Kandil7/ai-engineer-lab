@@ -33,8 +33,8 @@ def main() -> None:
     lin = nn.Linear(8, 8)
     prune.l1_unstructured(lin, name="weight", amount=0.5)
     sparsity = (lin.weight == 0).float().mean().item()
-    weight_orig = getattr(lin, "weight_orig")
-    weight_mask = getattr(lin, "weight_mask")
+    weight_orig = lin.weight_orig
+    weight_mask = lin.weight_mask
     print("Example 1: unstructured magnitude pruning")
     print(f"  sparsity: {sparsity:.2f} (bottom 50% of weights zeroed)")
     print(f"  weight == weight_orig * mask: {torch.equal(lin.weight, weight_orig * weight_mask)}")
