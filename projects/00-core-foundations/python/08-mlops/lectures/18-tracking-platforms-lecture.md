@@ -3,24 +3,48 @@
 ## Topic Overview
 
 An experiment tracker is the system of record for training runs: every
-hyperparameter, metric, artifact, and environment fingerprint, stored so runs can
-be compared, reproduced, and audited. Lecture 02 taught the *run data model* and
-MLflow, the open-source default. This lecture is about the *platform choice*: the
-managed services (Weights & Biases, Comet, Neptune) and the lightweight library
-(Sacred), and how to pick one without locking yourself into a decision you cannot
+hyperparameter, metric, artifact, and environment fingerprint, stored so
+runs can
+be compared, reproduced, and audited. Lecture 02 taught the *run data
+model* and
+MLflow, the open-source default. This lecture is about the *platform
+choice*: the
+managed services (Weights & Biases, Comet, Neptune) and the lightweight
+library
+(Sacred), and how to pick one without locking yourself into a decision
+you cannot
 reverse.
 
-The platforms differ along four axes: **hosting** (self-hosted versus managed
-SaaS), **scope** (tracking only versus the full lifecycle), **collaboration**
-(reports, sharing, teams), and **cost model** (free tier, per-seat, per-GB). The
-choice is rarely about features alone; it is about who runs the server, who sees
+The platforms differ along four axes: **hosting** (self-hosted versus
+managed
+SaaS), **scope** (tracking only versus the full lifecycle),
+**collaboration**
+(reports, sharing, teams), and **cost model** (free tier, per-seat,
+per-GB). The
+choice is rarely about features alone; it is about who runs the server,
+who sees
 the data, and what the bill looks like at scale.
 
-The durable lesson is that the *run-record contract* is the same everywhere: a
-run has an id, a config, metrics over time, artifacts, and provenance. If you
-keep that contract explicit in your code, switching trackers is a thin adapter,
-not a rewrite. The platforms are interchangeable at the boundary; the contract is
+The durable lesson is that the *run-record contract* is the same
+everywhere: a
+run has an id, a config, metrics over time, artifacts, and provenance.
+If you
+keep that contract explicit in your code, switching trackers is a thin
+adapter,
+not a rewrite. The platforms are interchangeable at the boundary; the
+contract is
 what you own.
+
+The choice is also reversible by design — which is the point of the
+contract.
+A team that owns its run records can move from a managed free tier to
+self-hosted MLflow when the bill or the residency rule changes, without
+losing
+history. That reversibility is worth more than any single feature
+comparison,
+because the right platform at 10 runs a week is rarely the right one at
+10,000
+a day.
 
 ## Learning Objectives
 
@@ -51,22 +75,26 @@ interface you program against; the platform is the implementation.
 run_record = {
     "run_id": "2026-10-02T09:14_a1b2",
     "config": {"lr": 3e-4, "batch": 64, "model": "resnet18"},
-    "metrics": {"train_loss": [...], "val_acc": [...]},   # series over time
+    "metrics": {"train_loss": [...], "val_acc": [...]},  # series over time
     "artifacts": ["checkpoints/best.pt", "confusion.png"],
     "provenance": {"git_sha": "a1b2c3", "data_version": "sha256:9f...", "seed": 0},
 }
 ```
 
-A tracker that captures these five is sufficient. Everything else — dashboards,
-sweeps, sharing — is convenience built on top. Keeping the contract explicit in
+A tracker that captures these five is sufficient. Everything else —
+dashboards,
+sweeps, sharing — is convenience built on top. Keeping the contract
+explicit in
 your code is what makes the platform swappable.
 
 ## 2. MLflow: Open Source, Full Lifecycle
 
-MLflow is the open-source reference implementation. It has four components:
+MLflow is the open-source reference implementation. It has four
+components:
 **Tracking** (runs and metrics), **Projects** (packaged runs), **Models** (a
 standard model format), and the **Model Registry** (Lecture 04). It is
-self-hosted (a local `mlruns/` directory, a server, or a managed Databricks
+self-hosted (a local `mlruns/` directory, a server, or a managed
+Databricks
 offering) and framework-agnostic.
 
 ```python
@@ -79,14 +107,18 @@ with mlflow.start_run(run_name="resnet18-baseline"):
 ```
 
 **Choose MLflow when** you want to own the data, need the full lifecycle in one
-open-source stack, or must self-host for privacy or cost. **The cost** is
+open-source stack, or must self-host for privacy or cost. **The cost**
+is
 operational: you run the server, the artifact store, and the database.
 
 ## 3. Weights & Biases: Managed Collaboration
 
-W&B is a managed platform built around collaboration: rich run dashboards,
-shareable reports, **sweeps** (managed hyperparameter search), and **artifacts**
-(versioned datasets and models). It is the research-lab favorite because the
+W&B is a managed platform built around collaboration: rich run
+dashboards,
+shareable reports, **sweeps** (managed hyperparameter search), and
+**artifacts**
+(versioned datasets and models). It is the research-lab favorite because
+the
 collaboration surface — a link a colleague can open — is first-class.
 
 ```python
@@ -98,13 +130,16 @@ run.log_artifact("checkpoints/best.pt")
 ```
 
 **Choose W&B when** team collaboration, sharing, and managed sweeps matter more
-than self-hosting. **The trade** is data residency: your metrics and artifacts
+than self-hosting. **The trade** is data residency: your metrics and
+artifacts
 live in their cloud unless you pay for a self-hosted deployment.
 
 ## 4. Comet: Managed Comparison
 
-Comet is a managed platform with a strong emphasis on **experiment comparison**
-and **model production monitoring** — it tracks not just training runs but the
+Comet is a managed platform with a strong emphasis on **experiment
+comparison**
+and **model production monitoring** — it tracks not just training runs
+but the
 deployed model's behavior. It integrates with most frameworks and has a
 lightweight free tier.
 
@@ -117,13 +152,17 @@ exp.log_metric("val_acc", 0.91, step=10)
 ```
 
 **Choose Comet when** you want training and production monitoring in one managed
-tool and value comparison views. The trade is the same as W&B: managed hosting.
+tool and value comparison views. The trade is the same as W&B: managed
+hosting.
 
 ## 5. Neptune: Long-Running Runs
 
-Neptune is a managed metadata store designed for **many, long-running runs** and
-large-scale metadata — it handles thousands of concurrent experiments and
-high-frequency metric logging without dropping points. It offers a self-hosted
+Neptune is a managed metadata store designed for **many, long-running
+runs** and
+large-scale metadata — it handles thousands of concurrent experiments
+and
+high-frequency metric logging without dropping points. It offers a
+self-hosted
 option, which matters for teams with data-residency constraints.
 
 ```python
@@ -135,14 +174,17 @@ run["metrics/val_acc"].append(0.91)
 ```
 
 **Choose Neptune when** you run many long experiments, need high-frequency
-logging, or need a self-hosted managed option. The trade is the managed model
+logging, or need a self-hosted managed option. The trade is the managed
+model
 unless you self-host.
 
 ## 6. Sacred: The Lightweight Library
 
-Sacred is not a platform; it is a small open-source Python library for capturing
+Sacred is not a platform; it is a small open-source Python library for
+capturing
 **configuration, seeds, and results** with minimal ceremony, optionally backed by
-MongoDB. It does one thing — capture the run config and metrics — and does it
+MongoDB. It does one thing — capture the run config and metrics — and
+does it
 without a server.
 
 ```python
@@ -150,10 +192,12 @@ from sacred import Experiment
 
 ex = Experiment("devmate")
 
+
 @ex.config
 def cfg():
     lr = 3e-4
     batch = 64
+
 
 @ex.automain
 def train(lr, batch):
@@ -161,7 +205,8 @@ def train(lr, batch):
 ```
 
 **Choose Sacred when** you want config/seed capture in a script with no
-infrastructure, or you are embedding tracking into existing research code. **The
+infrastructure, or you are embedding tracking into existing research
+code. **The
 trade** is scope: no dashboards, no collaboration, no registry.
 
 ## 7. The Comparison Matrix and Selection
@@ -193,6 +238,109 @@ def choose_tracker(can_leave_infra, needs_collab, many_long_runs):
     return "mlflow (local) or sacred"
 ```
 
+## 8. Migrating Between Trackers
+
+### Why migrations happen
+
+Trackers are switched for three reasons: cost (the SaaS bill at scale),
+residency (a new privacy requirement), or features (needing sweeps, or
+needing
+self-hosting). A migration is a normal lifecycle event, not a failure —
+which is
+why the adapter (`1`) exists.
+
+### The migration steps
+
+Export the run history (every run record as JSON), re-import it into the
+new
+backend through the same adapter, and validate parity: the same runs,
+the same
+metrics, the same artifacts. The migration is done when a spot-check of
+old runs
+matches.
+
+```python
+def export_history(tracker):
+    """Every run record out, as portable data — the migration's input."""
+    return [r.to_dict() for r in tracker.runs.values()]
+```
+
+### What not to abandon
+
+The history is the asset, not the dashboard. A migration that drops the
+old runs
+loses the basis for every future comparison. Export first, verify, then
+switch
+the default backend.
+
+## 9. Operating a Self-Hosted Tracker
+
+### The components
+
+A self-hosted MLflow (or Neptune) needs three pieces: the tracking
+server (the
+API), a database (run metadata), and an artifact store (object storage
+for the
+blobs). Each is independently scalable, and each needs backup.
+
+### Backup and retention
+
+The database is backed up like any production database; the artifact
+store uses
+versioning and lifecycle tiers. Retention policies (how long to keep
+high-frequency metrics, when to downsample) keep the database from
+growing
+without bound.
+
+### Access control
+
+Run records contain hyperparameters and sometimes data samples, so they
+need
+authentication and per-project authorization. The same IAM discipline as
+any
+internal service applies — the tracker is infrastructure, not a
+notebook.
+
+### When self-hosting pays
+
+Self-hosting pays when the SaaS bill exceeds the ops cost, or when data
+residency
+requires it. The break-even is the cost model from the exercise: runs
+per day
+times storage, versus an engineer's fraction of time plus the servers.
+
+## 10. A Worked Cost Comparison
+
+### The scenario
+
+A team runs 20 experiments a day, each logging 1,000 metric points and a
+100 MB
+checkpoint, with 5 engineers. Compare self-hosted MLflow against a
+managed SaaS
+at $25/seat and $0.023/GB-month.
+
+### The arithmetic
+
+Self-hosted: one small server ($50/mo) + object storage (20 × 30 × 0.1
+GB =
+60 GB × $0.023 ≈ $1.40) + a fraction of an engineer's ops time. Roughly
+$100–200/mo all-in.
+
+Managed: 5 seats × $25 = $125 + 60 GB × $0.023 ≈ $1.40, so roughly
+$126/mo —
+before overages on metric volume or retention.
+
+### The break-even and the real decision
+
+At this scale the numbers are close, so the decision is data residency
+and
+collaboration, not dollars. At 10× the volume the managed bill scales
+linearly
+while the self-hosted cost grows sublinearly — which is the break-even
+the cost
+model in the exercise computes. Run your own numbers; the method is the
+point.
+
 ## Every Use Case
 
 - **Research lab**: W&B for shared dashboards and sweeps across a team.
@@ -222,27 +370,33 @@ def choose_tracker(can_leave_infra, needs_collab, many_long_runs):
 ## Common Mistakes to Avoid
 
 ### Mistake 1: Hard-coding one tracker into the training loop
-Every `wandb.log` scattered through the code makes a switch a rewrite. Wrap it in
+Every `wandb.log` scattered through the code makes a switch a rewrite.
+Wrap it in
 one `log_run()` and program against the contract.
 
 ### Mistake 2: Choosing managed SaaS before checking data residency
-Metrics and artifacts can contain sensitive data. Confirm the data may leave the
+Metrics and artifacts can contain sensitive data. Confirm the data may
+leave the
 infrastructure before picking a cloud tracker.
 
 ### Mistake 3: Ignoring the cost model at scale
-Per-seat and per-GB pricing is cheap for 3 people and expensive for 300 runs a
+Per-seat and per-GB pricing is cheap for 3 people and expensive for 300
+runs a
 day. Model the bill before committing.
 
 ### Mistake 4: Assuming a tracker is a registry
-Tracking stores runs; a registry stores *promoted* models with lifecycle stages
+Tracking stores runs; a registry stores *promoted* models with lifecycle
+stages
 (Lecture 04). They are different concerns.
 
 ### Mistake 5: No artifact store plan
-Logging a 10 GB checkpoint to a SaaS tracker on every run is a surprise bill.
+Logging a 10 GB checkpoint to a SaaS tracker on every run is a surprise
+bill.
 Keep large artifacts in object storage and log the reference.
 
 ### Mistake 6: Abandoning the run record when the platform changes
-The five-field contract is yours. Export it, keep it, and the platform is
+The five-field contract is yours. Export it, keep it, and the platform
+is
 replaceable.
 
 ## Best Practices
@@ -271,7 +425,8 @@ replaceable.
 ## AI Engineering Relevance
 
 **Where this shows up:** every training run you will ever do. The tracker is how
-runs become comparable and reproducible; the platform choice is how you trade
+runs become comparable and reproducible; the platform choice is how you
+trade
 operational burden for managed convenience.
 
 | Concept here | Used for |
@@ -283,8 +438,10 @@ operational burden for managed convenience.
 | Selection questions | Hosting, scope, collaboration, cost |
 
 **Scale note:** the tracker decision is reversible only if the contract is
-explicit. At 10 runs a week a managed free tier is fine; at 10,000 a day the
-cost model and data residency dominate, and self-hosted MLflow or Neptune wins.
+explicit. At 10 runs a week a managed free tier is fine; at 10,000 a day
+the
+cost model and data residency dominate, and self-hosted MLflow or
+Neptune wins.
 Design for the switch from day one.
 
 ## Practice Exercises
@@ -294,17 +451,22 @@ Define a `RunRecord` dataclass with id, config, metrics, artifacts, and
 provenance; write `to_dict`/`from_dict` and round-trip it.
 
 ### Exercise 2: Tracker Adapter (Medium)
-Define a `Tracker` protocol with `start`, `log_metric`, `log_artifact`, and
-`end`; implement a `MemoryTracker` and a `NullTracker`, and log a run through
+Define a `Tracker` protocol with `start`, `log_metric`, `log_artifact`,
+and
+`end`; implement a `MemoryTracker` and a `NullTracker`, and log a run
+through
 each without changing the caller.
 
 ### Exercise 3: Selection Function (Medium)
-Implement `choose_tracker(can_leave_infra, needs_collab, many_long_runs)` and
+Implement `choose_tracker(can_leave_infra, needs_collab,
+many_long_runs)` and
 test each branch.
 
 ### Exercise 4: Cost Model (Hard)
-Implement `monthly_cost(runs_per_day, points_per_run, artifact_gb_per_run,
-price_per_seat, seats, price_per_gb)` and compare a managed plan against a
+Implement `monthly_cost(runs_per_day, points_per_run,
+artifact_gb_per_run,
+price_per_seat, seats, price_per_gb)` and compare a managed plan against
+a
 self-hosted estimate; find the break-even run volume.
 
 ## Summary
@@ -319,7 +481,8 @@ self-hosted estimate; find the break-even run volume.
 | Sacred | Lightweight library, zero infrastructure |
 
 The tracker is the system of record for experiments; the platform is an
-implementation detail behind a contract you own. Choose by hosting, scope,
+implementation detail behind a contract you own. Choose by hosting,
+scope,
 collaboration, and cost — and keep the adapter thin so the choice stays
 reversible.
 
@@ -335,7 +498,13 @@ reversible.
 
 ## Next Steps
 
-Next: **[19 Resource and Performance Metrics](19-resource-and-performance-metrics-lecture.md)** —
+Next: **[19 Resource and Performance
+Metrics](19-resource-and-performance-metrics-lecture.md)** —
 measuring what the model costs to run.
 Continues in: **[Phase 8 MLOps](../../08-mlops/README.md)**.
-Official docs: https://mlflow.org/, https://wandb.ai/, https://www.comet.com/
+Official docs: https://mlflow.org/, https://wandb.ai/,
+https://www.comet.com/
+
+
+
+
