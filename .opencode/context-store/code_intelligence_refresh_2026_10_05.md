@@ -1,0 +1,7 @@
+---
+id: code_intelligence_refresh_2026_10_05
+reported_by: opencode-main
+created_at: 2026-10-04T21:27:56.249Z
+---
+
+Code intelligence state after Go/frontend removal + rebrand (2026-10-05): ALL THREE GRAPHS REBUILT. Structural (codebase-memory): 66,515 nodes / 147,478 edges / 7 languages (Go gone), project key STILL D-AI-Projects-fullstack-ai-engineer-lab because folder rename to ai-engineer-lab is blocked by a file lock; rename from D:\AI\Projects then reindex. Review graph (code-review-graph): 12,904 nodes / 95,167 edges / 23 communities / 1,147 flows, built at 10cc7c9, head_matches_build true. graphify: 62,930 nodes / 67,935 edges / 3,785 communities (CLI `graphify update . --force`; 283 community labels hub-renamed, run `graphify label` with LLM key to refresh names; tree_sitter_sql missing warning). repomix CLI pack: 5,425,989 tokens / 3,435 files written to OS temp (CLI defaults are much broader than the old MCP pack of 1,244,995 tokens / 1,082 files - numbers not comparable). Docs updated: docs/CODEBASE-INTELLIGENCE.md (status table, refresh notes, clusters, god nodes, quick-ref commands now use ACTUAL fullstack path so copy-paste works) + README badges and two stat tables. All 5 validators pass 68/59/34/28/24. Security flag on 18-database-lecture.md is a false positive (placeholder creds like admin:secret123). Stale until next refresh: graphify label step, folder rename + reindex.
