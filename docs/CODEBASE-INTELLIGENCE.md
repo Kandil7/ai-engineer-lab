@@ -7,14 +7,30 @@ graphify, and repomix.
 
 | Layer | Status | Details |
 |-------|--------|---------|
-| **Structural Graph** | ✅ Refreshed 2026-10-02 | `D-AI-Projects-ai-engineer-lab`, **67,084 nodes, 148,492 edges**, 8 languages |
-| **Review Graph** | ✅ Rebuilt 2026-10-02 | 12,984 nodes, 95,601 edges, 23 communities, 1,147 flows; built at `78d12fb`, `head_matches_build: true` |
-| **Multimodal Graph** | ✅ Built | 49,856 nodes, 54,483 edges, 2,833 communities (AST-only, no LLM) |
-| **Context Pack** | ✅ Ready | 1,244,995 tokens (compressed), 1,082 files |
+| **Structural Graph** | ✅ Refreshed 2026-10-05 | **66,515 nodes, 147,478 edges**, 7 languages (Go removed) |
+| **Review Graph** | ✅ Rebuilt 2026-10-05 | 12,904 nodes, 95,167 edges, 23 communities, 1,147 flows; built at `10cc7c9`, `head_matches_build: true` |
+| **Multimodal Graph** | ✅ Rebuilt 2026-10-05 | 62,930 nodes, 67,935 edges, 3,785 communities (AST-only, no LLM) |
+| **Context Pack** | ✅ Repacked 2026-10-05 | 5,425,989 tokens, 3,435 files (repomix CLI defaults; written outside the repo) |
 | **Watcher** | ⏳ Manual | Re-index with `codebase-memory index_repository` after large edits |
 
-**Structural project name:** `D-AI-Projects-ai-engineer-lab`
-**Root:** `D:/AI/Projects/ai-engineer-lab` · branch `master`
+**Structural project name:** `D-AI-Projects-fullstack-ai-engineer-lab` — becomes `D-AI-Projects-ai-engineer-lab` after the folder rename + reindex
+**Root:** `D:/AI/Projects/fullstack-ai-engineer-lab` · branch `master`
+
+### Refresh notes (2026-10-05)
+
+- **Go + frontend removed** (52 files) and the repo rebranded to "AI Engineer Lab" /
+  `ai-engineer-lab`. Full structural reindex: nodes 67,084 → **66,515** (−569),
+  edges 148,492 → **147,478** (−1,014). Languages 8 → **7** — `Go` is gone.
+- Review graph rebuilt at `10cc7c9` (20 stale files dropped): 12,984 → **12,904**
+  nodes, 95,601 → **95,167** edges; communities (23) and flows (1,147) unchanged.
+- Graphify forced re-extract: 49,856 → **62,930** nodes, 54,483 → **67,935** edges,
+  2,833 → **3,785** communities. 283 community labels were re-derived by hub — run
+  `graphify label` with an LLM key to refresh the names.
+- The structural graph key is still the old path-derived name until the folder is
+  renamed and reindexed.
+- Repomix repacked with CLI defaults: **5,425,989 tokens / 3,435 files** (the older
+  1,244,995 figure came from the MCP tool's narrower defaults — not comparable).
+  Output lives in the OS temp dir, not the repo.
 
 ### Refresh notes (2026-10-02)
 
@@ -137,18 +153,18 @@ graph TD
 
 | Cluster | Size | Cohesion | Dominant |
 |---------|------|----------|----------|
-| 5 | 548 | 0.47 | len, range, split, main, analyze |
-| 16 | 534 | 0.57 | print, connect, execute, close, get |
-| 9 | 279 | 0.46 | append, pop, main, _verify |
-| 21 | 255 | 0.67 | get, _purge, _verify, append |
-| 6 | 251 | 0.53 | str, search, stats, resolve, _ingest_async |
-| 18 | 243 | 0.62 | list, _verify, parse_sse_stream, dedupe_chunks |
-| 29 | 214 | 0.71 | commit, select, Session, add |
-| 19 | 170 | 0.61 | dict, collect, _verify, execute |
-| 20 | 155 | 0.61 | lower, main, upper, _verify, run |
-| 17 | 153 | 0.57 | int, _verify, run_with_bulkhead |
-| 37 | 147 | 0.77 | filter, count, ValidationError, is_valid |
-| 107 | 146 | 0.66 | encode, decode, _verify, main |
+| 0 | 508 | 0.44 | len, range, _verify, partition, top_k_scores |
+| 11 | 477 | 0.52 | print, llm_call, run_communication_demo, run, _verify |
+| 1 | 329 | 0.59 | str, read, search, main, trace |
+| 50 | 320 | 0.81 | execute, connect, commit, close |
+| 14 | 317 | 0.48 | append, pop, analyze, execute_plan, solve_problem |
+| 15 | 240 | 0.64 | get, _purge, set, append |
+| 8 | 230 | 0.56 | list, keys, _verify, parse_sse_stream |
+| 12 | 222 | 0.56 | int, encode, main, decode, _verify |
+| 21 | 200 | 0.60 | append, get, insert, main, undo |
+| 68 | 194 | 0.75 | Session, add, _exp |
+| 16 | 160 | 0.47 | items, get, clear, _verify |
+| 6 | 155 | 0.60 | dict, sort, KeyValueStore, _verify |
 
 ### Communities (23 from code-review-graph)
 
@@ -176,13 +192,13 @@ graph TD
 |------|-------|------------|
 | `RedisClient` | 110 | Redis connection wrapper (capstone infra) |
 | `main()` | 100 | Entry points across all exercises |
-| `Session` | 94 | SQLAlchemy session (database exercises) |
+| `Session` | 96 | SQLAlchemy session (database exercises) |
 | `SpyClient` | 31 | Testing mock (observability exercises) |
 | `Glossary: Data Ethics` | 31 | fast.ai lecture glossary |
 | `BST` | 29 | Binary search tree (DSA) |
-| `AVLTree` | 26 | Self-balancing tree (DSA) |
 | `Detailed Definitions` | 29 | fast.ai glossary node |
-| `Terms` | 28 | fast.ai glossary node |
+| `TokenUsage` | 28 | LLM cost tracking (DevMate obs) |
+| `Terms - Alphabetical Order` | 28 | fast.ai glossary node |
 | `Definitions` | 27 | fast.ai glossary node |
 
 ## Quick Reference
@@ -193,19 +209,19 @@ graph TD
 | What does X call? | `codebase-memory_trace_path(function_name="X", direction="outbound")` |
 | Find by pattern | `codebase-memory_search_graph(name_pattern=".*X.*")` |
 | Dead code | `codebase-memory_search_graph(max_degree=0)` |
-| Impact of changes | `codebase-memory_detect_changes(project="D-AI-Projects-ai-engineer-lab")` |
+| Impact of changes | `codebase-memory_detect_changes(project="D-AI-Projects-fullstack-ai-engineer-lab")` |
 | Blast radius | `code-review-graph_detect_changes_tool(detail_level="minimal")` |
 | Critical flows | `code-review-graph_list_flows_tool(sort_by="criticality", detail_level="minimal")` |
 | Community details | `code-review-graph_get_community_tool(community_name="X")` |
 | God nodes | `graphify_god_nodes()` |
 | Shortest path | `graphify_shortest_path(from="X", to="Y")` |
-| Pack for LLM | `repomix_pack_codebase(path="D:\\AI\\Projects\\ai-engineer-lab")` |
+| Pack for LLM | `repomix_pack_codebase(path="D:\\AI\\Projects\\fullstack-ai-engineer-lab")` |
 
 ## How to re-index
 
 ```bash
 # Structural graph (codebase-memory-mcp)
-codebase-memory index_repository --repo_path D:\AI\Projects\ai-engineer-lab --mode full
+codebase-memory index_repository --repo_path D:\AI\Projects\fullstack-ai-engineer-lab --mode full
 
 # Review graph (code-review-graph)
 # Built automatically on first query, or trigger manually:
@@ -217,7 +233,7 @@ graphify update . --force
 
 ## What it covers
 
-- **Python** (1,126 files in structural graph language counts): core, advanced, libraries,
+- **Python** (1,146 files in structural graph language counts): core, advanced, libraries,
   databases, web frameworks, DSA, ML, MLOps, GenAI, DevMate package + unit tests
 - **Markdown** (extensive): lectures, quizzes, ADRs, roadmaps, learning paths
 - **HTML/CSS/JS / YAML / TOML / SQL**: templates, compose, CI, registries, init scripts
@@ -230,4 +246,4 @@ graphify update . --force
 | **Verify** | Task-directed evidence | graph + coverage checks + exact snippets |
 | **Auditor** | Full bounded verification | All tools, complete pagination |
 
-*Last updated: 2026-10-02 (cbm-refresh: structural 67,084 nodes, review graph rebuilt)*
+*Last updated: 2026-10-05 (all graphs rebuilt + repomix repacked after Go/frontend removal: structural 66,515 nodes / 147,478 edges / 7 languages, review 12,904 / 95,167, graphify 62,930 / 67,935, pack 5,425,989 tokens)*
