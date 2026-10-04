@@ -2,26 +2,40 @@
 
 ## Topic Overview
 
-Model governance is the set of policies, measurements, and artifacts that make a
-model's behavior **auditable, explainable, and fair** — and that make those
-properties checkable by someone who did not build the model. A registry (Lecture
+Model governance is the set of policies, measurements, and artifacts
+that make a
+model's behavior **auditable, explainable, and fair** — and that make
+those
+properties checkable by someone who did not build the model. A registry
+(Lecture
 04) tracks *which* model is live; governance answers the harder questions: is it
-biased against a group, can its decisions be explained, and can you prove both to
+biased against a group, can its decisions be explained, and can you
+prove both to
 a regulator, a customer, or a court?
 
-Governance is not one tool but four practices layered on the lifecycle. **Bias
-detection** measures whether the model treats groups unequally. **Fairness
+Governance is not one tool but four practices layered on the lifecycle.
+**Bias
+detection** measures whether the model treats groups unequally.
+**Fairness
 metrics** turn that measurement into numbers with agreed definitions.
 **Explainability** produces reasons a human can inspect — globally (what the
-model learned) and locally (why this prediction). **Model cards** and audit
-trails record all of it as durable evidence. Together they turn "we think the
-model is fair" into "here is the measurement, the definition, and the record."
+model learned) and locally (why this prediction). **Model cards** and
+audit
+trails record all of it as durable evidence. Together they turn "we
+think the
+model is fair" into "here is the measurement, the definition, and the
+record."
 
-This matters most exactly where models decide about people: credit, hiring,
-lending, insurance, medical triage, and content moderation. It is also a hard
-engineering problem, because fairness and accuracy trade off against each other —
-there is no free lunch, only explicit choices. The AI engineer's job is to make
-those choices visible, measured, and recorded, not to pretend they do not exist.
+This matters most exactly where models decide about people: credit,
+hiring,
+lending, insurance, medical triage, and content moderation. It is also a
+hard
+engineering problem, because fairness and accuracy trade off against
+each other —
+there is no free lunch, only explicit choices. The AI engineer's job is
+to make
+those choices visible, measured, and recorded, not to pretend they do
+not exist.
 
 ## Learning Objectives
 
@@ -45,7 +59,8 @@ By the end of this lecture, you will be able to:
 
 ## 1. What Model Governance Is
 
-Governance is the answer to four questions a stakeholder will ask about any model
+Governance is the answer to four questions a stakeholder will ask about
+any model
 that touches people:
 
 1. **What does it decide, and for whom?** (scope and population)
@@ -53,9 +68,12 @@ that touches people:
 3. **Why did it decide this?** (explainability)
 4. **Can you prove all of the above?** (audit and documentation)
 
-A registry records the *artifact*; governance records the *justification*. The
-distinction matters because a model can be perfectly reproducible (Lecture 01),
-correctly versioned (Lecture 04), and still be discriminatory or unexplainable.
+A registry records the *artifact*; governance records the
+*justification*. The
+distinction matters because a model can be perfectly reproducible
+(Lecture 01),
+correctly versioned (Lecture 04), and still be discriminatory or
+unexplainable.
 
 ```python
 # A governance record is a first-class artifact, like a model version.
@@ -76,7 +94,8 @@ ungoverned regardless of how good it is.
 
 ## 2. Where Bias Comes From
 
-Bias is not a single bug; it enters at five distinct points, and each has a
+Bias is not a single bug; it enters at five distinct points, and each
+has a
 different fix.
 
 | Source | What happens | Example |
@@ -87,9 +106,12 @@ different fix.
 | Proxy | A neutral feature correlates with a protected one | Zip code as a proxy for race |
 | Measurement | The target itself is measured unequally | Health cost as a proxy for health need |
 
-The proxy source is the most insidious: dropping the protected attribute does not
-remove bias if a correlated feature remains. A model that never sees "race" can
-still discriminate through "zip code". This is why fairness is measured on
+The proxy source is the most insidious: dropping the protected attribute
+does not
+remove bias if a correlated feature remains. A model that never sees
+"race" can
+still discriminate through "zip code". This is why fairness is measured
+on
 *outcomes by group*, never by checking that the feature list looks clean.
 
 ```python
@@ -100,7 +122,8 @@ def proxy_correlation(df, protected, candidate):
 
 ## 3. Fairness Metrics
 
-There is no single definition of fairness. The four common ones measure different
+There is no single definition of fairness. The four common ones measure
+different
 things, and a model can satisfy one while violating another.
 
 - **Demographic parity**: each group receives positive decisions at the same rate.
@@ -123,13 +146,16 @@ def disparate_impact(y_pred, group, privileged, unprivileged):
     return ru / rp if rp else float("inf")
 ```
 
-The metric you choose is a *policy decision*, not a technical one. A hiring model
-might be held to equalized odds; a lending model to disparate impact. Naming the
+The metric you choose is a *policy decision*, not a technical one. A
+hiring model
+might be held to equalized odds; a lending model to disparate impact.
+Naming the
 metric and the threshold is part of governance.
 
 ## 4. Explainability Requirements
 
-Explainability has two scopes, and different stakeholders need different ones.
+Explainability has two scopes, and different stakeholders need different
+ones.
 
 - **Global**: what the model learned overall — feature importances, SHAP summary
   plots, partial-dependence. This is for model developers and reviewers.
@@ -143,16 +169,22 @@ def reason_codes(row, contributions, top_k=3):
     return [f"{name}: {'+' if w > 0 else ''}{w:.2f}" for name, w in ranked[:top_k]]
 ```
 
-The "right to explanation" in regulations such as GDPR turns local explainability
-from a nice-to-have into a legal requirement for automated decisions. A reason
-code ("declined because: debt-to-income +1.2, recent delinquency +0.8") is the
+The "right to explanation" in regulations such as GDPR turns local
+explainability
+from a nice-to-have into a legal requirement for automated decisions. A
+reason
+code ("declined because: debt-to-income +1.2, recent delinquency +0.8")
+is the
 deliverable.
 
 ## 5. Model Cards
 
-A model card is the standard governance artifact: a short, structured document
-that states what a model is for, how it was evaluated, and where it must not be
-used. It is the human-readable companion to the registry's machine-readable
+A model card is the standard governance artifact: a short, structured
+document
+that states what a model is for, how it was evaluated, and where it must
+not be
+used. It is the human-readable companion to the registry's
+machine-readable
 metadata.
 
 ```markdown
@@ -165,17 +197,22 @@ metadata.
 - Ethical considerations: reviewed by risk committee; reason codes served
 ```
 
-The card's most valuable section is *out-of-scope*: naming where the model must
+The card's most valuable section is *out-of-scope*: naming where the
+model must
 not be used is how governance prevents misuse, not just documents it.
 
 ## 6. Fairness Versus Accuracy
 
-The impossibility results (Chouldechova, Kleinberg et al.) say you cannot, in
-general, satisfy all fairness definitions at once when base rates differ between
-groups. Improving one metric degrades another, and improving fairness often
+The impossibility results (Chouldechova, Kleinberg et al.) say you
+cannot, in
+general, satisfy all fairness definitions at once when base rates differ
+between
+groups. Improving one metric degrades another, and improving fairness
+often
 costs accuracy.
 
-This is the central governance insight: there is no technically "correct" answer,
+This is the central governance insight: there is no technically
+"correct" answer,
 only an explicit trade-off. The job is to:
 
 1. Measure the trade-off curve (accuracy and each fairness metric).
@@ -195,12 +232,14 @@ def fairness_accuracy_tradeoff(thresholds, scores, y_true, group):
     return rows
 ```
 
-Presenting this table, and the recorded decision, is governance. Hiding it is
+Presenting this table, and the recorded decision, is governance. Hiding
+it is
 how organizations ship a model they cannot defend.
 
 ## 7. Governance in the Lifecycle
 
-Governance is not a one-time report; it is wired into the lifecycle as gates,
+Governance is not a one-time report; it is wired into the lifecycle as
+gates,
 exactly like the eval gate (Lecture 12).
 
 - **Training**: bias detection runs on the data and the labels; proxy features
@@ -223,6 +262,80 @@ def governance_gate(candidate, champion, max_dp_gap=0.05):
         return False, "FAIL: fairness regressed vs champion"
     return True, "PASS: fairness within bounds"
 ```
+
+## 8. Regulatory Frameworks
+
+### The rules that require governance
+
+Governance is not voluntary in regulated domains; it is the law. Three
+frameworks
+shape what must be measured and recorded.
+
+**GDPR (EU)** grants a right to explanation for automated decisions and requires
+a legal basis for processing. A credit or hiring model must be able to
+say why it
+decided, which is the local-explainability requirement (section 4) with
+legal
+force.
+
+**US sectoral law** governs by domain: the Equal Credit Opportunity Act for
+lending, Title VII for employment, each with its own fairness standard.
+The 80%
+disparate-impact rule is the operational form these take — a measurable
+threshold,
+not a vague principle.
+
+**The EU AI Act** takes a risk-based approach: high-risk systems (biometrics,
+employment, credit, education) face conformity assessment,
+documentation, human
+oversight, and post-market monitoring. The model card, the audit trail,
+and the
+production fairness monitoring in this lecture are exactly the artifacts
+it
+demands.
+
+### The common thread
+
+Every framework asks for the same three things: documentation (what the
+model
+is for), measurement (fairness and accuracy by group), and human
+oversight (who
+approved it, who can override it). Governance that produces those three
+satisfies
+the regulator regardless of jurisdiction.
+
+## 9. The Governance Dashboard
+
+### What to watch
+
+A governance dashboard shows, per model and per protected group: the
+fairness
+metrics (DP gap, DI, equalized odds), the trend (widening or narrowing),
+the
+approval status, and the model-card currency. It is the operational view
+of the
+four practices — the place an owner looks to know "is this model still
+fair."
+
+### Alerting on fairness regression
+
+A fairness metric that crosses its threshold, or widens versus the
+champion, is
+an alert — the same mechanism as a latency SLO breach. The alert routes
+to the
+model owner with the group breakdown, so the response is targeted (which
+group,
+how much, since when).
+
+### The audit view
+
+The dashboard's second consumer is the auditor. Every number links to
+its
+evidence: the eval run, the registry version, the approver, and the
+model card.
+That traceability is what turns monitoring into compliance — the
+dashboard is
+both an operational tool and a legal artifact.
 
 ## Every Use Case
 
@@ -257,31 +370,38 @@ def governance_gate(candidate, champion, max_dp_gap=0.05):
 ## Common Mistakes to Avoid
 
 ### Mistake 1: Dropping the protected attribute and calling it fair
-Bias persists through proxies (zip code, device, name). Measure outcomes by
+Bias persists through proxies (zip code, device, name). Measure outcomes
+by
 group, not the feature list.
 
 ### Mistake 2: Reporting accuracy only
-A single accuracy number hides group harm. Report accuracy and the fairness
+A single accuracy number hides group harm. Report accuracy and the
+fairness
 metrics together, always.
 
 ### Mistake 3: Picking the fairness metric after seeing the numbers
-Choosing the definition that flatters the model is not governance. Fix the
+Choosing the definition that flatters the model is not governance. Fix
+the
 metric and threshold *before* measuring.
 
 ### Mistake 4: A model card with no out-of-scope section
-Naming where the model must not be used is the point. A card without limits is
+Naming where the model must not be used is the point. A card without
+limits is
 marketing.
 
 ### Mistake 5: Explaining only globally
-A global SHAP plot does not tell an affected person why *they* were declined.
+A global SHAP plot does not tell an affected person why *they* were
+declined.
 Local reason codes are the legal deliverable.
 
 ### Mistake 6: Governance as a one-time report
-Fairness drifts (Lecture 11). A report filed once and never monitored is stale
+Fairness drifts (Lecture 11). A report filed once and never monitored is
+stale
 the moment the data shifts.
 
 ### Mistake 7: Hiding the fairness/accuracy trade-off
-Pretending there is no trade-off is the failure mode that produces indefensible
+Pretending there is no trade-off is the failure mode that produces
+indefensible
 models. Surface the curve and record the choice.
 
 ## Best Practices
@@ -311,7 +431,8 @@ models. Surface the curve and record the choice.
 ## AI Engineering Relevance
 
 **Where this shows up:** every model that decides about people. Governance is
-what makes those models defensible; without it, an accurate model is still a
+what makes those models defensible; without it, an accurate model is
+still a
 liability.
 
 | Concept here | Used for |
@@ -323,26 +444,34 @@ liability.
 | Fairness gate | Wiring governance into the lifecycle |
 
 **Scale note:** at 20 teams × 50 models, governance must be a reusable gate, not
-a per-model manual review. The bias report + fairness gate + model-card lint
-packaged as a CI job is how a platform team enforces one bar across many teams.
+a per-model manual review. The bias report + fairness gate + model-card
+lint
+packaged as a CI job is how a platform team enforces one bar across many
+teams.
 
 ## Practice Exercises
 
 ### Exercise 1: Demographic Parity (Easy)
-Implement `demographic_parity_gap(y_pred, group)` and test it on a group split
+Implement `demographic_parity_gap(y_pred, group)` and test it on a group
+split
 where one group's positive rate is double the other's.
 
 ### Exercise 2: Disparate Impact (Medium)
-Implement `disparate_impact(y_pred, group, privileged, unprivileged)` and flag
+Implement `disparate_impact(y_pred, group, privileged, unprivileged)`
+and flag
 the 80% rule; test the pass, fail, and zero-rate cases.
 
 ### Exercise 3: Proxy Detector (Medium)
-Implement `proxy_features(df, protected, candidates, threshold)` returning the
-candidate features correlated above the threshold — the "neutral feature" trap.
+Implement `proxy_features(df, protected, candidates, threshold)`
+returning the
+candidate features correlated above the threshold — the "neutral
+feature" trap.
 
 ### Exercise 4: Fairness Gate (Hard)
-Implement `governance_gate(candidate, champion, max_dp_gap)` and integrate it
-with an accuracy check so a candidate must pass *both* to promote; write the
+Implement `governance_gate(candidate, champion, max_dp_gap)` and
+integrate it
+with an accuracy check so a candidate must pass *both* to promote; write
+the
 pass/fail/regress cases as tests.
 
 ## Summary
@@ -356,9 +485,12 @@ pass/fail/regress cases as tests.
 | Model card | The standard governance artifact, with out-of-scope |
 | Fairness gate | Governance wired into CI and the registry |
 
-Model governance turns a model's fairness, explainability, and provenance from
-claims into measured, recorded facts. It is the discipline that makes an accurate
-model also a defensible one — and in regulated domains, it is the difference
+Model governance turns a model's fairness, explainability, and
+provenance from
+claims into measured, recorded facts. It is the discipline that makes an
+accurate
+model also a defensible one — and in regulated domains, it is the
+difference
 between shipping and not shipping at all.
 
 ## Quick Reference
@@ -374,7 +506,11 @@ between shipping and not shipping at all.
 
 ## Next Steps
 
-Next: **[18 Tracking Platforms](18-tracking-platforms-lecture.md)** — MLflow,
+Next: **[18 Tracking Platforms](18-tracking-platforms-lecture.md)** —
+MLflow,
 W&B, Comet, Neptune, Sacred, and how to choose.
 Continues in: **[Phase 8 MLOps](../../08-mlops/README.md)**.
-Official docs: https://fairmlbook.org/, https://modelcards.withgoogle.com/about
+Official docs: https://fairmlbook.org/,
+https://modelcards.withgoogle.com/about
+
+
