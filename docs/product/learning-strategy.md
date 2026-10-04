@@ -15,7 +15,7 @@ How to use the 5-axis resource system with the Full-Stack AI Engineer Lab worksp
 | Axis | Focus | Key Sources | Lab Integration |
 |------|-------|-------------|-----------------|
 | 1 | Web / Full-Stack Foundations | MDN, FreeCodeCamp, Odin Project, Roadmap.sh | Frontend projects, API integration |
-| 2 | Backend / DevOps | Pro Git, PostgreSQL/Redis docs, Docker courses | Go services, infra scripts |
+| 2 | Backend / DevOps | Pro Git, PostgreSQL/Redis docs, Docker courses | FastAPI services, infra scripts |
 | 3 | AI Engineering / LLMs / RAG | DeepLearning.AI, Boot.dev, OpenAI Cookbook | rag-system, embeddings, prompt-engineering |
 | 4 | Agents / Prompt Engineering | Anthropic guides, production patterns articles | .ai/prompts/, agents project |
 | 5 | Evidence-Based Learning | Active recall research, spaced repetition guides | daily-log, weekly-review, notes system |
@@ -82,8 +82,8 @@ Don't study one axis exclusively. Mix them:
 
 | Week | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday |
 |------|--------|---------|-----------|----------|--------|----------|
-| Focus | Go Backend | Flutter UI | RAG System | Go Backend | Agents | Review |
-| Axis | 2 | 1 | 3 | 2 | 4 | 5 |
+| Focus | RAG System | LLM APIs | RAG System | Agents | Prompt Eng | Review |
+| Axis | 3 | 3 | 3 | 4 | 4 | 5 |
 
 This follows the interleaving principle: mixing topics produces deeper learning than studying one topic at a time.
 
@@ -108,12 +108,12 @@ For every concept learned:
 ### Tier 1: Complete First (Foundations)
 1. **FreeCodeCamp** or **Odin Project** → Web fundamentals
 2. **Pro Git** → Git mastery
-3. **Go backend learning path** → `docs/learning/paths/go-backend.md`
+3. **FastAPI learning path** → `docs/learning/paths/fastapi-ai-services.md`
 
 ### Tier 2: Complete Next (Core Skills)
 4. **DeepLearning.AI Generative AI with LLMs** → AI fundamentals
 5. **DeepLearning.AI RAG course** → RAG pipeline
-6. **Flutter learning path** → `docs/learning/paths/flutter-client.md`
+6. **RAG learning path** → `docs/learning/paths/rag-qdrant.md`
 
 ### Tier 3: Complete Later (Advanced)
 7. **Anthropic agent guides** → Agent architecture
@@ -133,7 +133,7 @@ Based on research from axis 5:
 
 1. **Active Recall > Re-reading**: Test yourself before reviewing source material
 2. **Spaced Repetition > Cramming**: Review at increasing intervals
-3. **Interleaving > Blocking**: Mix Go, Flutter, RAG in same week
+3. **Interleaving > Blocking**: Mix RAG, LLM, system design in same week
 4. **Elaboration > Highlighting**: Explain concepts in your own words
 5. **Project-Based > Course-Based**: Every lesson → real code in the lab
 
@@ -174,8 +174,6 @@ Use `monthly-review.template.md`:
 
 | I need to learn... | Start with | Then apply in |
 |-------------------|------------|---------------|
-| Go basics | FreeCodeCamp backend + Go learning path | `projects/01-backend-go/` |
-| Flutter | Odin Project frontend + Flutter learning path | `projects/02-frontend/flutter-app/` |
 | PostgreSQL | PostgreSQL docs + GeeksforGeeks | `projects/03-databases/postgres-design/` |
 | Redis | Redis commands reference | `projects/03-databases/redis-cache/` |
 | RAG | DeepLearning.AI RAG + OpenAI Cookbook | `projects/04-ai-engineering/rag-system/` |

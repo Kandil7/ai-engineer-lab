@@ -29,7 +29,7 @@ Open a new session and fill in the goal card:
 ## Step 2 — Start with the Smallest Useful Question (1 min)
 
 **Bad:** "Build my auth service."
-**Better:** "Explain JWT auth flow in a Go API."
+**Better:** "Explain JWT auth flow in a FastAPI service."
 
 **Bad:** "How does RAG work?"
 **Better:** "How does chunk size affect retrieval quality?"

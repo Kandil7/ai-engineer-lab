@@ -7,7 +7,7 @@
 [![Eval Harness](https://img.shields.io/badge/Eval-Offline%20Hit%405%201.0-orange)](projects/04-ai-engineering/devmate/eval/)
 
 A **Repo-Centric Agentic Workspace** — a learning + execution + review operating system for
-becoming a production-level AI / Full-Stack AI Engineer. This is not a notes folder; it is an
+becoming a production-level AI Engineer. This is not a notes folder; it is an
 engineering environment where prompts, templates, workflows, ADRs, reviews, and **running
 systems** are versioned engineering artifacts.
 
@@ -43,8 +43,6 @@ systems** are versioned engineering artifacts.
 | Relational DB | PostgreSQL 16 | Compose ready |
 | Cache | Redis 7 | Compose ready |
 | Eval | Offline harness (`devmate.eval.run_ragas`) | **Yes** |
-| Backend (core) | Go (auth, users, routing) | Deferred (long track) |
-| Mobile / Web | Flutter / Next.js | Deferred |
 | Infra | Docker / Docker Compose | Compose file present |
 
 ---
@@ -94,7 +92,7 @@ evaluations/
   rag/baselines/            # Recorded retrieval top-k for offline eval
   rag/reports/              # Dated eval harness reports
 projects/
-  00-core-foundations/      # Python / Go / DSA / web curriculum
+  00-core-foundations/      # Python / DSA / git / Linux foundations
     python/                 # 10-phase module + SKILLS_MASTERY_MAP + 11 challenge sets
   04-ai-engineering/
     devmate/                # ACTIVE PROJECT — package, tests, eval, docker
@@ -235,7 +233,7 @@ Target: a remote AI/LLM engineering role. Vehicle: **DevMate**.
 | ----- | ------ |
 | [Production AI Systems Engineer](docs/roadmap/production-ai-systems-engineer.md) (P1–P8) | Strategic follow-on after A4/A6 |
 | [Phase 2 — Athar & Baligh](docs/roadmap/phase-2-athar-baligh.md) | After A7 |
-| [Long track — 12-month roadmap](docs/roadmap/master-roadmap.md) (Go, Flutter/Next.js, ThanaweyaGPT) | Deferred |
+| [Long track — 12-month roadmap](docs/roadmap/master-roadmap.md) | Deferred |
 
 ---
 
@@ -243,7 +241,7 @@ Target: a remote AI/LLM engineering role. Vehicle: **DevMate**.
 
 ### Workspace Build (Complete)
 - [x] Phase 0 — Foundations (repo skeleton, templates, prompts, registries)
-- [x] Phase 1 — Core MVP (end-to-end feature on `auth-service`)
+- [x] Phase 1 — Core MVP (end-to-end feature workflow)
 - [x] Phase 2 — Reliability (learning workflows, source templates, tests)
 - [x] Phase 3 — Scale (scaffolding, repo validation, deep dives)
 - [x] Phase 4 — Advanced (curriculum, operating manual, DevMate scaffold)
@@ -271,7 +269,8 @@ Target: a remote AI/LLM engineering role. Vehicle: **DevMate**.
 - [ ] **A2 remainder — Langfuse keys + live traced `devmate ask`**
 - [ ] **A3 remainder — live retrieval + chunking/vector ADRs**
 - [ ] A4–A10 — see table above
-- [ ] Deferred: Go, frontend, classical ML, P-track production depth
+- [x] Go and frontend tracks removed to focus on AI Engineering
+- [ ] Deferred: classical ML, P-track production depth
 
 ---
 

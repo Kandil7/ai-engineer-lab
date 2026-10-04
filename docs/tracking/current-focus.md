@@ -78,8 +78,7 @@ and the two ADRs are next once Qdrant/ingest are up.
 
 - ❌ **Unanchored lectures** — curriculum content must trace to a DevMate concept or an
   interview answer (ADR-0006). No "tutorial for its own sake".
-- ❌ Go / auth-service — paused under ADR-0004, lives in the long track
-- ❌ Flutter / Next.js — paused
+- ❌ Go / Flutter / Next.js — removed to focus on AI Engineering
 - ❌ Athar / Baligh — [phase 2](../roadmap/phase-2-athar-baligh.md), after A7
 - ❌ RAG implementation beyond the existing scaffold — week 2, after the eval harness exists
 - ❌ Classical ML / PyTorch — deferred to week 11+ (A10)

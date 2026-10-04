@@ -8,9 +8,8 @@
 [active track](../../roadmap/active-track-10-week.md))
 
 > **Status note.** Under [ADR-0004](../../decisions/0004-adopt-10-week-ai-engineer-track.md)
-> the Go core is paused, so this service is currently standalone rather than sitting behind a
-> Go gateway. The `/ai/*` contract below stays valid for when the Go layer resumes
-> ([ADR-0003](../../decisions/0003-hybrid-stack-go-fastapi.md)).
+> this service is standalone — the Go backend track was retired to focus on AI Engineering.
+> The `/ai/*` contract below stays valid.
 >
 > **Coverage note.** `projects/00-core-foundations/python/05-web-frameworks/fastapi/` already
 > contains 25 topics with a matching exercise for each. The fundamentals below are largely

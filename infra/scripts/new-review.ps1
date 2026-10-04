@@ -7,7 +7,7 @@
     code-review.template.md template.
 
 .EXAMPLE
-    ./infra/scripts/new-review.ps1 "auth-service" "jwt-middleware"
+    ./infra/scripts/new-review.ps1 "devmate" "langfuse-live-tracing"
     ./infra/scripts/new-review.ps1 "rag-system" "chunking-pipeline"
 #>
 

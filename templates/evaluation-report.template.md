@@ -1,6 +1,6 @@
 # Evaluation Report: <system / feature>
 
-- **System name:** <e.g. auth-service, rag-system>
+- **System name:** <e.g. devmate, rag-system>
 - **Eval type:** Prompt Regression | RAG Quality | Feature Eval | Model Comparison
 - **Date:** YYYY-MM-DD
 - **Dataset:** <name / path>

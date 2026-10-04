@@ -15,7 +15,7 @@ having the right context. Evaluation catches these failures before they reach us
 Test datasets live in `datasets/` as JSONL files. Each line is one test case:
 
 ```json
-{"question": "How does Go handle goroutine leaks?", "expected_context": ["goroutine leak detection", "context cancellation"], "expected_answer": "Go detects goroutine leaks using runtime.NumGoroutine() and context.WithCancel patterns."}
+{"question": "How does DevMate handle fallback across LLM providers?", "expected_context": ["provider fallback chain", "retry with backoff"], "expected_answer": "DevMate tries the primary provider, then falls back through a cheaper provider to a cached or graceful error path."}
 ```
 
 ### Dataset Schema

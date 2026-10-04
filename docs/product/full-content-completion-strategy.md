@@ -174,7 +174,7 @@ gate)**, **axis 11 (threat model)**, **axis 8 (inference benchmark)**.
 | `scope-definition.md` | Out: production SaaS, autonomous loops, K8s/prod infra, PII | P7 is demand-gated and labelled; no tenant data touched |
 | `feature-priorities.md` | P0-P3 ordering; quality non-negotiable at P0/P1 | Content and P1/P2 are P0/P1; P7/P8 are P2/P3 |
 | `workspace-goals.md` | 5-axis, quality targets, evidence | Matrix rows + validators are the evidence |
-| `12-month-plan.md` | Superseded 2026-08-02 (ADR-0004) | Retained only for Go/frontend/DevOps post-employment |
+| `12-month-plan.md` | Superseded 2026-08-02 (ADR-0004) | Retained only for DevOps post-employment |
 
 ---
 

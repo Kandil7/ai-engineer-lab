@@ -36,8 +36,6 @@ All learning resources are organized into 5 axes (see [`learning-sources/source-
 
 | Target | Description | Depth |
 |--------|-------------|-------|
-| **Go** | Backend services, CLI tools, concurrency patterns | Proficient |
-| **Flutter** | Cross-platform UI, BLoC/Riverpod state management | Proficient |
 | **FastAPI** | AI service APIs, async patterns, dependency injection | Proficient |
 | **PostgreSQL** | Schema design, migrations, query optimization | Proficient |
 | **Redis** | Caching, pub/sub, session management | Working |
@@ -52,8 +50,6 @@ All learning resources are organized into 5 axes (see [`learning-sources/source-
 
 | Project | Purpose | Stack |
 |---------|---------|-------|
-| **Auth System** | Foundation project — JWT, sessions, RBAC | Go + FastAPI + PostgreSQL + Redis |
-| **Chat Application** | Real-time messaging with AI augmentation | Go + Flutter + Redis + Qdrant |
 | **RAG Pipeline** | Document ingestion, retrieval, generation | FastAPI + Qdrant + PostgreSQL |
 | **AI Assistant** | Tool-using agent with memory and planning | FastAPI + Redis + Qdrant |
 | **ThanaweyaGPT** | Domain-specific educational AI | Full stack — all services |
@@ -63,9 +59,7 @@ All learning resources are organized into 5 axes (see [`learning-sources/source-
 ## Quality Targets
 
 ### Code Quality
-- All Go code passes `golangci-lint` with zero warnings
 - All Python code passes `ruff` with zero errors
-- Flutter code passes `flutter analyze` with no issues
 - Test coverage ≥ 80% for core business logic
 
 ### Prompt Quality
@@ -98,11 +92,10 @@ All learning resources are organized into 5 axes (see [`learning-sources/source-
 - [ ] Initial project scaffolds generated
 
 ### Phase 1 — Learning Workflows (Weeks 2-3)
-- [ ] Go backend learning path completed
 - [ ] FastAPI AI services learning path completed
 - [ ] PostgreSQL fundamentals practiced
 - [ ] Redis caching patterns implemented
-- [ ] First ADR: database choice for Auth system
+- [ ] First ADR: database choice for AI service
 
 ### Phase 2 — Core Projects (Weeks 4-6)
 - [ ] Auth system scaffolded and functional

@@ -1,7 +1,7 @@
 # Learning Source Index
 
 Resources specifically selected for the `fullstack-ai-engineer-lab` stack:
-Go/FastAPI + Flutter/Next.js + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
+FastAPI + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 
 **Rule:** Few sources, many projects. Every source → artifact in the repo.
 
@@ -23,19 +23,18 @@ Go/FastAPI + Flutter/Next.js + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 
 | # | Source | Type | Topic | Status | Link | Lab Integration |
 |---|--------|------|-------|--------|------|-----------------|
-| 1 | FreeCodeCamp – Full Stack Curriculum | course | HTML, CSS, JS, React, APIs, backend | planned | [freecodecamp.org](https://www.freecodecamp.org/) | HTML/CSS/JS → `projects/02-frontend/nextjs-web/`. REST APIs → `projects/01-backend-go/01-auth-service`. |
+| 1 | FreeCodeCamp – Full Stack Curriculum | course | HTML, CSS, JS, React, APIs, backend | planned | [freecodecamp.org](https://www.freecodecamp.org/) | HTML/CSS/JS → `projects/00-core-foundations/`. REST APIs → FastAPI. |
 | 2 | The Odin Project – Full Stack JavaScript | course | Full-Stack JS, project-based | planned | [theodinproject.com](https://www.theodinproject.com/) | Project folders, tests, git workflow mirror the lab philosophy. Apply every Odin project inside the lab. |
-| 3 | Scrimba – Fullstack Developer Path | course | JS, React, Next, Node, SQL, TypeScript | planned | [scrimba.com](https://scrimba.com/) | Interactive sections for React/Next → `projects/02-frontend/nextjs-web/`. Node concepts → mental model for Go/FastAPI. |
+| 3 | Scrimba – Fullstack Developer Path | course | JS, React, Next, Node, SQL, TypeScript | planned | [scrimba.com](https://scrimba.com/) | Interactive sections for React/Next → optional. Node concepts → mental model for FastAPI. |
 | 4 | App Academy Open | course | Bootcamp-style full-stack | planned | [appacademy.io](https://www.appacademy.io/) | Free alternative to Scrimba. Use for backend + database sections. |
 
 ### How to Use
 
 - **FreeCodeCamp + Odin** for basics (months 1-3):
-  - HTML/CSS/JS → `projects/02-frontend/`
-  - REST APIs → `projects/01-backend-go/01-auth-service`
+  - HTML/CSS/JS → `projects/00-core-foundations/`
+  - REST APIs → FastAPI
   - Write `docs/learning/paths/web-basics.md` for each module
-- **Scrimba/App Academy** for structured full-stack (months 3-6):
-  - React/Next sections → `projects/02-frontend/nextjs-web/`
+- **Scrimba/App Academy** for structured backend + database sections:
   - Connect every course project to a lab project
 
 ---
@@ -46,7 +45,7 @@ Go/FastAPI + Flutter/Next.js + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 
 | # | Source | Type | Topic | Status | Link | Lab Integration |
 |---|--------|------|-------|--------|------|-----------------|
-| 5 | Fullstack + AI Web Dev Roadmap (YouTube) | video | Why start with React/Node then move to Go/Rust | planned | [YouTube](https://www.youtube.com/watch?v=uB6orI_RpmY) | Understand why the lab uses Go/FastAPI after web fundamentals. |
+| 5 | Fullstack + AI Web Dev Roadmap (YouTube) | video | Why start with Python/FastAPI then move to AI | planned | [YouTube](https://www.youtube.com/watch?v=uB6orI_RpmY) | Understand why the lab uses FastAPI after web fundamentals. |
 | 6 | Git/GitHub for AI Engineers | video | Git workflow for AI projects | planned | [YouTube](https://www.youtube.com/watch?v=enBm0jLXLZ4) | Write `docs/decisions/000x-git-branching-strategy.md`. Apply feature branches per service. |
 | 7 | Pro Git (free book) | book | Git internals, branching, merging | planned | [git-scm.com](https://git-scm.com/book/en/v2) | Deep reference for Git decisions in the lab. |
 
@@ -62,7 +61,7 @@ Go/FastAPI + Flutter/Next.js + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 ### How to Use
 
 - **Git/GitHub video** → write branching strategy ADR
-- **Docker course** → containerize auth-service, deploy to Render/Vercel/VPS
+- **Docker course** → containerize the API service, deploy to Render/Vercel/VPS
 - **PostgreSQL/Redis docs** → apply one concept per service build session
 
 ---
@@ -127,8 +126,6 @@ Extract: Key concepts + one example + one exercise
     ↓
 Apply in lab project:
     - projects/00-core-foundations/     (basics)
-    - projects/01-backend-go/           (Go backend)
-    - projects/02-frontend/             (Flutter/Next.js)
     - projects/03-databases/            (PostgreSQL/Redis/Qdrant)
     - projects/04-ai-engineering/       (AI/LLMs/RAG/Agents)
     - projects/05-system-design/        (architecture)
@@ -151,23 +148,22 @@ Reflect in docs/learning/notes/weekly/
 
 ### Tier 1: Start Here (Months 1-3)
 1. **FreeCodeCamp** — HTML/CSS/JS basics
-2. **The Odin Project** — project-based full-stack
+2. **The Odin Project** — project-based foundations
 3. **YouTube Crash Course** — quick language intro
 
-### Tier 2: Build Full-Stack (Months 4-6)
-4. **Scrimba or App Academy** — structured React/Next/Node
+### Tier 2: Build Backend Foundations (Months 4-6)
+4. **FastAPI docs** — API service patterns
 5. **Roadmap.sh** — visual coverage reference
 
-### Tier 3: Master Backend (Months 7-9)
-6. **Go learning path** — `docs/learning/paths/go-backend.md`
-7. **PostgreSQL/Redis docs** — apply one concept per session
-8. **Docker course** — containerize and deploy
+### Tier 3: Master Databases + DevOps (Months 7-9)
+6. **PostgreSQL/Redis docs** — apply one concept per session
+7. **Docker course** — containerize and deploy
 
 ### Tier 4: AI Engineering (Months 10-12)
-9. **ML for Beginners + Karpathy** — ML foundations
-10. **HF NLP Course + Illustrated Transformer** — Transformers
-11. **DeepLearning.AI RAG + Agents courses** — RAG + Agents
-12. **Arize AI** — evaluation and monitoring
+8. **ML for Beginners + Karpathy** — ML foundations
+9. **HF NLP Course + Illustrated Transformer** — Transformers
+10. **DeepLearning.AI RAG + Agents courses** — RAG + Agents
+11. **Arize AI** — evaluation and monitoring
 
 ### Don't Collect
 - Pick ONE per tier, COMPLETE it, then move on

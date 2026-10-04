@@ -21,8 +21,8 @@ defines release-gate criteria that must ALL pass.
 |---|-----------|---------------|
 | 1 | Plan exists and is complete | `plan.md` has MVP, file structure, acceptance criteria |
 | 2 | Architecture reviewed | `architecture-review.md` exists with no open Critical |
-| 3 | Code compiles/builds | `go build ./...` or `flutter build` succeeds |
-| 4 | Tests pass | `go test ./...` or `flutter test` — 0 failures |
+| 3 | Code compiles/builds | `python -m pytest` / `ruff check` succeeds |
+| 4 | Tests pass | `pytest` — 0 failures |
 | 5 | Code reviewed | `ai-review.md` exists with severity ratings |
 | 6 | No Critical/High findings open | All Critical and High items resolved in `mistakes.md` |
 | 7 | Daily log exists | `docs/learning/notes/` has reflection for this feature |
@@ -32,7 +32,7 @@ defines release-gate criteria that must ALL pass.
 | Phase | Additional Criteria |
 |-------|-------------------|
 | P0 (Foundations) | All templates exist, all registries valid |
-| P1 (Core MVP) | auth-service handles signup, login, token refresh |
+| P1 (Core MVP) | DevMate answers a question end-to-end |
 | P2 (Reliability) | Learning workflow runs end-to-end on real source |
 | P3 (Scale) | infra scripts work, repo validation passes |
 | P4 (Advanced) | RAG eval baseline exists, capstone builds |
@@ -50,8 +50,8 @@ defines release-gate criteria that must ALL pass.
 |---|-----------|--------|----------|
 | 1 | Plan complete | [ ] | plan.md exists |
 | 2 | Architecture reviewed | [ ] | architecture-review.md |
-| 3 | Code builds | [ ] | `go build ./...` output |
-| 4 | Tests pass | [ ] | `go test ./...` output |
+| 3 | Code builds | [ ] | `python -m pytest` output |
+| 4 | Tests pass | [ ] | `pytest` output |
 | 5 | Code reviewed | [ ] | ai-review.md |
 | 6 | No open Critical/High | [ ] | mistakes.md |
 | 7 | Daily log exists | [ ] | docs/learning/notes/ |
@@ -79,10 +79,10 @@ For each criterion:
 # Validate project structure
 ./tests/repo-structure/validate.ps1
 
-# For auth-service specifically
-cd projects/01-backend-go/01-auth-service
-go build ./...
-go test ./...
+# For DevMate specifically
+cd projects/04-ai-engineering/devmate
+& .venv\Scripts\python.exe -m pytest -q
+& .venv\Scripts\python.exe -m ruff check .
 ```
 
 ## Release Gates

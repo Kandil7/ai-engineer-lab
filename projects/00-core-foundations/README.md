@@ -4,32 +4,26 @@
 
 ## Overview
 
-Before writing production Go services, deploying containers, or building AI pipelines, you need rock-solid fundamentals. This phase covers three pillars:
+Before building AI pipelines or deploying production services, you need rock-solid
+fundamentals. This phase covers three pillars:
 
 | Module | What You'll Master | Why It Matters |
 |--------|-------------------|----------------|
-| **Go Fundamentals** | Types, concurrency, interfaces, testing | Every backend service in this lab is written in Go |
+| **Python** | Core language, advanced patterns, libraries, web, ML | The primary language for all AI engineering in this lab |
 | **Git & Linux** | Branching, rebasing, shell scripting, permissions | DevOps, CI/CD, and deployment all run on Linux with Git |
 | **Data Structures & Algorithms** | Arrays, trees, graphs, sorting, Big-O | Interview prep + writing efficient code for AI workloads |
 
 ## Module Breakdown
 
-### 1. Go Fundamentals (`go/`)
+### 1. Python (`python/`)
 
-Go is the backbone of this lab. By the end of this module, you'll be comfortable with:
+Python is the backbone of this lab. The module is organized in 10 phases:
 
-- **Type system**: structs, interfaces, generics (Go 1.18+)
-- **Concurrency**: goroutines, channels, select, sync package
-- **Error handling**: custom errors, error wrapping, sentinel errors
-- **Testing**: table-driven tests, benchmarks, fuzzing
-- **Project layout**: cmd/, internal/, pkg/ conventions
-
-**Project**: Build a CLI tool that reads JSON, transforms data, and writes output. Practice Go idioms, error handling, and testing.
-
-```bash
-# Example: what you'll build
-$ go run . transform --input data.json --output result.json --field "name" --upper
-```
+- **Core** (`01-core-python/`) — language fundamentals, 52 topics
+- **Advanced** (`02-advanced-python/`) — Unicode, separation of concerns, review, test strategy
+- **Libraries, databases, web, DSA, ML, MLOps, GenAI, system design** — phased progression
+- **SKILLS_MASTERY_MAP.md** — the six Athar skills mapped to topics + mastery evidence
+- **Per-module challenge sets** — Bronze/Silver/Gold with measured structural guards
 
 ### 2. Git & Linux (`git-linux/`)
 
@@ -58,13 +52,9 @@ AI engineering isn't just about frameworks — it's about understanding complexi
 ```
 Phase 00: Foundations
     │
-    ├── Phase 01: Backend Go ─────── Go skills → API services
-    │
-    ├── Phase 02: Frontend ───────── Git workflows → collaboration
-    │
     ├── Phase 03: Databases ──────── SQL, Redis, vector DBs
     │
-    ├── Phase 04: AI Engineering ─── Python + Go for ML pipelines
+    ├── Phase 04: AI Engineering ─── Python for ML pipelines
     │
     ├── Phase 05: System Design ──── DSA knowledge → architecture decisions
     │
@@ -77,21 +67,19 @@ Phase 00: Foundations
 
 | Time Block | Activity |
 |------------|----------|
-| **Morning (2h)** | Go exercises or new concept |
+| **Morning (2h)** | Python exercises or new concept |
 | **Afternoon (1h)** | Git/Linux practice or DSA problems |
 | **Evening (30m)** | Review, document learnings, push to repo |
 
 ## Resources
 
-- [Go Tour](https://tour.golang.org/) — Interactive Go introduction
-- [Pro Go (Adam Bell)](https://adam-f bell.com/pro-go) — Deep Go reference
 - [Pro Git Book](https://git-scm.com/book/) — Free, comprehensive Git guide
 - [Linux Upskill Challenge](https://linuxupskillchallenge.org/) — 30-day Linux fundamentals
 - [NeetCode](https://neetcode.io/) — DSA problem sets with video explanations
 
 ## Progress Tracking
 
-- [ ] Go: Complete all exercises in `go/`
+- [ ] Python: Complete all phases in `python/`
 - [ ] Git: Set up multi-branch workflow with CI hooks
 - [ ] Linux: Write 10 shell scripts for common tasks
 - [ ] DSA: Solve 30 problems (10 easy, 10 medium, 10 hard)

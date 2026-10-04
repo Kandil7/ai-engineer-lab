@@ -202,7 +202,7 @@ Design the human-in-the-loop escalation policy. LLM judges are cheap and always-
 
 - When humans are pulled in: judge disagreement with itself (temperature>0 runs), judge score in a confidence band (e.g., 3–4 on the 5-scale), random sampling (1–5% of eval runs), and every CI failure.
 - Annotation guidelines: one page a new annotator can follow, with 3 worked examples and 3 deliberately ambiguous counter-examples.
-- The feedback loop: human corrections become golden cases (see `evaluations/prompts/golden-cases/` — reviewer-basic.md, planner-basic.md, debugger-basic.md already exist as prompt-level cases).
+- The feedback loop: human corrections become golden cases (see `evaluations/prompts/golden-cases/devmate.jsonl` for the existing prompt-level cases).
 - **Write an ADR-style justification:** Option A judge-only eval (fast, biased) vs. Option B human-only (accurate, unscalable) vs. Option C hybrid sampling (chosen). Include a cost estimate: 25-question run × judge cost vs. 25 × 5-min human review.
 
 **Verify:** the calibration report exists with self-agreement kappa; the ADR exists with a cost comparison table (use `MODEL_PRICING` in `src/devmate/obs/cost.py` for judge cost math).

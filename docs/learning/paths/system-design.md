@@ -174,7 +174,7 @@ one component → 1h discuss/review with peer or AI.
 5. Set up Kafka producer/consumer for async event processing
 6. Design a rate limiter: token bucket vs sliding window
 7. Write a capacity estimation doc for the full-stack-ai-engineer-lab system
-8. Diagram the full architecture: mobile → API gateway → Go → FastAPI → Qdrant
+8. Diagram the full architecture: client → API gateway → FastAPI → Qdrant
 
 ---
 
@@ -303,7 +303,7 @@ Single database handling load?
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-service
+  name: devmate-api
 spec:
   replicas: 3
   strategy:
@@ -314,8 +314,8 @@ spec:
   template:
     spec:
       containers:
-      - name: auth
-        image: auth-service:v1.2.0
+      - name: api
+        image: devmate-api:v1.2.0
         resources:
           requests: { cpu: "250m", memory: "256Mi" }
           limits:   { cpu: "500m", memory: "512Mi" }
@@ -330,9 +330,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: devmate-api
 spec:
-  selector: { app: auth-service }
+  selector: { app: devmate-api }
   ports: [{ port: 80, targetPort: 8080 }]
 ---
 # HPA
@@ -342,7 +342,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: auth-service
+    name: devmate-api
   minReplicas: 3
   maxReplicas: 20
   metrics:

@@ -45,7 +45,7 @@ This document defines the priority matrix for features in the Full-Stack AI Engi
 
 ### Project Scaffolds
 - **Description**: Ready-to-use project starters for each technology stack
-- **Components**: Go backend, FastAPI service, Flutter app, PostgreSQL schema
+- **Components**: FastAPI service, PostgreSQL schema, Docker Compose
 - **Success Criteria**: New projects can be scaffolded in < 5 minutes
 - **Dependencies**: Technology choices documented in ADRs
 

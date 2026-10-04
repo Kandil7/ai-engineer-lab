@@ -10,7 +10,7 @@ The goal is not just a learning repo, but an **engineering operating system** th
 
 The appropriate design here is a **hybrid architecture**: content/documentation-centric repo first, with clear workflow, prompt, and template layers — instead of starting with a massive software platform featuring a complex orchestration runtime from day one.
 
-The current system derived from the plan focuses on: Go backend, Flutter frontend, FastAPI for AI services, PostgreSQL, Redis, Qdrant, plus AI workflows inside the `.ai/` namespace.
+The current system derived from the plan focuses on: FastAPI for AI services, PostgreSQL, Redis, Qdrant, plus AI workflows inside the `.ai/` namespace.
 
 ### Component Separation
 
@@ -47,7 +47,7 @@ The current system is a **repo-centric implementation system** supporting human 
 
 The system solves the problem that learning plans, projects, prompts, and reviews are often scattered across files, chats, notebooks, and scattered tools — making progress unstructured and unmeasurable.
 
-The primary user is an engineer who wants to become a Full-Stack AI Engineer at a production level, linking learning with practical projects in backend, frontend, AI engineering, system design, and devops. The system must also suit actual projects like Athar and Baligh that are RAG/LLM-heavy.
+The primary user is an engineer who wants to become an AI Engineer at a production level, linking learning with practical projects in AI engineering, databases, system design, and devops. The system must also suit actual projects like Athar and Baligh that are RAG/LLM-heavy.
 
 ### Core Inputs
 
@@ -84,7 +84,7 @@ The primary user is an engineer who wants to become a Full-Stack AI Engineer at 
 ### In Scope
 
 - Organized monorepo for learning, execution, and review.
-- Project folders for paths: foundations, backend, frontend, databases, AI engineering, system design, devops, capstone.
+- Project folders for paths: foundations, databases, AI engineering, system design, devops, capstone.
 - Modular prompt system divided by function.
 - Workflows for planning, building, reviewing, debugging, and learning from sources.
 - Documentation system: README, roadmap, ADRs, learning notes, review logs.
@@ -116,12 +116,12 @@ The primary user is an engineer who wants to become a Full-Stack AI Engineer at 
 The proposed architecture is a **Repo-Centric Agentic Workspace**:
 
 1. **Content Layer** — roadmap, docs, learning paths, deep dives, source materials, decision records.
-2. **Project Layer** — actual applied projects: auth-service, chat-service, rag-system, ai-assistant, capstone.
+2. **Project Layer** — actual applied projects: DevMate, rag-system, ai-assistant, capstone.
 3. **Workflow Layer** — step-by-step workflows for planning, building, reviewing, debugging, and learning from sources.
 4. **Prompt Layer** — modular prompts used as operating modes: mentor, planner, architect, reviewer, debugger, interviewer, source-learning.
 5. **Template Layer** — standardized templates for plans, reviews, ADRs, bug reports, daily logs, source summaries.
 6. **Evaluation Layer** — golden cases, review outputs, eval reports, release gates for AI projects.
-7. **Delivery Layer** — infra, docker, scripts, app structure for complete projects (Go monorepo + FastAPI + Flutter + Next.js).
+7. **Delivery Layer** — infra, docker, scripts, app structure for complete projects (FastAPI + Docker).
 
 ### Core Modules
 
@@ -206,14 +206,10 @@ fullstack-ai-engineer-lab/
       0003-hybrid-stack-go-fastapi.md
     learning/
       paths/
-        go-backend.md
         fastapi-ai-services.md
-        flutter-client.md
-        nextjs-web.md
         rag-qdrant.md
         system-design.md
       deep-dives/
-        auth-service-deep-dive.md
         rag-system-deep-dive.md
         athar-retrieval-deep-dive.md
         baligh-training-deep-dive.md
@@ -279,12 +275,10 @@ fullstack-ai-engineer-lab/
   evaluations/
     prompts/ (golden-cases, regressions)
     rag/ (datasets, reports, baselines)
-    projects/ (auth-service, rag-system, capstone)
+    projects/ (rag-system, capstone)
 
   projects/
-    00-core-foundations/ (go, git-linux, ds-algo)
-    01-backend-go/ (auth-service, user-service, chat-service)
-    02-frontend/ (flutter-app, nextjs-web)
+    00-core-foundations/ (git-linux, ds-algo, python)
     03-databases/ (postgres-design, redis-cache, qdrant-rag)
     04-ai-engineering/ (prompt-engineering, embeddings, rag-system, agents)
     05-system-design/
@@ -293,7 +287,7 @@ fullstack-ai-engineer-lab/
 
   infra/
     docker/ (docker-compose.yml, postgres/, redis/)
-    scripts/ (setup, dev-run, seed-db, new-adr, new-review, new-source-note)
+    scripts/ (setup, new-adr, new-review, new-source-note)
 
   tests/
     prompts/
@@ -465,17 +459,14 @@ Every prompt is assembled deterministically from layers:
 - [x] ADR templates and first decisions recorded
 - [x] Core cheat sheets created
 - [x] Workspace goals documented
-- [x] Go basics + mini-exercises scaffolded
 - [x] Learning paths documented
 
 ### Phase 1 — Learning Workflows (Weeks 2-3)
-- [ ] Go backend learning path exercises
 - [ ] FastAPI learning path exercises
 - [ ] PostgreSQL fundamentals practiced
 - [ ] Redis caching patterns
 
 ### Phase 2 — Core Projects (Weeks 4-6)
-- [ ] Auth system scaffolded and functional
 - [ ] RAG pipeline with Qdrant operational
 - [ ] First prompt evaluation framework
 

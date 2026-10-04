@@ -72,7 +72,7 @@ governing rule (no new lectures until DevMate is deployed) is the mechanism.
 
 ### Not started
 
-Go beyond two exercise scaffolds · frontend · deployment · CI *(week 0)* · SQL *(week 4)* ·
+deployment · CI *(week 0)* · SQL *(week 4)* ·
 classical ML *(week 11+)* · MCP *(weeks 5–6)*.
 
 ---
@@ -82,14 +82,14 @@ classical ML *(week 11+)* · MCP *(weeks 5–6)*.
 | Metric | Count | Notes |
 | --- | --- | --- |
 | Active-track milestones | 1 / 10 | A1 done; A2/A3 in progress |
-| Long-track milestones | 0 / 13 | deferred under ADR-0004 |
+| Long-track milestones | 0 / 8 | deferred under ADR-0004 |
 | ADRs | 5 | 0004 and 0005 added 2026-08-02 |
 | Python files | 354 | foundations |
 | AI exercise lines | 6,947 | curriculum, not services |
 | **Deployed services** | **0** | ← the number that matters; target week 4 |
 | Daily logs | 1 | 2026-07-18 |
 | Weekly reviews | 0 | protocol exists, unused |
-| Source summaries | 1 | Go stdlib HTTP |
+| Source summaries | 0 | none yet |
 | Commits (last 30d) | 3 | 2026-07-29 most recent |
 
 ---
@@ -126,9 +126,7 @@ classical ML *(week 11+)* · MCP *(weeks 5–6)*.
 
 | Phase | Status |
 | --- | --- |
-| 0 — Foundations | Partial — Python well beyond target; Go and web barely started |
-| 1 — Backend (Go) | Deferred |
-| 2 — Frontend | Deferred |
+| 0 — Foundations | Partial — Python well beyond target |
 | 3 — AI Fundamentals | Superseded by the active track |
 | 4 — RAG Systems | Superseded — active track weeks 2–3 |
 | 5 — AI Agents | Superseded — active track weeks 5–6 |

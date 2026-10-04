@@ -3,13 +3,6 @@
 # Maintained by infra/scripts/new-review.ps1; each entry points at the review file.
 version: 1
 reviews:
-  - id: "01-auth-service-initial"
-    project: 01-auth-service
-    feature: initial
-    date: null
-    path: projects/01-backend-go/01-auth-service/ai-review.md
-    decision: draft
-    score: null
   - id: "devmate-scaffold-a1"
     project: devmate
     feature: a1-scaffold

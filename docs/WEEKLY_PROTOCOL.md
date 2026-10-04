@@ -148,7 +148,6 @@ Workflows: [`.ai/workflows/learning/`](../.ai/workflows/learning/) — one per s
 | **DevMate** — RAG, agents, MCP, production | **Active** | [`active-track-10-week.md`](roadmap/active-track-10-week.md) |
 | Athar — Arabic RAG | Phase 2 | [`phase-2-athar-baligh.md`](roadmap/phase-2-athar-baligh.md) |
 | Baligh — Arabic LLM fine-tuning | Phase 2 | [`phase-2-athar-baligh.md`](roadmap/phase-2-athar-baligh.md) |
-| Go backend / frontend | Deferred | [`master-roadmap.md`](roadmap/master-roadmap.md) |
 | Classical ML | Week 11+ | [`reference/ml-fundamentals-map.md`](reference/ml-fundamentals-map.md) |
 
 ---

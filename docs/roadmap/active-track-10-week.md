@@ -80,7 +80,7 @@ is a real trade-off, not an oversight: it is correct for an applied-LLM generali
 wrong for a research-leaning one. Scheduled as a sprint at week 11+ into the existing
 `projects/00-core-foundations/python/07-machine-learning/` folder.
 
-**Go / Flutter / Next.js** — paused. Lives on in [`master-roadmap.md`](master-roadmap.md).
+**Go / Flutter / Next.js** — removed. The tracks were retired to focus on AI Engineering.
 
 **Multi-agent systems, multimodal, self-hosted models** — deferred. No home in weeks 0–10;
 multi-agent is a weeks 11–12 buffer candidate. Multimodal and self-hosted serving stay out
@@ -92,8 +92,7 @@ unless postings demand them.
 
 Every week runs through the existing artifact chain in `.ai/workflows/feature/`:
 `01-plan → 02-design → 03-build → 04-review → 05-fix → 06-reflect`, producing `plan.md`,
-`ai-review.md`, `notes.md`, and `mistakes.md` in the DevMate folder — the same chain
-`auth-service` already demonstrates.
+`ai-review.md`, `notes.md`, and `mistakes.md` in the DevMate folder.
 
 ---
 

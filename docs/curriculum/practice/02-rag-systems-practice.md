@@ -292,7 +292,7 @@ You just found that `make test` hangs: `devmate/tests/unit/test_chunker.py::test
 
 Fixed-size is ClauseCheck's current production chunker for *contracts*. Quantify the damage and decide the migration:
 
-- Instrument the fixed chunker over 5 real contracts (or `evaluations/rag/datasets/auth-service-faqs.md` + `src/devmate/` docs): count chunks that (a) start or end mid-sentence, (b) split a numbered clause ("5.1 … 5.2"), (c) split a signature/DOI-style token.
+- Instrument the fixed chunker over 5 real contracts (or `src/devmate/` docs): count chunks that (a) start or end mid-sentence, (b) split a numbered clause ("5.1 … 5.2"), (c) split a signature/DOI-style token.
 - Write the migration decision as an ADR-style document: keep fixed (cost zero, recall 0.58 measured) vs. migrate (one sprint, recall 0.68+ measured) — with a results table from your own runs. Reference the lecture numbers (Fixed 0.62/0.58/0.78) as the baseline to beat.
 - Gates: the mid-sentence split rate is measured per corpus; the ADR states a numeric migration trigger (e.g., "migrate when mid-sentence split rate > 15%").
 
@@ -489,7 +489,7 @@ Harden and prove the real implementation:
 Multi-language + broken-code reality. DevMate supports ~25 extensions (`DocumentLoader.SUPPORTED_EXTENSIONS`), but AST-aware only handles Python (real `ast`) and JS/TS (regex + brace counting — `_extract_balanced_block` tracks strings, but test it against template literals containing `{`). Scope:
 
 - Stress the JS/TS path: arrow functions, nested template literals, destructuring with braces, comments containing braces. Find the cases that produce wrong blocks; quantify the error rate.
-- Evaluate tree-sitter (or language-specific parsers) for the top 5 languages in `SUPPORTED_EXTENSIONS` vs. the current fallback-to-recursive. Metric: retrieval recall@5 on 10 questions per language using a golden set over `src/devmate/` (Python), `projects/01-backend-go/01-auth-service/` (Go — currently pure recursive), and one JS/TS repo if available.
+- Evaluate tree-sitter (or language-specific parsers) for the top 5 languages in `SUPPORTED_EXTENSIONS` vs. the current fallback-to-recursive. Metric: retrieval recall@5 on 10 questions per language using a golden set over `src/devmate/` (Python) and one JS/TS repo if available.
 - **Write an ADR-style justification:** tree-sitter per language vs. regex/ast hybrid vs. fallback-to-recursive. Include the error-rate table and recall table; name the languages that justify parser investment.
 - Gates: no exception escapes the chunker on a full-corpus run (syntax errors included); per-language recall reported; the ADR's Consequences section is non-empty.
 

@@ -4,8 +4,10 @@
 >
 > On **2026-08-02**, [ADR-0004](../decisions/0004-adopt-10-week-ai-engineer-track.md) adopted
 > the **[Active Track — 10-Week AI Engineer](active-track-10-week.md)** as the plan of record.
-> This document is retained as the **long track**: post-employment depth in Go, Flutter/Next.js,
-> and the ThanaweyaGPT capstone.
+> This document is retained as the **long track** for post-employment depth.
+>
+> The Go and frontend phases (0–2) were **removed** to focus on AI Engineering. Only the
+> foundations, AI, system-design, DevOps, and ThanaweyaGPT capstone phases remain.
 >
 > **Why it was demoted.** It schedules "Python basics for AI" at weeks 37–38 and "chatbot with
 > LLM API" at weeks 39–40, while the repo already holds 354 Python files including all 20
@@ -22,8 +24,8 @@
 > | Phase 6 — System Design + DevOps | active track weeks 0, 4, 7 |
 > | Phase 7 — Capstone (ThanaweyaGPT) | DevMate; then [phase 2](phase-2-athar-baligh.md) |
 >
-> Phases 0–2 (Go, frontend) are **deferred, not superseded** — they remain valid future work.
-> Milestone IDs here use the `M` prefix; the active track uses `A`.
+> Phases 0–2 (Go, frontend) are **removed**, not superseded. Milestone IDs here use the `M`
+> prefix; the active track uses `A`.
 
 **Last updated:** 2026-08-02 (demoted) · **Originally written:** 2026-06-26
 
@@ -34,15 +36,13 @@
 | # | Phase | Duration | Months |
 |---|-------|----------|--------|
 | 0 | Foundations | 3 months | 1–3 |
-| 1 | Backend Foundations (Go) | 3 months | 4–6 |
-| 2 | Frontend (Flutter / Next.js) | 3 months | 4–6 |
 | 3 | AI Fundamentals | 3 months | 7–9 |
 | 4 | RAG Systems | 2 months | 10–11 |
 | 5 | AI Agents | 1 month | 12 |
 | 6 | System Design + DevOps | Ongoing | 8–12 |
 | 7 | Capstone — ThanaweyaGPT | Final | 11–12 |
 
-> Phases 1 and 2 run in parallel (backend + frontend). Phase 6 is interleaved from month 8 onward.
+> Phase 6 is interleaved from month 8 onward.
 
 ---
 
@@ -52,92 +52,24 @@
 **Goal:** Build a solid web development foundation and establish a learning workflow that compounds.
 
 ### Projects
-- `projects/00-core-foundations/` — HTML/CSS/JS portfolio, Go mini-exercises, Git workflow practice
+- `projects/00-core-foundations/` — HTML/CSS/JS portfolio, Git workflow practice
 
 ### Skills Covered
 - HTML5, CSS3, JavaScript ES6+ (DOM, fetch, async/await)
 - Git branching, PR workflow, rebase, conventional commits
 - Linux basics, command line proficiency
-- Go language basics (structs, interfaces, HTTP handlers)
 - Source-learning workflow (read → extract → apply → document)
 
 ### Key Resources
 - FreeCodeCamp Responsive Web Design + JavaScript Algorithms
 - The Odin Project — Foundations path
-- Go Tour (tour.golang.org)
 - Pro Git book (git-scm.com)
 
 ### Definition of Done
 - [ ] Deployed portfolio site with 3+ pages (HTML/CSS/JS)
-- [ ] 10 Go mini-exercises with tests passing
 - [ ] Git workflow: feature branch → commit → PR → merge → cleanup
 - [ ] First source-learning summary documented in `docs/learning/source-summaries/`
 - [ ] All artifacts version-controlled with clean commit history
-
----
-
-## Phase 1 — Backend Foundations (Go)
-
-**Duration:** Months 4–6 (12 weeks)
-**Goal:** Build a production-quality Go backend service with authentication, middleware, and database integration.
-
-### Projects
-- `projects/01-backend-go/01-auth-service/` — Auth service MVP (register, login, JWT, middleware)
-- `projects/03-databases/postgres-design/` — PostgreSQL schema design for auth + users
-
-### Skills Covered
-- Go standard library (net/http, encoding/json, crypto)
-- RESTful API design (routes, middleware, error handling)
-- JWT authentication and session management
-- PostgreSQL schema design, migrations, queries
-- Redis caching patterns
-- API testing (unit + integration)
-
-### Key Resources
-- Go standard library docs
-- PostgreSQL official documentation
-- Redis documentation
-- "Go Design Patterns" or an equivalent online resource
-
-### Definition of Done
-- [ ] Auth service: register, login, refresh-token endpoints working
-- [ ] JWT middleware protecting routes
-- [ ] PostgreSQL schema with users + sessions tables
-- [ ] Redis caching for session data
-- [ ] Integration tests passing (go test + testify)
-- [ ] API documented (OpenAPI or README)
-
----
-
-## Phase 2 — Frontend (Flutter / Next.js)
-
-**Duration:** Months 4–6 (12 weeks, parallel with Phase 1)
-**Goal:** Build a responsive frontend that integrates with the Go backend API.
-
-### Projects
-- `projects/02-frontend/flutter-app/` — Mobile app (Flutter) OR
-- `projects/02-frontend/nextjs-web/` — Web dashboard (Next.js + TypeScript)
-
-### Skills Covered
-- Flutter: widgets, state management, navigation, HTTP client
-- Next.js: pages, API routes, SSR/SSG, Tailwind CSS
-- API integration (fetch, error handling, loading states)
-- Responsive design and mobile-first principles
-- State management patterns (BLoC for Flutter, Zustand for Next.js)
-
-### Key Resources
-- Flutter documentation (flutter.dev)
-- Scrimba Next.js course
-- App Academy Open (frontend)
-- Tailwind CSS documentation
-
-### Definition of Done
-- [ ] Frontend app connects to Go backend API
-- [ ] Authentication flow (login/register screens)
-- [ ] Dashboard or home screen with real data
-- [ ] Responsive on mobile + desktop
-- [ ] Error handling and loading states
-- [ ] Deployed (Flutter web or Vercel)
 
 ---
 
@@ -258,7 +190,7 @@
 - Grafana / Prometheus basics
 
 ### Definition of Done
-- [ ] Docker Compose for full stack (Go + Flutter/Next.js + PostgreSQL + Redis + Qdrant)
+- [ ] Docker Compose for the full stack (FastAPI + PostgreSQL + Redis + Qdrant)
 - [ ] CI pipeline: lint → test → build → deploy
 - [ ] System design doc for ThanaweyaGPT architecture
 - [ ] 5+ ADRs covering major technical decisions
@@ -275,7 +207,7 @@
 - `projects/07-capstone/thanaweyagpt/` — Complete application
 
 ### Skills Covered (synthesis)
-- Full-stack integration (Go backend + Flutter/Next.js frontend)
+- Full-stack integration (FastAPI backend + RAG + AI agent)
 - RAG pipeline for domain knowledge
 - AI agent for interactive assistance
 - Production deployment with monitoring
@@ -288,8 +220,7 @@
 
 ### Definition of Done
 - [ ] Working ThanaweyaGPT application with:
-  - Backend API (Go)
-  - Frontend (Flutter or Next.js)
+  - Backend API (FastAPI)
   - RAG pipeline for knowledge retrieval
   - Agent for interactive Q&A
   - Docker deployment
@@ -324,4 +255,4 @@
 2. **Evidence required** — every milestone needs a file path proving completion.
 3. **Monthly reviews** — update progress-dashboard at month boundaries.
 4. **30-day rule** — every 30 days something must work end-to-end.
-5. **Parallel phases** — Phases 1+2 run together; Phase 6 interleaved; Phase 7 overlaps with 5+6.
+5. **Parallel phases** — Phase 6 interleaved; Phase 7 overlaps with 5+6.

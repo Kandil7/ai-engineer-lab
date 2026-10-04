@@ -10,10 +10,11 @@
 > weeks 39–40. The repo already contains 354 Python files including all 20 advanced topics and
 > 25 FastAPI topics, so months 1–9 would largely re-cover completed material.
 >
-> Retained for the Go, frontend, and DevOps sequencing, which resumes post-employment.
+> The Go and frontend phases were **removed** to focus on AI Engineering; the AI and DevOps
+> sequencing resumes post-employment.
 
 Tailored for the `fullstack-ai-engineer-lab` stack:
-Go/FastAPI + Flutter/Next.js + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
+FastAPI + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 
 **Last updated:** 2026-08-02 (demoted) · **Originally written:** 2026-06-26
 
@@ -70,71 +71,16 @@ Understand programming basics + web fundamentals. Build your first web pages.
 
 ## Phase 2: Full-Stack Web (Months 4–6)
 
-### Goal
-Build modern frontend + simple backend. Create a full-stack application.
-
-### Sources
-
-| Source | What You Learn | When |
-|--------|---------------|------|
-| **Scrimba** – Fullstack Developer Path (React/Next sections) | React, Next.js, TypeScript | Month 4-5 |
-| **OR App Academy Open** – Full Stack JS | Backend + database concepts | Month 4-5 |
-| **Roadmap.sh** – Full Stack | Visual checklist of what to learn | Reference |
-| **Node.js/Express docs** or **FastAPI docs** | Backend API patterns | Month 5-6 |
-
-### What to Build
-
-| Week | Project | Lab Location |
-|------|---------|-------------|
-| 13-14 | React/Next.js crash course + todo app | `projects/02-frontend/nextjs-web/` |
-| 15-16 | Auth UI (login/register) | `projects/02-frontend/nextjs-web/` |
-| 17-18 | Simple dashboard page | `projects/02-frontend/nextjs-web/` |
-| 19-20 | Backend API with CRUD (Node/FastAPI) | `projects/01-backend-go/` |
-| 21-22 | Connect frontend to backend | Full-stack integration |
-| 23-24 | **Full-stack app** — Auth + CRUD + DB | Complete project |
-
-### Checkpoint
-- [ ] Can build a React/Next.js component
-- [ ] Can create REST API endpoints
-- [ ] Can design a basic database schema
-- [ ] Can implement user authentication
-- [ ] Have a full-stack app in portfolio
+> **Removed.** This phase covered React/Next.js frontend and a Go backend — both retired to
+> focus on AI Engineering.
 
 ---
 
 ## Phase 3: Backend Mastery + Databases + DevOps (Months 7–9)
 
-### Goal
-Build production-style backend with real databases. Deploy to the internet.
-
-### Sources
-
-| Source | What You Learn | When |
-|--------|---------------|------|
-| **Go learning path** in this lab | Go backend (auth, users, middleware) | Month 7-8 |
-| **PostgreSQL 16 Documentation** | Schema design, indexing, joins | Month 8 |
-| **Redis Commands Reference** | Caching, pub/sub, sessions | Month 8 |
-| **Docker course** (from Mimo list) | Containerization, deployment | Month 9 |
-| **Pro Git** (free book) | Git internals, advanced patterns | Month 7 |
-
-### What to Build
-
-| Week | Project | Lab Location |
-|------|---------|-------------|
-| 25-26 | Go basics + simple HTTP server | `projects/01-backend-go/01-auth-service/` |
-| 27-28 | Auth service (register/login/JWT) | `projects/01-backend-go/01-auth-service/` |
-| 29-30 | PostgreSQL schema design + migrations | `projects/03-databases/postgres-design/` |
-| 31-32 | Redis caching patterns | `projects/03-databases/redis-cache/` |
-| 33-34 | Docker setup for services | `projects/06-devops/docker/` |
-| 35-36 | **Deploy full-stack app** | Live on the internet |
-
-### Checkpoint
-- [ ] Can build a Go backend with proper layering
-- [ ] Can design PostgreSQL schemas with indexes
-- [ ] Can use Redis for caching
-- [ ] Can containerize services with Docker
-- [ ] Can deploy a full-stack app to the internet
-- [ ] Have a deployed app in portfolio
+> **Removed.** This phase covered a Go backend with PostgreSQL/Redis — retired to focus on AI
+> Engineering. The PostgreSQL, Redis, and Docker content lives on in
+> `projects/03-databases/` and `projects/06-devops/`.
 
 ---
 
@@ -181,8 +127,7 @@ Understand AI/LLMs/RAG. Build an AI-powered application.
 
 ```
 Month 1-3:  FreeCodeCamp + Odin → projects/00-core-foundations/
-Month 4-6:  Scrimba/App Academy → projects/02-frontend/ + projects/01-backend-go/
-Month 7-9:  Go path + PostgreSQL/Redis + Docker → projects/01-backend-go/ + projects/03-databases/ + projects/06-devops/
+Month 7-9:  PostgreSQL/Redis + Docker → projects/03-databases/ + projects/06-devops/
 Month 10-12: ML + HF + DeepLearning.AI → projects/04-ai-engineering/
 ```
 
@@ -192,7 +137,7 @@ Month 10-12: ML + HF + DeepLearning.AI → projects/04-ai-engineering/
 
 1. **Active Recall > Re-reading**: Test yourself before reviewing
 2. **Spaced Repetition > Cramming**: Review at 1 day → 3 days → 1 week → 1 month
-3. **Interleaving > Blocking**: Mix Go, Flutter, RAG in same week
+3. **Interleaving > Blocking**: Mix RAG, LLM, system design in same week
 4. **Elaboration > Highlighting**: Explain concepts in your own words
 5. **Project-Based > Course-Based**: Every lesson → real code in the lab
 
@@ -217,6 +162,5 @@ Month 10-12: ML + HF + DeepLearning.AI → projects/04-ai-engineering/
 | Month | Milestone | Portfolio Item |
 |-------|-----------|---------------|
 | 3 | Programming foundations complete | 3+ static websites |
-| 6 | Full-stack capable | 1 full-stack app (deployed) |
-| 9 | Backend + DevOps mastery | Deployed Go backend with DB |
+| 9 | Databases + DevOps mastery | Deployed FastAPI service with DB |
 | 12 | AI Engineering capable | 1 AI-powered application |

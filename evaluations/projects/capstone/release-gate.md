@@ -161,7 +161,7 @@ This checklist defines the criteria for releasing ThanaweyaGPT — the capstone 
 ## Notes
 
 - This is the capstone — it should be the highest-quality release
-- All prior project gates (auth-service, rag-system) should be referenced
+- All prior project gates (rag-system) should be referenced
 - Consider a beta release to 10 students before full launch
 - Post-launch monitoring is critical for the first 30 days
 - This gate criteria may evolve as the project matures

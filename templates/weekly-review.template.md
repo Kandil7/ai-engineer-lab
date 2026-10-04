@@ -1,6 +1,6 @@
 # Weekly Review: Week of YYYY-MM-DD
 
-- **Theme:** <e.g. Go backend + PostgreSQL>
+- **Theme:** <e.g. RAG eval harness + Qdrant>
 
 ## Shipped This Week
 

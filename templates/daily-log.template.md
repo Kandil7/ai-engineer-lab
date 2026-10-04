@@ -1,6 +1,6 @@
 # Daily Log: YYYY-MM-DD
 
-- **Focus area:** <Go backend / RAG / Flutter / ...>
+- **Focus area:** <RAG / LLM / agents / eval / ...>
 - **Project:** <projects/...>
 
 ## Plan for Today

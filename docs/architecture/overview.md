@@ -9,7 +9,7 @@ orchestration is human-led and workflow-driven.
 | Layer | Directory | Purpose |
 |-------|-----------|---------|
 | **1. Content** | `docs/` | Roadmap, learning paths, deep dives, decision records, cheat sheets |
-| **2. Project** | `projects/` | Actual code: auth-service, chat-service, rag-system, capstone |
+| **2. Project** | `projects/` | Actual code: DevMate (RAG, LLM, agents), rag-system, capstone |
 | **3. Workflow** | `.ai/workflows/` | Step-by-step procedures for planning, building, reviewing, debugging, learning |
 | **4. Prompt** | `.ai/prompts/` | Modular operating modes (system / roles / tasks / critics / repair) |
 | **5. Template** | `templates/` | Standardized artifact shapes (16 templates) |

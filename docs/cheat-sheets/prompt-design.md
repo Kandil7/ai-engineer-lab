@@ -84,7 +84,7 @@ Summarize this text in 3 bullet points: [text]
 ### Expert Persona
 ```markdown
 You are a senior backend engineer with 10 years of experience.
-Specializing in Go, PostgreSQL, and distributed systems.
+Specializing in Python, PostgreSQL, and distributed systems.
 Focus on: performance, security, maintainability.
 ```
 
@@ -231,7 +231,7 @@ Examples:
 ---
 id: code-review-backend-v1
 category: code-review
-purpose: Review Go backend code
+purpose: Review Python backend code
 version: 1
 tokens: 850
 eval_score: 4.2/5

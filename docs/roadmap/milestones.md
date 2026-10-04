@@ -15,7 +15,8 @@
 | **M** | [Long Track — 12-month master roadmap](master-roadmap.md) | Deferred under [ADR-0004](../decisions/0004-adopt-10-week-ai-engineer-track.md) |
 
 Long-track milestones are retained rather than deleted — several will be revisited after
-employment, and M1/M3/M6 are partially satisfied already.
+employment, and M3 is partially satisfied already. The Go and frontend milestones were
+removed when those tracks were retired.
 
 ---
 
@@ -180,24 +181,19 @@ weeks (11–12) absorb slippage.
 
 | ID | Milestone | Evidence | Status |
 | --- | --- | --- | --- |
-| M1 | Go basics + mini exercises | `projects/00-core-foundations/go/` | Deferred — 2 of 10 exercises scaffolded |
-| M2 | HTML/CSS/JS portfolio | `projects/00-core-foundations/` | Deferred |
 | M3 | Git workflow mastery | this repo | Partially met — folded into A1 |
-| M6 | First source-learning workflow | `docs/learning/source-summaries/` | Partially met — 1 summary exists |
+| M6 | First source-learning workflow | `docs/learning/source-summaries/` | Planned |
 
 ## Phase 0 → 1 Bridge
 
 | ID | Milestone | Evidence | Status |
 | --- | --- | --- | --- |
-| M4 | Auth-service MVP | `projects/01-backend-go/01-auth-service/` | Deferred — scaffolded, incomplete |
 | M5 | PostgreSQL schema design | `projects/03-databases/postgres-design/` | Superseded by A4's SQL sprint |
 
-## Phases 1–2 — Backend + Frontend
+## Databases + DevOps
 
 | ID | Milestone | Evidence | Status |
 | --- | --- | --- | --- |
-| M7 | Frontend app (Flutter or Next.js) | `projects/02-frontend/` | Deferred |
-| M8 | Full-stack integration | complete app | Deferred |
 | M9 | Docker deployment | `projects/06-devops/docker/` | Partially met by A4 |
 
 ## Phases 3–5 — AI
@@ -222,7 +218,7 @@ weeks (11–12) absorb slippage.
 | --- | --- | --- | --- | --- | --- |
 | Active (A) | 10 | 1 | 2 | 7 | 0 |
 | Production (P) | 9 | 0 | 0 | 9 | 0 |
-| Long (M) | 13 | 0 | 0 | 0 | 13 |
+| Long (M) | 8 | 0 | 0 | 0 | 8 |
 
 **The number that matters: deployed services = 0.** Target A4, week 4. Production AI
 Systems evidence requires more than a URL: eval gates, SLOs, cost enforcement, and

@@ -81,10 +81,7 @@ Current levels from the 2026-09-30 repo audit.
 
 | Skill | Target | Current | Status |
 | --- | --- | --- | --- |
-| Go | 6 | 2 | Deferred — 2 exercise scaffolds, auth-service incomplete |
 | PostgreSQL (depth) | 6 | 2 | Partial — week 4 SQL sprint covers the basics |
-| Flutter | 6 | 1 | Deferred |
-| Next.js | 6 | 1 | Deferred |
 | ML fundamentals | 5 | 2 | Deferred to week 11+ (A10) |
 | PyTorch | 4 | 1 | Deferred to week 11+ (A10) |
 | Kubernetes | 3 | 1 | Post-employment |

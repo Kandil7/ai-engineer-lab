@@ -15,9 +15,7 @@ This document defines what is **in scope**, **out of scope**, and **future scope
 ## In Scope
 
 ### 1. Monorepo Structure
-- Go backend services (`services/`)
 - FastAPI AI services (`services/`)
-- Flutter mobile application (`mobile/`)
 - Shared libraries (`libs/`)
 - Configuration and deployment (`deploy/`)
 - Documentation (`docs/`)
@@ -60,9 +58,7 @@ This document defines what is **in scope**, **out of scope**, and **future scope
 - Common pitfalls and solutions
 
 ### 7. Project Scaffolds
-- Go backend starter with auth patterns
 - FastAPI service with RAG integration
-- Flutter app with state management
 - PostgreSQL schema templates
 - Docker Compose configurations
 

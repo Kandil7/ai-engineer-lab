@@ -21,7 +21,7 @@ graphify, and repomix.
 - Growth from lecture/quiz commits: nodes 60,751 → **67,084** (+6,333),
   edges 141,083 → **148,492** (+7,409).
 - `parse_partial`: 7 files (infra sql/conf/ps1, `practice_no_solutions.py`,
-  `pytest.ini`, auth-service `notes.md`). `skipped`: 0.
+  `pytest.ini`). `skipped`: 0.
 - Review graph rebuilt same day at `78d12fb`: nodes 11,590 → **12,984**,
   edges 87,721 → **95,601**; files 932 → 1,180. Communities (23) and
   flows (1,147) unchanged.
@@ -62,7 +62,6 @@ graph TD
         EP_DS["main: ds-algo x4"]:::entry
         EP_CLI["devmate cli.ask"]:::entry
         EP_API["devmate api.ask"]:::entry
-        EP_GO["auth-service main (Go)"]:::entry
         MAIN["main() across exercises"]:::god
     end
 
@@ -91,15 +90,10 @@ graph TD
         SPY["SpyClient mock"]:::god
     end
 
-    subgraph GO["01-backend-go (deferred)"]
-        GO_AUTH["auth: handlers / jwt / pgx"]
-    end
-
     EP_DATA --> PY_LIBS
     EP_DS --> PY_DSA
     EP_CLI --> DEVMATE
     EP_API --> DEVMATE
-    EP_GO --> GO_AUTH
     DEVMATE -.->|"406 calls"| PY_CORE
     PY_CORE -.->|"249 calls"| DEVMATE
     DEVMATE -.->|"Tracer.trace 47 callers"| OBS
@@ -175,7 +169,6 @@ graph TD
 | 08-mlops-verify | 180 | 0.34 | Python |
 | exercises-train | 162 | 0.18 | Python |
 | 01-calculator-task | 74 | 0.17 | Python |
-| services-user | 64 | 0.11 | Go |
 
 ### God Nodes (graphify, top 10)
 
@@ -226,7 +219,6 @@ graphify update . --force
 
 - **Python** (1,126 files in structural graph language counts): core, advanced, libraries,
   databases, web frameworks, DSA, ML, MLOps, GenAI, DevMate package + unit tests
-- **Go** (17 files): Auth / user / chat scaffolds (deferred track)
 - **Markdown** (extensive): lectures, quizzes, ADRs, roadmaps, learning paths
 - **HTML/CSS/JS / YAML / TOML / SQL**: templates, compose, CI, registries, init scripts
 

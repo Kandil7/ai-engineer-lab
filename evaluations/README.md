@@ -10,7 +10,7 @@ Systematic quality assurance for all AI-assisted engineering outputs in this lab
 |----------|------|----------|
 | **Prompts** | Prompt quality, consistency, scope control | System prompts, role prompts, critic prompts |
 | **RAG** | Retrieval quality, faithfulness, completeness | Chunk strategies, embedding models, reranking |
-| **Projects** | Feature completeness, code quality, test coverage | auth-service, rag-system, capstone |
+| **Projects** | Feature completeness, code quality, test coverage | DevMate, rag-system, capstone |
 
 ## How We Evaluate
 
@@ -71,7 +71,6 @@ evaluations/
     reports/                   # Evaluation run reports
   projects/
     README.md                  # Project evaluation guide
-    auth-service/              # auth-service eval criteria
     rag-system/                # rag-system eval criteria
     capstone/                  # capstone eval criteria
 ```

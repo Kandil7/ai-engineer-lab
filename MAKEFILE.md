@@ -4,7 +4,7 @@ This repo targets **Windows/PowerShell**, so automation lives in `infra/scripts/
 than a Makefile. This document is the comprehensive reference for every command and operation
 available in the workspace.
 
-> **Prerequisites:** PowerShell 5.1+, Go 1.22+, Docker Desktop (optional).
+> **Prerequisites:** PowerShell 5.1+, Python 3.11+, Docker Desktop (optional).
 > The `tests/*` validators are standalone PowerShell scripts (not Pester tests);
 > run them directly or via `make validate`.
 
@@ -162,45 +162,17 @@ retrieval quality.
 
 ## Development Commands
 
-### Run Auth Service Locally
+### Run DevMate Tests
 
 ```powershell
-cd projects/01-backend-go/01-auth-service
-go run .
-```
+cd projects/04-ai-engineering/devmate
+& .venv\Scripts\python.exe -m pytest -q
 
-Starts the Go auth service on its default port. Requires PostgreSQL to be running.
+# With coverage
+& .venv\Scripts\python.exe -m pytest -q --cov=devmate --cov-report=term-missing
 
-**When to use:** Developing or testing authentication features.
-
----
-
-### Run Auth Service with Hot Reload
-
-```powershell
-./infra/scripts/dev-run.ps1
-```
-
-Starts the auth service with file watching for automatic restarts on code changes.
-
-**When to use:** Active development where you want instant feedback.
-
----
-
-### Run Go Tests
-
-```powershell
-cd projects/01-backend-go/01-auth-service
-go test ./...
-
-# With verbose output
-go test -v ./...
-
-# With race detector
-go test -race ./...
-
-# Run a specific test
-go test -run TestRegisterUser -v ./...
+# Run a specific test file
+& .venv\Scripts\python.exe -m pytest tests/unit/test_cost.py -q
 ```
 
 **When to use:** Before committing, during development, or after fixing a bug.
@@ -223,7 +195,7 @@ assigned automatically.
 ### Generate New Code Review
 
 ```powershell
-./infra/scripts/new-review.ps1 projects/01-backend-go/01-auth-service "JWT refresh token rotation"
+./infra/scripts/new-review.ps1 projects/04-ai-engineering/devmate "Add Langfuse live tracing"
 ```
 
 Creates a code review artifact for a specific project and feature.
@@ -254,26 +226,13 @@ Creates a learning artifact from a study source. The type parameter determines t
 
 ---
 
-### Seed Database
-
-```powershell
-./infra/scripts/seed-db.ps1
-```
-
-Populates the database with test data for development. Includes sample users, courses, and
-chat sessions.
-
-**When to use:** After a fresh database setup or when you need test data for development.
-
----
-
 ### Initial Project Setup
 
 ```powershell
 ./infra/scripts/setup.ps1
 ```
 
-One-time setup: validates prerequisites, creates `.env` files, installs Go dependencies,
+One-time setup: validates prerequisites, creates `.env` files, installs Python dependencies,
 and optionally runs Docker Compose.
 
 **When to use:** First time cloning the repo, or after a major environment change.
@@ -366,17 +325,18 @@ Runs every validation suite in a single pass. This is the pre-commit quality gat
 
 ---
 
-### Validate a Specific Go Service
+### Validate a Specific Python Service
 
 ```powershell
-cd projects/01-backend-go/01-auth-service
-go vet ./...
+cd projects/04-ai-engineering/devmate
+& .venv\Scripts\python.exe -m ruff check .
+& .venv\Scripts\python.exe -m mypy src/
 ```
 
-Runs Go's static analysis to catch common mistakes: unused imports, unreachable code,
-incorrect format strings.
+Runs Python's static analysis to catch common mistakes: unused imports, unreachable code,
+incorrect type annotations.
 
-**When to use:** During development, before committing Go code.
+**When to use:** During development, before committing Python code.
 
 ---
 
@@ -385,16 +345,16 @@ incorrect format strings.
 ### Scaffold a New Service
 
 ```powershell
-# Create a new Go microservice
+# Create a new Python service
 $serviceName = "payment-service"
-New-Item -ItemType Directory -Path "projects/01-backend-go/$serviceName" -Force
-Copy-Item templates/feature-spec.template.md "projects/01-backend-go/$serviceName/feature-spec.md"
+New-Item -ItemType Directory -Path "projects/04-ai-engineering/$serviceName" -Force
+Copy-Item templates/feature-spec.template.md "projects/04-ai-engineering/$serviceName/feature-spec.md"
 ```
 
 Creates a new service directory with the standard template structure. Follow the pattern
-established by `01-auth-service`.
+established by DevMate.
 
-**When to use:** Starting a new backend service.
+**When to use:** Starting a new AI service.
 
 ---
 
@@ -433,7 +393,7 @@ should include input, expected output, and scoring criteria.
 
 ```powershell
 # Manually from template
-Copy-Item templates/feature-spec.template.md projects/01-backend-go/01-auth-service/feature-spec.md
+Copy-Item templates/feature-spec.template.md projects/04-ai-engineering/devmate/feature-spec.md
 ```
 
 Or use the workflow: start at `.ai/workflows/feature/01-plan.md` which guides you through
@@ -446,7 +406,7 @@ creating a complete feature specification.
 ### Generate Architecture Review
 
 ```powershell
-Copy-Item templates/architecture-review.template.md projects/01-backend-go/01-auth-service/architecture-review.md
+Copy-Item templates/architecture-review.template.md projects/04-ai-engineering/devmate/architecture-review.md
 ```
 
 **When to use:** When a feature touches system boundaries, involves new infrastructure,
@@ -605,9 +565,8 @@ End-to-end evaluation of AI features against quality criteria and golden test ca
 | ------------ | ---------------------------------------------------- | -------------------------- |
 | **Infra**    | `docker compose up -d`                               | Start databases            |
 | **Infra**    | `docker compose down -v`                             | Full reset                 |
-| **Dev**      | `go test ./...`                                      | Run Go tests               |
+| **Dev**      | `& .venv\Scripts\python.exe -m pytest -q`           | Run Python tests           |
 | **Dev**      | `./infra/scripts/new-adr.ps1 "title"`               | New architecture decision  |
-| **Dev**      | `./infra/scripts/seed-db.ps1`                        | Populate test data         |
 | **Validate** | `make validate`                                    | Run all validations        |
 | **Validate** | `./tests/repo-structure/validate.ps1`              | Check folder structure     |
 | **Workflow** | `./infra/scripts/new-source-note.ps1 <type> "title"`| Study source               |
@@ -640,12 +599,11 @@ docker compose -f infra/docker/docker-compose.yml ps -a
 docker compose -f infra/docker/docker-compose.yml rm -f
 ```
 
-### Go Module Issues
+### Python Environment Issues
 
 ```powershell
-cd projects/01-backend-go/01-auth-service
-go mod tidy
-go mod download
+cd projects/04-ai-engineering/devmate
+& .venv\Scripts\python.exe -m pip install -e ".[dev]"
 ```
 
 ### Validator Script Fails to Run

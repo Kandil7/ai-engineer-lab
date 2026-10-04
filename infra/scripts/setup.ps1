@@ -3,17 +3,15 @@
     Setup the Full-Stack AI Engineer Lab development environment.
 
 .DESCRIPTION
-    Checks prerequisites (Go, Docker, Flutter), pulls Docker images,
+    Checks prerequisites (Python, Docker), pulls Docker images,
     starts services, and creates the database.
 
 .EXAMPLE
     ./infra/scripts/setup.ps1
-    ./infra/scripts/setup.ps1 -SkipFlutter
     ./infra/scripts/setup.ps1 -WithDevTools
 #>
 
 param(
-    [switch]$SkipFlutter,
     [switch]$WithDevTools,
     [switch]$Force
 )
@@ -64,12 +62,12 @@ Write-Step "Checking prerequisites..."
 
 $prereqFailed = $false
 
-# Go
-if (Test-CommandExists "go") {
-    $goVersion = (go version) -replace '.*go(\d+\.\d+\.\d+).*', '$1'
-    Write-Ok "Go $goVersion"
+# Python
+if (Test-CommandExists "python") {
+    $pyVersion = (python --version 2>&1)
+    Write-Ok $pyVersion
 } else {
-    Write-Fail "Go not found — install from https://go.dev/dl/"
+    Write-Fail "Python not found — install Python 3.11+"
     $prereqFailed = $true
 }
 
@@ -88,16 +86,6 @@ if (Test-CommandExists "docker" -and (docker compose version 2>$null)) {
 } else {
     Write-Fail "Docker Compose not found"
     $prereqFailed = $true
-}
-
-# Flutter (optional)
-if (-not $SkipFlutter) {
-    if (Test-CommandExists "flutter") {
-        $flutterVersion = (flutter --version 2>$null | Select-Object -First 1) -replace 'Flutter\s+(\S+).*', '$1'
-        Write-Ok "Flutter $flutterVersion"
-    } else {
-        Write-Warn "Flutter not found — skipping (use -SkipFlutter to suppress)"
-    }
 }
 
 if ($prereqFailed -and -not $Force) {
@@ -211,7 +199,5 @@ Write-Host @"
   ║  DB User    : fslab                      ║
   ║  DB Pass    : fslab_dev_2026             ║
   ╚══════════════════════════════════════════╝
-
-  Next: ./infra/scripts/seed-db.ps1
 
 "@ -ForegroundColor Green

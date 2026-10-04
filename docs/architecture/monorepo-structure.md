@@ -14,7 +14,7 @@ fullstack-ai-engineer-lab/
 
   docs/
     architecture/       # overview, monorepo-structure, ai-workspace-architecture
-    decisions/          # ADR index + numbered ADRs (0001-0003)
+    decisions/          # ADR index + numbered ADRs (0001-0006)
     learning/           # paths/ deep-dives/ source-summaries/
     product/            # workspace-goals, scope-definition, feature-priorities, learning-strategy
     cheat-sheets/       # git, docker, postgres, qdrant, prompt-design
@@ -28,15 +28,13 @@ fullstack-ai-engineer-lab/
   evaluations/
     prompts/  golden-cases/ regressions/
     rag/      datasets/ reports/ baselines/
-    projects/ auth-service/ rag-system/ capstone/
+    projects/ rag-system/ capstone/
 
   projects/
-    00-core-foundations/  go/ git-linux/ ds-algo/ python/
+    00-core-foundations/  git-linux/ ds-algo/ python/
                           # python/: 10 phases (core→advanced→libraries→databases→
                           # web→DSA→ML→MLOps→GenAI→system-design) + SKILLS_MASTERY_MAP.md
                           # + per-module challenge sets (Bronze/Silver/Gold)
-    01-backend-go/        01-auth-service/ 02-user-service/ 03-chat-service/
-    02-frontend/          flutter-app/ nextjs-web/
     03-databases/         postgres-design/ redis-cache/ qdrant-rag/
     04-ai-engineering/    prompt-engineering/ embeddings/ rag-system/ agents/ ai-automation/ security/
     05-system-design/
@@ -45,7 +43,7 @@ fullstack-ai-engineer-lab/
 
   infra/
     docker/   docker-compose.yml + postgres/ redis/ mongodb/ qdrant/ langfuse/
-    scripts/  setup.ps1 dev-run.ps1 seed-db.ps1 new-adr.ps1 new-review.ps1 new-source-note.ps1
+    scripts/  setup.ps1 new-adr.ps1 new-review.ps1 new-source-note.ps1
 
   tests/
     repo-structure/ templates/ workflows/ prompts/
@@ -56,7 +54,7 @@ fullstack-ai-engineer-lab/
 | Artifact | Pattern | Example |
 |----------|---------|---------|
 | ADRs | `NNNN-kebab-title.md` (4-digit, zero-padded) | `0001-repo-centric-workspace.md` |
-| Source summaries | `<type>-<slug>.md` | `go-stdlib-http-package.md` |
+| Source summaries | `<type>-<slug>.md` | `fastapi-dependency-injection.md` |
 | Project artifacts | Standard filenames inside project folders | `plan.md`, `ai-review.md`, `notes.md`, `mistakes.md` |
 | Prompts | `<layer>.<name>` ids | `system.workspace-governor`, `roles.project-planner` |
 | Workflows | `<group>/<NN-step>` ids | `feature/01-plan`, `debugging/01-symptom-capture` |

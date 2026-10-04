@@ -220,19 +220,6 @@ Write: what was built, what you misunderstood, what the reviewer found, what to 
 ### `00-core-foundations/`
 AI as tutor + quiz generator. Study topic → ask 3 questions → solve by hand → get feedback → record.
 
-### `01-backend-go/`
-1. Learning Coach for concepts (interfaces, handlers, middleware)
-2. Project Planner for each feature
-3. Pair Programmer while implementing
-4. Code Reviewer after completion
-5. Debugger for runtime issues
-
-**Best practice:** Write handlers, service logic, validation, auth flow manually.
-
-### `02-frontend/`
-AI to explain state, plan screens, review component structure, debug async.
-Write manually: component logic, form handling, state transitions, rendering.
-
 ### `03-databases/`
 AI to explain normalization/indexing, review schema proposals, analyze queries.
 Write manually: schema drafts, sample queries, migration structure.
@@ -263,8 +250,8 @@ Write manually: Dockerfiles, compose adjustments, deployment runbooks.
 ```
 
 ### Step 2 — Start with the smallest useful question
-Bad: "Build my auth service."
-Better: "Explain JWT auth flow in a Go API."
+Bad: "Build my RAG system."
+Better: "Explain how hybrid retrieval fuses dense + BM25 results."
 
 ### Step 3 — Write before asking for the answer
 Write pseudo-code, file structure, sketch request/response, write function signature.

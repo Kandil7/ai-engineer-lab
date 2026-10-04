@@ -28,19 +28,19 @@ Each golden case is a markdown file in `golden-cases/` with this structure:
 
 ## Input Scenario
 <!-- The user message or context that triggers the prompt -->
-User asks to build a JWT authentication middleware in Go.
+User asks to add API-key authentication to a FastAPI service.
 
 ## Expected Behavior
 <!-- What the prompt SHOULD produce -->
 1. Outputs step-by-step plan, not full code
-2. Uses `crypto/rand` not `math/rand` for secrets
+2. Uses `secrets` module, not `random`, for key generation
 3. Includes error handling for each step
 4. References project file structure
 
 ## Pass Criteria
 <!-- Specific, checkable conditions -->
 - [ ] Response does NOT contain complete code blocks > 20 lines
-- [ ] Response mentions `crypto/rand` or secure random
+- [ ] Response mentions `secrets` or secure random
 - [ ] Response includes error handling
 - [ ] Response references `projects/` directory
 - [ ] Response length is between 200-2000 tokens

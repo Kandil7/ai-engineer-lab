@@ -172,7 +172,6 @@ $requiredEvalDirs = @(
     "evaluations/rag/datasets",
     "evaluations/rag/reports",
     "evaluations/rag/baselines",
-    "evaluations/projects/auth-service",
     "evaluations/projects/rag-system",
     "evaluations/projects/capstone"
 )
@@ -189,8 +188,6 @@ Write-Host "`n── Required Infra Files ──" -ForegroundColor White
 $requiredInfraFiles = @(
     "infra/docker/docker-compose.yml",
     "infra/scripts/setup.ps1",
-    "infra/scripts/dev-run.ps1",
-    "infra/scripts/seed-db.ps1",
     "infra/scripts/new-adr.ps1",
     "infra/scripts/new-review.ps1",
     "infra/scripts/new-source-note.ps1"

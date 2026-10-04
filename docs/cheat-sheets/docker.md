@@ -31,18 +31,16 @@ RUN apt-get update && \
 
 ### Multi-Stage Builds
 ```dockerfile
-FROM golang:1.21 AS builder
+FROM python:3.11-slim AS builder
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o server
+COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-FROM alpine:3.18
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=builder /app/server .
-CMD ["./server"]
+FROM python:3.11-slim
+WORKDIR /app
+COPY --from=builder /install /usr/local
+COPY . .
+CMD ["python", "main.py"]
 ```
 
 ---
