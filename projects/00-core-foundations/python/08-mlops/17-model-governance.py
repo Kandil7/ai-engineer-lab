@@ -26,7 +26,7 @@ import sys
 def demographic_parity_gap(y_pred: list[int], group: list[str]) -> float:
     """Max minus min positive-decision rate across groups."""
     rates = {}
-    for y, g in zip(y_pred, group):
+    for y, g in zip(y_pred, group, strict=False):
         rates.setdefault(g, [0, 0])
         rates[g][1] += 1
         rates[g][0] += y
@@ -47,7 +47,7 @@ def disparate_impact(
 
 
 def _rate(y_pred: list[int], group: list[str], g: str) -> float:
-    vals = [y for y, grp in zip(y_pred, group) if grp == g]
+    vals = [y for y, grp in zip(y_pred, group, strict=False) if grp == g]
     return sum(vals) / len(vals) if vals else 0.0
 
 
@@ -57,7 +57,7 @@ def _rate(y_pred: list[int], group: list[str], g: str) -> float:
 def pearson(xs: list[float], ys: list[float]) -> float:
     n = len(xs)
     mx, my = sum(xs) / n, sum(ys) / n
-    cov = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+    cov = sum((x - mx) * (y - my) for x, y in zip(xs, ys, strict=False))
     sx = sum((x - mx) ** 2 for x in xs) ** 0.5
     sy = sum((y - my) ** 2 for y in ys) ** 0.5
     return cov / (sx * sy) if sx and sy else 0.0
