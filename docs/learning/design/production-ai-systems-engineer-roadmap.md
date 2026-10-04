@@ -2,7 +2,7 @@
 
 ### Context
 
-Repo fullstack-ai-engineer-lab. User asked for a Production AI Systems Engineer roadmap plus an audit of current content and what is left. Used researcher (job market) and architect (repo audit) agents in parallel. Wrote docs/roadmap/production-ai-systems-engineer-roadmap.md and updated tracking files.
+Repo ai-engineer-lab. User asked for a Production AI Systems Engineer roadmap plus an audit of current content and what is left. Used researcher (job market) and architect (repo audit) agents in parallel. Wrote docs/roadmap/production-ai-systems-engineer-roadmap.md and updated tracking files.
 
 ### Explanation
 

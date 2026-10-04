@@ -1,6 +1,6 @@
 # Advanced Python Quiz 32 — Metaprogramming
 
-**Course:** Full-Stack AI Engineer — Core Foundations · Python
+**Course:** AI Engineer — Core Foundations · Python
 **Level:** Advanced · **Topic:** 32 — Metaprogramming
 **Questions:** 20 (6 Easy · 9 Medium · 5 Hard)
 **Time:** 30 minutes

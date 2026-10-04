@@ -2,7 +2,7 @@
 
 ## Welcome
 
-This directory contains comprehensive lecture notes and glossaries for the AI Automation topic within the Full Stack AI Engineer Lab. The lectures progress from foundational concepts to advanced topics, providing you with the knowledge and skills needed to build production-ready AI systems.
+This directory contains comprehensive lecture notes and glossaries for the AI Automation topic within the AI Engineer Lab. The lectures progress from foundational concepts to advanced topics, providing you with the knowledge and skills needed to build production-ready AI systems.
 
 ---
 

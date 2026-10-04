@@ -1,4 +1,4 @@
-# AGENTS.md — Full-Stack AI Engineer Lab
+# AGENTS.md — AI Engineer Lab
 
 Repo-centric learning + execution workspace. Active project: DevMate (`projects/04-ai-engineering/devmate/`).
 What to work on: `docs/tracking/current-focus.md`. Plan of record: `docs/roadmap/active-track-10-week.md`.

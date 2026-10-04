@@ -6,7 +6,7 @@
 
 **Last updated:** 2026-08-06
 
-How to use the 5-axis resource system with the Full-Stack AI Engineer Lab workspace.
+How to use the 5-axis resource system with the AI Engineer Lab workspace.
 
 ---
 

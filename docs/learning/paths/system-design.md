@@ -173,7 +173,7 @@ one component → 1h discuss/review with peer or AI.
 4. Implement a Redis-based cache-aside layer for an existing service
 5. Set up Kafka producer/consumer for async event processing
 6. Design a rate limiter: token bucket vs sliding window
-7. Write a capacity estimation doc for the full-stack-ai-engineer-lab system
+7. Write a capacity estimation doc for the ai-engineer-lab system
 8. Diagram the full architecture: client → API gateway → FastAPI → Qdrant
 
 ---

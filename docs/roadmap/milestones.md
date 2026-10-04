@@ -1,4 +1,4 @@
-# Milestones — Full-Stack AI Engineer Lab
+# Milestones — AI Engineer Lab
 
 > Trackable milestones with evidence. Update status at weekly reviews.
 > Statuses: `Planned` · `In Progress` · `Blocked` · `Review` · `Done` · `Deferred`

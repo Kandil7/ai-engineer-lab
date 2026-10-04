@@ -1,6 +1,6 @@
 # 🗺️ Python Learning Path
 
-> **Fullstack AI Engineer Lab** — Complete learning map through all 9 phases.
+> **AI Engineer Lab** — Complete learning map through all 9 phases.
 
 ---
 

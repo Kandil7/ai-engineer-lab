@@ -100,4 +100,4 @@ See `SKILLS_MASTERY_MAP.md` at the module root for the full cross-reference.
 
 ---
 
-*Part of the Fullstack AI Engineer Lab — `projects/00-core-foundations/python/`*
+*Part of the AI Engineer Lab — `projects/00-core-foundations/python/`*

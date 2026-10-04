@@ -1,6 +1,6 @@
 # Advanced Python Quiz 33 — Security Essentials
 
-**Course:** Full-Stack AI Engineer — Core Foundations · Python
+**Course:** AI Engineer — Core Foundations · Python
 **Level:** Advanced · **Topic:** 33 — Security Essentials
 **Questions:** 20 (6 Easy · 9 Medium · 5 Hard)
 **Time:** 30 minutes

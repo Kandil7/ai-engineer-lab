@@ -2,7 +2,7 @@
 
 - Time: 2026-10-02T12:44:39.645Z
 - Session: ses_f03b47a43ffeC8rdXc1PhPnR1G
-- Project: D:\AI\Projects\fullstack-ai-engineer-lab
+- Project: D:\AI\Projects\ai-engineer-lab
 
 ## Recent user messages (tail)
 - **user**: commit all changes one commit per one file in detials

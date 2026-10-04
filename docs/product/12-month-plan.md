@@ -13,7 +13,7 @@
 > The Go and frontend phases were **removed** to focus on AI Engineering; the AI and DevOps
 > sequencing resumes post-employment.
 
-Tailored for the `fullstack-ai-engineer-lab` stack:
+Tailored for the `ai-engineer-lab` stack:
 FastAPI + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 
 **Last updated:** 2026-08-02 (demoted) · **Originally written:** 2026-06-26

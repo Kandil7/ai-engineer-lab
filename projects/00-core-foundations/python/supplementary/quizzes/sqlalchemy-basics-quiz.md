@@ -366,4 +366,4 @@ D) `OFFSET` cannot be combined with `ORDER BY`
 
 ---
 
-*Quiz created for Fullstack AI Engineer Lab - Python Foundations*
+*Quiz created for AI Engineer Lab - Python Foundations*

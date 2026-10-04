@@ -20,7 +20,7 @@ Given a doc, repo, notebook, article, or course module:
 2. Separate confirmed facts from inferred conclusions.
 3. Explain why the source matters.
 4. Suggest one practical exercise.
-5. Map it to the relevant folder in fullstack-ai-engineer-lab.
+5. Map it to the relevant folder in ai-engineer-lab.
 
 Do not produce generic summaries.
 ```

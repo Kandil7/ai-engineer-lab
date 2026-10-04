@@ -4,7 +4,7 @@
 
 The **AI Engineering Workspace / Learning OS** is a practical monorepo that combines: project-based learning, AI workflows, versioned prompts, architecture reviews, code reviews, debugging logs, and capstone projects within one organized repository.
 
-The goal is not just a learning repo, but an **engineering operating system** that helps the user learn, execute, review, and evolve from Full-Stack AI Engineer to higher production levels.
+The goal is not just a learning repo, but an **engineering operating system** that helps the user learn, execute, review, and evolve from AI Engineer to higher production levels.
 
 ## Architecture
 
@@ -188,7 +188,7 @@ START → feature request → planner prompt → plan artifact
 ## 5) Project Structure
 
 ```text
-fullstack-ai-engineer-lab/
+ai-engineer-lab/
   README.md
   ROADMAP.md
   MAKEFILE.md

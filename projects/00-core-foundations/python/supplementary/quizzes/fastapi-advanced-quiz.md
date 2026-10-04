@@ -373,4 +373,4 @@ D) Use Flask patterns
 
 ---
 
-*Quiz created for Fullstack AI Engineer Lab - Python Foundations*
+*Quiz created for AI Engineer Lab - Python Foundations*

@@ -173,4 +173,4 @@ When updating these lectures:
 
 ---
 
-*Part of the [Fullstack AI Engineer Lab](../../) curriculum.*
+*Part of the [AI Engineer Lab](../../) curriculum.*

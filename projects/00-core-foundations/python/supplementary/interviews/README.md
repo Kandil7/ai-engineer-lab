@@ -1,13 +1,13 @@
 # Python & AI Interview Practice Hub
 
-> Comprehensive interview preparation materials for Fullstack AI Engineer roles.  
+> Comprehensive interview preparation materials for AI Engineer roles.  
 > Covers Python fundamentals, FastAPI web frameworks, Machine Learning, and core data libraries.
 
 ---
 
 ## What This Directory Contains
 
-This interview prep collection is designed for **Fullstack AI Engineer** candidates. Each file provides:
+This interview prep collection is designed for **AI Engineer** candidates. Each file provides:
 
 - Topic overviews with key concepts
 - 10-15 interview questions with detailed answers

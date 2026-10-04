@@ -1,6 +1,6 @@
 # ============================================================
 # Qdrant Configuration — Development Environment
-# Full-Stack AI Engineer Lab
+# AI Engineer Lab
 # ============================================================
 # Vector database for RAG (Retrieval-Augmented Generation)
 # Mounted into the qdrant container.

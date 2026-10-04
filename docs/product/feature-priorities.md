@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document defines the priority matrix for features in the Full-Stack AI Engineer Lab. Features are categorized into four priority levels (P0-P3) based on their impact on learning, project execution, and workspace quality.
+This document defines the priority matrix for features in the AI Engineer Lab. Features are categorized into four priority levels (P0-P3) based on their impact on learning, project execution, and workspace quality.
 
 ---
 

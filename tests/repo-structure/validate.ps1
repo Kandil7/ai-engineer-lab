@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Validate the repository structure for the Full-Stack AI Engineer Lab.
+    Validate the repository structure for the AI Engineer Lab.
 
 .DESCRIPTION
     Checks that all required directories exist, required files are present,

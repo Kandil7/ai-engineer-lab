@@ -12,7 +12,7 @@ This repository serves as a **repo-centric learning OS** — a self-contained wo
 
 ## Primary Goal
 
-Build a structured, reproducible environment for learning full-stack AI engineering through hands-on projects, modular prompts, and documented decisions. Every artifact in this repo — prompts, workflows, scaffolds, ADRs — is designed to be learned from, forked, and extended.
+Build a structured, reproducible environment for learning AI engineering through hands-on projects, modular prompts, and documented decisions. Every artifact in this repo — prompts, workflows, scaffolds, ADRs — is designed to be learned from, forked, and extended.
 
 ---
 

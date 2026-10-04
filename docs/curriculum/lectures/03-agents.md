@@ -533,7 +533,7 @@ async def main():
     "devmate": {
       "command": "python",
       "args": ["-m", "devmate.mcp.server"],
-      "cwd": "/path/to/fullstack-ai-engineer-lab"
+      "cwd": "/path/to/ai-engineer-lab"
     }
   }
 }

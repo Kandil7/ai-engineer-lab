@@ -59,7 +59,7 @@ function ConvertTo-Slug {
 Write-Host @"
 
   ╔══════════════════════════════════════════╗
-  ║   Full-Stack AI Engineer Lab — Source    ║
+  ║   AI Engineer Lab — Source    ║
   ╚══════════════════════════════════════════╝
 
 "@ -ForegroundColor Magenta

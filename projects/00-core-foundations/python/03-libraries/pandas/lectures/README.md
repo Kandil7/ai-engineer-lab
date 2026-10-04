@@ -145,4 +145,4 @@ df = sns.load_dataset("iris")
 
 ---
 
-*Part of the Fullstack AI Engineer Lab – Core Foundations track.*
+*Part of the AI Engineer Lab – Core Foundations track.*

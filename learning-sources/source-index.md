@@ -1,6 +1,6 @@
 # Learning Source Index
 
-Resources specifically selected for the `fullstack-ai-engineer-lab` stack:
+Resources specifically selected for the `ai-engineer-lab` stack:
 FastAPI + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 
 **Rule:** Few sources, many projects. Every source → artifact in the repo.

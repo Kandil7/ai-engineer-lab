@@ -1,4 +1,4 @@
-# Full-Stack AI Engineer Lab — task runner
+# AI Engineer Lab — task runner
 #
 # Works in Git Bash on Windows and on Linux CI. PowerShell-only operations stay in
 # infra/scripts/*.ps1; see MAKEFILE.md for the full command reference.

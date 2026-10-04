@@ -1,6 +1,6 @@
 # Advanced Python Quiz 31 — Concurrency Patterns
 
-**Course:** Full-Stack AI Engineer — Core Foundations · Python
+**Course:** AI Engineer — Core Foundations · Python
 **Level:** Advanced · **Topic:** 31 — Concurrency Patterns
 **Questions:** 20 (6 Easy · 9 Medium · 5 Hard)
 **Time:** 30 minutes

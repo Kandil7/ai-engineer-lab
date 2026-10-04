@@ -1,6 +1,6 @@
 -- ============================================================
 -- PostgreSQL Initialization Script
--- Full-Stack AI Engineer Lab — auth-service database
+-- AI Engineer Lab — auth-service database
 -- ============================================================
 
 -- Create auth database

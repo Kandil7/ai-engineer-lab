@@ -1,4 +1,4 @@
-# Full-Stack AI Engineer Lab
+# AI Engineer Lab
 
 [![Code Intelligence](https://img.shields.io/badge/Structural%20Graph-67%2C084%20nodes%20%2F%20148%2C492%20edges-blue)](docs/CODEBASE-INTELLIGENCE.md)
 [![Review Graph](https://img.shields.io/badge/Review%20Graph-12%2C984%20nodes%20%2F%2095%2C601%20edges-green)](docs/CODEBASE-INTELLIGENCE.md)

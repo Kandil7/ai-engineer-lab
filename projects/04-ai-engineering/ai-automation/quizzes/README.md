@@ -119,4 +119,4 @@ To add new quizzes or improve existing ones:
 
 ---
 
-*Created for AI Automation Lab - Fullstack AI Engineer Program*
+*Created for AI Automation Lab - AI Engineer Program*

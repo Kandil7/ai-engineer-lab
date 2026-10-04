@@ -1,6 +1,6 @@
 # PostgreSQL Schema Design
 
-Relational database schema for the Full-Stack AI Engineer Lab and ThanaweyaGPT platform.
+Relational database schema for the AI Engineer Lab and ThanaweyaGPT platform.
 Covers users, courses, chat sessions, messages, and embedding metadata.
 
 ---

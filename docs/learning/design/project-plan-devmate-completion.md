@@ -2,7 +2,7 @@
 
 ### Context
 
-Repo: fullstack-ai-engineer-lab. Plan of record: docs/roadmap/active-track-10-week.md (adopted 2026-08-02, ADR-0004), vehicle DevMate, milestones A1–A10, target first applications 2026-10-12. Session goal: produce the ultra-detailed execution plan that completes the entire project, grounded in a verified state audit, and integrate the W3Schools AWS Cloud Practitioner tutorial (8h, CLF-C02 prep) the user shared as a parallel track.
+Repo: ai-engineer-lab. Plan of record: docs/roadmap/active-track-10-week.md (adopted 2026-08-02, ADR-0004), vehicle DevMate, milestones A1–A10, target first applications 2026-10-12. Session goal: produce the ultra-detailed execution plan that completes the entire project, grounded in a verified state audit, and integrate the W3Schools AWS Cloud Practitioner tutorial (8h, CLF-C02 prep) the user shared as a parallel track.
 
 ### Explanation
 

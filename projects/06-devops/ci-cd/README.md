@@ -1,7 +1,7 @@
 # CI/CD — Continuous Integration & Deployment
 
 GitHub Actions workflows for automated testing, building, and deployment of all services
-in the Full-Stack AI Engineer Lab.
+in the AI Engineer Lab.
 
 ---
 

@@ -7,14 +7,14 @@ graphify, and repomix.
 
 | Layer | Status | Details |
 |-------|--------|---------|
-| **Structural Graph** | ✅ Refreshed 2026-10-02 | `D-AI-Projects-fullstack-ai-engineer-lab`, **67,084 nodes, 148,492 edges**, 8 languages |
+| **Structural Graph** | ✅ Refreshed 2026-10-02 | `D-AI-Projects-ai-engineer-lab`, **67,084 nodes, 148,492 edges**, 8 languages |
 | **Review Graph** | ✅ Rebuilt 2026-10-02 | 12,984 nodes, 95,601 edges, 23 communities, 1,147 flows; built at `78d12fb`, `head_matches_build: true` |
 | **Multimodal Graph** | ✅ Built | 49,856 nodes, 54,483 edges, 2,833 communities (AST-only, no LLM) |
 | **Context Pack** | ✅ Ready | 1,244,995 tokens (compressed), 1,082 files |
 | **Watcher** | ⏳ Manual | Re-index with `codebase-memory index_repository` after large edits |
 
-**Structural project name:** `D-AI-Projects-fullstack-ai-engineer-lab`
-**Root:** `D:/AI/Projects/fullstack-ai-engineer-lab` · branch `master`
+**Structural project name:** `D-AI-Projects-ai-engineer-lab`
+**Root:** `D:/AI/Projects/ai-engineer-lab` · branch `master`
 
 ### Refresh notes (2026-10-02)
 
@@ -193,19 +193,19 @@ graph TD
 | What does X call? | `codebase-memory_trace_path(function_name="X", direction="outbound")` |
 | Find by pattern | `codebase-memory_search_graph(name_pattern=".*X.*")` |
 | Dead code | `codebase-memory_search_graph(max_degree=0)` |
-| Impact of changes | `codebase-memory_detect_changes(project="D-AI-Projects-fullstack-ai-engineer-lab")` |
+| Impact of changes | `codebase-memory_detect_changes(project="D-AI-Projects-ai-engineer-lab")` |
 | Blast radius | `code-review-graph_detect_changes_tool(detail_level="minimal")` |
 | Critical flows | `code-review-graph_list_flows_tool(sort_by="criticality", detail_level="minimal")` |
 | Community details | `code-review-graph_get_community_tool(community_name="X")` |
 | God nodes | `graphify_god_nodes()` |
 | Shortest path | `graphify_shortest_path(from="X", to="Y")` |
-| Pack for LLM | `repomix_pack_codebase(path="D:\\AI\\Projects\\fullstack-ai-engineer-lab")` |
+| Pack for LLM | `repomix_pack_codebase(path="D:\\AI\\Projects\\ai-engineer-lab")` |
 
 ## How to re-index
 
 ```bash
 # Structural graph (codebase-memory-mcp)
-codebase-memory index_repository --repo_path D:\AI\Projects\fullstack-ai-engineer-lab --mode full
+codebase-memory index_repository --repo_path D:\AI\Projects\ai-engineer-lab --mode full
 
 # Review graph (code-review-graph)
 # Built automatically on first query, or trigger manually:

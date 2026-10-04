@@ -83,4 +83,4 @@ scope needs cutting. Stop after milestone M2, not mid-authoring.
 
 ---
 
-*Plan for the Fullstack AI Engineer Lab. Reproduce any baseline number by running the named file.*
+*Plan for the AI Engineer Lab. Reproduce any baseline number by running the named file.*

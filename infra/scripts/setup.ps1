@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Setup the Full-Stack AI Engineer Lab development environment.
+    Setup the AI Engineer Lab development environment.
 
 .DESCRIPTION
     Checks prerequisites (Python, Docker), pulls Docker images,
@@ -51,7 +51,7 @@ function Test-CommandExists {
 Write-Host @"
 
   ╔══════════════════════════════════════════╗
-  ║   Full-Stack AI Engineer Lab — Setup     ║
+  ║   AI Engineer Lab — Setup     ║
   ╚══════════════════════════════════════════╝
 
 "@ -ForegroundColor Magenta

@@ -1,4 +1,4 @@
-# 📋 Fullstack AI Engineer Lab - Expansion Plan
+# 📋 AI Engineer Lab - Expansion Plan
 **Projects: 00-core-foundations/python/**
 
 ---

@@ -1,7 +1,7 @@
 # Monorepo Structure
 
 ```text
-fullstack-ai-engineer-lab/
+ai-engineer-lab/
   README.md  ROADMAP.md  MAKEFILE.md  .gitignore  .editorconfig  .gitattributes
 
   .ai/

@@ -1,4 +1,4 @@
-# Builder Progress — Full-Stack AI Engineer Lab
+# Builder Progress — AI Engineer Lab
 
 > Tracks the scaffolding and setup progress of the workspace.
 > Updated as each phase of the workspace build completes.

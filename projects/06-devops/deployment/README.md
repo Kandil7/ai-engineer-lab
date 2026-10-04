@@ -1,7 +1,7 @@
 # Deployment — Cloud Infrastructure
 
 Cloud deployment strategy, Kubernetes manifests, monitoring setup, and scaling configuration
-for the Full-Stack AI Engineer Lab and ThanaweyaGPT platform.
+for the AI Engineer Lab and ThanaweyaGPT platform.
 
 ---
 

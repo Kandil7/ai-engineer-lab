@@ -1434,7 +1434,7 @@ Four config snippets, each with an error. Spot and fix each (write the corrected
 
 | # | Config (abridged) | Error |
 |---|-------------------|-------|
-| 1 | `{"mcpServers": {"devmate": {"command": "python", "args": ["-m", "devmate.mcp.server"]}}}` — no `cwd`, run from a random directory | `devmate` not importable → server exits on init; fix: add `"cwd": "K:\\learning\\technical\\ai-ml\\01-main-projects\\fullstack-ai-engineer-lab\\projects\\04-ai-engineering\\devmate"` (the lecture's config has `cwd` for this reason) |
+| 1 | `{"mcpServers": {"devmate": {"command": "python", "args": ["-m", "devmate.mcp.server"]}}}` — no `cwd`, run from a random directory | `devmate` not importable → server exits on init; fix: add `"cwd": "K:\\learning\\technical\\ai-ml\\01-main-projects\\ai-engineer-lab\\projects\\04-ai-engineering\\devmate"` (the lecture's config has `cwd` for this reason) |
 | 2 | `"args": "-m devmate.mcp.server"` (a string, not array) | client passes one argv element with spaces → module lookup fails; fix: array `["-m", "devmate.mcp.server"]` |
 | 3 | `"command": "poetry"` with `"args": ["run", "python", "-m", "devmate.mcp.server"]` — no absolute poetry path | client launches with a clean PATH (Cursor on macOS/Windows GUI launches often lack the shell PATH) → "command not found"; fix: absolute path to poetry/python |
 | 4 | Two servers both named `"devmate"` in different config files | name collision — the second silently wins or both fail; fix: unique names per server |

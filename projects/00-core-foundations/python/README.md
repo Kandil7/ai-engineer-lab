@@ -1,4 +1,4 @@
-# 🐍 Python Learning Module — Fullstack AI Engineer Lab
+# 🐍 Python Learning Module — AI Engineer Lab
 
 > **3,069 files across 9 learning phases** — from `print("Hello")` to production ML pipelines and GenAI systems.
 > Each topic ships with a self-contained directory containing exercise, lecture, and glossary.
@@ -190,7 +190,7 @@ Most Phase 1–2 exercises need **no external packages**.
 
 ## 🔗 Related Resources
 
-- [Fullstack AI Engineer Lab (root)](../../../README.md)
+- [AI Engineer Lab (root)](../../../README.md)
 - [Project Plans](../../../docs/plan/)
 - [Architecture Docs](../../../docs/architecture/)
 - [Infrastructure](../../../infra/)

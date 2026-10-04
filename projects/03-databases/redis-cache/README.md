@@ -1,7 +1,7 @@
 # Redis Caching Layer
 
 Redis implementation for caching, session storage, rate limiting, and real-time features
-in the Full-Stack AI Engineer Lab.
+in the AI Engineer Lab.
 
 ---
 

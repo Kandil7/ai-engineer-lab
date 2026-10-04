@@ -1,7 +1,7 @@
 # Docker — Containerization
 
 Multi-stage Docker builds, Docker Compose orchestration, and production best practices
-for all services in the Full-Stack AI Engineer Lab.
+for all services in the AI Engineer Lab.
 
 ---
 

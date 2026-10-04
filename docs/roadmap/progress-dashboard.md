@@ -1,4 +1,4 @@
-# Progress Dashboard — Full-Stack AI Engineer Lab
+# Progress Dashboard — AI Engineer Lab
 
 > Quick-read status summary. Update at weekly and monthly reviews.
 

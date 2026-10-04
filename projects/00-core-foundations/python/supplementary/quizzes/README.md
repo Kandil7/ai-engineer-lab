@@ -71,7 +71,7 @@ Each quiz contains:
 ### Database Track
 1. SQLAlchemy Basics → SQLAlchemy Advanced
 
-### Full Stack AI Engineer Path
+### AI Engineer Path
 1. NumPy + Pandas (data handling)
 2. Matplotlib (visualization)
 3. SciPy (scientific computing)
@@ -97,4 +97,4 @@ Feel free to suggest improvements or add new quizzes! Each quiz should:
 
 ---
 
-*Created for Fullstack AI Engineer Lab - Python Foundations*
+*Created for AI Engineer Lab - Python Foundations*

@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "Full Stack AI Engineer Lab", email = "lab@example.com"}
+    {name = "AI Engineer Lab", email = "lab@example.com"}
 ]
 keywords = ["python", "education", "tutorial", "w3schools", "data-structures", "algorithms", "machine-learning", "web-frameworks"]
 classifiers = [
@@ -81,9 +81,9 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/fullstack-ai-engineer-lab/core-foundations-python"
-Repository = "https://github.com/fullstack-ai-engineer-lab/core-foundations-python"
-Issues = "https://github.com/fullstack-ai-engineer-lab/core-foundations-python/issues"
+Homepage = "https://github.com/ai-engineer-lab/core-foundations-python"
+Repository = "https://github.com/ai-engineer-lab/core-foundations-python"
+Issues = "https://github.com/ai-engineer-lab/core-foundations-python/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]

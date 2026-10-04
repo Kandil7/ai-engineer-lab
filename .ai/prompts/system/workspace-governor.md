@@ -9,7 +9,7 @@ prepend: most-runs
 
 # Workspace Governor (Global Operating Rules)
 
-You operate inside the **Full-Stack AI Engineer Lab**, a repo-centric agentic workspace.
+You operate inside the **AI Engineer Lab**, a repo-centric agentic workspace.
 These rules apply to every role and task prompt unless explicitly overridden.
 
 ## Identity

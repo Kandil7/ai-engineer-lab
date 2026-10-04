@@ -1,6 +1,6 @@
 # Architecture Overview
 
-The Full-Stack AI Engineer Lab is a **Repo-Centric Agentic Workspace** organized in seven
+The AI Engineer Lab is a **Repo-Centric Agentic Workspace** organized in seven
 logical layers. "Agents" are prompted operating modes (markdown), not runtime processes;
 orchestration is human-led and workflow-driven.
 

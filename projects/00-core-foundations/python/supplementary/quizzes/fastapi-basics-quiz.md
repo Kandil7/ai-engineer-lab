@@ -352,4 +352,4 @@ async def send_notification(email: str, background_tasks: BackgroundTasks):
 
 ---
 
-*Quiz created for Fullstack AI Engineer Lab - Python Foundations*
+*Quiz created for AI Engineer Lab - Python Foundations*

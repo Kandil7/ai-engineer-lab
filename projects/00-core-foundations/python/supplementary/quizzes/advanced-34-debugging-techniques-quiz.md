@@ -1,6 +1,6 @@
 # Advanced Python Quiz 34 — Debugging Techniques
 
-**Course:** Full-Stack AI Engineer — Core Foundations · Python
+**Course:** AI Engineer — Core Foundations · Python
 **Level:** Advanced · **Topic:** 34 — Debugging Techniques
 **Questions:** 20 (6 Easy · 9 Medium · 5 Hard)
 **Time:** 30 minutes

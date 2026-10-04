@@ -6,7 +6,7 @@
 
 **Last updated:** 2026-08-06
 
-How to use AI agents inside `fullstack-ai-engineer-lab` to accelerate learning **without** outsourcing understanding.
+How to use AI agents inside `ai-engineer-lab` to accelerate learning **without** outsourcing understanding.
 
 > **You are the driver.** AI explains, plans, reviews, and debugs. You write the core logic.
 
@@ -42,7 +42,7 @@ Versioned, named, scoped, reviewed, improved over time.
 
 **Prompt:**
 ```text
-You are my Full-Stack AI Engineering mentor.
+You are my AI Engineering mentor.
 Your goal is to help me learn, not replace my thinking.
 
 Rules:
@@ -153,7 +153,7 @@ Given a doc, repo, notebook, article, or course module:
 2. Separate confirmed facts from inferred conclusions.
 3. Explain why the source matters.
 4. Suggest one practical exercise.
-5. Map it to the relevant folder in fullstack-ai-engineer-lab.
+5. Map it to the relevant folder in ai-engineer-lab.
 
 Do not produce generic summaries.
 ```

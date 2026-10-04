@@ -1,4 +1,4 @@
-# Skills Matrix — Full-Stack AI Engineer Lab
+# Skills Matrix — AI Engineer Lab
 
 > Track skill levels across the journey. Update monthly.
 > Scale: 1 (aware) → 10 (authority). Targets set by the
