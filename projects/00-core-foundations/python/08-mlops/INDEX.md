@@ -20,5 +20,10 @@ Generated for Phase 8 MLOps (production machine learning).
 | 14 | `14-ab-testing-models.py` | MLOps 14: A/B Testing Models | Sample size, chi-squared, t-test, guardrails |
 | 15 | `15-cost-optimization.py` | MLOps 15: Cost Optimization | Unit costs, spot instances, dedup, budgets |
 | 16 | `16-case-study-e2e.py` | MLOps 16: Case Study E2E | Full lifecycle: data → train → serve → monitor → promote |
+| 17 | `17-model-governance.py` | MLOps 17: Model Governance | Fairness, bias, explainability, model cards, gates |
+| 18 | `18-tracking-platforms.py` | MLOps 18: Tracking Platforms | MLflow, W&B, Comet, Neptune, Sacred, selection |
+| 19 | `19-resource-and-performance-metrics.py` | MLOps 19: Resource and Performance Metrics | Latency, throughput, utilization, efficiency |
+| 20 | `20-continuous-training.py` | MLOps 20: Continuous Training | Triggers, champion/challenger, thrash guards |
+| 21 | `21-deployment-strategies.py` | MLOps 21: Deployment Strategies | Shadow, canary, blue-green, A/B, rollback |
 
-Each topic also ships a full-detail lecture + glossary in `lectures/`.
+Each topic also ships a full-detail lecture + glossary in `lectures/` and a quiz in `quizzes/`.
