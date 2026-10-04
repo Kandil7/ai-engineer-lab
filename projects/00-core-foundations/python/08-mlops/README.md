@@ -3,7 +3,7 @@
 The bridge from trained models to production systems: reproducibility,
 tracking, versioning, serving, monitoring, and the full deployment lifecycle.
 
-## Exercises (16)
+## Exercises (21)
 
 | # | File | Topics |
 |---|------|--------|
@@ -23,6 +23,11 @@ tracking, versioning, serving, monitoring, and the full deployment lifecycle.
 | 14 | 14-ab-testing-models.py | Sample size, chi-squared, t-test, guardrails |
 | 15 | 15-cost-optimization.py | Unit costs, spot instances, dedup, budgets |
 | 16 | 16-case-study-e2e.py | Full lifecycle: data → train → registry → serve → monitor → promote |
+| 17 | 17-model-governance.py | Fairness, bias detection, explainability, model cards |
+| 18 | 18-tracking-platforms.py | MLflow, W&B, Comet, Neptune, Sacred, selection |
+| 19 | 19-resource-and-performance-metrics.py | Latency, throughput, utilization, efficiency, gates |
+| 20 | 20-continuous-training.py | Triggers, champion/challenger, thrash guards |
+| 21 | 21-deployment-strategies.py | Shadow, canary, blue-green, A/B, rollback |
 
 ## Lectures
 
