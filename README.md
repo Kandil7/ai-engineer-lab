@@ -1,8 +1,8 @@
 # AI Engineer Lab
 
-[![Code Intelligence](https://img.shields.io/badge/Structural%20Graph-67%2C084%20nodes%20%2F%20148%2C492%20edges-blue)](docs/CODEBASE-INTELLIGENCE.md)
-[![Review Graph](https://img.shields.io/badge/Review%20Graph-12%2C984%20nodes%20%2F%2095%2C601%20edges-green)](docs/CODEBASE-INTELLIGENCE.md)
-[![Multimodal Graph](https://img.shields.io/badge/Multimodal%20Graph-49%2C856%20nodes%20%2F%2054%2C483%20edges-purple)](docs/CODEBASE-INTELLIGENCE.md)
+[![Code Intelligence](https://img.shields.io/badge/Structural%20Graph-66%2C515%20nodes%20%2F%20147%2C478%20edges-blue)](docs/CODEBASE-INTELLIGENCE.md)
+[![Review Graph](https://img.shields.io/badge/Review%20Graph-12%2C904%20nodes%20%2F%2095%2C167%20edges-green)](docs/CODEBASE-INTELLIGENCE.md)
+[![Multimodal Graph](https://img.shields.io/badge/Multimodal%20Graph-62%2C930%20nodes%20%2F%2067%2C935%20edges-purple)](docs/CODEBASE-INTELLIGENCE.md)
 [![DevMate Gate](https://img.shields.io/badge/DevMate-42%20tests%20green-brightgreen)](projects/04-ai-engineering/devmate/)
 [![Eval Harness](https://img.shields.io/badge/Eval-Offline%20Hit%405%201.0-orange)](projects/04-ai-engineering/devmate/eval/)
 
@@ -147,12 +147,12 @@ eval Hit@5 1.000 on recorded retrieval path (not a live measurement).
 
 Four-layer code intelligence for token-efficient engineering:
 
-| Layer | Tool | What it does | Stats (2026-09-30) |
+| Layer | Tool | What it does | Stats (2026-10-05) |
 | ----- | ---- | ------------ | ------------------- |
-| **Structural Graph** | codebase-memory-mcp | Tree-sitter + LSP call graph | **60,751 nodes, 141,083 edges** |
-| **Review Graph** | code-review-graph | PR blast-radius, communities | 11,590 nodes, 87,721 edges |
-| **Multimodal Graph** | graphify | Code + docs + schemas | 49,856 nodes, 54,483 edges |
-| **Context Pack** | repomix | One-shot repo packing | 1,244,995 tokens, 1,082 files |
+| **Structural Graph** | codebase-memory-mcp | Tree-sitter + LSP call graph | **66,515 nodes, 147,478 edges** |
+| **Review Graph** | code-review-graph | PR blast-radius, communities | 12,904 nodes, 95,167 edges |
+| **Multimodal Graph** | graphify | Code + docs + schemas | 62,930 nodes, 67,935 edges |
+| **Context Pack** | repomix | One-shot repo packing | 5,425,989 tokens, 3,435 files |
 
 **Quick commands:**
 
@@ -247,10 +247,10 @@ Target: a remote AI/LLM engineering role. Vehicle: **DevMate**.
 - [x] Phase 4 — Advanced (curriculum, operating manual, DevMate scaffold)
 
 ### Code Intelligence (Current)
-- [x] Structural graph reindexed 2026-09-30 — 60,751 nodes / 141,083 edges
-- [x] Review graph built — 11,590 nodes / 87,721 edges / 23 communities
-- [x] Multimodal graph built — 49,856 nodes / 54,483 edges
-- [x] Context pack ready — 1,244,995 tokens / 1,082 files
+- [x] Structural graph reindexed 2026-10-05 — 66,515 nodes / 147,478 edges
+- [x] Review graph rebuilt 2026-10-05 — 12,904 nodes / 95,167 edges / 23 communities
+- [x] Multimodal graph rebuilt 2026-10-05 — 62,930 nodes / 67,935 edges
+- [x] Context pack repacked 2026-10-05 — 5,425,989 tokens / 3,435 files
 - [x] Security exercises — 10 modules (directory-per-exercise)
 - [x] DevMate call-graph retrace after reindex (RAG/eval/tracer edges resolved)
 
