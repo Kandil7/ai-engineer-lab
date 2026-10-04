@@ -328,6 +328,11 @@ A6 (hardening) done; `eval/` harness prints a table; P-track does not steal buil
   5/5 complete. Non-Python content has no remaining gaps.
 - 2026-10-02 — Python content work paused by request; `01-core-python` and the remaining
   legacy modules are not started.
+- 2026-10-02 — `python/08-mlops` extended to 21 units (17–21) covering the roadmap's MLOps Core
+  gaps: 17 governance (fairness/explainability/bias), 18 tracking platforms (W&B/Comet/Neptune/
+  Sacred), 19 resource/performance metrics, 20 continuous training, 21 deployment strategies.
+  Each has lecture (400+ lines), glossary, quiz, and a `--verify` exercise; all 5 exercises
+  exit 0, ruff clean, module format check clean.
 
 *Created 2026-10-01 as a 12-axis content strategy. Rewritten 2026-10-02 to cover the whole
 roadmap. Update §2 and §8 when a block of units completes.*
