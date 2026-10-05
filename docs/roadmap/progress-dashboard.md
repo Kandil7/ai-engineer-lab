@@ -33,7 +33,7 @@ gateway/routing, cost enforcement, SLO operations, and experiment tracking. Star
 | Area | Evidence | Scale |
 | --- | --- | --- |
 | Core Python | `python/01-core-python/` | 52 topics, lecture + glossary each |
-| Advanced Python | `python/02-advanced-python/` | 38 topics — decorators, generators, context managers, async, type hints, dataclasses, ABC, functools, itertools, descriptors, metaclasses, threading, logging, patterns + production engineering (Unicode/Arabic text, SoC, code review, test strategy) |
+| Advanced Python | `python/02-advanced-python/` | 39 topics — decorators, generators, context managers, async, type hints, dataclasses, ABC, functools, itertools, descriptors, metaclasses, threading, logging, patterns + production engineering (Unicode/Arabic text, SoC, code review, test strategy) + Poetry |
 | Data libraries | `python/03-libraries/` | numpy, pandas, matplotlib, scipy — pandas + matplotlib exercises finished 2026-07-29 |
 | FastAPI | `python/05-web-frameworks/fastapi/` | 25 topics, each with an exercise |
 | AI curriculum | `04-ai-engineering/` | 6,947 lines — LLM APIs, prompting, embeddings, RAG, agents, evaluation, deployment, multi-agent, safety |

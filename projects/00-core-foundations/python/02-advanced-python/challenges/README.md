@@ -9,6 +9,7 @@ Practice sets follow [`PRACTICE_SPEC.md`](../../PRACTICE_SPEC.md): Bronze (mecha
 | `36-separation-of-concerns/` | [Separation of Concerns](../36-separation-of-concerns/) | Protocols, DI, engine-swap invariant |
 | `37-code-review-and-refactoring/` | [Code Review and Refactoring](../37-code-review-and-refactoring/) | smell measurement, lock tests, structural budgets |
 | `38-test-strategy-contract-regression/` | [Test Strategy](../38-test-strategy-contract-regression/) | provenance, idempotency, regression gate |
+| `39-poetry/` | [Poetry](../39-poetry/) | constraint expansion, group selection, lockfile audit |
 
 ## Running
 

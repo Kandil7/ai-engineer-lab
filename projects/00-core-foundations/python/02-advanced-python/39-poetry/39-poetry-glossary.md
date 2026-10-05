@@ -59,6 +59,7 @@ manifest fields that can change resolution — dependency tables, groups,
 
 ```python
 import hashlib, json
+
 digest = hashlib.sha256(json.dumps(relevant, sort_keys=True).encode()).hexdigest()
 ```
 
@@ -207,8 +208,8 @@ grow:
 
 ```python
 expand_constraint("~1.2.3")  # ('>=1.2.3', '<1.3.0')
-expand_constraint("~1.2")    # ('>=1.2.0', '<1.3.0')
-expand_constraint("~1")      # ('>=1.0.0', '<2.0.0')
+expand_constraint("~1.2")  # ('>=1.2.0', '<1.3.0')
+expand_constraint("~1")  # ('>=1.0.0', '<2.0.0')
 ```
 
 ### uv

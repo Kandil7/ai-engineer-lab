@@ -71,7 +71,8 @@ python/
 │   ├── 35-unicode-and-arabic-text/  # [NEW] Unicode, normalization, Arabic text
 │   ├── 36-separation-of-concerns/   # [NEW] Layers, Protocols, DI, config, logging
 │   ├── 37-code-review-and-refactoring/ # [NEW] Review lenses, smells, lock tests
-│   └── 38-test-strategy-contract-regression/ # [NEW] Unit/integration/contract/regression/data
+│   ├── 38-test-strategy-contract-regression/ # [NEW] Unit/integration/contract/regression/data
+│   └── 39-poetry/                   # [NEW] Poetry: constraints, lockfile audit, groups
 │
 ├── 03-libraries/                    # 📊 Phase 3: Data Science Libraries
 │   ├── numpy/                       # 34 topics: Arrays, ufuncs, linear algebra
@@ -156,6 +157,7 @@ See **[learning_path.md](learning_path.md)** for the complete, week-by-week lear
 | Practice production Python (Arabic text, batching) | `02-advanced-python/challenges/35-unicode-and-arabic-text/` |
 | Practice maintainable code (swappable engines) | `02-advanced-python/challenges/36-separation-of-concerns/` |
 | Practice testing (provenance, idempotency) | `02-advanced-python/challenges/38-test-strategy-contract-regression/` |
+| Practice dependency management (constraints, lockfiles) | `02-advanced-python/challenges/39-poetry/` |
 | Practice database ops (migrations, backups) | `04-databases/sqlalchemy/challenges/11-migrations-alembic/` |
 | Prep for interviews | `supplementary/interviews/` |
 | Test yourself | `supplementary/quizzes/` |

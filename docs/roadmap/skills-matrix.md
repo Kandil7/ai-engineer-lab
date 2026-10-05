@@ -23,7 +23,7 @@ Targets are the level needed to interview credibly for a remote AI engineer role
 
 | Skill | Target | Current | Evidence | Next step |
 | --- | --- | --- | --- | --- |
-| Python (language) | 7 | **6** | `python/01-core-python/` (52 topics), `02-advanced-python/` (38 topics) | Apply in a real service, not exercises |
+| Python (language) | 7 | **6** | `python/01-core-python/` (52 topics), `02-advanced-python/` (39 topics) | Apply in a real service, not exercises |
 | Python (production) | 7 | **3** | `02-advanced-python/35-38` (Unicode, SoC, review, test strategy) + challenge sets | Apply in a real service, not exercises — week 0 |
 | Clean code / typing | 6 | **4** | `02-advanced-python/36-37` (SoC, refactoring) + challenge sets with structural guards | ruff + mypy green in CI — week 0 |
 | Testing (pytest) | 6 | **4** | `python/tests/`, `02-advanced-python/18,38` + regression-gate challenge set | Test a real service; LLM-aware testing — week 7 |

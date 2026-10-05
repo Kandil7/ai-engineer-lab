@@ -320,7 +320,7 @@ dependencies = ["requests (>=2.31,<3.0.0)"]
 tool_poetry_deps = {"numpy": "1.2.3"}
 
 # CORRECT -- say what you meant
-tool_poetry_deps = {"numpy": "^1.2.3"}   # >=1.2.3,<2.0.0
+tool_poetry_deps = {"numpy": "^1.2.3"}  # >=1.2.3,<2.0.0
 ```
 
 ### Mistake 3: gitignoring the lockfile

@@ -1,6 +1,6 @@
 # 🔬 Phase 2: Advanced Python
 
-38 self-contained topic directories covering advanced Python concepts from decorators to production engineering, plus practice challenge sets for the production topics.
+39 self-contained topic directories covering advanced Python concepts from decorators to production engineering, plus practice challenge sets for the production topics.
 
 ## 📋 Directory Structure
 
@@ -19,7 +19,7 @@ Each topic directory contains:
 │   ├── 02-generators.py
 │   ├── 02-generators-lecture.md
 │   └── 02-generators-glossary.md
-└── ... (38 topics)
+└── ... (39 topics)
 ```
 
 Challenge sets (one per production topic, `challenges/`):
@@ -30,7 +30,8 @@ challenges/
 ├── 35-unicode-and-arabic-text/               # Bronze/Silver/Gold + quiz
 ├── 36-separation-of-concerns/
 ├── 37-code-review-and-refactoring/
-└── 38-test-strategy-contract-regression/
+├── 38-test-strategy-contract-regression/
+└── 39-poetry/                                   # Bronze/Silver/Gold
 ```
 
 ## 📚 Topics
@@ -75,6 +76,7 @@ challenges/
 | **36** | **Separation of Concerns** | Layered pipeline, Protocols, DI, composition root, frozen config, engine-swap proof |
 | **37** | **Code Review & Refactoring** | Review lenses, smell measurement (ast), extract-method, lock tests, four-part comments |
 | **38** | **Test Strategy** | Unit/integration/contract/regression/data tests, provenance, idempotency, golden cases |
+| **39** | **Poetry** | Constraints (^, ~, ~=), group selection, content-hash freshness, lockfile audit, index-fetch budget |
 
 ## 🚀 Quick Start
 
@@ -135,6 +137,9 @@ python -m pytest challenges/35-unicode-and-arabic-text/test_challenge.py -q
 These four map directly to the Athar skills table — see
 [`../SKILLS_MASTERY_MAP.md`](../SKILLS_MASTERY_MAP.md). Each has a challenge set
 in `challenges/` with Bronze/Silver/Gold tiers.
+
+### Tooling (39)
+39. **39-poetry** — dependency management: constraint expansion, lockfile verification, manifest audit
 
 ## 🎯 Each Topic Contains
 

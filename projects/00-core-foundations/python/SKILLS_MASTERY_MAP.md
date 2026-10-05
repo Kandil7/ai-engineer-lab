@@ -43,7 +43,7 @@ unaffected.
 | Typing | `02-advanced-python/05-type-hints`, `23-typing-advanced` | Protocols, generics |
 | Asyncio | `02-advanced-python/04-async-await`, `22-asyncio-advanced` | concurrent I/O |
 | Profiling & memory | `02-advanced-python/25-profiling-and-optimization`, `24-memory-and-gc`, `01-core-python/advanced/52-memory-and-performance` | measure first |
-| Dependency management | `01-core-python/advanced/39-pip`, `40-virtualenv`, `02-advanced-python/27-packaging-and-distribution` | environments, lockfiles |
+| Dependency management | `01-core-python/advanced/39-pip`, `40-virtualenv`, `02-advanced-python/27-packaging-and-distribution`, `39-poetry` | environments, lockfiles |
 
 **The importer pattern lives in [NEW] topic 35's section 9** — batch streaming,
 typed `ImportRecordError` with line numbers, and the `on_error` quarantine hook.
