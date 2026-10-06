@@ -17,3 +17,23 @@ uv is the current default for reproducible Python environments and now carries t
 Candidate follow-ups: challenge quiz.md backfill for sets 20-34 and 39 (spec requires quiz.md; 35-38 have it); run_uv smoke test wiring if uv-based verification is wanted; topic 41 candidate (pdm or hatch) to complete the tooling track; consider a docs/learning walkthrough of the uv.lock format from a real generated lock.
 
 ---
+
+## Quiz backfill: 16 challenge sets brought up to spec (2026-10-06)
+
+### Context
+
+ai-engineer-lab, python curriculum (02-advanced-python). Follow-up in the same session: PRACTICE_SPEC.md requires quiz.md in every challenge set, but sets 20-34 and 39 shipped without one (only 35-38 and the reference set 49 had it).
+
+### Explanation
+
+Backfilled quiz.md for all 16 sets missing it: 20-patterns, 21-concurrency-comparison through 34-debugging-techniques, and 39-poetry. Each follows the house format verified from 35-unicode-and-arabic-text/quiz.md: title line, 8 single-line multiple-choice questions with inline options (A/B/C/D on one or two lines), and a final **Answers:** key line. Questions test decisions and consequences from each set's README (guards, adversarial inputs, naive-solution failure modes), not trivia. 01-decorators was left without a quiz deliberately: it is the documented stub (starter.py only, no solution or tests), so there is no content to quiz against. Verification: scripted check confirms 8 questions + 8-key answers line in every set except the stub; all five workspace validators exit 0; docs gates green (link_scan_fail=0, focus stamp 6 days).
+
+### Rationale (Why this?)
+
+The spec is the contract: an authored set that violates it is a bug. The backfill closes the gap without touching any tested code, so no test re-runs were needed beyond the validators.
+
+### Next Steps
+
+01-decorators needs its full set (solution, tests, quiz) to exit stub status; a spot-check pass by the user on quiz answer quality is worthwhile since most keys are B-heavy, matching the 35-38 house style.
+
+---
