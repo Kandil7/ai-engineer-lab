@@ -3,6 +3,7 @@ Agent system with tools, ReAct pattern, and LangGraph integration.
 """
 
 import json
+import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -522,11 +523,7 @@ Maximum {max_steps} steps allowed.
             max_steps=self.max_steps,
             tools=self.tools,
         )
-
-        messages = [
-            {"role": "system", "content": self._build_system_prompt()},
-            {"role": "user", "content": f"Goal: {goal}"},
-        ]
+        messages = self._initial_messages(goal)
 
         for step_num in range(self.max_steps):
             context.current_step = step_num + 1
@@ -539,67 +536,90 @@ Maximum {max_steps} steps allowed.
             # Parse response
             thought, action, action_input, final_answer = self._parse_response(response)
 
-            # Check for final answer
             if final_answer:
-                # Record final step
-                step = AgentStep(
-                    step_id=step_num + 1,
-                    thought=thought,
-                    action="finish",
-                    action_input={},
-                    observation=final_answer,
-                    state=AgentState.DONE,
-                )
-                context.add_step(step)
-                return final_answer
+                return self._finish(context, step_num, thought, final_answer)
 
-            # Execute action
             if action and action in self.tools:
-                tool = self.tools[action]
-
-                with tracer.trace("agent.tool", tool=action) as span:
-                    import time
-
-                    start = time.perf_counter()
-                    result = await tool.execute(**action_input)
-                    latency_ms = (time.perf_counter() - start) * 1000
-                    span.set_attribute("success", result.success)
-                    span.set_attribute("latency_ms", latency_ms)
-
-                observation = result.content if result.success else f"Error: {result.error}"
-
-                # Record step
-                step = AgentStep(
-                    step_id=step_num + 1,
-                    thought=thought,
-                    action=action,
-                    action_input=action_input,
-                    observation=observation,
-                    state=AgentState.OBSERVING,
-                    latency_ms=latency_ms,
-                )
-                context.add_step(step)
-
-                # Add to messages for next iteration
-                messages.append({"role": "assistant", "content": response})
-                messages.append(
-                    {
-                        "role": "user",
-                        "content": f"Observation: {observation}\n\nWhat should I do next?",
-                    }
+                await self._run_tool(
+                    context, messages, step_num, response, thought, action, action_input
                 )
             else:
-                # Invalid action
-                observation = f"Unknown action: {action}. Available: {list(self.tools.keys())}"
-                messages.append({"role": "assistant", "content": response})
-                messages.append(
-                    {
-                        "role": "user",
-                        "content": f"Observation: {observation}\n\nWhat should I do next?",
-                    }
-                )
+                self._note_invalid_action(messages, action, response)
 
         return "Maximum steps reached without completing the task."
+
+    def _initial_messages(self, goal: str) -> list[dict[str, str]]:
+        """System prompt plus the user goal that start every run."""
+        return [
+            {"role": "system", "content": self._build_system_prompt()},
+            {"role": "user", "content": f"Goal: {goal}"},
+        ]
+
+    def _finish(self, context: AgentContext, step_num: int, thought: str, final_answer: str) -> str:
+        """Record the terminal step and return the answer."""
+        step = AgentStep(
+            step_id=step_num + 1,
+            thought=thought,
+            action="finish",
+            action_input={},
+            observation=final_answer,
+            state=AgentState.DONE,
+        )
+        context.add_step(step)
+        return final_answer
+
+    async def _run_tool(
+        self,
+        context: AgentContext,
+        messages: list[dict[str, str]],
+        step_num: int,
+        response: str,
+        thought: str,
+        action: str,
+        action_input: dict,
+    ) -> None:
+        """Execute one tool call, record the step, queue the observation."""
+        tool = self.tools[action]
+
+        with tracer.trace("agent.tool", tool=action) as span:
+            start = time.perf_counter()
+            result = await tool.execute(**action_input)
+            latency_ms = (time.perf_counter() - start) * 1000
+            span.set_attribute("success", result.success)
+            span.set_attribute("latency_ms", latency_ms)
+
+        observation = result.content if result.success else f"Error: {result.error}"
+        step = AgentStep(
+            step_id=step_num + 1,
+            thought=thought,
+            action=action,
+            action_input=action_input,
+            observation=observation,
+            state=AgentState.OBSERVING,
+            latency_ms=latency_ms,
+        )
+        context.add_step(step)
+
+        messages.append({"role": "assistant", "content": response})
+        messages.append(
+            {
+                "role": "user",
+                "content": f"Observation: {observation}\n\nWhat should I do next?",
+            }
+        )
+
+    def _note_invalid_action(
+        self, messages: list[dict[str, str]], action: str, response: str
+    ) -> None:
+        """Queue the unknown-action observation so the LLM can recover."""
+        observation = f"Unknown action: {action}. Available: {list(self.tools.keys())}"
+        messages.append({"role": "assistant", "content": response})
+        messages.append(
+            {
+                "role": "user",
+                "content": f"Observation: {observation}\n\nWhat should I do next?",
+            }
+        )
 
 
 class LangGraphAgent:

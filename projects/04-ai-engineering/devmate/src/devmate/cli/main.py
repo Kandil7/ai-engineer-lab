@@ -6,6 +6,7 @@ import asyncio
 import json
 import sys
 from collections.abc import AsyncIterator
+from dataclasses import dataclass, field
 from datetime import UTC
 from pathlib import Path
 from typing import cast
@@ -35,6 +36,119 @@ app = typer.Typer(name="devmate", help="AI Assistant for Code Repositories")
 console = Console()
 
 
+@dataclass
+class RepoStats:
+    """Collected repository statistics: chunk aggregates plus AST analysis."""
+
+    path: str
+    total_chunks: int
+    total_characters: int
+    total_lines: int
+    file_types: dict[str, int] = field(default_factory=dict)
+    languages: dict[str, int] = field(default_factory=dict)
+    ast_files: int = 0
+    ast_total_lines: int = 0
+    ast_code_lines: int = 0
+    ast_functions: int = 0
+    ast_classes: int = 0
+    ast_file_types: dict[str, int] = field(default_factory=dict)
+
+
+def collect_repo_stats(repo_path: Path) -> RepoStats:
+    """Load documents, aggregate chunk statistics, run AST analysis."""
+    loader = DocumentLoader()
+    documents = list(loader.load_repository(repo_path))
+
+    stats = RepoStats(
+        path=str(repo_path),
+        total_chunks=len(documents),
+        total_characters=0,
+        total_lines=0,
+    )
+    for doc in documents:
+        ext = doc.metadata.get("extension", "unknown")
+        stats.file_types[ext] = stats.file_types.get(ext, 0) + 1
+        stats.total_characters += len(doc.content)
+        stats.total_lines += doc.content.count("\n") + 1
+        lang = doc.metadata.get("language", "unknown")
+        stats.languages[lang] = stats.languages.get(lang, 0) + 1
+
+    from devmate.ingest.repo_reader import RepoAnalyzer
+
+    repo_stats = RepoAnalyzer().analyze(repo_path)
+    stats.ast_files = repo_stats.total_files
+    stats.ast_total_lines = repo_stats.total_lines
+    stats.ast_code_lines = repo_stats.total_code_lines
+    stats.ast_functions = repo_stats.total_functions
+    stats.ast_classes = repo_stats.total_classes
+    stats.ast_file_types = dict(repo_stats.file_types)
+    return stats
+
+
+def format_stats_json(stats: RepoStats) -> str:
+    """Serialize collected statistics to the JSON document the CLI prints."""
+    return json.dumps(
+        {
+            "path": stats.path,
+            "total_chunks": stats.total_chunks,
+            "total_characters": stats.total_characters,
+            "total_lines": stats.total_lines,
+            "file_types": stats.file_types,
+            "languages": stats.languages,
+            "ast": {
+                "files": stats.ast_files,
+                "total_lines": stats.ast_total_lines,
+                "code_lines": stats.ast_code_lines,
+                "functions": stats.ast_functions,
+                "classes": stats.ast_classes,
+                "file_types": stats.ast_file_types,
+            },
+        },
+        indent=2,
+    )
+
+
+def present_stats_table(stats: RepoStats, repo_name: str) -> None:
+    """Print the summary, file-type, language, and AST tables."""
+    console.print(f"\n[bold cyan]Repository Statistics: {repo_name}[/bold cyan]\n")
+
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("Metric", style="cyan")
+    table.add_column("Value", style="green")
+    table.add_row("Total Chunks", str(stats.total_chunks))
+    table.add_row("Total Characters", f"{stats.total_characters:,}")
+    table.add_row("Total Lines", f"{stats.total_lines:,}")
+    table.add_row("Unique File Types", str(len(stats.file_types)))
+    console.print(table)
+
+    ft_table = Table(show_header=True, header_style="bold magenta")
+    ft_table.add_column("Extension", style="cyan")
+    ft_table.add_column("Count", style="green")
+    for ext, count in sorted(stats.file_types.items(), key=lambda x: -x[1]):
+        ft_table.add_row(ext, str(count))
+    console.print("\n[bold]File Types:[/bold]")
+    console.print(ft_table)
+
+    lang_table = Table(show_header=True, header_style="bold magenta")
+    lang_table.add_column("Language", style="cyan")
+    lang_table.add_column("Chunks", style="green")
+    for lang, count in sorted(stats.languages.items(), key=lambda x: -x[1]):
+        lang_table.add_row(lang, str(count))
+    console.print("\n[bold]Languages:[/bold]")
+    console.print(lang_table)
+
+    py_table = Table(show_header=True, header_style="bold magenta")
+    py_table.add_column("Metric", style="cyan")
+    py_table.add_column("Value", style="green")
+    py_table.add_row("Files", str(stats.ast_files))
+    py_table.add_row("Total Lines", f"{stats.ast_total_lines:,}")
+    py_table.add_row("Code Lines", f"{stats.ast_code_lines:,}")
+    py_table.add_row("Functions", f"{stats.ast_functions:,}")
+    py_table.add_row("Classes", f"{stats.ast_classes:,}")
+    console.print("\n[bold]Repository Analysis (AST):[/bold]")
+    console.print(py_table)
+
+
 @app.command()
 def stats(
     path: str = typer.Argument(".", help="Path to repository"),
@@ -53,104 +167,16 @@ def stats(
         console=console,
     ) as progress:
         task = progress.add_task("Analyzing repository...", total=None)
-
-        # Load documents
-        loader = DocumentLoader()
-        documents = list(loader.load_repository(repo_path))
-
-        progress.update(task, description=f"Found {len(documents)} chunks, computing stats...")
-
-        # Compute statistics
-        file_types = {}
-        total_chars = 0
-        total_lines = 0
-        languages = {}
-
-        for doc in documents:
-            ext = doc.metadata.get("extension", "unknown")
-            file_types[ext] = file_types.get(ext, 0) + 1
-
-            content = doc.content
-            total_chars += len(content)
-            total_lines += content.count("\n") + 1
-
-            lang = doc.metadata.get("language", "unknown")
-            languages[lang] = languages.get(lang, 0) + 1
-
+        collected = collect_repo_stats(repo_path)
+        progress.update(
+            task, description=f"Found {collected.total_chunks} chunks, computing stats..."
+        )
         progress.update(task, description="Complete!")
 
-    # AST-based analysis (functions, classes, LOC) for Python files
-    from devmate.ingest.repo_reader import RepoAnalyzer
-
-    repo_stats = RepoAnalyzer().analyze(repo_path)
-
     if format == "json":
-        result = {
-            "path": str(repo_path),
-            "total_chunks": len(documents),
-            "total_characters": total_chars,
-            "total_lines": total_lines,
-            "file_types": file_types,
-            "languages": languages,
-            "ast": {
-                "files": repo_stats.total_files,
-                "total_lines": repo_stats.total_lines,
-                "code_lines": repo_stats.total_code_lines,
-                "functions": repo_stats.total_functions,
-                "classes": repo_stats.total_classes,
-                "file_types": dict(repo_stats.file_types),
-            },
-        }
-        console.print_json(json.dumps(result, indent=2))
+        console.print_json(format_stats_json(collected))
     else:
-        # Table output
-        console.print(f"\n[bold cyan]Repository Statistics: {repo_path.name}[/bold cyan]\n")
-
-        table = Table(show_header=True, header_style="bold magenta")
-        table.add_column("Metric", style="cyan")
-        table.add_column("Value", style="green")
-
-        table.add_row("Total Chunks", str(len(documents)))
-        table.add_row("Total Characters", f"{total_chars:,}")
-        table.add_row("Total Lines", f"{total_lines:,}")
-        table.add_row("Unique File Types", str(len(file_types)))
-
-        console.print(table)
-
-        # File types table
-        ft_table = Table(show_header=True, header_style="bold magenta")
-        ft_table.add_column("Extension", style="cyan")
-        ft_table.add_column("Count", style="green")
-
-        for ext, count in sorted(file_types.items(), key=lambda x: -x[1]):
-            ft_table.add_row(ext, str(count))
-
-        console.print("\n[bold]File Types:[/bold]")
-        console.print(ft_table)
-
-        # Languages table
-        lang_table = Table(show_header=True, header_style="bold magenta")
-        lang_table.add_column("Language", style="cyan")
-        lang_table.add_column("Chunks", style="green")
-
-        for lang, count in sorted(languages.items(), key=lambda x: -x[1]):
-            lang_table.add_row(lang, str(count))
-
-        console.print("\n[bold]Languages:[/bold]")
-        console.print(lang_table)
-
-        # AST-based repository analysis
-        py_table = Table(show_header=True, header_style="bold magenta")
-        py_table.add_column("Metric", style="cyan")
-        py_table.add_column("Value", style="green")
-        py_table.add_row("Files", str(repo_stats.total_files))
-        py_table.add_row("Total Lines", f"{repo_stats.total_lines:,}")
-        py_table.add_row("Code Lines", f"{repo_stats.total_code_lines:,}")
-        py_table.add_row("Functions", f"{repo_stats.total_functions:,}")
-        py_table.add_row("Classes", f"{repo_stats.total_classes:,}")
-
-        console.print("\n[bold]Repository Analysis (AST):[/bold]")
-        console.print(py_table)
+        present_stats_table(collected, repo_path.name)
 
 
 @app.command()
