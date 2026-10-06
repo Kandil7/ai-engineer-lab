@@ -250,6 +250,8 @@ counts, `tracemalloc` ceilings — never wall-clock assertions.
 
 | Set | Location | Mastery target |
 |---|---|---|
+| Patterns | `02-advanced-python/challenges/20-patterns/` | provider adapter, observer bus, probe-budgeted router |
+| Advanced Python 21–34 (14 sets) | `02-advanced-python/challenges/` | per-set index in `02-advanced-python/challenges/README.md` |
 | Unicode & Arabic Text | `02-advanced-python/challenges/35-unicode-and-arabic-text/` | streaming import, located errors |
 | Separation of Concerns | `02-advanced-python/challenges/36-separation-of-concerns/` | engine-swap invariant |
 | Code Review & Refactoring | `02-advanced-python/challenges/37-code-review-and-refactoring/` | lock tests, structural budgets |

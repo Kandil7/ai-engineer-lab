@@ -22,16 +22,19 @@ Each topic directory contains:
 └── ... (39 topics)
 ```
 
-Challenge sets (one per production topic, `challenges/`):
+Challenge sets (Bronze/Silver/Gold; the full index of all 21 sets lives in
+`challenges/README.md`):
 
 ```
 challenges/
-├── README.md                                 # index
+├── README.md                                 # full index (01 stub, 20, 21–39)
+├── 20-patterns/                              # adapter, observer bus, strategy router
+├── 21-concurrency-comparison/ … 34-debugging-techniques/   # 14 sets, see index
 ├── 35-unicode-and-arabic-text/               # Bronze/Silver/Gold + quiz
 ├── 36-separation-of-concerns/
 ├── 37-code-review-and-refactoring/
 ├── 38-test-strategy-contract-regression/
-└── 39-poetry/                                   # Bronze/Silver/Gold
+└── 39-poetry/                                # Bronze/Silver/Gold
 ```
 
 ## 📚 Topics

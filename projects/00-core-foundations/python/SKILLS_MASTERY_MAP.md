@@ -81,6 +81,10 @@ validation errors across two search backends is the mechanical proof.
 Bronze DI wiring, Silver spy-guarded call budgets (normalize once per record),
 Gold a new engine with a structural decoupling proof.
 
+**Practice:** [`02-advanced-python/challenges/20-patterns/`](02-advanced-python/challenges/20-patterns/) —
+Bronze provider adapter, Silver comparison-budgeted observer bus, Gold
+probe-budgeted strategy router.
+
 ---
 
 ## 3. Testing — الاختبارات
