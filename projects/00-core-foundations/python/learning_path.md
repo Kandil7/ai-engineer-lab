@@ -43,7 +43,7 @@ python 01-core-python/basics/01-introduction/01-introduction.py
 ## ⚡ Phase 2: Advanced Python
 
 **Directory:** `02-advanced-python/`  
-**Topics:** 39 self-contained topic directories
+**Topics:** 40 self-contained topic directories
 
 | Order | Topics | Key Concepts |
 |-------|--------|--------------|
@@ -57,6 +57,7 @@ python 01-core-python/basics/01-introduction/01-introduction.py
 | **37** | **Code review and refactoring [NEW]** | Review lenses, smell measurement, lock tests |
 | **38** | **Test strategy [NEW]** | Unit/integration/contract/regression/data tests |
 | **39** | **Poetry [NEW]** | Constraints, group selection, content-hash, lockfile audit |
+| **40** | **uv [NEW]** | Universal lockfile, sync flags, wheel selection, uv audit, cooldowns, migration |
 
 **Each topic directory contains:**
 - `NN-topic-name.py` — Exercise (runnable code)
@@ -257,6 +258,7 @@ counts, `tracemalloc` ceilings — never wall-clock assertions.
 | Code Review & Refactoring | `02-advanced-python/challenges/37-code-review-and-refactoring/` | lock tests, structural budgets |
 | Test Strategy | `02-advanced-python/challenges/38-test-strategy-contract-regression/` | provenance, idempotency, regression gate |
 | Poetry | `02-advanced-python/challenges/39-poetry/` | constraint expansion, lockfile audit, fetch budget |
+| uv | `02-advanced-python/challenges/40-uv/` | wheel-tag selection, indexed queries, streaming audit |
 | Migrations | `04-databases/sqlalchemy/challenges/11-migrations-alembic/` | expand-backfill-contract, lineage |
 | Backup & Restore | `04-databases/postgresql/challenges/07-backup-and-restore/` | verify-by-restore, PITR |
 | Component Contracts | `10-system-design/challenges/01-component-contracts/` | rolling-upgrade plans |

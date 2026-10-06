@@ -72,7 +72,8 @@ python/
 │   ├── 36-separation-of-concerns/   # [NEW] Layers, Protocols, DI, config, logging
 │   ├── 37-code-review-and-refactoring/ # [NEW] Review lenses, smells, lock tests
 │   ├── 38-test-strategy-contract-regression/ # [NEW] Unit/integration/contract/regression/data
-│   └── 39-poetry/                   # [NEW] Poetry: constraints, lockfile audit, groups
+│   ├── 39-poetry/                   # [NEW] Poetry: constraints, lockfile audit, groups
+│   └── 40-uv/                        # [NEW] uv: universal lock, sync flags, audit, migration
 │
 ├── 03-libraries/                    # 📊 Phase 3: Data Science Libraries
 │   ├── numpy/                       # 34 topics: Arrays, ufuncs, linear algebra
@@ -158,6 +159,7 @@ See **[learning_path.md](learning_path.md)** for the complete, week-by-week lear
 | Practice maintainable code (swappable engines) | `02-advanced-python/challenges/36-separation-of-concerns/` |
 | Practice testing (provenance, idempotency) | `02-advanced-python/challenges/38-test-strategy-contract-regression/` |
 | Practice dependency management (constraints, lockfiles) | `02-advanced-python/challenges/39-poetry/` |
+| Practice uv (universal lock, audit, migration) | `02-advanced-python/challenges/40-uv/` |
 | Practice database ops (migrations, backups) | `04-databases/sqlalchemy/challenges/11-migrations-alembic/` |
 | Prep for interviews | `supplementary/interviews/` |
 | Test yourself | `supplementary/quizzes/` |

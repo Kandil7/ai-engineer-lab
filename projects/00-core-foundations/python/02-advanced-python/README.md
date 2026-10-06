@@ -1,6 +1,6 @@
 # 🔬 Phase 2: Advanced Python
 
-39 self-contained topic directories covering advanced Python concepts from decorators to production engineering, plus practice challenge sets for the production topics.
+40 self-contained topic directories covering advanced Python concepts from decorators to production engineering, plus practice challenge sets for the production topics.
 
 ## 📋 Directory Structure
 
@@ -19,7 +19,7 @@ Each topic directory contains:
 │   ├── 02-generators.py
 │   ├── 02-generators-lecture.md
 │   └── 02-generators-glossary.md
-└── ... (39 topics)
+└── ... (40 topics)
 ```
 
 Challenge sets (Bronze/Silver/Gold; the full index of all 21 sets lives in
@@ -27,14 +27,15 @@ Challenge sets (Bronze/Silver/Gold; the full index of all 21 sets lives in
 
 ```
 challenges/
-├── README.md                                 # full index (01 stub, 20, 21–39)
+├── README.md                                 # full index (01 stub, 20, 21–40)
 ├── 20-patterns/                              # adapter, observer bus, strategy router
 ├── 21-concurrency-comparison/ … 34-debugging-techniques/   # 14 sets, see index
 ├── 35-unicode-and-arabic-text/               # Bronze/Silver/Gold + quiz
 ├── 36-separation-of-concerns/
 ├── 37-code-review-and-refactoring/
 ├── 38-test-strategy-contract-regression/
-└── 39-poetry/                                # Bronze/Silver/Gold
+├── 39-poetry/                                # Bronze/Silver/Gold
+└── 40-uv/                                    # Bronze/Silver/Gold + quiz
 ```
 
 ## 📚 Topics
@@ -80,6 +81,7 @@ challenges/
 | **37** | **Code Review & Refactoring** | Review lenses, smell measurement (ast), extract-method, lock tests, four-part comments |
 | **38** | **Test Strategy** | Unit/integration/contract/regression/data tests, provenance, idempotency, golden cases |
 | **39** | **Poetry** | Constraints (^, ~, ~=), group selection, content-hash freshness, lockfile audit, index-fetch budget |
+| **40** | **uv** | Universal uv.lock, sync flags (--locked/--frozen), group/extras surface, wheel-tag selection, uv audit, cooldowns, migration |
 
 ## 🚀 Quick Start
 
@@ -141,8 +143,9 @@ These four map directly to the Athar skills table — see
 [`../SKILLS_MASTERY_MAP.md`](../SKILLS_MASTERY_MAP.md). Each has a challenge set
 in `challenges/` with Bronze/Silver/Gold tiers.
 
-### Tooling (39)
+### Tooling (39-40)
 39. **39-poetry** — dependency management: constraint expansion, lockfile verification, manifest audit
+40. **40-uv** — the universal lockfile: sync flags, wheel selection, supply-chain security, migration
 
 ## 🎯 Each Topic Contains
 
