@@ -5,13 +5,13 @@
 > ⚠️ A staleness gate fails CI if this file is more than 8 days old: `make fresh-check`
 > locally and the Tracking freshness step in `.github/workflows/ci.yml`.
 
-**Last updated:** 2026-09-30
+**Last updated:** 2026-10-06
 
 ---
 
 ## Active Window
 
-**Week 0 (cont.)** — 2026-09-26 → 2026-09-28 (weekend sprint)
+**Week 2** — 2026-10-06 → 2026-10-12 (RAG + application window)
 
 **Plan:** [Active Track — 10-Week AI Engineer](../roadmap/active-track-10-week.md)
 (adopted 2026-08-02 by [ADR-0004](../decisions/0004-adopt-10-week-ai-engineer-track.md))
@@ -53,6 +53,12 @@ and the two ADRs are next once Qdrant/ingest are up.
 10. Live retrieval eval: start qdrant, ingest repo, run `--mode live`; write chunking ADR with measured numbers
 11. Full DevMate gate after any further code change
 12. ~~Skills-mastery content + challenge sets for the python module~~ — done 2026-09-30 (11 topics, 11 challenge sets, SKILLS_MASTERY_MAP.md; 186 tests verified)
+13. ~~Topic 39 Poetry + challenge set~~ — done 2026-10-05 (committed 04e22ca)
+14. ~~Challenge 20 Patterns + dedup of 14 nested challenge dirs~~ — done 2026-10-05 (committed 5de7c8f)
+15. ~~Topic 40 uv: full learning package + challenge set~~ — done 2026-10-06
+16. ~~Quiz backfill: quiz.md for all 16 sets missing it (20–34, 39)~~ — done 2026-10-06
+17. ~~Legacy curriculum suite repaired and promoted to gating in CI~~ — done 2026-10-06 (311 passed, 7 skipped; fixed `practice_no_solutions.py` U+00D7 SyntaxError and `18-tracking-platforms.py` artifact-after-end bug)
+18. Adopt uv for DevMate: `uv lock`, commit `uv.lock`, CI `uv sync --locked` + `uv audit --locked`
 
 ---
 
@@ -101,9 +107,10 @@ Full list: [`../roadmap/milestones.md`](../roadmap/milestones.md)
 
 ## Next Window Preview
 
-**Week 1** (2026-09-29 → 2026-10-05) — LLM layer. Claude API with streaming, structured
-outputs, retries. **Langfuse tracing and cost tracking wired in from day one**, not at the
-end. First 10 golden cases. `devmate ask "<question>"` working end to end.
+**Week 2** (2026-10-06 → 2026-10-12) — RAG. Qdrant up, ingest this repo, live retrieval
+eval with measured Hit@5, chunking ADR with numbers. DevMate `ask` end to end with
+tracing. Target application date is 2026-10-12 (week 10 of the track) — portfolio
+deliverables (A4 deployment) take priority over new content.
 
 ---
 

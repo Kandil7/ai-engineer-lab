@@ -96,13 +96,23 @@ class NullTracker(Tracker):
 
 
 def log_run(
-    tracker: Tracker, run_id: str, config: dict, metrics: dict[str, list[tuple[int, float]]]
+    tracker: Tracker,
+    run_id: str,
+    config: dict,
+    metrics: dict[str, list[tuple[int, float]]],
+    artifacts: tuple[str, ...] = (),
 ) -> None:
-    """One logging interface; the backend is swappable (adapter pattern)."""
+    """One logging interface; the backend is swappable (adapter pattern).
+
+    Artifacts are logged inside the run window: start() opens the run and
+    end() closes it, so anything logged after end() has no current run.
+    """
     tracker.start(run_id, config)
     for name, series in metrics.items():
         for step, value in series:
             tracker.log_metric(name, value, step)
+    for path in artifacts:
+        tracker.log_artifact(path)
     tracker.end()
 
 
@@ -142,8 +152,7 @@ def main() -> None:
     series = {"val_acc": [(0, 0.80), (1, 0.86), (2, 0.91)]}
 
     mem = MemoryTracker("memory")
-    log_run(mem, "run_a1b2", cfg, series)
-    mem.log_artifact("s3://artifacts/best.pt")
+    log_run(mem, "run_a1b2", cfg, series, artifacts=("s3://artifacts/best.pt",))
     print("Example 1: tracker adapter")
     print(f"  recorded runs: {list(mem.runs)}")
     print(f"  val_acc series: {mem.runs['run_a1b2'].metrics['val_acc']}")

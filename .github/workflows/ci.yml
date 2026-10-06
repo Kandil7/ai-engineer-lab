@@ -1,13 +1,11 @@
 name: CI
 
-# Scope note (2026-09-26):
-# This pipeline gates the DevMate service and the workspace registry system
-# (tests/*/validate.ps1 on windows-latest). The legacy curriculum under
-# projects/00-core-foundations/python/ currently has 2 collection errors and 68 test
-# failures caused by directory-name shadowing (e.g. 03-libraries/pandas/ shadowing the
-# real `pandas` package). Gating on it today would mean a permanently red pipeline,
-# which teaches the team to ignore CI. Repair is tracked as a separate task; the
-# legacy-lint job below runs advisory-only until then.
+# Scope note (updated 2026-10-06):
+# This pipeline gates the DevMate service, the workspace registry system
+# (tests/*/validate.ps1 on windows-latest), the docs gates, and the legacy
+# curriculum under projects/00-core-foundations/python/. The curriculum suite
+# was repaired (previously 2 collection errors and 68 failures from
+# directory-name shadowing); it now gates like every other job.
 
 on:
   push:
@@ -147,9 +145,8 @@ jobs:
           fi
 
   legacy-lint:
-    name: Legacy curriculum (advisory)
+    name: Legacy curriculum — tests (lint advisory)
     runs-on: ubuntu-latest
-    continue-on-error: true   # advisory until the suite is repaired
     defaults:
       run:
         working-directory: projects/00-core-foundations/python
@@ -159,12 +156,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - run: pip install ruff
+      - run: pip install ruff pytest
       - name: Lint (advisory)
-        run: ruff check . --output-format=github || true
-      - name: Report test collection status
-        run: |
-          pip install pytest
-          pytest --collect-only -q 2>&1 | tail -20 || true
-          echo "Known: 2 collection errors, 68 failures from directory-name shadowing."
-          echo "Tracked for repair; see docs/tracking/current-focus.md."
+        # ~2.3k style findings (I001/E402/N806...) across teaching files;
+        # modernizing them is deferred churn. Tests below are the gate.
+        run: ruff check . --statistics || true
+      - name: Tests
+        run: pytest -q

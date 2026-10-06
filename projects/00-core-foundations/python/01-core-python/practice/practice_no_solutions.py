@@ -30,10 +30,10 @@ def problem_01():
 
 # Problem 2: Celsius to Fahrenheit
 # Convert a temperature from Celsius to Fahrenheit.
-# Formula: F = (C × 9/5) + 32
+# Formula: F = (C * 9/5) + 32
 def problem_02():
     C=float(input("Enter temperature in Celsius : "))
-    F = (C × 9/5) + 32
+    F = (C * 9/5) + 32
     print(f"{C}°C = {F}°F")
 
 
