@@ -4,7 +4,7 @@ Cost tracking for LLM API calls.
 
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from threading import Lock
 
 from devmate.config import settings
@@ -112,7 +112,7 @@ class CostTracker:
         total_cost = prompt_cost + completion_cost
 
         record = CostRecord(
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(UTC),
             provider=provider,
             model=model,
             prompt_tokens=usage.prompt_tokens,

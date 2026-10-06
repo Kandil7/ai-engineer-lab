@@ -60,8 +60,10 @@ and the two ADRs are next once Qdrant/ingest are up.
 17. ~~Legacy curriculum suite repaired and promoted to gating in CI~~ — done 2026-10-06 (311 passed, 7 skipped; fixed `practice_no_solutions.py` U+00D7 SyntaxError and `18-tracking-platforms.py` artifact-after-end bug)
 18. ~~Adopt uv for DevMate: `uv lock`, commit `uv.lock`, CI `uv sync --locked` + `uv audit`~~ — done 2026-10-06 (166 packages; qdrant 1.8.2 to 1.12.2 fixing CVE-2024-3829 with .search() signature verified; audit advisory with ignore-until-fixed on the no-fix CVEs)
 19. ~~Single local gate: `infra/scripts/local-ci.ps1` + `infra/scripts/docs-gates.ps1`~~ — done 2026-10-06 (LOCAL CI: ALL GREEN)
-20. python-jose migration (pyjwt + cryptography): `uv audit` reports python-jose CVE-2026-85394 and `rsa is archived`, both with no fix available; qdrant findings cleared by the 1.12.2 bump
-21. The editable-install .pth pointed at the pre-rename `fullstack-ai-engineer-lab` path and broke `import devmate`; fixed by hand, and `uv sync` ownership of the venv (task 18) prevents recurrence
+20. ~~python-jose migration~~ — done 2026-10-06 by removal: jose/passlib were dead deps (imported nowhere), so no pyjwt replacement was needed; relock dropped rsa/ecdsa and their unfixable CVEs; `uv audit` now gates in CI with zero findings
+21. ~~DevMate review quick wins~~ — done 2026-10-06: secret_key production guard, debug=False default, ConfigDict, pathlib import moved up, all 11 datetime.utcnow() sites to datetime.now(UTC); mypy stays 3.12 (numpy 2.5.3 stubs unparsable under 3.11, documented in pyproject)
+22. The editable-install .pth pointed at the pre-rename `fullstack-ai-engineer-lab` path and broke `import devmate`; fixed by hand, and `uv sync` ownership of the venv prevents recurrence
+23. Remaining review debt: split `cli/main.py` stats (115 lines) + agent dispatch table; API/agent test coverage (47% overall); `devmate/ui/` missing so compose `ui` service fails — start only needed infra
 
 ---
 

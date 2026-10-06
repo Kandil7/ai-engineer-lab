@@ -7,7 +7,8 @@ import logging
 import uuid
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any, Protocol
 
 from fastapi import FastAPI, HTTPException, Request
@@ -168,9 +169,9 @@ async def add_request_id(request: Request, call_next):
     with tracer.trace("http.request", method=request.method, path=request.url.path) as span:
         span.set_attribute("request_id", request_id)
 
-        start_time = datetime.utcnow()
+        start_time = datetime.now(UTC)
         response = await call_next(request)
-        latency_ms = (datetime.utcnow() - start_time).total_seconds() * 1000
+        latency_ms = (datetime.now(UTC) - start_time).total_seconds() * 1000
 
         span.set_attribute("status_code", response.status_code)
         span.set_attribute("latency_ms", latency_ms)
@@ -479,7 +480,3 @@ if __name__ == "__main__":
         port=settings.api_port,
         reload=settings.debug,
     )
-
-
-# Import at bottom to avoid circular imports
-from pathlib import Path  # noqa: E402

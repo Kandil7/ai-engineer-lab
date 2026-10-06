@@ -1,0 +1,7 @@
+---
+id: system_improvement_p2
+reported_by: opencode
+created_at: 2026-10-06T20:08:47.939Z
+---
+
+System improvement P2 completed 2026-10-06. Facts: (1) python-jose+passlib were DEAD deps (zero imports in src/tests) - removed, not replaced; uv.lock 166 to 160 packages; uv audit main+dev surface: zero vulnerabilities, zero adverse statuses, exit 0; CI audit step now GATES (continue-on-error and ignore flags removed). (2) config.py: SECRET_KEY production guard via model_validator (raises ValueError when APP_ENV=production with default key, verified); debug default False (CLI serve has explicit --reload flag; api __main__ needs DEBUG=1); class Config to SettingsConfigDict (Pydantic v2 deprecation gone). (3) api/main.py bottom pathlib import moved to top, bogus circular-import comment dropped. (4) All 11 datetime.utcnow() converted to datetime.now(UTC) (cost, rag, agent, api, cli, models, tracing x5 incl. 3 previously unlisted, test_cost); single comparison site cost.py:142 stays consistent (all producers converted); ruff --fix applied UTC alias. (5) mypy 3.11 attempted and REVERTED: numpy 2.5.3 stubs use 3.12-only `type` statement, unparsable under 3.11 target, not suppressible via [[tool.mypy.overrides]] (verified empirically); decision + revisit note in pyproject. (6) ai-review.md has a dated 2026-10-06 addendum (original preserved); current-focus tasks 20-23 updated. (7) Full local-ci ALL GREEN. Remaining: structural review debt (stats split, agent dispatch table, API/agent tests); ubuntu CI runs unverified until next master push.

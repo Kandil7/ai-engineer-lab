@@ -6,7 +6,7 @@ import time
 import uuid
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any, cast
 
 from devmate.config import settings
@@ -38,7 +38,7 @@ class RAGResult:
     usage: dict[str, Any]
     latency_ms: float
     request_id: str
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 # System prompt for RAG

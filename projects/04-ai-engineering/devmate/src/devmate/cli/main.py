@@ -6,6 +6,7 @@ import asyncio
 import json
 import sys
 from collections.abc import AsyncIterator
+from datetime import UTC
 from pathlib import Path
 from typing import cast
 
@@ -277,7 +278,7 @@ def cost(
 
     from devmate.obs.cost import cost_tracker
 
-    since = datetime.utcnow() - timedelta(days=days)
+    since = datetime.now(UTC) - timedelta(days=days)
     summary = cost_tracker.get_summary(since=since)
 
     console.print(f"\n[bold cyan]Usage Statistics (Last {days} days)[/bold cyan]\n")

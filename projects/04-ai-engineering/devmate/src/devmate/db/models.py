@@ -3,7 +3,7 @@ Database models and connection management.
 """
 
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any, Optional
 
 from sqlalchemy import (
@@ -444,5 +444,5 @@ class EvalRepository:
         run = await self.session.get(EvalRun, eval_run_id)
         if run:
             run.status = "completed"
-            run.completed_at = datetime.utcnow()
+            run.completed_at = datetime.now(UTC)
             run.metrics = metrics

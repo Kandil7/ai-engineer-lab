@@ -4,8 +4,8 @@ Configuration management for DevMate.
 
 from functools import lru_cache
 
-from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic import Field, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     # App
     app_name: str = "devmate"
     app_env: str = Field(default="development", alias="APP_ENV")
-    debug: bool = Field(default=True, alias="DEBUG")
+    debug: bool = Field(default=False, alias="DEBUG")
 
     # API
     api_host: str = "0.0.0.0"
@@ -104,11 +104,19 @@ class Settings(BaseSettings):
     pii_detection_enabled: bool = True
     injection_detection_enabled: bool = True
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
-        extra = "ignore"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore",
+    )
+
+    @model_validator(mode="after")
+    def _reject_default_secret_in_production(self) -> "Settings":
+        """Fail startup when production would sign with the public default key."""
+        if self.app_env == "production" and self.secret_key == "dev-secret-change-in-production":
+            raise ValueError("SECRET_KEY must be set when APP_ENV=production")
+        return self
 
     @property
     def redis_connection_url(self) -> str:

@@ -5,7 +5,7 @@ Agent system with tools, ReAct pattern, and LangGraph integration.
 import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
 
@@ -367,7 +367,7 @@ class AgentStep:
     action_input: dict[str, Any]
     observation: str
     state: AgentState
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
     latency_ms: float = 0
 
 

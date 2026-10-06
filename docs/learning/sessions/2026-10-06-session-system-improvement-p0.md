@@ -37,3 +37,23 @@ The audit gate follows the same judgment as the legacy-lint promotion: gate what
 P2 next: python-jose to pyjwt+cryptography migration (removes the unsuppressible rsa-archived status and CVE-2026-85394); then the audit step can gate. DevMate review debt after that (secret_key guard, debug default, mypy 3.11, API tests). The ubuntu run of all three promoted/rewritten CI jobs is unverified until the next push to master.
 
 ---
+
+## P2: dead-dep removal clears the audit, review quick wins closed (2026-10-06)
+
+### Context
+
+ai-engineer-lab system improvement, P2 batch. Goal: clear the python-jose audit findings, gate the audit step, and close the mechanical half of the DevMate review debt.
+
+### Explanation
+
+python-jose + passlib were declared but imported nowhere in src/ or tests/ — dead deps, so the migration was removal, not replacement: 2 lines deleted from pyproject, relock dropped rsa/ecdsa and 160 to 160 packages (net removals), and `uv audit --locked --no-extra eval --no-extra agents` now reports zero vulnerabilities and zero adverse statuses with exit 0. CI audit step promoted from advisory (continue-on-error removed, ignore flags dropped). config.py: secret_key production guard via model_validator (verified raising under APP_ENV=production), debug default True to False (CLI serve already has explicit --reload; api __main__ now needs DEBUG=1, as the review requested), class Config to ConfigDict. api/main.py bottom pathlib import moved up, bogus circular-import comment dropped. All 11 datetime.utcnow() sites converted to datetime.now(UTC) after proving the single comparison site (cost.py:142) and all producers convert together; ruff --fix normalized to the UTC alias. mypy 3.11 was attempted and reverted: numpy 2.5.3 stubs use the 3.12-only `type` statement, unparsable under 3.11 and not suppressible via overrides (verified empirically); decision documented in pyproject. ai-review.md carries a dated addendum instead of rewritten history; current-focus tasks 20-23 updated. Full local-ci: ALL GREEN (devmate 4 checks, legacy 311, 5 validators, docs gates).
+
+### Rationale (Why this?)
+
+Removal beat replacement because no code consumed the libraries; every finding in the audit is now either fixed (qdrant bump), gone (dead-dep removal), or scoped to an uninstalled extra (ragas) — which is what makes the gate honest instead of advisory.
+
+### Next Steps
+
+Remaining review debt is structural, not mechanical: split cli stats (115 lines) and the agent dispatch table, then API/agent happy-path tests before A2 grows the LLM layer. The ubuntu runs of the rewritten CI jobs are unverified until the next push to master.
+
+---

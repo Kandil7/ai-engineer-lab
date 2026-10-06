@@ -6,7 +6,7 @@ import uuid
 from collections.abc import AsyncGenerator, Generator
 from contextlib import AbstractContextManager, asynccontextmanager, contextmanager
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from devmate.config import settings
@@ -36,7 +36,7 @@ class Span:
         self.events.append(
             {
                 "name": name,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
                 "attributes": attributes or {},
             }
         )
@@ -50,7 +50,7 @@ class Span:
 
     def finish(self) -> None:
         """Mark span as finished."""
-        self.end_time = datetime.utcnow()
+        self.end_time = datetime.now(UTC)
 
     def duration_ms(self) -> float:
         """Get span duration in milliseconds."""
@@ -182,7 +182,7 @@ class Tracer:
         trace = Trace(
             trace_id=trace_id,
             name=name,
-            start_time=datetime.utcnow(),
+            start_time=datetime.now(UTC),
             metadata=metadata or {},
         )
         self._traces[trace_id] = trace
@@ -242,7 +242,7 @@ class Tracer:
             span_id=span_id,
             parent_span_id=parent,
             name=name,
-            start_time=datetime.utcnow(),
+            start_time=datetime.now(UTC),
             attributes=attributes,
         )
 
@@ -251,7 +251,7 @@ class Tracer:
             self._traces[trace_id] = Trace(
                 trace_id=trace_id,
                 name=name,
-                start_time=datetime.utcnow(),
+                start_time=datetime.now(UTC),
             )
 
         self._traces[trace_id].add_span(span)

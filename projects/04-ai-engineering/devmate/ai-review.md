@@ -1,5 +1,18 @@
 # Code Review: DevMate scaffold (all modules, pre-A2)
 
+> **Addendum 2026-10-06** — findings closed since the review, without rewriting
+> the original: the JWT `secret_key` default now fails startup under
+> `APP_ENV=production` (`config.py` model validator, verified raising);
+> `debug` defaults to `False`; `class Config` migrated to `ConfigDict`;
+> the bottom `pathlib` import moved up with the bogus comment dropped;
+> all 11 `datetime.utcnow()` sites use `datetime.now(UTC)`;
+> `python-jose` + `passlib` removed as dead deps (imported nowhere), which
+> cleared the rsa/ecdsa CVEs and adverse statuses — `uv audit` gates in CI
+> with zero findings; qdrant bumped to 1.12.2 (CVE-2024-3829 fixed, `.search()`
+> signature verified). mypy stays at 3.12: numpy 2.5.3 stubs are unparsable
+> under a 3.11 target (documented in pyproject). Still open: function-length
+> splits, API/agent test coverage, Docker image build.
+
 - **Reviewer:** Code Reviewer mode
 - **Date:** 2026-09-26
 - **Project path:** `projects/04-ai-engineering/devmate`

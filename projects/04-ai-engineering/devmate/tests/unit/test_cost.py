@@ -1,6 +1,6 @@
 """Unit tests for devmate.obs.cost."""
 
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 import pytest
 
@@ -60,12 +60,12 @@ def test_get_summary_since_filters_by_time() -> None:
     tracker = CostTracker()
     tracker.reset()
     tracker.record_usage("openai", "gpt-4o", _usage(1_000, 0), 10.0)
-    old = datetime.utcnow() - timedelta(days=2)
+    old = datetime.now(UTC) - timedelta(days=2)
     # Force a stale record by editing the stored timestamp.
     with tracker._lock:
         tracker._records[0].timestamp = old
 
-    summary = tracker.get_summary(since=datetime.utcnow() - timedelta(days=1))
+    summary = tracker.get_summary(since=datetime.now(UTC) - timedelta(days=1))
     assert summary.total_requests == 0
 
 

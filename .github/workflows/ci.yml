@@ -52,18 +52,14 @@ jobs:
       - name: Type check (mypy)
         run: uv run --frozen mypy src/
 
-      - name: Audit (uv audit, advisory)
+      - name: Audit (uv audit)
         # Scoped to the main + dev surface CI installs (eval/agents extras
         # excluded: ragas SSRF GHSA with no fix available lives there).
-        # --ignore-until-fixed suppresses the no-fix CVEs until a fix lands
-        # and they resurface automatically. Currently advisory because the
-        # `rsa is archived` adverse status has no ignore mechanism; tracked
-        # as the python-jose migration task in docs/tracking/current-focus.md.
-        continue-on-error: true
-        run: >-
-          uv audit --locked --no-extra eval --no-extra agents
-          --ignore-until-fixed GHSA-wj6h-64fc-37mp
-          --ignore-until-fixed GHSA-3qf3-8w2g-rqmx
+        # Gating: the lock currently reports zero vulnerabilities and zero
+        # adverse statuses. python-jose + passlib were removed 2026-10-06
+        # (dead deps that pulled rsa/ecdsa with unfixable CVEs); qdrant was
+        # bumped to >=1.9 for CVE-2024-3829.
+        run: uv audit --locked --no-extra eval --no-extra agents
 
       - name: Tests
         run: uv run --frozen pytest -q --cov=devmate --cov-report=term-missing
