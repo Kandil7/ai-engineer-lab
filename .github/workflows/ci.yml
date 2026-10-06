@@ -32,25 +32,41 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
-          cache-dependency-path: projects/04-ai-engineering/devmate/pyproject.toml
 
-      - name: Install dependencies
-        # pip from the PEP 621 pyproject is the environment of record
-        # (see Makefile). No lockfile is committed; see current-focus.md.
-        run: python -m pip install -e ".[dev]"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install the project
+        # uv.lock is the reproducibility contract (committed); --locked fails
+        # if syncing would change it. The dev extra carries ruff/mypy/pytest.
+        run: uv sync --locked --extra dev
 
       - name: Lint (ruff)
-        run: python -m ruff check .
+        run: uv run --frozen ruff check .
 
       - name: Format check (ruff format)
-        run: python -m ruff format --check .
+        run: uv run --frozen ruff format --check .
 
       - name: Type check (mypy)
-        run: python -m mypy src/
+        run: uv run --frozen mypy src/
+
+      - name: Audit (uv audit, advisory)
+        # Scoped to the main + dev surface CI installs (eval/agents extras
+        # excluded: ragas SSRF GHSA with no fix available lives there).
+        # --ignore-until-fixed suppresses the no-fix CVEs until a fix lands
+        # and they resurface automatically. Currently advisory because the
+        # `rsa is archived` adverse status has no ignore mechanism; tracked
+        # as the python-jose migration task in docs/tracking/current-focus.md.
+        continue-on-error: true
+        run: >-
+          uv audit --locked --no-extra eval --no-extra agents
+          --ignore-until-fixed GHSA-wj6h-64fc-37mp
+          --ignore-until-fixed GHSA-3qf3-8w2g-rqmx
 
       - name: Tests
-        run: python -m pytest -q --cov=devmate --cov-report=term-missing
+        run: uv run --frozen pytest -q --cov=devmate --cov-report=term-missing
         env:
           # Unit tests must not call a real API. Integration tests are marked
           # and excluded here; they run in the integration job below.

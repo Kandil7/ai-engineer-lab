@@ -58,7 +58,10 @@ and the two ADRs are next once Qdrant/ingest are up.
 15. ~~Topic 40 uv: full learning package + challenge set~~ — done 2026-10-06
 16. ~~Quiz backfill: quiz.md for all 16 sets missing it (20–34, 39)~~ — done 2026-10-06
 17. ~~Legacy curriculum suite repaired and promoted to gating in CI~~ — done 2026-10-06 (311 passed, 7 skipped; fixed `practice_no_solutions.py` U+00D7 SyntaxError and `18-tracking-platforms.py` artifact-after-end bug)
-18. Adopt uv for DevMate: `uv lock`, commit `uv.lock`, CI `uv sync --locked` + `uv audit --locked`
+18. ~~Adopt uv for DevMate: `uv lock`, commit `uv.lock`, CI `uv sync --locked` + `uv audit`~~ — done 2026-10-06 (166 packages; qdrant 1.8.2 to 1.12.2 fixing CVE-2024-3829 with .search() signature verified; audit advisory with ignore-until-fixed on the no-fix CVEs)
+19. ~~Single local gate: `infra/scripts/local-ci.ps1` + `infra/scripts/docs-gates.ps1`~~ — done 2026-10-06 (LOCAL CI: ALL GREEN)
+20. python-jose migration (pyjwt + cryptography): `uv audit` reports python-jose CVE-2026-85394 and `rsa is archived`, both with no fix available; qdrant findings cleared by the 1.12.2 bump
+21. The editable-install .pth pointed at the pre-rename `fullstack-ai-engineer-lab` path and broke `import devmate`; fixed by hand, and `uv sync` ownership of the venv (task 18) prevents recurrence
 
 ---
 

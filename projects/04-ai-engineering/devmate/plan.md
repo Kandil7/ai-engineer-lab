@@ -54,7 +54,10 @@ docker/
 - Risk: `make` is not installed on this machine, so `make ci` cannot run locally.
 - Mitigation: run the underlying commands directly (venv python + `powershell -File tests/*/validate.ps1`); documented in `docs/tracking/current-focus.md`.
 - Risk: no lockfile — CI resolves fresh on every run.
-- Mitigation: accepted for Week 0; lockfile decision tracked as follow-up.
+- Resolved 2026-10-06: `uv.lock` committed (166 packages); CI installs with
+  `uv sync --locked --extra dev` and runs the gate via `uv run --frozen`.
+  `uv audit` runs advisory (scoped to main + dev; eval/agents findings and
+  the python-jose CVEs tracked in current-focus.md).
 
 ## Open Questions
 

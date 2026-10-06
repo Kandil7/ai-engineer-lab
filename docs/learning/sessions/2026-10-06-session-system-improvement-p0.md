@@ -17,3 +17,23 @@ CI now gates the entire curriculum instead of apologizing for it, and the tracki
 P1 next: uv adoption for DevMate (lock, CI sync --locked, uv audit) and infra/scripts/local-ci.ps1 + docs-gates.ps1 to end the temp-dir replica. Then P2 DevMate review debt (secret_key guard, debug default, mypy 3.11, API tests). The ubuntu CI run of the promoted job is the remaining unknown: the suite is green on Windows; linux behavior of the 7 skipped tests is unverified.
 
 ---
+
+## P1: uv adoption with verified qdrant fix, advisory audit, single local gate (2026-10-06)
+
+### Context
+
+ai-engineer-lab system improvement, P1 batch. Goal: uv adoption for DevMate, advisory security audit in CI, single local gate, in-repo docs gates.
+
+### Explanation
+
+uv.lock committed for DevMate (166 packages, revision 3) via `uv lock`; `uv sync --locked --extra dev --dry-run` exits 0. Bumped qdrant-client 1.8.2 to 1.12.2 (`>=1.9,<1.13`) fixing CVE-2026-85394-class input-validation CVE-2024-3829; verified the 1.12.2 wheel still exposes `QdrantRemote.search(collection_name, query_vector, query_filter, limit, with_payload, with_vectors)` matching vector_store.py:234 exactly. `uv audit` triage: three no-fix CVEs (python-ecdsa Minerva GHSA-wj6h-64fc-37mp, python-jose alg-confusion GHSA-3qf3-8w2g-rqmx) suppressed with --ignore-until-fixed so they resurface when fixed; ragas SSRF + langchain-community archived live in the optional eval extra, excluded from the CI surface via --no-extra; `rsa is archived` has no ignore mechanism and keeps the audit advisory. CI devmate job rewritten: setup-uv with cache, `uv sync --locked --extra dev`, gate via `uv run --frozen` (ruff, format, mypy, pytest), audit advisory with continue-on-error. Created infra/scripts/local-ci.ps1 (devmate 4 checks + legacy suite + 5 validators + docs gates; verified LOCAL CI: ALL GREEN) and infra/scripts/docs-gates.ps1 (link scan + freshness, matches the bash replica), documented in MAKEFILE.md. Repaired a broken local env on the way: the devmate .venv editable .pth pointed at the pre-rename `fullstack-ai-engineer-lab` path so `import devmate` failed (9 collection errors); fixed the .pth line, suite back to 52 passed. Reverted a dirtied tracked .coverage. Updated current-focus tasks 18-21 and plan.md lockfile note.
+
+### Rationale (Why this?)
+
+The audit gate follows the same judgment as the legacy-lint promotion: gate what is green, report the rest with tracked remediation. Bare --ignore on the fixable qdrant CVE was rejected in favor of actually fixing it; bare --ignore was never applied anywhere.
+
+### Next Steps
+
+P2 next: python-jose to pyjwt+cryptography migration (removes the unsuppressible rsa-archived status and CVE-2026-85394); then the audit step can gate. DevMate review debt after that (secret_key guard, debug default, mypy 3.11, API tests). The ubuntu run of all three promoted/rewritten CI jobs is unverified until the next push to master.
+
+---

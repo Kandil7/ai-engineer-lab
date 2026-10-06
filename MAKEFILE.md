@@ -241,6 +241,17 @@ and optionally runs Docker Compose.
 
 ## Validation Commands
 
+### Full Local Gate (one command)
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File infra/scripts/local-ci.ps1
+```
+
+Runs the whole gate in order: DevMate ruff / format / mypy / pytest, the legacy
+curriculum suite, the five `tests/*/validate.ps1` suites, then
+`infra/scripts/docs-gates.ps1` (relative-link scan + current-focus freshness —
+the same checks as the CI docs job). Exit 0 means CI should pass.
+
 Each suite is a standalone `tests/<area>/validate.ps1` script. Every suite
 exits non-zero on any failure **or warning**, so they gate CI directly (see
 the `workspace` job in `.github/workflows/ci.yml`).
