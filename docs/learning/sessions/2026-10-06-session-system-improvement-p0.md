@@ -77,3 +77,23 @@ The splits were pure moves (no behavior change) so the existing tests are the pr
 Deeper agent/API coverage (tool dispatch table, error paths) belongs to the A2 window alongside the LLM layer it will exercise. Ubuntu CI runs still unverified until a master push.
 
 ---
+
+## P3: hygiene executed, two retirements rejected on evidence (2026-10-07)
+
+### Context
+
+ai-engineer-lab system improvement, P3 hygiene batch. Two candidate items investigated and closed without action; one executed.
+
+### Explanation
+
+No-action findings: (1) task.implementation-planner retirement rejected — the registry already marks it status: deprecated with used_by: [] and deprecated_in_favor_of: role.project-planner, and the registries validator explicitly passes it as unreferenced-by-design; deleting it would remove a tested deprecation path for zero gain. (2) review-log outcome column rejected — the schema already carries decision + score (devmate-scaffold-a1: approve-with-warnings, 6). Executed: `git rm -r --cached outputs/` (77 PNGs) plus the tracked devmate .coverage — the exact command the .gitignore comment pre-authorized; files verified present on disk afterward. Verified .code-review-graph/ is ignored (`!!` in porcelain --ignored output, via global exclude rather than repo gitignore). Debugging note: `git check-ignore` without --no-index exits 1 on tracked files in this environment, which initially looked like the outputs/**/*.png rule not matching; --no-index confirmed the match. Validators + docs gates green after the change. current-focus task 25 done.
+
+### Rationale (Why this?)
+
+Investigating before deleting is the point: two of three P3 items dissolved on inspection, and the one that stood had its exact command pre-authorized in the repo's own gitignore comment.
+
+### Next Steps
+
+The system-improvement arc (P0/P1/P2/structural/P3) is complete. Remaining work is A2-window product work (LLM layer, deeper agent coverage) and the first master push to verify the ubuntu CI runs. Commit decision is the user's.
+
+---

@@ -65,6 +65,7 @@ and the two ADRs are next once Qdrant/ingest are up.
 22. The editable-install .pth pointed at the pre-rename `fullstack-ai-engineer-lab` path and broke `import devmate`; fixed by hand, and `uv sync` ownership of the venv prevents recurrence
 23. ~~Structural splits + API tests~~ — done 2026-10-06: `stats` split into collect/format/present (RepoStats dataclass, output contract preserved, 4 tests green); agent `run` split into _initial_messages/_finish/_run_tool/_note_invalid_action (+ hoisted `import time`); 9 new API happy-path tests (61 passed total, coverage 45% to 48%)
 24. Remaining review debt: `devmate/ui/` missing so compose `ui` service fails — start only needed infra; agent/API deeper coverage before A2 grows the LLM layer
+25. ~~Hygiene: untrack pre-rule artifacts~~ — done 2026-10-07 (`git rm -r --cached outputs/` for 77 PNGs + tracked `.coverage`; files stay on disk; `.code-review-graph/` verified ignored via global exclude)
 
 ---
 
