@@ -57,3 +57,23 @@ Removal beat replacement because no code consumed the libraries; every finding i
 Remaining review debt is structural, not mechanical: split cli stats (115 lines) and the agent dispatch table, then API/agent happy-path tests before A2 grows the LLM layer. The ubuntu runs of the rewritten CI jobs are unverified until the next push to master.
 
 ---
+
+## Structural splits + API happy-path tests, output contracts preserved (2026-10-06)
+
+### Context
+
+ai-engineer-lab system improvement, structural batch. Goal: close the function-length review findings and add the API happy-path tests the review required before A2 grows the LLM layer.
+
+### Explanation
+
+Split `cli/main.py stats` (115 lines) into RepoStats dataclass + collect_repo_stats + format_stats_json + present_stats_table + thin command; output contract preserved (all 4 existing stats tests green without modification). Split agent `run` (85 lines) into _initial_messages/_finish/_run_tool/_note_invalid_action and hoisted the mid-function `import time` to top; no agent tests exist so behavior preservation rests on identical statement ordering, verified by full-suite green. Added tests/unit/test_api_happy_path.py (9 tests): health shape (found HealthResponse carries version, adjusted assertion), root, usage shape + bad-date 400, traces list, ready-degraded-offline shape, ingest 404 + happy path with faked loader/chunker/pipeline, non-stream RAG query shape. Suite 52 to 61 passed, coverage 45% to 48%. Full local-ci ALL GREEN. current-focus task 23 done.
+
+### Rationale (Why this?)
+
+The splits were pure moves (no behavior change) so the existing tests are the proof; the new tests target the endpoints the SSE suite did not cover, using the same monkeypatch-the-module-attribute pattern.
+
+### Next Steps
+
+Deeper agent/API coverage (tool dispatch table, error paths) belongs to the A2 window alongside the LLM layer it will exercise. Ubuntu CI runs still unverified until a master push.
+
+---

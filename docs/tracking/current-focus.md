@@ -63,7 +63,8 @@ and the two ADRs are next once Qdrant/ingest are up.
 20. ~~python-jose migration~~ — done 2026-10-06 by removal: jose/passlib were dead deps (imported nowhere), so no pyjwt replacement was needed; relock dropped rsa/ecdsa and their unfixable CVEs; `uv audit` now gates in CI with zero findings
 21. ~~DevMate review quick wins~~ — done 2026-10-06: secret_key production guard, debug=False default, ConfigDict, pathlib import moved up, all 11 datetime.utcnow() sites to datetime.now(UTC); mypy stays 3.12 (numpy 2.5.3 stubs unparsable under 3.11, documented in pyproject)
 22. The editable-install .pth pointed at the pre-rename `fullstack-ai-engineer-lab` path and broke `import devmate`; fixed by hand, and `uv sync` ownership of the venv prevents recurrence
-23. Remaining review debt: split `cli/main.py` stats (115 lines) + agent dispatch table; API/agent test coverage (47% overall); `devmate/ui/` missing so compose `ui` service fails — start only needed infra
+23. ~~Structural splits + API tests~~ — done 2026-10-06: `stats` split into collect/format/present (RepoStats dataclass, output contract preserved, 4 tests green); agent `run` split into _initial_messages/_finish/_run_tool/_note_invalid_action (+ hoisted `import time`); 9 new API happy-path tests (61 passed total, coverage 45% to 48%)
+24. Remaining review debt: `devmate/ui/` missing so compose `ui` service fails — start only needed infra; agent/API deeper coverage before A2 grows the LLM layer
 
 ---
 
