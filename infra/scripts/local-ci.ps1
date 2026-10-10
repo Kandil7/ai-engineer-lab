@@ -46,6 +46,8 @@ foreach ($suite in @("prompts", "workflows", "templates", "registries", "knowled
     Invoke-Gate "validate $suite" $repoRoot ("powershell -NoProfile -ExecutionPolicy Bypass -File tests/{0}/validate.ps1" -f $suite)
 }
 
+Invoke-Gate "knowledge index" $repoRoot "powershell -NoProfile -ExecutionPolicy Bypass -File infra/scripts/build-knowledge-index.ps1 -Check"
+
 Invoke-Gate "docs gates" $repoRoot "powershell -NoProfile -ExecutionPolicy Bypass -File infra/scripts/docs-gates.ps1"
 
 Write-Host ""

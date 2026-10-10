@@ -87,6 +87,14 @@ jobs:
           }
           if ($failed) { exit 1 }
 
+      - name: Knowledge index drift check
+        # docs/reference/INDEX.md is a generated view of registries/knowledge-registry.yaml.
+        # Fails when the committed index is stale.
+        shell: pwsh
+        run: |
+          & "infra/scripts/build-knowledge-index.ps1" -Check
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+
   integration:
     name: DevMate — integration (Qdrant + Redis)
     runs-on: ubuntu-latest
