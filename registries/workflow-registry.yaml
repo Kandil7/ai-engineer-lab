@@ -110,6 +110,13 @@ workflows:
       template_used: null
       produces: ["exercise appended to summary", "projects/* code"]
       exit_criteria: "exercise completed and tied to project code"
+    - id: learning/project-to-learning-map
+      path: .ai/workflows/learning/project-to-learning-map.md
+      entry_point: true
+      prompts_used: [role.learning-coach]
+      template_used: learning-map.template.md
+      produces: ["docs/learning/paths/<project>-learning-map.md", "registries/knowledge-registry.yaml"]
+      exit_criteria: "every required concept maps to a registry node, a source, and an evidence check"
   architecture:
     - id: architecture/propose-decision
       path: .ai/workflows/architecture/propose-decision.md

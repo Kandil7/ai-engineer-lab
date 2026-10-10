@@ -42,7 +42,7 @@ Invoke-Gate "devmate pytest" $devmate "& `"$devPy`" -m pytest -q --cov=devmate -
 $legacy = Join-Path $repoRoot "projects\00-core-foundations\python"
 Invoke-Gate "legacy pytest" $legacy "& python -m pytest -q"
 
-foreach ($suite in @("prompts", "workflows", "templates", "registries", "repo-structure")) {
+foreach ($suite in @("prompts", "workflows", "templates", "registries", "knowledge", "repo-structure")) {
     Invoke-Gate "validate $suite" $repoRoot ("powershell -NoProfile -ExecutionPolicy Bypass -File tests/{0}/validate.ps1" -f $suite)
 }
 

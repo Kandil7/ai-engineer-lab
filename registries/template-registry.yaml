@@ -66,3 +66,7 @@ templates:
     path: templates/mistakes.template.md
     required_sections: ["The Mistake", "Why It Happened", "The Lesson", "Prevention", "Verification"]
     used_by: [feature/05-fix, feature/06-reflect, debugging/04-fix-verification]
+  - id: learning-map
+    path: templates/learning-map.template.md
+    required_sections: ["Required Skills", "Current Level", "Gaps", "Study Plan", "Verification"]
+    used_by: [learning/project-to-learning-map]

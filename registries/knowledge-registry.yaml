@@ -1,0 +1,520 @@
+# Knowledge Registry - concept graph for the AI Engineer Lab "Learning OS".
+# The backbone that links a concept to where it is taught, its source, its
+# exercise, the project that uses it, and the evidence that proves mastery.
+# Read by tests/knowledge/validate.ps1 and by the
+# learning/project-to-learning-map workflow.
+#
+# Schema per node:
+#   id                 unique dotted id (domain.area)
+#   name               human-readable name
+#   level              core | advanced
+#   prerequisites      list of node ids (must resolve in this file)
+#   taught_in          repo-relative paths (files or dirs) that must exist
+#   sources            learning-sources/source-index.md anchors (source-index#N)
+#   exercises          repo-relative paths (files or dirs) that must exist
+#   used_by_projects   repo-relative project paths that must exist
+#   evidence           one-line proof of mastery
+#   status             active | deprecated
+version: 1
+domains:
+  python:
+    - id: python.production
+      name: Production Python
+      level: core
+      prerequisites: []
+      taught_in: [projects/00-core-foundations/python/02-advanced-python/35-unicode-and-arabic-text]
+      sources: [source-index#1]
+      exercises: [projects/00-core-foundations/python/02-advanced-python/challenges]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Bounded-memory batch import with typed errors naming the failing line."
+      status: active
+    - id: python.testing
+      name: Test strategy (unit to regression)
+      level: core
+      prerequisites: [python.production]
+      taught_in: [projects/00-core-foundations/python/02-advanced-python/38-test-strategy-contract-regression]
+      sources: [source-index#1]
+      exercises: [projects/00-core-foundations/python/02-advanced-python/challenges]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A regression suite that reproduces a known failure and gates it."
+      status: active
+
+  ai-engineering:
+    - id: llm.fundamentals
+      name: LLM fundamentals
+      level: core
+      prerequisites: [python.production]
+      taught_in: [docs/curriculum/lectures/01-llm-fundamentals.md]
+      sources: [source-index#18]
+      exercises: [projects/04-ai-engineering/prompt-engineering]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Explain tokens, temperature, and context windows and defend each choice."
+      status: active
+    - id: llm.streaming
+      name: Streaming and structured outputs
+      level: core
+      prerequisites: [llm.fundamentals]
+      taught_in: [docs/curriculum/lectures/01-llm-fundamentals.md]
+      sources: [source-index#18]
+      exercises: [projects/04-ai-engineering/devmate]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A streaming ask with typed retries and a validated structured response."
+      status: active
+    - id: llm.prompt-engineering
+      name: Prompt engineering
+      level: core
+      prerequisites: [llm.fundamentals]
+      taught_in: [projects/04-ai-engineering/prompt-engineering/01-prompt-structure]
+      sources: [source-index#18]
+      exercises: [projects/04-ai-engineering/prompt-engineering]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Versioned templates in a running system, changed with a golden-set diff."
+      status: active
+    - id: obs.tracing
+      name: Observability and tracing
+      level: core
+      prerequisites: [llm.fundamentals]
+      taught_in: [docs/curriculum/lectures/04-evaluation-observability.md]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/devmate]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Every LLM call appears as a span with tokens and latency."
+      status: active
+    - id: obs.cost-tracking
+      name: Cost tracking
+      level: core
+      prerequisites: [obs.tracing]
+      taught_in: [docs/curriculum/lectures/04-evaluation-observability.md]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/devmate]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "State the dollar cost of one request from the ledger."
+      status: active
+    - id: rag.embeddings
+      name: Embeddings and model selection
+      level: core
+      prerequisites: [llm.fundamentals]
+      taught_in: [projects/04-ai-engineering/embeddings/01-model-selection]
+      sources: [source-index#16]
+      exercises: [projects/04-ai-engineering/embeddings]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Embed a real corpus and report a measured retrieval metric."
+      status: active
+    - id: rag.chunking
+      name: Chunking strategies
+      level: core
+      prerequisites: [rag.embeddings]
+      taught_in: [projects/04-ai-engineering/rag-system/01-chunking-by-structure]
+      sources: [source-index#21]
+      exercises: [projects/04-ai-engineering/rag-system]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Three chunkers compared on a golden set with measured numbers."
+      status: active
+    - id: rag.vector-store
+      name: Vector store (Qdrant)
+      level: core
+      prerequisites: [rag.embeddings]
+      taught_in: [projects/00-core-foundations/python/04-databases/vector-stores]
+      sources: [source-index#21]
+      exercises: [projects/00-core-foundations/python/04-databases/vector-stores]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Ingest and query the repo corpus at scale with metadata filters."
+      status: active
+    - id: rag.hybrid-retrieval
+      name: Hybrid retrieval (dense plus BM25)
+      level: advanced
+      prerequisites: [rag.vector-store]
+      taught_in: [projects/04-ai-engineering/rag-system/02-hard-filters-retrieval]
+      sources: [source-index#21]
+      exercises: [projects/04-ai-engineering/rag-system]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A measured eval table showing hybrid beats dense-only."
+      status: active
+    - id: rag.reranking
+      name: Reranking
+      level: advanced
+      prerequisites: [rag.hybrid-retrieval]
+      taught_in: [projects/04-ai-engineering/rag-system/03-reranking]
+      sources: [source-index#21]
+      exercises: [projects/04-ai-engineering/rag-system]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Rerank top-k and show the metric delta against no rerank."
+      status: active
+    - id: rag.citations-abstention
+      name: Citations and abstention
+      level: advanced
+      prerequisites: [rag.hybrid-retrieval]
+      taught_in: [projects/04-ai-engineering/rag-system/05-abstention-citations]
+      sources: [source-index#21]
+      exercises: [projects/04-ai-engineering/rag-system]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Answers cite sources and abstain when evidence is missing."
+      status: active
+    - id: eval.golden-datasets
+      name: Golden datasets and annotation
+      level: core
+      prerequisites: [llm.fundamentals]
+      taught_in: [projects/04-ai-engineering/ai-evaluation/01-gold-datasets-annotation]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/ai-evaluation]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A hand-graded golden set with expected sources per question."
+      status: active
+    - id: eval.retrieval-metrics
+      name: Retrieval metrics (recall, MRR)
+      level: core
+      prerequisites: [eval.golden-datasets, rag.hybrid-retrieval]
+      taught_in: [projects/04-ai-engineering/ai-evaluation/03-retrieval-evaluation]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/ai-evaluation]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A harness that prints recall@k and MRR against the golden set."
+      status: active
+    - id: eval.faithfulness
+      name: Faithfulness and citation precision
+      level: advanced
+      prerequisites: [eval.golden-datasets]
+      taught_in: [projects/04-ai-engineering/ai-evaluation/02-faithfulness-citation-precision]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/ai-evaluation]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Score answers for grounding and report the failure cases."
+      status: active
+    - id: eval.llm-as-judge
+      name: LLM-as-judge
+      level: advanced
+      prerequisites: [eval.faithfulness]
+      taught_in: [projects/04-ai-engineering/ai-evaluation/04-llm-as-judge]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/ai-evaluation]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A judge rubric calibrated against a hand-graded sample."
+      status: active
+    - id: eval.eval-in-ci
+      name: Evaluation in CI
+      level: advanced
+      prerequisites: [eval.retrieval-metrics]
+      taught_in: [projects/04-ai-engineering/ai-evaluation/06-eval-in-ci]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/ai-evaluation]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "The eval gate fails CI when a metric regresses past a threshold."
+      status: active
+    - id: agents.tool-use
+      name: Tool use
+      level: core
+      prerequisites: [llm.streaming]
+      taught_in: [docs/curriculum/lectures/03-agents.md]
+      sources: [source-index#23]
+      exercises: [projects/04-ai-engineering/agents/exercises]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "One hand-rolled tool loop with a validated tool schema."
+      status: active
+    - id: agents.react
+      name: ReAct loop
+      level: advanced
+      prerequisites: [agents.tool-use]
+      taught_in: [projects/04-ai-engineering/agents/lectures]
+      sources: [source-index#23]
+      exercises: [projects/04-ai-engineering/agents/exercises]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A step-capped loop with loop detection and a passing test."
+      status: active
+    - id: agents.mcp
+      name: Model Context Protocol
+      level: advanced
+      prerequisites: [agents.tool-use]
+      taught_in: [docs/curriculum/lectures/03-agents.md]
+      sources: [source-index#23]
+      exercises: [projects/04-ai-engineering/agents/exercises]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "An MCP server reachable from a real MCP client."
+      status: active
+    - id: prod.semantic-cache
+      name: Semantic caching
+      level: advanced
+      prerequisites: [rag.hybrid-retrieval, databases.redis]
+      taught_in: [projects/04-ai-engineering/rag-system/06-caching]
+      sources: [source-index#11]
+      exercises: [projects/04-ai-engineering/rag-system]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A cache hit-rate metric from a semantic (not exact-match) cache."
+      status: active
+    - id: prod.guardrails
+      name: Guardrails and injection defence
+      level: advanced
+      prerequisites: [llm.fundamentals]
+      taught_in: [projects/04-ai-engineering/rag-system/08-context-security]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/security]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Blocked injection attempts with evidence and a size limit."
+      status: active
+
+  backend:
+    - id: backend.fastapi-service
+      name: FastAPI service
+      level: core
+      prerequisites: [python.production]
+      taught_in: [docs/learning/paths/fastapi-ai-services.md]
+      sources: [source-index#5]
+      exercises: [projects/00-core-foundations/python/05-web-frameworks]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A documented API with health, streaming, and validation."
+      status: active
+
+  databases:
+    - id: databases.sql-schema
+      name: SQL schema and indexes
+      level: core
+      prerequisites: [python.production]
+      taught_in: [projects/00-core-foundations/python/04-databases/sql-fundamentals]
+      sources: [source-index#10]
+      exercises: [projects/00-core-foundations/python/04-databases/sql-fundamentals]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A schema with justified indexes and a query plan that uses them."
+      status: active
+    - id: databases.redis
+      name: Redis cache and queues
+      level: core
+      prerequisites: [python.production]
+      taught_in: [projects/00-core-foundations/python/04-databases/redis]
+      sources: [source-index#11]
+      exercises: [projects/00-core-foundations/python/04-databases/redis]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A cache or queue in the running system with a measured effect."
+      status: active
+
+  devops:
+    - id: deploy.docker
+      name: Docker and deployment
+      level: core
+      prerequisites: [backend.fastapi-service]
+      taught_in: [projects/00-core-foundations/python/08-mlops]
+      sources: [source-index#8]
+      exercises: [projects/06-devops]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A multi-stage image serving the API from a public URL."
+      status: active
+
+  system-design:
+    - id: system-design.contracts
+      name: Component contracts
+      level: advanced
+      prerequisites: [backend.fastapi-service]
+      taught_in: [projects/00-core-foundations/python/10-system-design/01-component-contracts]
+      sources: [source-index#26]
+      exercises: [projects/00-core-foundations/python/10-system-design/challenges]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A four-part contract with a compatibility and migration path."
+      status: active
+    - id: system-design.failure-modes
+      name: Failure modes and resilience
+      level: advanced
+      prerequisites: [system-design.contracts]
+      taught_in: [projects/00-core-foundations/python/10-system-design/04-failure-modes-and-resilience]
+      sources: [source-index#26]
+      exercises: [projects/00-core-foundations/python/10-system-design/challenges]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Explain, with runbooks, what happens when a dependency dies."
+      status: active
+
+  ml-foundations:
+    - id: ml.vectors-similarity
+      name: Vectors and similarity
+      level: core
+      prerequisites: [python.production]
+      taught_in: [projects/04-ai-engineering/applied-ml/01-vectors-and-similarity]
+      sources: [source-index#12]
+      exercises: [projects/04-ai-engineering/applied-ml]
+      used_by_projects: [projects/04-ai-engineering/applied-ml]
+      evidence: "Compute similarity by hand and explain why the metric fits the data."
+      status: active
+    - id: ml.evaluation-metrics
+      name: Precision, recall, confusion
+      level: core
+      prerequisites: [ml.vectors-similarity]
+      taught_in: [projects/04-ai-engineering/applied-ml/03-precision-recall-confusion]
+      sources: [source-index#12]
+      exercises: [projects/04-ai-engineering/applied-ml]
+      used_by_projects: [projects/04-ai-engineering/applied-ml]
+      evidence: "Pick the right metric for an imbalanced task and defend it."
+      status: active
+    - id: ml.baselines-error-analysis
+      name: Rules vs models, error analysis
+      level: advanced
+      prerequisites: [ml.evaluation-metrics]
+      taught_in: [projects/04-ai-engineering/applied-ml/04-rules-vs-models-error-analysis]
+      sources: [source-index#12]
+      exercises: [projects/04-ai-engineering/applied-ml]
+      used_by_projects: [projects/04-ai-engineering/applied-ml]
+      evidence: "A rules baseline and a model compared with a real error analysis."
+      status: active
+
+  fine-tuning:
+    - id: fine-tuning.sft
+      name: Supervised fine-tuning
+      level: core
+      prerequisites: [llm.fundamentals]
+      taught_in: [projects/04-ai-engineering/fine-tuning/01-supervised-fine-tuning]
+      sources: [source-index#20]
+      exercises: [projects/04-ai-engineering/fine-tuning]
+      used_by_projects: [projects/04-ai-engineering/fine-tuning]
+      evidence: "One SFT run with a held-out loss and a sample output."
+      status: active
+    - id: fine-tuning.lora-qlora
+      name: LoRA and QLoRA
+      level: advanced
+      prerequisites: [fine-tuning.sft]
+      taught_in: [projects/04-ai-engineering/fine-tuning/02-lora-qlora]
+      sources: [source-index#20]
+      exercises: [projects/04-ai-engineering/fine-tuning]
+      used_by_projects: [projects/04-ai-engineering/fine-tuning]
+      evidence: "A 4-bit QLoRA run inside the 16 GB budget with VRAM measured."
+      status: active
+    - id: fine-tuning.training-data
+      name: Training data preparation
+      level: core
+      prerequisites: [fine-tuning.sft]
+      taught_in: [projects/04-ai-engineering/fine-tuning/03-training-data]
+      sources: [source-index#20]
+      exercises: [projects/04-ai-engineering/fine-tuning]
+      used_by_projects: [projects/04-ai-engineering/fine-tuning]
+      evidence: "A deduplicated, format-validated dataset with a data card."
+      status: active
+    - id: fine-tuning.model-registry
+      name: Model registry and versioning
+      level: advanced
+      prerequisites: [fine-tuning.sft]
+      taught_in: [projects/04-ai-engineering/fine-tuning/05-model-registry]
+      sources: [source-index#20]
+      exercises: [projects/04-ai-engineering/fine-tuning]
+      used_by_projects: [projects/04-ai-engineering/fine-tuning]
+      evidence: "A versioned checkpoint registry with eval metadata per version."
+      status: active
+    - id: fine-tuning.rag-vs-ft
+      name: RAG vs fine-tuning
+      level: advanced
+      prerequisites: [fine-tuning.sft, rag.hybrid-retrieval]
+      taught_in: [projects/04-ai-engineering/fine-tuning/06-rag-vs-fine-tuning]
+      sources: [source-index#20]
+      exercises: [projects/04-ai-engineering/fine-tuning]
+      used_by_projects: [projects/04-ai-engineering/fine-tuning]
+      evidence: "A written decision on when to retrieve and when to fine-tune."
+      status: active
+
+  arabic-nlp:
+    - id: arabic-nlp.text-fundamentals
+      name: Arabic text fundamentals
+      level: core
+      prerequisites: [python.production]
+      taught_in: [projects/04-ai-engineering/arabic-nlp/01-arabic-text-fundamentals]
+      sources: [source-index#16]
+      exercises: [projects/04-ai-engineering/arabic-nlp]
+      used_by_projects: [projects/04-ai-engineering/arabic-nlp, projects/04-ai-engineering/athar-lab]
+      evidence: "Explain harakat, presentation forms, and digit folding on real text."
+      status: active
+    - id: arabic-nlp.normalization
+      name: Arabic normalization and tokenization
+      level: core
+      prerequisites: [arabic-nlp.text-fundamentals]
+      taught_in: [projects/04-ai-engineering/arabic-nlp/02-arabic-normalization-tokenization]
+      sources: [source-index#16]
+      exercises: [projects/04-ai-engineering/arabic-nlp]
+      used_by_projects: [projects/04-ai-engineering/arabic-nlp, projects/04-ai-engineering/athar-lab]
+      evidence: "A normalizer that is idempotent and proven on a golden text set."
+      status: active
+    - id: arabic-nlp.lexical-retrieval
+      name: Arabic lexical retrieval
+      level: advanced
+      prerequisites: [arabic-nlp.normalization]
+      taught_in: [projects/04-ai-engineering/arabic-nlp/03-arabic-lexical-retrieval]
+      sources: [source-index#21]
+      exercises: [projects/04-ai-engineering/arabic-nlp]
+      used_by_projects: [projects/04-ai-engineering/arabic-nlp, projects/04-ai-engineering/athar-lab]
+      evidence: "A BM25 baseline on Arabic text with a measured recall."
+      status: active
+    - id: arabic-nlp.embeddings
+      name: Arabic embeddings
+      level: advanced
+      prerequisites: [arabic-nlp.normalization, rag.embeddings]
+      taught_in: [projects/04-ai-engineering/arabic-nlp/04-arabic-embeddings]
+      sources: [source-index#16]
+      exercises: [projects/04-ai-engineering/arabic-nlp]
+      used_by_projects: [projects/04-ai-engineering/arabic-nlp, projects/04-ai-engineering/athar-lab]
+      evidence: "An Arabic embedding model chosen with a measured retrieval delta."
+      status: active
+    - id: arabic-nlp.hybrid-search
+      name: Arabic hybrid search
+      level: advanced
+      prerequisites: [arabic-nlp.embeddings]
+      taught_in: [projects/04-ai-engineering/arabic-nlp/05-arabic-hybrid-search]
+      sources: [source-index#21]
+      exercises: [projects/04-ai-engineering/arabic-nlp]
+      used_by_projects: [projects/04-ai-engineering/arabic-nlp, projects/04-ai-engineering/athar-lab]
+      evidence: "A dense plus lexical fusion that beats each alone on Arabic."
+      status: active
+    - id: arabic-nlp.ann-search
+      name: Arabic ANN search
+      level: advanced
+      prerequisites: [arabic-nlp.embeddings]
+      taught_in: [projects/04-ai-engineering/arabic-nlp/06-arabic-ann-search]
+      sources: [source-index#21]
+      exercises: [projects/04-ai-engineering/arabic-nlp]
+      used_by_projects: [projects/04-ai-engineering/arabic-nlp, projects/04-ai-engineering/athar-lab]
+      evidence: "An ANN index with a recall vs latency tradeoff measured."
+      status: active
+    - id: arabic-nlp.mrr-evaluation
+      name: Arabic retrieval evaluation
+      level: advanced
+      prerequisites: [arabic-nlp.hybrid-search, eval.retrieval-metrics]
+      taught_in: [projects/04-ai-engineering/arabic-nlp/07-arabic-mrr-evaluation]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/arabic-nlp]
+      used_by_projects: [projects/04-ai-engineering/arabic-nlp, projects/04-ai-engineering/athar-lab]
+      evidence: "An MRR harness on an Arabic golden set with reported numbers."
+      status: active
+
+  model-serving:
+    - id: serving.model-selection
+      name: Choosing a model
+      level: core
+      prerequisites: [llm.fundamentals]
+      taught_in: [projects/04-ai-engineering/model-serving/01-choosing-a-model]
+      sources: [source-index#12]
+      exercises: [projects/04-ai-engineering/model-serving]
+      used_by_projects: [projects/04-ai-engineering/model-serving]
+      evidence: "A model choice defended by size, license, and task fit."
+      status: active
+    - id: serving.self-hosted
+      name: Self-hosted models
+      level: advanced
+      prerequisites: [serving.model-selection]
+      taught_in: [projects/04-ai-engineering/model-serving/02-self-hosted-models]
+      sources: [source-index#12]
+      exercises: [projects/04-ai-engineering/model-serving]
+      used_by_projects: [projects/04-ai-engineering/model-serving]
+      evidence: "A quantized model served locally within the 16 GB VRAM budget."
+      status: active
+    - id: serving.inference
+      name: Inference serving
+      level: advanced
+      prerequisites: [serving.self-hosted]
+      taught_in: [projects/04-ai-engineering/model-serving/03-inference-serving]
+      sources: [source-index#12]
+      exercises: [projects/04-ai-engineering/model-serving]
+      used_by_projects: [projects/04-ai-engineering/model-serving]
+      evidence: "A served endpoint with measured throughput and latency."
+      status: active
+
+  security:
+    - id: security.llm-security
+      name: LLM application security
+      level: advanced
+      prerequisites: [llm.fundamentals]
+      taught_in: [projects/04-ai-engineering/security/lectures]
+      sources: [source-index#25]
+      exercises: [projects/04-ai-engineering/security/exercises]
+      used_by_projects: [projects/04-ai-engineering/security, projects/04-ai-engineering/devmate]
+      evidence: "A blocked prompt-injection attempt from the OWASP LLM top-10."
+      status: active

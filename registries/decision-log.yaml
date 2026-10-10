@@ -44,3 +44,10 @@ decisions:
     path: docs/decisions/0006-adopt-master-ai-engineering-curriculum.md
     supersedes: "0004"
     superseded_by: null
+  - id: "0007"
+    title: Adopt a knowledge registry as the Learning OS backbone
+    status: Accepted
+    date: 2026-10-10
+    path: docs/decisions/0007-adopt-learning-os-knowledge-registry.md
+    supersedes: null
+    superseded_by: null

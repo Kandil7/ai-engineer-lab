@@ -126,6 +126,7 @@ $requiredFiles = @(
     @{ path = "registries/template-registry.yaml"; desc = "Template registry" },
     @{ path = "registries/decision-log.yaml"; desc = "Decision log" },
     @{ path = "registries/skills-registry.yaml"; desc = "Skills registry" },
+    @{ path = "registries/knowledge-registry.yaml"; desc = "Knowledge registry" },
     @{ path = "registries/review-log.yaml"; desc = "Review log" }
 )
 
@@ -207,7 +208,8 @@ $requiredTestFiles = @(
     "tests/templates/validate.ps1",
     "tests/workflows/validate.ps1",
     "tests/prompts/validate.ps1",
-    "tests/registries/validate.ps1"
+    "tests/registries/validate.ps1",
+    "tests/knowledge/validate.ps1"
 )
 
 foreach ($file in $requiredTestFiles) {

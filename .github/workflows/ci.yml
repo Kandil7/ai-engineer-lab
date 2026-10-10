@@ -79,7 +79,7 @@ jobs:
         # their cross-registry consistency, and the repo structure.
         shell: pwsh
         run: |
-          $suites = @("prompts", "workflows", "templates", "registries", "repo-structure")
+          $suites = @("prompts", "workflows", "templates", "registries", "knowledge", "repo-structure")
           $failed = $false
           foreach ($suite in $suites) {
             & "tests/$suite/validate.ps1"
