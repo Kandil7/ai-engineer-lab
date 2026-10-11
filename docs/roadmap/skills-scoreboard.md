@@ -4,6 +4,7 @@
 > Do not edit by hand. Run the script and commit the result. The knowledge gate fails CI when this file drifts.
 
 **Summary:** 48 concepts, 15 with evidence, 0 at or above target, 33 with no evidence yet.
+**Evidence provenance:** 4 script-checked, 11 self-assessed, 0 external. Prefer script-checked; self-assessed levels are claims until a test or gate backs them.
 
 ## python
 

@@ -47,25 +47,32 @@ if ($cur) { $nodes += $cur }
 $current = @{}
 $types = @{}
 $count = @{}
+$byChecked = @{ script = 0; self = 0; external = 0 }
+$entries = @()
 $ce = $null
 foreach ($line in (Get-Content -LiteralPath $EvFile -Raw) -split "`n") {
     if ($line -match '^\s*- id:\s*(.+)') {
-        $ce = @{ skill = ""; level = 0; type = "" }
+        if ($ce) { $entries += $ce }
+        $ce = @{ skill = ""; level = 0; type = ""; checked_by = "" }
         continue
     }
     if (-not $ce) { continue }
     if ($line -match '^\s*skill:\s*(.+)') { $ce.skill = $matches[1].Trim() }
     elseif ($line -match '^\s*level:\s*(\d+)') { $ce.level = [int]$matches[1] }
     elseif ($line -match '^\s*type:\s*(.+)') { $ce.type = $matches[1].Trim() }
-    if ($ce.skill -and $ce.level -gt 0 -and $ce.type) {
-        if (-not $current.ContainsKey($ce.skill) -or $ce.level -gt $current[$ce.skill]) {
-            $current[$ce.skill] = $ce.level
-        }
-        if (-not $types.ContainsKey($ce.skill)) { $types[$ce.skill] = @() }
-        if ($types[$ce.skill] -notcontains $ce.type) { $types[$ce.skill] += $ce.type }
-        $count[$ce.skill] = 1 + ($count[$ce.skill])
-        $ce = $null
+    elseif ($line -match '^\s*checked_by:\s*(.+)') { $ce.checked_by = $matches[1].Trim() }
+}
+if ($ce) { $entries += $ce }
+
+foreach ($e in $entries) {
+    if (-not $e.skill) { continue }
+    if (-not $current.ContainsKey($e.skill) -or $e.level -gt $current[$e.skill]) {
+        $current[$e.skill] = $e.level
     }
+    if (-not $types.ContainsKey($e.skill)) { $types[$e.skill] = @() }
+    if ($types[$e.skill] -notcontains $e.type) { $types[$e.skill] += $e.type }
+    $count[$e.skill] = 1 + ($count[$e.skill])
+    if ($byChecked.ContainsKey($e.checked_by)) { $byChecked[$e.checked_by]++ }
 }
 
 # --- Render -------------------------------------------------------------
@@ -78,6 +85,7 @@ $sb = New-Object System.Text.StringBuilder
 [void]$sb.Append("> Generated from ``registries/evidence.yaml`` joined with ``registries/knowledge-registry.yaml`` by ``infra/scripts/build-skills-scoreboard.ps1``.`n")
 [void]$sb.Append("> Do not edit by hand. Run the script and commit the result. The knowledge gate fails CI when this file drifts.`n`n")
 [void]$sb.Append("**Summary:** $($nodes.Count) concepts, $withEvidence with evidence, $metTarget at or above target, $noEvidence with no evidence yet.`n")
+[void]$sb.Append("**Evidence provenance:** $($byChecked['script']) script-checked, $($byChecked['self']) self-assessed, $($byChecked['external']) external. Prefer script-checked; self-assessed levels are claims until a test or gate backs them.`n")
 
 foreach ($d in $domainOrder) {
     $dn = @($nodes | Where-Object { $_.domain -eq $d })
