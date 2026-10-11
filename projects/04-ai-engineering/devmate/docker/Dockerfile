@@ -37,6 +37,9 @@ WORKDIR /app
 # reads (repos, uploads) arrives via explicit request/CLI paths.
 COPY --from=builder /install /usr/local
 
+# The Streamlit UI (devmate-ui compose service) runs from /app/ui.
+COPY ui/ ./ui/
+
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app \
     && chown -R app:app /app

@@ -99,8 +99,8 @@ services:
   # DevMate API Service
   devmate-api:
     build:
-      context: ..
-      dockerfile: projects/04-ai-engineering/devmate/docker/Dockerfile
+      context: ../../projects/04-ai-engineering/devmate
+      dockerfile: docker/Dockerfile
     container_name: devmate-api
     environment:
       APP_ENV: production
@@ -162,8 +162,8 @@ services:
   # DevMate MCP Server
   devmate-mcp:
     build:
-      context: ..
-      dockerfile: projects/04-ai-engineering/devmate/docker/Dockerfile
+      context: ../../projects/04-ai-engineering/devmate
+      dockerfile: docker/Dockerfile
     container_name: devmate-mcp
     command: python -m devmate.mcp.server http
     environment:
@@ -197,10 +197,10 @@ services:
   # Streamlit UI
   devmate-ui:
     build:
-      context: ..
-      dockerfile: projects/04-ai-engineering/devmate/docker/Dockerfile
+      context: ../../projects/04-ai-engineering/devmate
+      dockerfile: docker/Dockerfile
     container_name: devmate-ui
-    command: streamlit run projects/04-ai-engineering/devmate/ui/app.py --server.port=8501 --server.address=0.0.0.0
+    command: streamlit run ui/app.py --server.port=8501 --server.address=0.0.0.0
     environment:
       DEVMATE_API_URL: http://devmate-api:8000
     ports:
