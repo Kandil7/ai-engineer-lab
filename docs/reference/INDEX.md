@@ -16,6 +16,9 @@
 - **Exercises:** `projects/00-core-foundations/python/02-advanced-python/challenges`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Bounded-memory batch import with typed errors naming the failing line.
+- **Target:** 7/10
+- **Evidence required:** `test`, `pr`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `python.testing` - Test strategy (unit to regression)
 
@@ -26,6 +29,9 @@
 - **Exercises:** `projects/00-core-foundations/python/02-advanced-python/challenges`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A regression suite that reproduces a known failure and gates it.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ## ai-engineering
 
@@ -38,6 +44,9 @@
 - **Exercises:** `projects/04-ai-engineering/prompt-engineering`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Explain tokens, temperature, and context windows and defend each choice.
+- **Target:** 7/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `llm.streaming` - Streaming and structured outputs
 
@@ -48,6 +57,9 @@
 - **Exercises:** `projects/04-ai-engineering/devmate`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A streaming ask with typed retries and a validated structured response.
+- **Target:** 7/10
+- **Evidence required:** `test`, `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `llm.prompt-engineering` - Prompt engineering
 
@@ -58,6 +70,9 @@
 - **Exercises:** `projects/04-ai-engineering/prompt-engineering`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Versioned templates in a running system, changed with a golden-set diff.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `obs.tracing` - Observability and tracing
 
@@ -68,6 +83,9 @@
 - **Exercises:** `projects/04-ai-engineering/devmate`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Every LLM call appears as a span with tokens and latency.
+- **Target:** 6/10
+- **Evidence required:** `test`, `deployment`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `obs.cost-tracking` - Cost tracking
 
@@ -78,6 +96,9 @@
 - **Exercises:** `projects/04-ai-engineering/devmate`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** State the dollar cost of one request from the ledger.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `rag.embeddings` - Embeddings and model selection
 
@@ -88,6 +109,9 @@
 - **Exercises:** `projects/04-ai-engineering/embeddings`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Embed a real corpus and report a measured retrieval metric.
+- **Target:** 6/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 90 days
 
 ### `rag.chunking` - Chunking strategies
 
@@ -98,6 +122,9 @@
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Three chunkers compared on a golden set with measured numbers.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`, `adr`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `rag.vector-store` - Vector store (Qdrant)
 
@@ -108,6 +135,9 @@
 - **Exercises:** `projects/00-core-foundations/python/04-databases/vector-stores`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Ingest and query the repo corpus at scale with metadata filters.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`, `test`
+- **Verified:** 2026-10-10, review every 90 days
 
 ### `rag.hybrid-retrieval` - Hybrid retrieval (dense plus BM25)
 
@@ -118,6 +148,9 @@
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A measured eval table showing hybrid beats dense-only.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `rag.reranking` - Reranking
 
@@ -128,6 +161,9 @@
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Rerank top-k and show the metric delta against no rerank.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`, `adr`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `rag.citations-abstention` - Citations and abstention
 
@@ -138,6 +174,9 @@
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Answers cite sources and abstain when evidence is missing.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `eval.golden-datasets` - Golden datasets and annotation
 
@@ -148,6 +187,9 @@
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A hand-graded golden set with expected sources per question.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `eval.retrieval-metrics` - Retrieval metrics (recall, MRR)
 
@@ -158,6 +200,9 @@
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A harness that prints recall@k and MRR against the golden set.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `eval.faithfulness` - Faithfulness and citation precision
 
@@ -168,6 +213,9 @@
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Score answers for grounding and report the failure cases.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `eval.llm-as-judge` - LLM-as-judge
 
@@ -178,6 +226,9 @@
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A judge rubric calibrated against a hand-graded sample.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `eval.eval-in-ci` - Evaluation in CI
 
@@ -188,6 +239,9 @@
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** The eval gate fails CI when a metric regresses past a threshold.
+- **Target:** 7/10
+- **Evidence required:** `test`, `deployment`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `agents.tool-use` - Tool use
 
@@ -198,6 +252,9 @@
 - **Exercises:** `projects/04-ai-engineering/agents/exercises`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** One hand-rolled tool loop with a validated tool schema.
+- **Target:** 7/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `agents.react` - ReAct loop
 
@@ -208,6 +265,9 @@
 - **Exercises:** `projects/04-ai-engineering/agents/exercises`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A step-capped loop with loop detection and a passing test.
+- **Target:** 7/10
+- **Evidence required:** `test`, `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `agents.mcp` - Model Context Protocol
 
@@ -218,6 +278,9 @@
 - **Exercises:** `projects/04-ai-engineering/agents/exercises`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** An MCP server reachable from a real MCP client.
+- **Target:** 6/10
+- **Evidence required:** `test`, `deployment`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `prod.semantic-cache` - Semantic caching
 
@@ -228,6 +291,9 @@
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A cache hit-rate metric from a semantic (not exact-match) cache.
+- **Target:** 5/10
+- **Evidence required:** `test`, `benchmark`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `prod.guardrails` - Guardrails and injection defence
 
@@ -238,6 +304,9 @@
 - **Exercises:** `projects/04-ai-engineering/security`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Blocked injection attempts with evidence and a size limit.
+- **Target:** 6/10
+- **Evidence required:** `test`, `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ## backend
 
@@ -250,6 +319,9 @@
 - **Exercises:** `projects/00-core-foundations/python/05-web-frameworks`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A documented API with health, streaming, and validation.
+- **Target:** 7/10
+- **Evidence required:** `test`, `deployment`
+- **Verified:** 2026-10-10, review every 0 days
 
 ## databases
 
@@ -262,6 +334,9 @@
 - **Exercises:** `projects/00-core-foundations/python/04-databases/sql-fundamentals`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A schema with justified indexes and a query plan that uses them.
+- **Target:** 6/10
+- **Evidence required:** `test`, `adr`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `databases.redis` - Redis cache and queues
 
@@ -272,6 +347,9 @@
 - **Exercises:** `projects/00-core-foundations/python/04-databases/redis`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A cache or queue in the running system with a measured effect.
+- **Target:** 5/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ## devops
 
@@ -284,6 +362,9 @@
 - **Exercises:** `projects/06-devops`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A multi-stage image serving the API from a public URL.
+- **Target:** 6/10
+- **Evidence required:** `deployment`
+- **Verified:** 2026-10-10, review every 90 days
 
 ## system-design
 
@@ -296,6 +377,9 @@
 - **Exercises:** `projects/00-core-foundations/python/10-system-design/challenges`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A four-part contract with a compatibility and migration path.
+- **Target:** 6/10
+- **Evidence required:** `adr`, `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `system-design.failure-modes` - Failure modes and resilience
 
@@ -306,6 +390,9 @@
 - **Exercises:** `projects/00-core-foundations/python/10-system-design/challenges`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Explain, with runbooks, what happens when a dependency dies.
+- **Target:** 6/10
+- **Evidence required:** `adr`, `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ## ml-foundations
 
@@ -318,6 +405,9 @@
 - **Exercises:** `projects/04-ai-engineering/applied-ml`
 - **Used by:** `projects/04-ai-engineering/applied-ml`
 - **Evidence:** Compute similarity by hand and explain why the metric fits the data.
+- **Target:** 5/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `ml.evaluation-metrics` - Precision, recall, confusion
 
@@ -328,6 +418,9 @@
 - **Exercises:** `projects/04-ai-engineering/applied-ml`
 - **Used by:** `projects/04-ai-engineering/applied-ml`
 - **Evidence:** Pick the right metric for an imbalanced task and defend it.
+- **Target:** 5/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `ml.baselines-error-analysis` - Rules vs models, error analysis
 
@@ -338,6 +431,9 @@
 - **Exercises:** `projects/04-ai-engineering/applied-ml`
 - **Used by:** `projects/04-ai-engineering/applied-ml`
 - **Evidence:** A rules baseline and a model compared with a real error analysis.
+- **Target:** 5/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ## fine-tuning
 
@@ -350,6 +446,9 @@
 - **Exercises:** `projects/04-ai-engineering/fine-tuning`
 - **Used by:** `projects/04-ai-engineering/fine-tuning`
 - **Evidence:** One SFT run with a held-out loss and a sample output.
+- **Target:** 6/10
+- **Evidence required:** `benchmark`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `fine-tuning.lora-qlora` - LoRA and QLoRA
 
@@ -360,6 +459,9 @@
 - **Exercises:** `projects/04-ai-engineering/fine-tuning`
 - **Used by:** `projects/04-ai-engineering/fine-tuning`
 - **Evidence:** A 4-bit QLoRA run inside the 16 GB budget with VRAM measured.
+- **Target:** 6/10
+- **Evidence required:** `benchmark`
+- **Verified:** 2026-10-10, review every 90 days
 
 ### `fine-tuning.training-data` - Training data preparation
 
@@ -370,6 +472,9 @@
 - **Exercises:** `projects/04-ai-engineering/fine-tuning`
 - **Used by:** `projects/04-ai-engineering/fine-tuning`
 - **Evidence:** A deduplicated, format-validated dataset with a data card.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `fine-tuning.model-registry` - Model registry and versioning
 
@@ -380,6 +485,9 @@
 - **Exercises:** `projects/04-ai-engineering/fine-tuning`
 - **Used by:** `projects/04-ai-engineering/fine-tuning`
 - **Evidence:** A versioned checkpoint registry with eval metadata per version.
+- **Target:** 5/10
+- **Evidence required:** `adr`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `fine-tuning.rag-vs-ft` - RAG vs fine-tuning
 
@@ -390,6 +498,9 @@
 - **Exercises:** `projects/04-ai-engineering/fine-tuning`
 - **Used by:** `projects/04-ai-engineering/fine-tuning`
 - **Evidence:** A written decision on when to retrieve and when to fine-tune.
+- **Target:** 6/10
+- **Evidence required:** `adr`
+- **Verified:** 2026-10-10, review every 0 days
 
 ## arabic-nlp
 
@@ -402,6 +513,9 @@
 - **Exercises:** `projects/04-ai-engineering/arabic-nlp`
 - **Used by:** `projects/04-ai-engineering/arabic-nlp`, `projects/04-ai-engineering/athar-lab`
 - **Evidence:** Explain harakat, presentation forms, and digit folding on real text.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `arabic-nlp.normalization` - Arabic normalization and tokenization
 
@@ -412,6 +526,9 @@
 - **Exercises:** `projects/04-ai-engineering/arabic-nlp`
 - **Used by:** `projects/04-ai-engineering/arabic-nlp`, `projects/04-ai-engineering/athar-lab`
 - **Evidence:** A normalizer that is idempotent and proven on a golden text set.
+- **Target:** 6/10
+- **Evidence required:** `test`, `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `arabic-nlp.lexical-retrieval` - Arabic lexical retrieval
 
@@ -422,6 +539,9 @@
 - **Exercises:** `projects/04-ai-engineering/arabic-nlp`
 - **Used by:** `projects/04-ai-engineering/arabic-nlp`, `projects/04-ai-engineering/athar-lab`
 - **Evidence:** A BM25 baseline on Arabic text with a measured recall.
+- **Target:** 6/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `arabic-nlp.embeddings` - Arabic embeddings
 
@@ -432,6 +552,9 @@
 - **Exercises:** `projects/04-ai-engineering/arabic-nlp`
 - **Used by:** `projects/04-ai-engineering/arabic-nlp`, `projects/04-ai-engineering/athar-lab`
 - **Evidence:** An Arabic embedding model chosen with a measured retrieval delta.
+- **Target:** 6/10
+- **Evidence required:** `eval_report`, `adr`
+- **Verified:** 2026-10-10, review every 90 days
 
 ### `arabic-nlp.hybrid-search` - Arabic hybrid search
 
@@ -442,6 +565,9 @@
 - **Exercises:** `projects/04-ai-engineering/arabic-nlp`
 - **Used by:** `projects/04-ai-engineering/arabic-nlp`, `projects/04-ai-engineering/athar-lab`
 - **Evidence:** A dense plus lexical fusion that beats each alone on Arabic.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ### `arabic-nlp.ann-search` - Arabic ANN search
 
@@ -452,6 +578,9 @@
 - **Exercises:** `projects/04-ai-engineering/arabic-nlp`
 - **Used by:** `projects/04-ai-engineering/arabic-nlp`, `projects/04-ai-engineering/athar-lab`
 - **Evidence:** An ANN index with a recall vs latency tradeoff measured.
+- **Target:** 6/10
+- **Evidence required:** `benchmark`
+- **Verified:** 2026-10-10, review every 90 days
 
 ### `arabic-nlp.mrr-evaluation` - Arabic retrieval evaluation
 
@@ -462,6 +591,9 @@
 - **Exercises:** `projects/04-ai-engineering/arabic-nlp`
 - **Used by:** `projects/04-ai-engineering/arabic-nlp`, `projects/04-ai-engineering/athar-lab`
 - **Evidence:** An MRR harness on an Arabic golden set with reported numbers.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-10, review every 0 days
 
 ## model-serving
 
@@ -474,6 +606,9 @@
 - **Exercises:** `projects/04-ai-engineering/model-serving`
 - **Used by:** `projects/04-ai-engineering/model-serving`
 - **Evidence:** A model choice defended by size, license, and task fit.
+- **Target:** 6/10
+- **Evidence required:** `adr`
+- **Verified:** 2026-10-10, review every 90 days
 
 ### `serving.self-hosted` - Self-hosted models
 
@@ -484,6 +619,9 @@
 - **Exercises:** `projects/04-ai-engineering/model-serving`
 - **Used by:** `projects/04-ai-engineering/model-serving`
 - **Evidence:** A quantized model served locally within the 16 GB VRAM budget.
+- **Target:** 6/10
+- **Evidence required:** `benchmark`
+- **Verified:** 2026-10-10, review every 90 days
 
 ### `serving.inference` - Inference serving
 
@@ -494,6 +632,9 @@
 - **Exercises:** `projects/04-ai-engineering/model-serving`
 - **Used by:** `projects/04-ai-engineering/model-serving`
 - **Evidence:** A served endpoint with measured throughput and latency.
+- **Target:** 6/10
+- **Evidence required:** `benchmark`
+- **Verified:** 2026-10-10, review every 90 days
 
 ## security
 
@@ -506,3 +647,6 @@
 - **Exercises:** `projects/04-ai-engineering/security/exercises`
 - **Used by:** `projects/04-ai-engineering/security`, `projects/04-ai-engineering/devmate`
 - **Evidence:** A blocked prompt-injection attempt from the OWASP LLM top-10.
+- **Target:** 6/10
+- **Evidence required:** `test`, `eval_report`
+- **Verified:** 2026-10-10, review every 0 days

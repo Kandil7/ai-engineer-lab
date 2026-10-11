@@ -57,6 +57,7 @@ foreach ($line in (Get-Content -LiteralPath $RegFile -Raw) -split "`n") {
             id = $matches[1].Trim(); domain = $domain; name = ""; level = ""
             prerequisites = @(); taught_in = @(); sources = @()
             exercises = @(); used_by_projects = @(); evidence = ""; status = ""
+            level_target = ""; evidence_required = @(); verified_at = ""; review_after_days = "0"
         }
         continue
     }
@@ -69,6 +70,10 @@ foreach ($line in (Get-Content -LiteralPath $RegFile -Raw) -split "`n") {
     elseif ($line -match '^\s*exercises:\s*\[(.*)\]') { $cur.exercises = @(Split-List $matches[1]) }
     elseif ($line -match '^\s*used_by_projects:\s*\[(.*)\]') { $cur.used_by_projects = @(Split-List $matches[1]) }
     elseif ($line -match '^\s*evidence:\s*(.+)') { $cur.evidence = $matches[1].Trim().Trim('"') }
+    elseif ($line -match '^\s*level_target:\s*(.+)') { $cur.level_target = $matches[1].Trim() }
+    elseif ($line -match '^\s*evidence_required:\s*\[(.*)\]') { $cur.evidence_required = @(Split-List $matches[1]) }
+    elseif ($line -match '^\s*verified_at:\s*(.+)') { $cur.verified_at = $matches[1].Trim() }
+    elseif ($line -match '^\s*review_after_days:\s*(.+)') { $cur.review_after_days = $matches[1].Trim() }
     elseif ($line -match '^\s*status:\s*(.+)') { $cur.status = $matches[1].Trim() }
 }
 if ($cur) { $nodes += $cur }
@@ -100,6 +105,52 @@ foreach ($n in $nodes) {
     if ($n.used_by_projects.Count -eq 0) { Write-Fail "Node '$($n.id)' has no used_by_projects"; $fieldFail = $true }
 }
 if (-not $fieldFail) { Write-Pass "All nodes carry name, level, evidence, status, taught_in, used_by_projects" }
+
+# --- 4b. Mastery targets and staleness --------------------------------
+# level_target (1..10), evidence_required (allowed types), verified_at
+# (YYYY-MM-DD), review_after_days. A node with review_after_days > 0 fails
+# when verified_at is older than that window, forcing periodic re-verification
+# of fast-moving content.
+$metaFail = $false
+$allowedEvidence = @("test", "eval_report", "adr", "pr", "deployment", "teaching", "benchmark")
+$today = (Get-Date).Date
+foreach ($n in $nodes) {
+    $lt = 0
+    if (-not [int]::TryParse($n.level_target, [ref]$lt) -or $lt -lt 1 -or $lt -gt 10) {
+        Write-Fail "Node '$($n.id)' level_target '$($n.level_target)' is not an integer 1..10"
+        $metaFail = $true
+    }
+    if ($n.evidence_required.Count -eq 0) {
+        Write-Fail "Node '$($n.id)' has no evidence_required"
+        $metaFail = $true
+    } else {
+        foreach ($e in $n.evidence_required) {
+            if ($allowedEvidence -notcontains $e) {
+                Write-Fail "Node '$($n.id)' evidence_required '$e' is not one of $($allowedEvidence -join '/')"
+                $metaFail = $true
+            }
+        }
+    }
+    $vd = [datetime]::MinValue
+    $ok = [datetime]::TryParseExact(
+        $n.verified_at, "yyyy-MM-dd", $null,
+        [System.Globalization.DateTimeStyles]::None, [ref]$vd
+    )
+    if (-not $ok) {
+        Write-Fail "Node '$($n.id)' verified_at '$($n.verified_at)' is not YYYY-MM-DD"
+        $metaFail = $true
+    } else {
+        $rad = 0
+        if ([int]::TryParse($n.review_after_days, [ref]$rad) -and $rad -gt 0) {
+            $age = ($today - $vd.Date).Days
+            if ($age -gt $rad) {
+                Write-Fail "Node '$($n.id)' is stale: verified_at $($n.verified_at) is $age days old (limit $rad)"
+                $metaFail = $true
+            }
+        }
+    }
+}
+if (-not $metaFail) { Write-Pass "All nodes carry valid level_target, evidence_required, verified_at, review_after_days (none stale)" }
 
 # --- 5. Prerequisites resolve ------------------------------------------
 $prereqFail = $false

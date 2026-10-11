@@ -43,6 +43,7 @@ foreach ($line in (Get-Content -LiteralPath $RegFile -Raw) -split "`n") {
             id = $matches[1].Trim(); domain = $domain; name = ""; level = ""
             prerequisites = @(); taught_in = @(); sources = @()
             exercises = @(); used_by_projects = @(); evidence = ""; status = ""
+            level_target = ""; evidence_required = @(); verified_at = ""; review_after_days = "0"
         }
         continue
     }
@@ -55,6 +56,10 @@ foreach ($line in (Get-Content -LiteralPath $RegFile -Raw) -split "`n") {
     elseif ($line -match '^\s*exercises:\s*\[(.*)\]') { $cur.exercises = @(Split-List $matches[1]) }
     elseif ($line -match '^\s*used_by_projects:\s*\[(.*)\]') { $cur.used_by_projects = @(Split-List $matches[1]) }
     elseif ($line -match '^\s*evidence:\s*(.+)') { $cur.evidence = $matches[1].Trim().Trim('"') }
+    elseif ($line -match '^\s*level_target:\s*(.+)') { $cur.level_target = $matches[1].Trim() }
+    elseif ($line -match '^\s*evidence_required:\s*\[(.*)\]') { $cur.evidence_required = @(Split-List $matches[1]) }
+    elseif ($line -match '^\s*verified_at:\s*(.+)') { $cur.verified_at = $matches[1].Trim() }
+    elseif ($line -match '^\s*review_after_days:\s*(.+)') { $cur.review_after_days = $matches[1].Trim() }
     elseif ($line -match '^\s*status:\s*(.+)') { $cur.status = $matches[1].Trim() }
 }
 if ($cur) { $nodes += $cur }
@@ -84,6 +89,9 @@ foreach ($d in $domainOrder) {
         [void]$sb.Append("- **Exercises:** $(Code-List $n.exercises)`n")
         [void]$sb.Append("- **Used by:** $(Code-List $n.used_by_projects)`n")
         [void]$sb.Append("- **Evidence:** $($n.evidence)`n")
+        [void]$sb.Append("- **Target:** $($n.level_target)/10`n")
+        [void]$sb.Append("- **Evidence required:** $(Code-List $n.evidence_required)`n")
+        [void]$sb.Append("- **Verified:** $($n.verified_at), review every $($n.review_after_days) days`n")
     }
 }
 
