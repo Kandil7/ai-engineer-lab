@@ -3,8 +3,8 @@
 [![Code Intelligence](https://img.shields.io/badge/Structural%20Graph-66%2C515%20nodes%20%2F%20147%2C478%20edges-blue)](docs/CODEBASE-INTELLIGENCE.md)
 [![Review Graph](https://img.shields.io/badge/Review%20Graph-12%2C904%20nodes%20%2F%2095%2C167%20edges-green)](docs/CODEBASE-INTELLIGENCE.md)
 [![Multimodal Graph](https://img.shields.io/badge/Multimodal%20Graph-62%2C930%20nodes%20%2F%2067%2C935%20edges-purple)](docs/CODEBASE-INTELLIGENCE.md)
-[![DevMate Gate](https://img.shields.io/badge/DevMate-42%20tests%20green-brightgreen)](projects/04-ai-engineering/devmate/)
-[![Eval Harness](https://img.shields.io/badge/Eval-Offline%20Hit%405%201.0-orange)](projects/04-ai-engineering/devmate/eval/)
+[![DevMate Gate](https://img.shields.io/badge/DevMate-75%20tests%20green-brightgreen)](projects/04-ai-engineering/devmate/)
+[![Eval Gate](https://img.shields.io/badge/Eval%20gate-Hit%405%201.0%20%2F%20MRR%200.74-orange)](projects/04-ai-engineering/devmate/eval/)
 
 A **Repo-Centric Agentic Workspace** — a learning + execution + review operating system for
 becoming a production-level AI Engineer. This is not a notes folder; it is an
@@ -16,16 +16,17 @@ systems** are versioned engineering artifacts.
 
 ---
 
-## Where you are right now (2026-09-30)
+## Where you are right now (2026-10-11)
 
 | Track | Status |
 | ----- | ------ |
 | **Plan of record** | [Active Track — 10-Week AI Engineer](docs/roadmap/active-track-10-week.md) ([ADR-0004](docs/decisions/0004-adopt-10-week-ai-engineer-track.md)) |
 | **Vehicle** | DevMate — `projects/04-ai-engineering/devmate/` |
 | **A1** CI + stats CLI | **Done** (GitHub Actions green) |
-| **A2** LLM layer | **In progress** — golden cases + offline eval done; Langfuse UI keys + live traced `ask` remain |
-| **A3** RAG eval | **In progress** — offline harness shipped; live retrieval + 2 ADRs remain |
-| **A4** Public URL | Planned |
+| **A2** LLM layer | **Done** — streaming, retries, 4 providers (Anthropic/OpenAI/Groq/Ollama), cost ledger, span tracing |
+| **A3** RAG eval | **Done (offline)** — harness + CI gate (Hit@5 ≥ 1.0, MRR ≥ 0.70); live retrieval is next |
+| **A4** Public URL | **Deploy-ready** — image builds and runs, Alembic + Streamlit UI + demo corpus in place, Render Blueprint + runbook; the cloud deploy is a dashboard step |
+| **Learning OS** | **Shipped** — knowledge registry, evidence ledger, generated scoreboard + concept index, project-to-learning-map workflow ([ADR-0007](docs/decisions/0007-adopt-learning-os-knowledge-registry.md), [ADR-0008](docs/decisions/0008-evidence-ledger-and-generated-scoreboard.md)) |
 | **Strategic follow-on** | [Production AI Systems Engineer roadmap](docs/roadmap/production-ai-systems-engineer.md) — P1–P8, start after A4/A6 |
 
 **Immediate execution window:** [`docs/tracking/current-focus.md`](docs/tracking/current-focus.md)
@@ -37,13 +38,16 @@ systems** are versioned engineering artifacts.
 | Layer | Technology | Live in DevMate? |
 | ----- | ---------- | ---------------- |
 | AI services | FastAPI / Python (RAG, embeddings, agents, MCP) | **Yes** |
-| LLM providers | Anthropic, OpenAI, Ollama (fallback chain) | **Yes** |
+| LLM providers | Anthropic, OpenAI, Groq, Ollama (fallback chain) | **Yes** |
+| Embeddings | Ollama (offline) or any OpenAI-compatible endpoint (Jina, Google, ...) | **Yes** |
 | Observability | Langfuse + cost ledger + span tracing | Code yes; UI keys pending |
 | Vector DB | Qdrant 1.8.0 (compose pinned) | Compose ready |
-| Relational DB | PostgreSQL 16 | Compose ready |
+| Relational DB | PostgreSQL 16 + Alembic migrations | **Yes** (migrations verified) |
 | Cache | Redis 7 | Compose ready |
-| Eval | Offline harness (`devmate.eval.run_ragas`) | **Yes** |
-| Infra | Docker / Docker Compose | Compose file present |
+| Eval | Offline harness + CI gate (`devmate.eval.run_ragas`) | **Yes** |
+| UI | Streamlit (`ui/app.py`) | **Yes** |
+| Deploy | Render Blueprint + multi-stage Dockerfile (`deploy/`) | Config ready |
+| Infra | Docker / Docker Compose | **Yes** (image builds) |
 
 ---
 
@@ -70,6 +74,9 @@ See [`docs/product/learning-strategy.md`](docs/product/learning-strategy.md) and
   workflows/                # feature, debugging, learning, architecture, evaluation
 templates/                   # Standardized artifact templates
 registries/                  # YAML inventories (source of truth for inventory)
+  knowledge-registry.yaml    # concept graph (Learning OS backbone)
+  evidence.yaml              # mastery evidence ledger
+  mistake-checks.yaml        # mistake-to-check ledger
 docs/
   CODEBASE-INTELLIGENCE.md  # Multi-layer code intelligence
   roadmap/
@@ -78,7 +85,7 @@ docs/
     milestones.md           # A / P / M milestone IDs
     progress-dashboard.md   # Status snapshot
     skills-matrix.md        # Skill levels with evidence rules
-  decisions/                # ADRs 0001–0006
+  decisions/                # ADRs 0001–0008
   curriculum/               # 4 lecture + practice modules (DevMate-anchored)
   reference/                # LLM production architecture, checklists, interview bank
   learning/                 # paths, deep-dives, design notes, source-summaries
@@ -95,16 +102,21 @@ projects/
   00-core-foundations/      # Python / DSA / git / Linux foundations
     python/                 # 10-phase module + SKILLS_MASTERY_MAP + 11 challenge sets
   04-ai-engineering/
-    devmate/                # ACTIVE PROJECT — package, tests, eval, docker
+    devmate/                # ACTIVE PROJECT — package, tests, eval, docker, ui, deploy
       src/devmate/          # llm, retrieve, obs, eval, agent, api, guards, cache, mcp
+      migrations/           # Alembic revisions (initial schema)
+      ui/app.py             # Streamlit UI
+      deploy/               # Render Blueprint + runbook
+      sample_corpus/        # demo corpus ingested on first boot
       eval/README.md        # How to run the harness
       tests/unit/           # Offline unit tests (no API key)
+      tests/integration/    # Qdrant + Redis integration tests
     model-serving/          # Curriculum (serving labs still to build)
     security/               # 10 security modules
   06-devops/                # llmops guide, docker/ci-cd/deployment notes
   07-capstone/              # ThanaweyaGPT scaffold (deferred)
 infra/docker/               # compose: postgres, redis, mongo, qdrant, langfuse
-tests/                      # Workspace validators (5 suites)
+tests/                      # Workspace validators (6 suites incl. knowledge)
 ```
 
 See [`docs/architecture/monorepo-structure.md`](docs/architecture/monorepo-structure.md).
@@ -119,13 +131,18 @@ with sources, with cost tracking and traces.
 | Capability | Location | State |
 | ---------- | -------- | ----- |
 | CLI (`stats`, `ask`, `ingest`, `serve`, `cost`) | `src/devmate/cli/main.py` | Working |
-| LLM client (streaming, retries, 3 providers, fallback) | `src/devmate/llm/client.py` | Working |
+| LLM client (streaming, retries, 4 providers, fallback) | `src/devmate/llm/client.py` | Working |
+| Embeddings (provider-agnostic) | `src/devmate/index/embeddings.py` | Working |
 | Cost ledger | `src/devmate/obs/cost.py` | Working (records; budgets later) |
 | Span tracing + Langfuse export | `src/devmate/obs/tracing.py` | Code ready; UI keys pending |
 | RAG pipeline + hybrid retrieval | `src/devmate/retrieve/`, `src/devmate/index/` | Working offline path |
 | Guardrails + semantic cache | `src/devmate/guards/`, `src/devmate/cache/` | Present; hardening is A6 |
 | Agent + MCP | `src/devmate/agent/`, `src/devmate/mcp/` | Present; week 5–6 focus |
-| Offline eval harness | `src/devmate/eval/` + `evaluations/` | **Shipped 2026-09-30** |
+| Offline eval harness + CI gate | `src/devmate/eval/` + `evaluations/` | **Shipped** |
+| Integration tests (Qdrant + Redis) | `tests/integration/` | **Shipped** (3 tests) |
+| DB schema + Alembic migrations | `src/devmate/db/`, `migrations/` | **Shipped** |
+| Streamlit UI | `ui/app.py` | **Shipped** |
+| Deploy config | `deploy/` | **Ready** (Render Blueprint) |
 
 ### Verify like CI does
 
@@ -135,11 +152,12 @@ cd projects/04-ai-engineering/devmate
 & .venv\Scripts\python.exe -m ruff format --check .
 & .venv\Scripts\python.exe -m mypy src/
 & .venv\Scripts\python.exe -m pytest -q
-& .venv\Scripts\python.exe -m devmate.eval.run_ragas --mode offline
+& .venv\Scripts\python.exe -m devmate.eval.run_ragas --mode offline --no-report --fail-under-hit-at-5 1.0 --fail-under-mrr 0.70
 ```
 
-Last verified 2026-09-30: ruff 0, format clean, mypy 0, **pytest 52 passed**, offline
-eval Hit@5 1.000 on recorded retrieval path (not a live measurement).
+Last verified 2026-10-11: ruff 0, format clean, mypy 0, **pytest 75 passed** (3
+integration deselected), eval gate green (Hit@5 1.000, MRR 0.742 on the recorded
+retrieval path — not a live measurement).
 
 ---
 
@@ -212,12 +230,12 @@ Target: a remote AI/LLM engineering role. Vehicle: **DevMate**.
 > curriculum content is allowed again when it traces to a DevMate concept or an interview
 > answer — never as a substitute for building.
 
-| Week | Milestone | Deliverable | Status (2026-09-30) |
+| Week | Milestone | Deliverable | Status (2026-10-11) |
 | ---- | --------- | ----------- | ------------------- |
 | 0 | A1 | CI green + `devmate stats` CLI | **Done** |
-| 1 | A2 | LLM layer — streaming, traced, costed | **In progress** |
-| 2–3 | A3 | RAG with a measured eval harness | **In progress** (offline) |
-| 4 | A4 | **Deployed at a public URL** + SQL sprint | Planned |
+| 1 | A2 | LLM layer — streaming, traced, costed | **Done** |
+| 2–3 | A3 | RAG with a measured eval harness | **Done** (offline + CI gate) |
+| 4 | A4 | **Deployed at a public URL** + SQL sprint | **Deploy-ready** (cloud step manual) |
 | 5–6 | A5 | Agent with 4 tools + MCP server | Planned |
 | 7 | A6 | Cache, guardrails, hardening | Planned |
 | 8 | A7 | Portfolio — blog, README, CV | Planned |
@@ -264,11 +282,11 @@ Target: a remote AI/LLM engineering role. Vehicle: **DevMate**.
 - [x] AI curriculum — lectures + practice under `docs/curriculum/` and `projects/04-ai-engineering/`
 - [x] fast.ai Deep Learning track — 13 modules
 - [x] **A1 — CI green + `devmate stats` CLI**
-- [x] Prompt golden cases + offline schema tests (A2 partial)
-- [x] Offline eval harness + unit tests + first report (A3 partial)
-- [ ] **A2 remainder — Langfuse keys + live traced `devmate ask`**
-- [ ] **A3 remainder — live retrieval + chunking/vector ADRs**
-- [ ] A4–A10 — see table above
+- [x] **A2 — LLM layer** — streaming, retries, 4 providers, cost ledger, span tracing
+- [x] **A3 — RAG eval** — offline harness + CI regression gate (Hit@5 / MRR)
+- [x] **Learning OS** — knowledge registry (48 concepts), evidence ledger, generated scoreboard + concept index, project-to-learning-map workflow ([ADR-0007](docs/decisions/0007-adopt-learning-os-knowledge-registry.md), [ADR-0008](docs/decisions/0008-evidence-ledger-and-generated-scoreboard.md))
+- [x] **A4 — deploy-ready** — Alembic migrations, Streamlit UI, demo corpus, Render Blueprint + runbook; container build verified
+- [ ] A4 cloud deploy (dashboard step) + A5–A10 — see table above
 - [x] Go and frontend tracks removed to focus on AI Engineering
 - [ ] Deferred: classical ML, P-track production depth
 
