@@ -8,6 +8,20 @@ from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+def _to_asyncpg_url(url: str) -> str:
+    """Force the async driver onto a managed Postgres URL.
+
+    Hosting platforms (Render, Heroku) hand out ``postgres://`` or
+    ``postgresql://`` connection strings; the app's engine is asyncpg, so the
+    scheme must be ``postgresql+asyncpg://``. Idempotent when already async.
+    """
+    if url.startswith("postgres://"):
+        return url.replace("postgres://", "postgresql+asyncpg://", 1)
+    if url.startswith("postgresql://"):
+        return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    return url
+
+
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
@@ -24,6 +38,8 @@ class Settings(BaseSettings):
     # LLM Providers
     anthropic_api_key: str | None = Field(default=None, alias="ANTHROPIC_API_KEY")
     openai_api_key: str | None = Field(default=None, alias="OPENAI_API_KEY")
+    groq_api_key: str | None = Field(default=None, alias="GROQ_API_KEY")
+    groq_model: str = Field(default="llama-3.1-8b-instant", alias="GROQ_MODEL")
     default_llm_provider: str = Field(default="ollama", alias="DEFAULT_LLM_PROVIDER")
     default_model: str = Field(default="claude-3-5-sonnet-20241022", alias="DEFAULT_MODEL")
     max_tokens: int = 4096
@@ -129,7 +145,7 @@ class Settings(BaseSettings):
     @property
     def postgres_connection_url(self) -> str:
         if self.database_url:
-            return self.database_url
+            return _to_asyncpg_url(self.database_url)
         return f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
 
 

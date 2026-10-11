@@ -52,5 +52,6 @@ EXPOSE 8000 8001
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the application
-CMD ["uvicorn", "devmate.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the application. Honour $PORT so hosting platforms (Render, Railway)
+# can inject their port; default to 8000 for local/compose runs.
+CMD ["sh", "-c", "uvicorn devmate.api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

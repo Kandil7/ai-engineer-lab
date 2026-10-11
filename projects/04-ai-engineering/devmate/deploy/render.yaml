@@ -1,0 +1,86 @@
+# Render Blueprint for DevMate (A4).
+#
+# Deploys the API and the Streamlit UI as Docker web services, with managed
+# Postgres and Redis. Qdrant is external (Qdrant Cloud free tier): create a
+# cluster first and fill QDRANT_HOST / QDRANT_PORT / QDRANT_API_KEY when Render
+# prompts for them (they are marked sync:false below).
+#
+# Deploy: Render Dashboard -> New -> Blueprint -> select this repo. Render reads
+# this file from the repo root. See deploy/README.md for the full runbook.
+databases:
+  - name: devmate-db
+    databaseName: devmate
+    user: devmate
+    plan: free
+
+services:
+  - type: redis
+    name: devmate-redis
+    plan: free
+    ipAllowList: []
+
+  - type: web
+    name: devmate-api
+    runtime: docker
+    rootDir: projects/04-ai-engineering/devmate
+    dockerfilePath: ./docker/Dockerfile
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: DEFAULT_LLM_PROVIDER
+        value: groq
+      - key: DEFAULT_MODEL
+        value: llama-3.1-8b-instant
+      - key: EMBEDDING_PROVIDER
+        value: openai
+      - key: EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: EMBEDDING_DIMENSIONS
+        value: "1536"
+      - key: QDRANT_VECTOR_SIZE
+        value: "1536"
+      # Tight limits for a public demo.
+      - key: RATE_LIMIT_REQUESTS
+        value: "20"
+      - key: RATE_LIMIT_WINDOW_SECONDS
+        value: "60"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: devmate-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: devmate-redis
+          property: connectionString
+      # Set these in the Render dashboard (never committed).
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: QDRANT_HOST
+        sync: false
+      - key: QDRANT_PORT
+        value: "6333"
+      - key: QDRANT_API_KEY
+        sync: false
+
+  - type: web
+    name: devmate-ui
+    runtime: docker
+    rootDir: projects/04-ai-engineering/devmate
+    dockerfilePath: ./docker/Dockerfile
+    plan: free
+    dockerCommand: streamlit run ui/app.py --server.port=$PORT --server.address=0.0.0.0 --server.headless=true
+    envVars:
+      - key: DEVMATE_API_URL
+        fromService:
+          type: web
+          name: devmate-api
+          property: hostport

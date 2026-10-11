@@ -11,6 +11,8 @@ import httpx
 import streamlit as st
 
 API_URL = os.getenv("DEVMATE_API_URL", "http://localhost:8000")
+if not API_URL.startswith(("http://", "https://")):
+    API_URL = f"http://{API_URL}"
 REQUEST_TIMEOUT = 120.0
 
 st.set_page_config(page_title="DevMate", layout="wide")

@@ -31,6 +31,7 @@ class LLMProvider(StrEnum):
 
     ANTHROPIC = "anthropic"
     OPENAI = "openai"
+    GROQ = "groq"
     OLLAMA = "ollama"
 
 
@@ -494,6 +495,33 @@ class OpenAIProvider(BaseLLMProvider):
             yield StreamingChunk(content="", is_final=True, usage=usage)
 
 
+class GroqProvider(OpenAIProvider):
+    """Groq provider - OpenAI-compatible chat completions with Llama models.
+
+    Groq serves generation only (there is no embeddings endpoint); pair it with
+    an embeddings provider (OpenAI or Ollama) in settings. Reuses the OpenAI
+    request/stream/retry logic with a different base URL and key.
+    """
+
+    @property
+    def provider_name(self) -> LLMProvider:
+        return LLMProvider.GROQ
+
+    def __init__(self) -> None:
+        self.api_key = settings.groq_api_key
+        if not self.api_key:
+            raise LLMAuthError("GROQ_API_KEY not set")
+        self.base_url = "https://api.groq.com/openai/v1"
+        self.client = httpx.AsyncClient(
+            base_url=self.base_url,
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            timeout=httpx.Timeout(60.0, connect=10.0),
+        )
+
+
 class OllamaProvider(BaseLLMProvider):
     """Local Ollama provider — runs fully offline, no API key required."""
 
@@ -670,6 +698,10 @@ class LLMClient:
             with contextlib.suppress(Exception):
                 self.providers[LLMProvider.OPENAI] = OpenAIProvider()
 
+        if settings.groq_api_key:
+            with contextlib.suppress(Exception):
+                self.providers[LLMProvider.GROQ] = GroqProvider()
+
         if not self.providers:
             raise LLMAuthError(
                 "No LLM providers available. Start Ollama (ollama serve) "
@@ -682,6 +714,8 @@ class LLMClient:
             return model
         if provider == LLMProvider.OLLAMA:
             return settings.ollama_model
+        if provider == LLMProvider.GROQ:
+            return settings.groq_model
         return settings.default_model
 
     def get_provider(self, provider: LLMProvider | None = None) -> BaseLLMProvider:
