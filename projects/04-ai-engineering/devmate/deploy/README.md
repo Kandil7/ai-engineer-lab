@@ -39,17 +39,13 @@ embeddings (Groq has no embeddings endpoint). Everything is driven by `render.ya
    `{"status":"healthy",...}`.
 3. Open the UI URL (`https://<your-ui>.onrender.com`) and ask a question.
 
-## Step 4 — Load the demo corpus (REQUIRED, currently open)
+## Step 4 — Load the demo corpus (handled)
 
-The `/ingest` endpoint takes a **server-side path**, and the production image has
-no repository on disk, so the demo needs a corpus baked into the image and
-ingested on boot. Recommended (not yet built):
-
-- Add a small `sample_corpus/` to the image.
-- Add a startup hook that ingests it when the Qdrant collection is empty.
-
-Until that lands, `/ask` and the UI will answer over an empty index. Tracked as
-task 6 in `docs/deployment-plan.md`.
+The image bakes `sample_corpus/` and the API ingests it on first boot, when the
+Qdrant collection is empty (a no-op on later boots). So a fresh deploy answers
+questions about DevMate immediately, with no manual ingest step. Ingestion needs
+the embeddings key (`OPENAI_API_KEY`); without it the corpus step is skipped and
+the API still starts.
 
 ## Step 5 — Smoke test
 

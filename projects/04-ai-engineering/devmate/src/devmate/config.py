@@ -108,6 +108,11 @@ class Settings(BaseSettings):
     # overflowed qwen2.5-coder:7b's default Ollama context (HTTP 500).
     rag_context_char_budget: int = 8000
 
+    # Demo corpus: a small baked-in dataset ingested on startup when the vector
+    # store is empty, so a fresh deploy can answer questions immediately.
+    sample_corpus_path: str = Field(default="sample_corpus", alias="SAMPLE_CORPUS_PATH")
+    sample_corpus_on_startup: bool = Field(default=True, alias="SAMPLE_CORPUS_ON_STARTUP")
+
     # Ollama — num_ctx must cover system prompt (with context) + history + answer
     ollama_num_ctx: int = 8192
 

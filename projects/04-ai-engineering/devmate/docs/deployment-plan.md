@@ -42,7 +42,7 @@ Ship DevMate to a public URL a recruiter can click: a running API (`/health`, `/
 | 3 | Platform config: `render.yaml` Blueprint + runbook | 45 | platform decision | done |
 | 4 | Provision managed Postgres + Redis (Render Blueprint) | 30 | platform | manual (dashboard) |
 | 5 | Qdrant Cloud free cluster; set host/port/key | 45 | platform | manual (dashboard) |
-| 6 | Bake a `sample_corpus/` and ingest it on boot | 60 | 4, 5 | todo (open) |
+| 6 | Bake a `sample_corpus/` and ingest it on boot | 60 | 4, 5 | done |
 | 7 | Secrets via platform env (Groq, OpenAI, Qdrant) | 20 | 4 | manual (dashboard) |
 | 8 | Keep-warm ping or a documented cold-start note | 20 | deploy | manual |
 | 9 | Smoke test the public URL: `/health`, one `/ask` | 15 | deploy | manual |
@@ -80,8 +80,8 @@ projects/04-ai-engineering/devmate/
 - **Decided (2026-10-11):** platform = **Render** (Blueprint); vector store =
   **Qdrant Cloud** free cluster; generation = **Groq** (`llama-3.1-8b-instant`);
   embeddings = **OpenAI** (`text-embedding-3-small`, since Groq has no embeddings).
-- **Still open:** the demo corpus (task 6) — the prod image has no repository on
-  disk, so a small `sample_corpus/` must be baked in and ingested on first boot.
+- **Resolved (2026-10-11):** the demo corpus (task 6) — `sample_corpus/` is baked
+  into the image and ingested on first boot when the collection is empty.
 - **Still open:** is the Streamlit UI required for A4, or is the API + a hosted
   README enough? (Assumed yes; the UI is built and boot-verified.)
 

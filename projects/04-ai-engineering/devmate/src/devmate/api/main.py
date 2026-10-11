@@ -49,6 +49,16 @@ async def lifespan(app: FastAPI):
     except Exception:
         pass
 
+    # Populate a fresh deployment with the baked-in demo corpus (no-op when the
+    # store already has data or no embedding provider is configured).
+    if settings.sample_corpus_on_startup:
+        try:
+            from devmate.ingest.sample_corpus import ensure_sample_corpus
+
+            await ensure_sample_corpus()
+        except Exception:
+            pass
+
     yield
 
     # Shutdown

@@ -40,6 +40,9 @@ COPY --from=builder /install /usr/local
 # The Streamlit UI (devmate-ui compose service) runs from /app/ui.
 COPY ui/ ./ui/
 
+# Demo corpus ingested on first boot when the vector store is empty.
+COPY sample_corpus/ ./sample_corpus/
+
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app \
     && chown -R app:app /app
