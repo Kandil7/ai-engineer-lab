@@ -28,10 +28,11 @@ set in the dashboard.
 
 ## Step 2 — Deploy the Blueprint
 
-1. Render Dashboard -> **New** -> **Blueprint** -> select this repo.
-2. Render reads `render.yaml` and creates: `devmate-db` (Postgres),
-   `devmate-redis`, `devmate-api`, `devmate-ui`.
-3. When prompted, fill the `sync:false` variables: `GROQ_API_KEY`,
+1. Connect your GitHub account to Render (authorize the Render GitHub App).
+2. Render Dashboard -> **New** -> **Blueprint** -> select `Kandil7/ai-engineer-lab`.
+3. Render reads `render.yaml` **from the repository root** and creates:
+   `devmate-db` (Postgres), `devmate-redis`, `devmate-api`, `devmate-ui`.
+4. When prompted, fill the `sync:false` variables: `GROQ_API_KEY`,
    `EMBEDDING_API_KEY`, `QDRANT_HOST`, `QDRANT_PORT`, `QDRANT_API_KEY`.
    `SECRET_KEY` is generated. `EMBEDDING_BASE_URL` and the model are preset to
    Jina; change them for a different provider.

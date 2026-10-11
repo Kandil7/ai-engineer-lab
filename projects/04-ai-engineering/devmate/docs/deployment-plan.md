@@ -57,7 +57,7 @@ projects/04-ai-engineering/devmate/
   ui/app.py                                    # new
   ui/requirements.txt                          # new (or reuse [dev])
   docker/Dockerfile                            # exists (verify UI CMD)
-  deploy/render.yaml  |  deploy/railway.json   # new
+  render.yaml (repo root)                      # new; Render reads it only from the repo root
   deploy/README.md                             # new (runbook: how to deploy + roll back)
   .env.example                                 # exists; add prod keys
 ```

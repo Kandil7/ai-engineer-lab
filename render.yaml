@@ -1,12 +1,13 @@
 # Render Blueprint for DevMate (A4).
 #
-# Deploys the API and the Streamlit UI as Docker web services, with managed
-# Postgres and Redis. Qdrant is external (Qdrant Cloud free tier): create a
-# cluster first and fill QDRANT_HOST / QDRANT_PORT / QDRANT_API_KEY when Render
-# prompts for them (they are marked sync:false below).
+# Render reads this file ONLY from the repository root, so it lives here (not in
+# the devmate folder). It deploys the API and the Streamlit UI as Docker web
+# services, with managed Postgres and Redis. Qdrant is external (Qdrant Cloud):
+# fill QDRANT_HOST / QDRANT_PORT / QDRANT_API_KEY when Render prompts (sync:false).
 #
-# Deploy: Render Dashboard -> New -> Blueprint -> select this repo. Render reads
-# this file from the repo root. See deploy/README.md for the full runbook.
+# Deploy: Render Dashboard -> New -> Blueprint -> connect GitHub -> select
+# Kandil7/ai-engineer-lab. See projects/04-ai-engineering/devmate/deploy/README.md
+# for the full runbook.
 databases:
   - name: devmate-db
     databaseName: devmate
