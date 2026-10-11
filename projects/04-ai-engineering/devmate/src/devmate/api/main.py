@@ -221,38 +221,49 @@ async def health():
     )
 
 
-@app.get("/ready")
-async def ready():
-    """Readiness probe - checks dependencies."""
-    components = {"api": "ok"}
-
-    # Check Qdrant
+async def _check_qdrant() -> str:
+    """Readiness of Qdrant as a status string. Isolated so tests can double it."""
     try:
         from devmate.index.vector_store import get_vector_store
 
         vs = await get_vector_store()
         count = await vs.count()
-        components["qdrant"] = f"ok ({count} vectors)"
+        return f"ok ({count} vectors)"
     except Exception as e:
-        components["qdrant"] = f"error: {e}"
+        return f"error: {e}"
 
-    # Check Redis
+
+async def _check_redis() -> str:
+    """Readiness of Redis as a status string. Isolated so tests can double it."""
     try:
         import redis.asyncio as redis
 
         r = redis.from_url(settings.redis_connection_url)
         await r.ping()
-        await r.close()
-        components["redis"] = "ok"
+        await r.aclose()
+        return "ok"
     except Exception as e:
-        components["redis"] = f"error: {e}"
+        return f"error: {e}"
 
-    # Check LLM
+
+async def _check_llm() -> str:
+    """Readiness of the LLM provider as a status string. Isolated for tests."""
     try:
         provider = llm_client.get_provider()
-        components["llm"] = f"ok ({provider.provider_name.value})"
+        return f"ok ({provider.provider_name.value})"
     except Exception as e:
-        components["llm"] = f"error: {e}"
+        return f"error: {e}"
+
+
+@app.get("/ready")
+async def ready():
+    """Readiness probe - checks dependencies."""
+    components = {
+        "api": "ok",
+        "qdrant": await _check_qdrant(),
+        "redis": await _check_redis(),
+        "llm": await _check_llm(),
+    }
 
     all_healthy = all("ok" in v for v in components.values())
 

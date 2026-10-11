@@ -119,12 +119,35 @@ def test_traces_returns_list() -> None:
     assert isinstance(payload["traces"], list)
 
 
-def test_ready_reports_shape_offline() -> None:
-    """Without services running every dependency degrades, honestly."""
+def test_ready_reports_shape_offline(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Every dependency down: the probe degrades, honestly. Hermetic (no real services)."""
+
+    async def _offline() -> str:
+        return "error: offline"
+
+    monkeypatch.setattr(api_main, "_check_qdrant", _offline)
+    monkeypatch.setattr(api_main, "_check_redis", _offline)
+    monkeypatch.setattr(api_main, "_check_llm", _offline)
+
     payload = TestClient(app).get("/ready").json()
     assert payload["status"] == "degraded"
     assert set(payload["components"]) == {"api", "qdrant", "redis", "llm"}
     assert payload["components"]["api"] == "ok"
+    assert payload["components"]["qdrant"].startswith("error")
+
+
+def test_ready_reports_ready_when_all_up(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Every dependency ok: the probe reports ready. Hermetic (no real services)."""
+
+    async def _up() -> str:
+        return "ok"
+
+    monkeypatch.setattr(api_main, "_check_qdrant", _up)
+    monkeypatch.setattr(api_main, "_check_redis", _up)
+    monkeypatch.setattr(api_main, "_check_llm", _up)
+
+    payload = TestClient(app).get("/ready").json()
+    assert payload["status"] == "ready"
 
 
 def test_ingest_missing_path_is_404(client: TestClient, tmp_path: object) -> None:

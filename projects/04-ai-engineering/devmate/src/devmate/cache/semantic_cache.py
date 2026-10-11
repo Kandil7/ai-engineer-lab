@@ -189,7 +189,7 @@ class SemanticCache:
     async def close(self) -> None:
         """Close Redis connection."""
         if self.redis_client:
-            await self.redis_client.close()
+            await self.redis_client.aclose()
 
 
 # Global cache instance
