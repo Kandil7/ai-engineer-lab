@@ -58,7 +58,9 @@ projects/04-ai-engineering/devmate/
   ui/requirements.txt                          # new (or reuse [dev])
   docker/Dockerfile                            # exists (verify UI CMD)
   render.yaml (repo root)                      # new; Render reads it only from the repo root
+  railway.toml (service root)                  # new; Railway reads it from the service Root Directory
   deploy/README.md                             # new (runbook: how to deploy + roll back)
+  deploy/railway.md                            # new (Railway runbook)
   .env.example                                 # exists; add prod keys
 ```
 
@@ -77,9 +79,11 @@ projects/04-ai-engineering/devmate/
 
 ## Open Questions
 
-- **Decided (2026-10-11):** platform = **Render** (Blueprint); vector store =
-  **Qdrant Cloud** free cluster; generation = **Groq** (`llama-3.1-8b-instant`);
-  embeddings = **OpenAI** (`text-embedding-3-small`, since Groq has no embeddings).
+- **Decided (2026-10-11):** platform = **Render** (Blueprint) **or Railway**
+  (`railway.toml`); both configs ship. Vector store = **Qdrant Cloud** free
+  cluster; generation = **Groq** (`llama-3.1-8b-instant`); embeddings = a free
+  OpenAI-compatible provider (**Jina**, `jina-embeddings-v3`), since Groq has no
+  embeddings endpoint.
 - **Resolved (2026-10-11):** the demo corpus (task 6) — `sample_corpus/` is baked
   into the image and ingested on first boot when the collection is empty.
 - **Still open:** is the Streamlit UI required for A4, or is the API + a hosted

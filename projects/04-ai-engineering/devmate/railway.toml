@@ -1,0 +1,15 @@
+# Railway config for the DevMate service.
+#
+# In a monorepo, set the service's Root Directory to
+# projects/04-ai-engineering/devmate (Settings -> Source). Railway then reads
+# this file and builds the image from docker/Dockerfile. The container's CMD
+# already binds to $PORT, which Railway injects.
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "docker/Dockerfile"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
