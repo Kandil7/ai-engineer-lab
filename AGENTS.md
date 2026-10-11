@@ -16,17 +16,20 @@ DevMate gate — working directory `projects/04-ai-engineering/devmate/`, python
 & .venv/Scripts/python.exe -m ruff format --check .
 & .venv/Scripts/python.exe -m mypy src/
 & .venv/Scripts/python.exe -m pytest -q --cov=devmate --cov-report=term-missing
+& .venv/Scripts/python.exe -m devmate.eval.run_ragas --mode offline --no-report --fail-under-hit-at-5 1.0 --fail-under-mrr 0.70
 ```
 
 Single test: `& .venv/Scripts/python.exe -m pytest tests/unit/test_cost.py -q`. Unit tests need no API key.
-`llm`-marked tests need a real key and never run in CI. No test file currently carries
-the `integration` marker, so `make test-int` collects nothing; when such tests exist
-they need `docker compose -f infra/docker/docker-compose.yml up -d postgres redis qdrant` first.
+`llm`-marked tests need a real key and never run in CI. Integration tests live in
+`tests/integration/` (the marker is registered in pyproject); the default run excludes them via
+addopts, and CI runs them in the integration job against Qdrant + Redis service containers.
+Locally they need `docker compose -f infra/docker/docker-compose.yml up -d qdrant redis` first,
+then `& .venv/Scripts/python.exe -m pytest -m integration -q`.
 
-Workspace validators — all five must exit 0 (warnings fail the suite):
+Workspace validators — all six must exit 0 (warnings fail the suite):
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File tests/<prompts|workflows|templates|registries|repo-structure>/validate.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File tests/<prompts|workflows|templates|registries|knowledge|repo-structure>/validate.ps1
 ```
 
 Docs gates (mirrored in CI): no broken relative links under `docs/`, and

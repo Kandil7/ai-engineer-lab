@@ -115,7 +115,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-v --tb=short"
+addopts = "-v --tb=short -m 'not integration and not llm'"
 markers = [
     "integration: requires docker services (Qdrant/Redis/Postgres)",
     "llm: requires a real LLM API key (never run in CI)",

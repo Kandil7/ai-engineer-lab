@@ -106,15 +106,18 @@ jobs:
   integration:
     name: DevMate — integration (Qdrant + Redis)
     runs-on: ubuntu-latest
-    # Enabled from week 2, once the vector store exists.
-    if: false
+    # Runs the tests/integration/ suite against live Qdrant + Redis service
+    # containers. Enable the paired unit run's exclusion via pyproject addopts
+    # (`-m 'not integration and not llm'`); this job overrides with `-m integration`.
     defaults:
       run:
         working-directory: projects/04-ai-engineering/devmate
 
     services:
       qdrant:
-        image: qdrant/qdrant:latest
+        # Pinned to the compose server version; the client floor/cap
+        # (>=1.9,<1.13) relies on the .search() API removed after 1.8/1.13.
+        image: qdrant/qdrant:v1.8.0
         ports: ["6333:6333"]
       redis:
         image: redis:7-alpine
@@ -126,6 +129,21 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - run: python -m pip install -e ".[dev]"
+      - name: Wait for Qdrant and Redis
+        run: |
+          python - <<'PY'
+          import socket, time
+          for name, port in (("qdrant", 6333), ("redis", 6379)):
+              for _ in range(30):
+                  try:
+                      socket.create_connection(("localhost", port), timeout=1).close()
+                      print(f"{name} is up")
+                      break
+                  except OSError:
+                      time.sleep(1)
+              else:
+                  raise SystemExit(f"{name} did not become ready")
+          PY
       - run: python -m pytest -q -m integration
         env:
           QDRANT_URL: http://localhost:6333

@@ -1,7 +1,10 @@
 # Integration tests
 
-Tests that need live infrastructure (Postgres, Redis, Qdrant — `docker compose -f ../../../../infra/docker/docker-compose.yml up -d postgres redis qdrant`).
+Tests that need live infrastructure (Qdrant, Redis — `docker compose -f ../../../../infra/docker/docker-compose.yml up -d qdrant redis`).
 
-Mark every test in here with `@pytest.mark.integration` so `make test-int` collects them and the default unit run skips them. The `integration` marker must be registered in `pyproject.toml` before the first test lands.
+Every test in here is marked `pytest.mark.integration` (registered in `pyproject.toml`). The
+default run excludes integration and llm tests via `addopts = "-m 'not integration and not llm'"`;
+run them explicitly with `python -m pytest -m integration -q`. CI runs this suite in the
+`integration` job against Qdrant + Redis service containers.
 
 No test in here may call a paid API. Fake the LLM boundary with a local double.
