@@ -1,0 +1,122 @@
+# Evidence Ledger - what has actually been proven, per concept.
+# Source of truth for current mastery. docs/roadmap/skills-scoreboard.md is a
+# generated view of this file joined with registries/knowledge-registry.yaml.
+#
+# Rule (mirrors docs/roadmap/skills-matrix.md): a level requires evidence.
+# Study without a shipped artifact does not count.
+#
+# Schema per entry:
+#   id          unique evidence id
+#   skill       knowledge-registry node id (must resolve in that file)
+#   level       proven level on the 1-10 scale
+#   type        test | eval_report | adr | pr | deployment | teaching | benchmark
+#   path        repo-relative artifact that proves it (must exist)
+#   date        YYYY-MM-DD
+#   checked_by  script | self | external
+version: 1
+evidence:
+  - id: ev-python-production-importer
+    skill: python.production
+    level: 2
+    type: pr
+    path: projects/00-core-foundations/python/02-advanced-python/35-unicode-and-arabic-text
+    date: 2026-09-30
+    checked_by: self
+  - id: ev-python-test-strategy
+    skill: python.testing
+    level: 2
+    type: test
+    path: projects/00-core-foundations/python/02-advanced-python/38-test-strategy-contract-regression
+    date: 2026-09-30
+    checked_by: script
+  - id: ev-obs-tracing-code
+    skill: obs.tracing
+    level: 1
+    type: pr
+    path: projects/04-ai-engineering/devmate/src/devmate/obs/tracing.py
+    date: 2026-10-06
+    checked_by: self
+  - id: ev-obs-cost-ledger
+    skill: obs.cost-tracking
+    level: 2
+    type: pr
+    path: projects/04-ai-engineering/devmate/src/devmate/obs/cost.py
+    date: 2026-10-06
+    checked_by: self
+  - id: ev-rag-chunker
+    skill: rag.chunking
+    level: 2
+    type: pr
+    path: projects/04-ai-engineering/devmate/src/devmate/ingest/chunker.py
+    date: 2026-10-06
+    checked_by: script
+  - id: ev-rag-golden-set
+    skill: eval.golden-datasets
+    level: 2
+    type: eval_report
+    path: evaluations/rag/datasets/devmate-golden.jsonl
+    date: 2026-09-30
+    checked_by: self
+  - id: ev-rag-retrieval-metrics
+    skill: eval.retrieval-metrics
+    level: 2
+    type: eval_report
+    path: evaluations/rag/reports/2026-09-30-eval-harness.md
+    date: 2026-09-30
+    checked_by: script
+  - id: ev-eval-gate-ci
+    skill: eval.eval-in-ci
+    level: 2
+    type: deployment
+    path: .github/workflows/ci.yml
+    date: 2026-10-10
+    checked_by: script
+  - id: ev-backend-fastapi
+    skill: backend.fastapi-service
+    level: 2
+    type: pr
+    path: projects/04-ai-engineering/devmate/src/devmate/api/main.py
+    date: 2026-10-06
+    checked_by: self
+  - id: ev-db-models
+    skill: databases.sql-schema
+    level: 1
+    type: pr
+    path: projects/04-ai-engineering/devmate/src/devmate/db/models.py
+    date: 2026-10-06
+    checked_by: self
+  - id: ev-agents-mcp-server
+    skill: agents.mcp
+    level: 1
+    type: pr
+    path: projects/04-ai-engineering/devmate/src/devmate/mcp/server.py
+    date: 2026-10-06
+    checked_by: self
+  - id: ev-prod-semantic-cache
+    skill: prod.semantic-cache
+    level: 1
+    type: pr
+    path: projects/04-ai-engineering/devmate/src/devmate/cache/semantic_cache.py
+    date: 2026-10-06
+    checked_by: self
+  - id: ev-prod-guardrails
+    skill: prod.guardrails
+    level: 2
+    type: pr
+    path: projects/04-ai-engineering/devmate/src/devmate/guards/guardrails.py
+    date: 2026-10-06
+    checked_by: self
+  - id: ev-deploy-compose
+    skill: deploy.docker
+    level: 1
+    type: deployment
+    path: infra/docker/docker-compose.yml
+    date: 2026-10-06
+    checked_by: self
+  - id: ev-sysdesign-workspace-adr
+    skill: system-design.contracts
+    level: 2
+    type: adr
+    path: docs/decisions/0001-repo-centric-workspace.md
+    date: 2026-06-26
+    checked_by: self

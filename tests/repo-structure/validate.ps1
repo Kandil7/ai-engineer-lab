@@ -192,7 +192,8 @@ $requiredInfraFiles = @(
     "infra/scripts/new-adr.ps1",
     "infra/scripts/new-review.ps1",
     "infra/scripts/new-source-note.ps1",
-    "infra/scripts/build-knowledge-index.ps1"
+    "infra/scripts/build-knowledge-index.ps1",
+    "infra/scripts/build-skills-scoreboard.ps1"
 )
 
 foreach ($file in $requiredInfraFiles) {

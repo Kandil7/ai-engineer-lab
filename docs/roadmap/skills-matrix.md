@@ -4,6 +4,10 @@
 > Scale: 1 (aware) → 10 (authority). Targets set by the
 > [active track](active-track-10-week.md).
 
+> **Numbers are moving to a generated scoreboard.** Current mastery is now sourced from
+> `registries/evidence.yaml` and rendered in `skills-scoreboard.md` (ADR-0008). This file keeps
+> the level definitions, targets, and the monthly review ritual.
+
 **Last updated:** 2026-09-30 (added Production AI Systems rows; previous 2026-08-02)
 
 ---

@@ -51,3 +51,10 @@ decisions:
     path: docs/decisions/0007-adopt-learning-os-knowledge-registry.md
     supersedes: null
     superseded_by: null
+  - id: "0008"
+    title: Evidence ledger and a generated skills scoreboard
+    status: Accepted
+    date: 2026-10-10
+    path: docs/decisions/0008-evidence-ledger-and-generated-scoreboard.md
+    supersedes: null
+    superseded_by: null

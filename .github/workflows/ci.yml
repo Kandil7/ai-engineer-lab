@@ -103,6 +103,14 @@ jobs:
           & "infra/scripts/build-knowledge-index.ps1" -Check
           if ($LASTEXITCODE -ne 0) { exit 1 }
 
+      - name: Skills scoreboard drift check
+        # docs/roadmap/skills-scoreboard.md is a generated view of registries/evidence.yaml
+        # joined with the knowledge registry. Fails when the committed scoreboard is stale.
+        shell: pwsh
+        run: |
+          & "infra/scripts/build-skills-scoreboard.ps1" -Check
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+
   integration:
     name: DevMate — integration (Qdrant + Redis)
     runs-on: ubuntu-latest

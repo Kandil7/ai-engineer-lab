@@ -49,6 +49,7 @@ foreach ($suite in @("prompts", "workflows", "templates", "registries", "knowled
 }
 
 Invoke-Gate "knowledge index" $repoRoot "powershell -NoProfile -ExecutionPolicy Bypass -File infra/scripts/build-knowledge-index.ps1 -Check"
+Invoke-Gate "skills scoreboard" $repoRoot "powershell -NoProfile -ExecutionPolicy Bypass -File infra/scripts/build-skills-scoreboard.ps1 -Check"
 
 Invoke-Gate "docs gates" $repoRoot "powershell -NoProfile -ExecutionPolicy Bypass -File infra/scripts/docs-gates.ps1"
 

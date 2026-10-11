@@ -14,6 +14,7 @@ the architectural memory of the workspace. New ADRs are created with `infra/scri
 | [0005](0005-vector-db-qdrant-over-chromadb.md) | Vector DB — Qdrant primary, ChromaDB as a one-week comparison | Accepted | 2026-08-02 |
 | [0006](0006-adopt-master-ai-engineering-curriculum.md) | Lift the lecture moratorium — adopt the Master AI Engineering curriculum | Accepted | 2026-08-02 |
 | [0007](0007-adopt-learning-os-knowledge-registry.md) | Adopt a knowledge registry as the Learning OS backbone | Accepted | 2026-10-10 |
+| [0008](0008-evidence-ledger-and-generated-scoreboard.md) | Evidence ledger and a generated skills scoreboard | Accepted | 2026-10-10 |
 
 ## Lifecycle
 

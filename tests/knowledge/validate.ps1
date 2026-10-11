@@ -221,6 +221,74 @@ if ($orphans.Count -gt 0) {
     Write-Pass "Every node is reachable from a root (no orphans, no cycles)"
 }
 
+# --- 9. Evidence ledger -------------------------------------------------
+# registries/evidence.yaml is the source of truth for current mastery.
+# Every entry must resolve to a node id, an allowed type, and an existing
+# artifact path; its level and date must be well formed.
+$evFile = "$RootDir/registries/evidence.yaml"
+$evEntries = @()
+$ce = $null
+if (Test-Path -LiteralPath $evFile -PathType Leaf) {
+    foreach ($line in (Get-Content -LiteralPath $evFile -Raw) -split "`n") {
+        if ($line -match '^\s*- id:\s*(.+)') {
+            if ($ce) { $evEntries += $ce }
+            $ce = @{ id = $matches[1].Trim(); skill = ""; level = ""; type = ""; path = ""; date = ""; checked_by = "" }
+            continue
+        }
+        if (-not $ce) { continue }
+        if ($line -match '^\s*skill:\s*(.+)') { $ce.skill = $matches[1].Trim() }
+        elseif ($line -match '^\s*level:\s*(.+)') { $ce.level = $matches[1].Trim() }
+        elseif ($line -match '^\s*type:\s*(.+)') { $ce.type = $matches[1].Trim() }
+        elseif ($line -match '^\s*path:\s*(.+)') { $ce.path = $matches[1].Trim() }
+        elseif ($line -match '^\s*date:\s*(.+)') { $ce.date = $matches[1].Trim() }
+        elseif ($line -match '^\s*checked_by:\s*(.+)') { $ce.checked_by = $matches[1].Trim() }
+    }
+    if ($ce) { $evEntries += $ce }
+}
+
+$evFail = $false
+if (-not (Test-Path -LiteralPath $evFile -PathType Leaf)) {
+    Write-Fail "Evidence ledger missing: registries/evidence.yaml"
+    $evFail = $true
+} elseif ($evEntries.Count -eq 0) {
+    Write-Fail "Evidence ledger parsed zero entries"
+    $evFail = $true
+} else {
+    $evIds = @()
+    foreach ($e in $evEntries) {
+        if ($evIds -contains $e.id) { Write-Fail "Duplicate evidence id '$($e.id)'"; $evFail = $true }
+        $evIds += $e.id
+        if ($ids -notcontains $e.skill) {
+            Write-Fail "Evidence '$($e.id)' skill '$($e.skill)' is not a known node id"
+            $evFail = $true
+        }
+        $lv = 0
+        if (-not [int]::TryParse($e.level, [ref]$lv) -or $lv -lt 1 -or $lv -gt 10) {
+            Write-Fail "Evidence '$($e.id)' level '$($e.level)' is not an integer 1..10"
+            $evFail = $true
+        }
+        if ($allowedEvidence -notcontains $e.type) {
+            Write-Fail "Evidence '$($e.id)' type '$($e.type)' is not one of $($allowedEvidence -join '/')"
+            $evFail = $true
+        }
+        if (@("script", "self", "external") -notcontains $e.checked_by) {
+            Write-Fail "Evidence '$($e.id)' checked_by '$($e.checked_by)' is not script/self/external"
+            $evFail = $true
+        }
+        $d = [datetime]::MinValue
+        if (-not [datetime]::TryParseExact($e.date, "yyyy-MM-dd", $null, [System.Globalization.DateTimeStyles]::None, [ref]$d)) {
+            Write-Fail "Evidence '$($e.id)' date '$($e.date)' is not YYYY-MM-DD"
+            $evFail = $true
+        }
+        $target = Join-Path $RootDir ($e.path -replace '/', '\')
+        if (-not (Test-Path -LiteralPath $target)) {
+            Write-Fail "Evidence '$($e.id)' path missing: $($e.path)"
+            $evFail = $true
+        }
+    }
+    if (-not $evFail) { Write-Pass "Evidence ledger valid: $($evEntries.Count) entries resolve (skill, type, path, date)" }
+}
+
 # --- Summary ------------------------------------------------------------
 Write-Host ""
 Write-Host "  Passed: $passCount" -ForegroundColor Green
