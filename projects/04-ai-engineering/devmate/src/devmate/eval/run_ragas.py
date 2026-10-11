@@ -25,8 +25,9 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import subprocess
 import sys
-from datetime import date
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -225,6 +226,21 @@ async def run_live(
     return summary, [s.to_dict() for s in retrieval_scores], [s.to_dict() for s in answer_scores]
 
 
+def _git_sha() -> str:
+    """Short HEAD sha so a report's numbers are tied to a revision. 'unknown' if git is absent."""
+    try:
+        out = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
+        )
+        return out.stdout.strip() or "unknown"
+    except Exception:
+        return "unknown"
+
+
 def build_report(
     summary: EvalSummary,
     mode: str,
@@ -232,10 +248,13 @@ def build_report(
     answer_details: list[dict[str, Any]],
 ) -> str:
     today = date.today().isoformat()
+    generated = datetime.now(UTC).isoformat(timespec="seconds")
     lines = [
         f"# DevMate Eval Report — {today}",
         "",
         f"- Mode: `{mode}`",
+        f"- Commit: `{_git_sha()}`",
+        f"- Generated: {generated}",
         f"- RAG golden set: `{RAG_GOLDEN_PATH.relative_to(REPO_ROOT)}` ({summary.retrieval_cases} cases)",
         f"- Prompt golden set: `{PROMPT_GOLDEN_PATH.relative_to(REPO_ROOT)}` ({summary.answer_cases} cases)",
         "",
