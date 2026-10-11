@@ -1,9 +1,10 @@
 # Deploying DevMate (A4)
 
 Target: **Render** (Docker web services + managed Postgres/Redis) with an external
-**Qdrant Cloud** cluster, a cheap **Groq** model for generation, and **OpenAI** for
-embeddings (Groq has no embeddings endpoint). Everything is driven by `render.yaml`
-(a Render Blueprint) plus a few secrets you set in the dashboard.
+**Qdrant Cloud** cluster, a cheap **Groq** model for generation, and a **free
+OpenAI-compatible embeddings** provider (Groq has no embeddings endpoint).
+Everything is driven by `render.yaml` (a Render Blueprint) plus a few secrets you
+set in the dashboard.
 
 > This runbook was written and the container build was verified locally
 > (`docker compose build devmate-api` then `/health` returns 200). The cloud
@@ -13,8 +14,10 @@ embeddings (Groq has no embeddings endpoint). Everything is driven by `render.ya
 
 - This repo pushed to GitHub.
 - A [Render](https://render.com) account.
-- A [Groq](https://console.groq.com) API key (generation) and an OpenAI API key
-  (embeddings only; Groq serves no embeddings).
+- A [Groq](https://console.groq.com) API key (generation).
+- A free OpenAI-compatible embeddings key, e.g. [Jina](https://jina.ai/embeddings)
+  (`jina-embeddings-v3`, 1024) or Google (`text-embedding-004`, 768). Groq serves
+  no embeddings, so the embeddings client is pointed at one of these.
 - A [Qdrant Cloud](https://cloud.qdrant.io) free cluster (1 GB).
 
 ## Step 1 — Qdrant Cloud
@@ -29,8 +32,9 @@ embeddings (Groq has no embeddings endpoint). Everything is driven by `render.ya
 2. Render reads `render.yaml` and creates: `devmate-db` (Postgres),
    `devmate-redis`, `devmate-api`, `devmate-ui`.
 3. When prompted, fill the `sync:false` variables: `GROQ_API_KEY`,
-   `OPENAI_API_KEY`, `QDRANT_HOST`, `QDRANT_PORT`, `QDRANT_API_KEY`.
-   `SECRET_KEY` is generated.
+   `EMBEDDING_API_KEY`, `QDRANT_HOST`, `QDRANT_PORT`, `QDRANT_API_KEY`.
+   `SECRET_KEY` is generated. `EMBEDDING_BASE_URL` and the model are preset to
+   Jina; change them for a different provider.
 
 ## Step 3 — First boot
 
@@ -44,8 +48,8 @@ embeddings (Groq has no embeddings endpoint). Everything is driven by `render.ya
 The image bakes `sample_corpus/` and the API ingests it on first boot, when the
 Qdrant collection is empty (a no-op on later boots). So a fresh deploy answers
 questions about DevMate immediately, with no manual ingest step. Ingestion needs
-the embeddings key (`OPENAI_API_KEY`); without it the corpus step is skipped and
-the API still starts.
+the embeddings key (`EMBEDDING_API_KEY`); without it the corpus step is skipped
+and the API still starts.
 
 ## Step 5 — Smoke test
 

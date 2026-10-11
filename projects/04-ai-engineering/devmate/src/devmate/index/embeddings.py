@@ -48,17 +48,24 @@ class BaseEmbeddingProvider(ABC):
 
 
 class OpenAIEmbeddingProvider(BaseEmbeddingProvider):
-    """OpenAI embeddings provider."""
+    """OpenAI-compatible embeddings provider.
 
-    def __init__(self, model: str = None, api_key: str = None) -> None:
+    The base URL and key are overridable (EMBEDDING_BASE_URL / EMBEDDING_API_KEY)
+    so any OpenAI-compatible embeddings endpoint works — Jina, Google, Together,
+    Voyage — without an OpenAI key. Defaults to OpenAI when unset.
+    """
+
+    def __init__(self, model: str = None, api_key: str = None, base_url: str = None) -> None:
         self._model = model or settings.embedding_model
-        self._api_key = api_key or settings.openai_api_key
+        self._api_key = api_key or settings.embedding_api_key or settings.openai_api_key
 
         if not self._api_key:
-            raise ValueError("OpenAI API key not configured")
+            raise ValueError(
+                "No embeddings key configured (set EMBEDDING_API_KEY or OPENAI_API_KEY)"
+            )
 
         self.client = httpx.AsyncClient(
-            base_url="https://api.openai.com/v1",
+            base_url=base_url or settings.embedding_base_url or "https://api.openai.com/v1",
             headers={
                 "Authorization": f"Bearer {self._api_key}",
                 "Content-Type": "application/json",
@@ -83,7 +90,8 @@ class OpenAIEmbeddingProvider(BaseEmbeddingProvider):
             "text-embedding-3-large": 3072,
             "text-embedding-ada-002": 1536,
         }
-        return dim_map.get(self._model, 1536)
+        # Unknown (non-OpenAI) models take the configured dimension.
+        return dim_map.get(self._model, settings.embedding_dimensions)
 
     def count_tokens(self, text: str) -> int:
         return len(self.encoding.encode(text))
@@ -310,9 +318,10 @@ def get_embedding_provider() -> BaseEmbeddingProvider:
 
     name = settings.embedding_provider.lower()
 
-    if name == "openai" and not settings.openai_api_key:
+    if name == "openai" and not (settings.embedding_api_key or settings.openai_api_key):
         logging.getLogger(__name__).warning(
-            "EMBEDDING_PROVIDER=openai but OPENAI_API_KEY is not set; using Ollama instead"
+            "EMBEDDING_PROVIDER=openai but no embeddings key is set "
+            "(EMBEDDING_API_KEY / OPENAI_API_KEY); using Ollama instead"
         )
         name = "ollama"
 

@@ -98,6 +98,10 @@ class Settings(BaseSettings):
     embedding_model: str = Field(default="text-embedding-3-small", alias="EMBEDDING_MODEL")
     embedding_dimensions: int = Field(default=768, alias="EMBEDDING_DIMENSIONS")
     embedding_batch_size: int = 100
+    # Point the OpenAI-compatible embeddings client at any provider (Jina,
+    # Google, Together, Voyage, ...) to avoid an OpenAI key. Unset = OpenAI.
+    embedding_base_url: str | None = Field(default=None, alias="EMBEDDING_BASE_URL")
+    embedding_api_key: str | None = Field(default=None, alias="EMBEDDING_API_KEY")
 
     # RAG
     rag_top_k: int = 20
