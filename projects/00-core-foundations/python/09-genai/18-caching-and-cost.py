@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import math
 import sys
+import zlib
 from dataclasses import dataclass, field
 
 
@@ -77,7 +78,7 @@ def toy_embed(text: str, dim: int = 32) -> list[float]:
     """Word-level bag embedding - distinct topics get distinct vectors."""
     vec = [0.0] * dim
     for word in text.lower().split():
-        vec[hash(word) % dim] += 1.0
+        vec[zlib.crc32(word.encode("utf-8")) % dim] += 1.0
     return vec
 
 

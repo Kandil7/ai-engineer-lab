@@ -51,7 +51,7 @@ def toy_embed(text: str, dim: int = 64) -> list[float]:
     vec = [0.0] * dim
     for ch in text.lower():
         if ch.isalnum():
-            vec[hash(ch) % dim] += 1.0
+            vec[ord(ch) % dim] += 1.0
     return vec
 
 
@@ -92,7 +92,7 @@ class EmbeddingCache:
         self._cache: dict[str, list[float]] = {}
 
     def embed(self, text: str) -> list[float]:
-        key = str(hash(text))
+        key = text
         if key not in self._cache:
             self._cache[key] = toy_embed(text)
         return self._cache[key]

@@ -19,6 +19,7 @@ from __future__ import annotations
 import math
 import sys
 import time
+import zlib
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -39,7 +40,7 @@ def toy_embed(text: str, dim: int = 64) -> list[float]:
     """Word-level bag embedding - queries match docs by shared vocabulary."""
     vec = [0.0] * dim
     for word in text.lower().split():
-        vec[hash(word) % dim] += 1.0
+        vec[zlib.crc32(word.encode("utf-8")) % dim] += 1.0
     return vec
 
 
