@@ -2,7 +2,7 @@
 
 - **Owner:** Project Planner mode
 - **Date:** 2026-10-11
-- **Status:** In Progress — container builds and runs; awaiting a platform decision
+- **Status:** Config ready — cloud deploy is a dashboard step (Render + Qdrant Cloud); demo-corpus bake-in open
 - **Project path:** `projects/04-ai-engineering/devmate/`
 - **Milestone:** A4 (weeks 4 / target application 2026-10-12)
 
@@ -39,13 +39,13 @@ Ship DevMate to a public URL a recruiter can click: a running API (`/health`, `/
 | 1 | Alembic: `alembic.ini`, `migrations/env.py`, initial revision from `db/models.py` | 60 | db models | done |
 | 2 | Streamlit UI `ui/app.py`: ask box, sources, cost, ingest trigger | 90 | API | done |
 | 2b | Fix compose build context + copy `ui/` + `.dockerignore` so the image builds | 30 | — | done |
-| 3 | Platform config: `render.yaml` or `railway.json` + `Procfile` | 45 | platform decision | todo |
-| 4 | Provision managed Postgres + Redis; point env at them | 30 | platform | todo |
-| 5 | Qdrant in prod: Qdrant Cloud free tier, or a container on the host | 45 | platform | todo |
-| 6 | One-time ingest job: load this repo into the prod Qdrant collection | 30 | 4, 5 | todo |
-| 7 | Secrets via platform env: `ANTHROPIC_API_KEY`, `SECRET_KEY`, DB/Redis/Qdrant URLs | 20 | 4 | todo |
-| 8 | Keep-warm ping or a documented cold-start note | 20 | deploy | todo |
-| 9 | Smoke test the public URL: `/health`, one `/ask` | 15 | deploy | todo |
+| 3 | Platform config: `render.yaml` Blueprint + runbook | 45 | platform decision | done |
+| 4 | Provision managed Postgres + Redis (Render Blueprint) | 30 | platform | manual (dashboard) |
+| 5 | Qdrant Cloud free cluster; set host/port/key | 45 | platform | manual (dashboard) |
+| 6 | Bake a `sample_corpus/` and ingest it on boot | 60 | 4, 5 | todo (open) |
+| 7 | Secrets via platform env (Groq, OpenAI, Qdrant) | 20 | 4 | manual (dashboard) |
+| 8 | Keep-warm ping or a documented cold-start note | 20 | deploy | manual |
+| 9 | Smoke test the public URL: `/health`, one `/ask` | 15 | deploy | manual |
 
 ## Proposed File Structure
 
@@ -77,12 +77,13 @@ projects/04-ai-engineering/devmate/
 
 ## Open Questions
 
-- **Deploy platform:** Railway or Render? (Recommendation: Render — free web service + managed
-  Postgres/Redis in one place; Railway is fine if you prefer one config file.)
-- **Vector store:** Qdrant Cloud free tier or a container on the same host?
-- **Public LLM:** real provider key with a budget cap, or an offline/cheap fallback for the demo?
-- **UI in the recruiter demo:** is the Streamlit UI required for A4, or is the API + a hosted
-  README with example responses enough? (The track lists the UI, so assume yes.)
+- **Decided (2026-10-11):** platform = **Render** (Blueprint); vector store =
+  **Qdrant Cloud** free cluster; generation = **Groq** (`llama-3.1-8b-instant`);
+  embeddings = **OpenAI** (`text-embedding-3-small`, since Groq has no embeddings).
+- **Still open:** the demo corpus (task 6) — the prod image has no repository on
+  disk, so a small `sample_corpus/` must be baked in and ingested on first boot.
+- **Still open:** is the Streamlit UI required for A4, or is the API + a hosted
+  README enough? (Assumed yes; the UI is built and boot-verified.)
 
 ## Acceptance Criteria
 
