@@ -54,6 +54,7 @@ class Settings(BaseSettings):
     qdrant_host: str = "localhost"
     qdrant_port: int = 6333
     qdrant_api_key: str | None = None
+    qdrant_https: bool = Field(default=False, alias="QDRANT_HTTPS")
     qdrant_collection: str = "devmate_code"
     qdrant_vector_size: int = Field(default=768, alias="QDRANT_VECTOR_SIZE")
     qdrant_distance: str = "cosine"
