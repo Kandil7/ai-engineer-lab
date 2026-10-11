@@ -313,6 +313,11 @@ seeding. Open `http://localhost:3000`, sign in as documented in
 | [`docs/roadmap/production-ai-systems-engineer.md`](docs/roadmap/production-ai-systems-engineer.md) | Production AI / platform track + gap analysis |
 | [`docs/roadmap/milestones.md`](docs/roadmap/milestones.md) | A / P / M milestone IDs |
 | [`docs/roadmap/skills-matrix.md`](docs/roadmap/skills-matrix.md) | Skill levels with evidence rules |
+| [`docs/roadmap/skills-scoreboard.md`](docs/roadmap/skills-scoreboard.md) | Generated scoreboard (evidence ledger joined with the registry) |
+| [`docs/reference/INDEX.md`](docs/reference/INDEX.md) | Generated concept index (knowledge registry) |
+| [`registries/knowledge-registry.yaml`](registries/knowledge-registry.yaml) | Concept graph — Learning OS backbone (source of truth) |
+| [`registries/evidence.yaml`](registries/evidence.yaml) | Evidence ledger — current mastery (source of truth) |
+| [`registries/mistake-checks.yaml`](registries/mistake-checks.yaml) | Mistake-to-check ledger |
 | [`docs/roadmap/progress-dashboard.md`](docs/roadmap/progress-dashboard.md) | Status snapshot |
 | [`docs/reference/llm-production-architecture.md`](docs/reference/llm-production-architecture.md) | Production LLM systems reference |
 | [`projects/00-core-foundations/python/SKILLS_MASTERY_MAP.md`](projects/00-core-foundations/python/SKILLS_MASTERY_MAP.md) | The 6 Athar skills → topics → mastery evidence |
