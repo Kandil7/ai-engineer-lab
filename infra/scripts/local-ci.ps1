@@ -39,6 +39,8 @@ Invoke-Gate "devmate format" $devmate "& `"$devPy`" -m ruff format --check ."
 Invoke-Gate "devmate mypy" $devmate "& `"$devPy`" -m mypy src/"
 Invoke-Gate "devmate pytest" $devmate "& `"$devPy`" -m pytest -q --cov=devmate --cov-report=term-missing"
 
+Invoke-Gate "devmate eval gate" $devmate "& `"$devPy`" -m devmate.eval.run_ragas --mode offline --no-report --fail-under-hit-at-5 1.0 --fail-under-mrr 0.70"
+
 $legacy = Join-Path $repoRoot "projects\00-core-foundations\python"
 Invoke-Gate "legacy pytest" $legacy "& python -m pytest -q"
 

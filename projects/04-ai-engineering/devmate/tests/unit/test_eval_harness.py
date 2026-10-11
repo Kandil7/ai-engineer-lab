@@ -182,3 +182,56 @@ def test_jsonl_recordings_are_valid_json() -> None:
         for line in lines:
             obj = json.loads(line)
             assert "id" in obj
+
+
+@pytest.mark.asyncio
+async def test_amain_fails_under_hit_at_5_threshold() -> None:
+    from devmate.eval import run_ragas as run_mod
+
+    code = await run_mod.amain(
+        [
+            "--mode",
+            "offline",
+            "--use-expected-as-retrieval",
+            "--no-report",
+            "--fail-under-hit-at-5",
+            "1.01",
+        ]
+    )
+    assert code == 1
+
+
+@pytest.mark.asyncio
+async def test_amain_passes_at_threshold() -> None:
+    from devmate.eval import run_ragas as run_mod
+
+    code = await run_mod.amain(
+        [
+            "--mode",
+            "offline",
+            "--use-expected-as-retrieval",
+            "--no-report",
+            "--fail-under-hit-at-5",
+            "1.0",
+            "--fail-under-mrr",
+            "0.5",
+        ]
+    )
+    assert code == 0
+
+
+@pytest.mark.asyncio
+async def test_amain_fails_under_mrr_threshold() -> None:
+    from devmate.eval import run_ragas as run_mod
+
+    code = await run_mod.amain(
+        [
+            "--mode",
+            "offline",
+            "--use-expected-as-retrieval",
+            "--no-report",
+            "--fail-under-mrr",
+            "1.01",
+        ]
+    )
+    assert code == 1

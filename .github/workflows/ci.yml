@@ -68,6 +68,14 @@ jobs:
           # and excluded here; they run in the integration job below.
           ANTHROPIC_API_KEY: test-key-not-used
 
+      - name: Eval gate (offline retrieval metrics)
+        # Deterministic offline gate: fails when Hit@5 or MRR drops below the
+        # recorded baseline. Live retrieval quality (Qdrant) runs in the
+        # integration job.
+        run: |
+          uv run --frozen python -m devmate.eval.run_ragas --mode offline --no-report \
+            --fail-under-hit-at-5 1.0 --fail-under-mrr 0.70
+
   workspace:
     name: Workspace — .ai registry validation
     runs-on: windows-latest

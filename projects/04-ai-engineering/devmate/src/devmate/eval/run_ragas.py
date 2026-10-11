@@ -333,6 +333,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=0.0,
         help="Exit 1 if Hit@5 rate is below this threshold (0 disables)",
     )
+    parser.add_argument(
+        "--fail-under-mrr",
+        type=float,
+        default=0.0,
+        help="Exit 1 if mean reciprocal rank is below this threshold (0 disables)",
+    )
     return parser.parse_args(argv)
 
 
@@ -372,6 +378,11 @@ async def amain(argv: list[str] | None = None) -> int:
     if args.fail_under_hit_at_5 > 0 and summary.hit_at_5_rate < args.fail_under_hit_at_5:
         sys.stderr.write(
             f"FAIL: Hit@5 {summary.hit_at_5_rate:.3f} < threshold {args.fail_under_hit_at_5:.3f}\n"
+        )
+        return 1
+    if args.fail_under_mrr > 0 and summary.mean_reciprocal_rank < args.fail_under_mrr:
+        sys.stderr.write(
+            f"FAIL: MRR {summary.mean_reciprocal_rank:.3f} < threshold {args.fail_under_mrr:.3f}\n"
         )
         return 1
     return 0
