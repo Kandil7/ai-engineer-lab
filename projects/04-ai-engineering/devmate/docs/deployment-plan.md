@@ -2,7 +2,7 @@
 
 - **Owner:** Project Planner mode
 - **Date:** 2026-10-11
-- **Status:** Draft — awaiting a platform decision
+- **Status:** In Progress — container builds and runs; awaiting a platform decision
 - **Project path:** `projects/04-ai-engineering/devmate/`
 - **Milestone:** A4 (weeks 4 / target application 2026-10-12)
 
@@ -36,8 +36,9 @@ Ship DevMate to a public URL a recruiter can click: a running API (`/health`, `/
 
 | # | Task | Est. (min) | Depends on | Status |
 | - | ---- | ---------- | ---------- | ------ |
-| 1 | Alembic: `alembic.ini`, `migrations/env.py`, initial revision from `db/models.py` | 60 | db models | todo |
-| 2 | Streamlit UI `ui/app.py`: ask box, sources, cost, ingest trigger | 90 | API | todo |
+| 1 | Alembic: `alembic.ini`, `migrations/env.py`, initial revision from `db/models.py` | 60 | db models | done |
+| 2 | Streamlit UI `ui/app.py`: ask box, sources, cost, ingest trigger | 90 | API | done |
+| 2b | Fix compose build context + copy `ui/` + `.dockerignore` so the image builds | 30 | — | done |
 | 3 | Platform config: `render.yaml` or `railway.json` + `Procfile` | 45 | platform decision | todo |
 | 4 | Provision managed Postgres + Redis; point env at them | 30 | platform | todo |
 | 5 | Qdrant in prod: Qdrant Cloud free tier, or a container on the host | 45 | platform | todo |
