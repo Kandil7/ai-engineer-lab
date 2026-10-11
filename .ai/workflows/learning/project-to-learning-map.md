@@ -24,16 +24,20 @@ your current level, the gaps, and an ordered study plan tied to real content.
 
 ## Steps
 
-1. Decompose the project into the concepts it needs, using node ids from
-   `registries/knowledge-registry.yaml`. If a concept is missing, add a node
-   (with prerequisites, taught_in, sources, exercises, used_by_projects, and
+1. Run the deterministic analyzer first:
+   `powershell -NoProfile -ExecutionPolicy Bypass -File infra/scripts/learning-map.ps1 -Project <name>`
+   It selects the project's concepts from `registries/knowledge-registry.yaml`,
+   reads current levels from `registries/evidence.yaml`, and prints a
+   prerequisite-ordered study plan with the gaps. No LLM needed for this part.
+2. Decompose anything the registry is missing into new concept nodes (with
+   prerequisites, taught_in, sources, exercises, used_by_projects, and
    evidence) before continuing.
-2. Order the concepts by prerequisites (topological order from the registry).
-3. For each concept, read its `taught_in`, `sources`, and `exercises`.
-4. Compare against your current level; mark each concept known / shaky / gap.
-5. Build the study plan: gap concepts first, each with its source, exercise,
+3. Order the concepts by prerequisites (the script already does this).
+4. For each concept, read its `taught_in`, `sources`, and `exercises`.
+5. Compare against your current level; mark each concept known / shaky / gap.
+6. Build the study plan: gap concepts first, each with its source, exercise,
    and evidence check.
-6. Fill the map from `templates/learning-map.template.md`.
+7. Fill the map from `templates/learning-map.template.md`.
 
 ## Artifacts Produced
 
