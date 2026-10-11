@@ -127,6 +127,8 @@ $requiredFiles = @(
     @{ path = "registries/decision-log.yaml"; desc = "Decision log" },
     @{ path = "registries/skills-registry.yaml"; desc = "Skills registry" },
     @{ path = "registries/knowledge-registry.yaml"; desc = "Knowledge registry" },
+    @{ path = "registries/evidence.yaml"; desc = "Evidence ledger" },
+    @{ path = "registries/mistake-checks.yaml"; desc = "Mistake-check ledger" },
     @{ path = "registries/review-log.yaml"; desc = "Review log" }
 )
 

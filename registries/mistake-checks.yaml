@@ -1,0 +1,37 @@
+# Mistake-to-check ledger - every recorded mistake becomes an automated check.
+# The point of docs/learning/.../mistakes.md is prevention, not confession: a
+# mistake is closed only when a test, lint rule, or gate now catches it.
+#
+# Schema per entry:
+#   id       unique check id (mc-<slug>)
+#   mistake  the mistake in one line
+#   skill    knowledge-registry node id it belongs to, or "" if cross-cutting
+#   kind     test | lint | gate
+#   path     repo-relative artifact that now catches it (must exist)
+#   status   open | closed
+version: 1
+checks:
+  - id: mc-genai-hash-nondeterminism
+    mistake: "Toy embeddings used built-in hash(), making --verify flaky across runs"
+    skill: python.testing
+    kind: test
+    path: projects/00-core-foundations/python/tests/unit/test_genai.py
+    status: closed
+  - id: mc-qdrant-client-version-drift
+    mistake: "Qdrant client/server version drift broke the .search() API"
+    skill: rag.vector-store
+    kind: gate
+    path: projects/04-ai-engineering/devmate/pyproject.toml
+    status: closed
+  - id: mc-tracking-staleness
+    mistake: "docs/tracking/current-focus.md went five weeks stale unnoticed"
+    skill: ""
+    kind: gate
+    path: infra/scripts/docs-gates.ps1
+    status: closed
+  - id: mc-editable-install-path
+    mistake: "Editable-install .pth pointed at the pre-rename path and broke import"
+    skill: ""
+    kind: gate
+    path: projects/04-ai-engineering/devmate/pyproject.toml
+    status: closed

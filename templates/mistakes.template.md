@@ -31,6 +31,7 @@
 ## Prevention
 
 **Check I will add:** [a test, a lint rule, a checklist item]
+**Registered in:** `registries/mistake-checks.yaml` as `mc-<slug>` (kind: test | lint | gate)
 **Pattern I will follow:** [the correct pattern to remember]
 
 ---

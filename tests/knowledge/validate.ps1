@@ -289,6 +289,61 @@ if (-not (Test-Path -LiteralPath $evFile -PathType Leaf)) {
     if (-not $evFail) { Write-Pass "Evidence ledger valid: $($evEntries.Count) entries resolve (skill, type, path, date)" }
 }
 
+# --- 10. Mistake-to-check ledger ----------------------------------------
+# registries/mistake-checks.yaml closes the loop: every mistake points at an
+# automated check (test/lint/gate) that now catches it. Paths must exist.
+$mcFile = "$RootDir/registries/mistake-checks.yaml"
+$mcEntries = @()
+$cm = $null
+if (Test-Path -LiteralPath $mcFile -PathType Leaf) {
+    foreach ($line in (Get-Content -LiteralPath $mcFile -Raw) -split "`n") {
+        if ($line -match '^\s*- id:\s*(.+)') {
+            if ($cm) { $mcEntries += $cm }
+            $cm = @{ id = $matches[1].Trim(); skill = ""; kind = ""; path = ""; status = "" }
+            continue
+        }
+        if (-not $cm) { continue }
+        if ($line -match '^\s*skill:\s*(.*)$') { $cm.skill = $matches[1].Trim().Trim('"') }
+        elseif ($line -match '^\s*kind:\s*(.+)') { $cm.kind = $matches[1].Trim() }
+        elseif ($line -match '^\s*path:\s*(.+)') { $cm.path = $matches[1].Trim() }
+        elseif ($line -match '^\s*status:\s*(.+)') { $cm.status = $matches[1].Trim() }
+    }
+    if ($cm) { $mcEntries += $cm }
+}
+
+$mcFail = $false
+if (-not (Test-Path -LiteralPath $mcFile -PathType Leaf)) {
+    Write-Fail "Mistake-check ledger missing: registries/mistake-checks.yaml"
+    $mcFail = $true
+} elseif ($mcEntries.Count -eq 0) {
+    Write-Fail "Mistake-check ledger parsed zero entries"
+    $mcFail = $true
+} else {
+    $mcIds = @()
+    foreach ($m in $mcEntries) {
+        if ($mcIds -contains $m.id) { Write-Fail "Duplicate mistake-check id '$($m.id)'"; $mcFail = $true }
+        $mcIds += $m.id
+        if ($m.skill -ne "" -and $ids -notcontains $m.skill) {
+            Write-Fail "Mistake-check '$($m.id)' skill '$($m.skill)' is not a known node id"
+            $mcFail = $true
+        }
+        if (@("test", "lint", "gate") -notcontains $m.kind) {
+            Write-Fail "Mistake-check '$($m.id)' kind '$($m.kind)' is not test/lint/gate"
+            $mcFail = $true
+        }
+        if (@("open", "closed") -notcontains $m.status) {
+            Write-Fail "Mistake-check '$($m.id)' status '$($m.status)' is not open/closed"
+            $mcFail = $true
+        }
+        $target = Join-Path $RootDir ($m.path -replace '/', '\')
+        if (-not (Test-Path -LiteralPath $target)) {
+            Write-Fail "Mistake-check '$($m.id)' path missing: $($m.path)"
+            $mcFail = $true
+        }
+    }
+    if (-not $mcFail) { Write-Pass "Mistake-check ledger valid: $($mcEntries.Count) entries resolve (skill, kind, path, status)" }
+}
+
 # --- Summary ------------------------------------------------------------
 Write-Host ""
 Write-Host "  Passed: $passCount" -ForegroundColor Green
