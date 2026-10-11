@@ -95,7 +95,8 @@ def parse_line(line: str, line_no: int) -> RawRecord:
 
 
 print("2. parser: raw line -> RawRecord (structure only)")
-print(f"   {parse_line('{"id": "a1", "book": "bukhari", "page": "5", "text": "نص"}', 1)}")
+raw_line = '{"id": "a1", "book": "bukhari", "page": "5", "text": "نص"}'
+print(f"   {parse_line(raw_line, 1)}")
 print()
 
 

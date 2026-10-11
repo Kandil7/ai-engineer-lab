@@ -86,7 +86,8 @@ except UnicodeDecodeError as exc:
     print(f"strict decode  : raises UnicodeDecodeError: {exc}")
     print(f"  start={exc.start} end={exc.end} reason={exc.reason}")
 
-print(f"replace decode : {b'\xff\xfe'.decode('utf-8', errors='replace')!r}")
+replaced = b"\xff\xfe".decode("utf-8", errors="replace")
+print(f"replace decode : {replaced!r}")
 print("  -> U+FFFD garbage. Never store this. Fail and quarantine instead.")
 print()
 
