@@ -15,12 +15,21 @@ the API and the Streamlit UI. Postgres and Redis are Railway database services.
 - A Groq API key (generation), a free OpenAI-compatible embeddings key (Jina),
   and a reachable Qdrant cluster.
 
-## Step 1 — Create the project and the API service
+## Step 1 — Create the project and configure the API service
 
 1. Railway -> **New Project** -> **Deploy from GitHub repo** -> select the repo.
-2. Open the service -> **Settings** -> **Source** -> set **Root Directory** to
-   `projects/04-ai-engineering/devmate`. Railway reads `railway.toml` and builds
-   from `docker/Dockerfile`.
+2. Open the service -> **Settings** -> **Source**:
+   - **Branch:** set to **`master`** (this repo's default; Railway defaults to
+     `main`, which does not exist here).
+   - **Root Directory:** `projects/04-ai-engineering/devmate`.
+3. **Build** -> set **Builder** to **Dockerfile** (not Railpack) and
+   **Dockerfile Path** = `docker/Dockerfile` (relative to the Root Directory).
+   Railpack would try to build it as a plain Python app and miss the start command.
+4. **Deploy** -> **Healthcheck Path** = `/health`. Leave the Start Command empty:
+   the Dockerfile's CMD already runs `uvicorn ... --port ${PORT}`.
+
+> Railway is deprecating Config-as-Code (`railway.toml`); configure via this
+> Settings screen. The `railway.toml` in the repo is kept for reference only.
 
 ## Step 2 — Add Postgres and Redis
 
