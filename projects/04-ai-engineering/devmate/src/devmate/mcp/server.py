@@ -261,3 +261,22 @@ async def run_mcp_http(host: str = None, port: int = None) -> None:
         host=host or settings.mcp_host,
         port=port or settings.mcp_port,
     )
+
+
+def main() -> None:
+    """CLI entry: `python -m devmate.mcp.server [stdio|http]` (default stdio).
+
+    stdio is what local MCP clients (opencode, Claude Desktop) expect.
+    """
+    import asyncio
+    import sys
+
+    mode = sys.argv[1] if len(sys.argv) > 1 else "stdio"
+    if mode == "http":
+        asyncio.run(run_mcp_http())
+    else:
+        asyncio.run(run_mcp_stdio())
+
+
+if __name__ == "__main__":
+    main()
