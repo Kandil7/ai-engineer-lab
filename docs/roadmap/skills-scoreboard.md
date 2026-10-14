@@ -3,7 +3,7 @@
 > Generated from `registries/evidence.yaml` joined with `registries/knowledge-registry.yaml` by `infra/scripts/build-skills-scoreboard.ps1`.
 > Do not edit by hand. Run the script and commit the result. The knowledge gate fails CI when this file drifts.
 
-**Summary:** 48 concepts, 15 with evidence, 0 at or above target, 33 with no evidence yet.
+**Summary:** 54 concepts, 15 with evidence, 0 at or above target, 39 with no evidence yet.
 **Evidence provenance:** 4 script-checked, 11 self-assessed, 0 external. Prefer script-checked; self-assessed levels are claims until a test or gate backs them.
 
 ## python
@@ -51,6 +51,17 @@
 | --- | --- | --- | --- | --- |
 | `databases.sql-schema` SQL schema and indexes | 6 | 1 | 5 | 1 (pr) |
 | `databases.redis` Redis cache and queues | 5 | 0 | 5 | none |
+
+## data-engineering
+
+| Concept | Target | Current | Gap | Evidence |
+| --- | --- | --- | --- | --- |
+| `data.etl-pipelines` ETL/ELT and ingestion pipelines | 6 | 0 | 6 | none |
+| `data.contracts` Schemas and data contracts | 6 | 0 | 6 | none |
+| `data.reliability` Idempotency and checkpointing | 6 | 0 | 6 | none |
+| `data.quality` Data quality and deduplication | 6 | 0 | 6 | none |
+| `data.lineage` Provenance, versioning and lineage | 6 | 0 | 6 | none |
+| `data.streaming-storage` Batch vs streaming and storage layout | 6 | 0 | 6 | none |
 
 ## devops
 

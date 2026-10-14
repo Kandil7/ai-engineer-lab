@@ -57,7 +57,7 @@ domains:
       level: core
       prerequisites: [python.production]
       taught_in: [docs/curriculum/lectures/01-llm-fundamentals.md]
-      sources: [source-index#18]
+      sources: [source-index#18, source-index#28]
       exercises: [projects/04-ai-engineering/prompt-engineering]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "Explain tokens, temperature, and context windows and defend each choice."
@@ -71,7 +71,7 @@ domains:
       level: core
       prerequisites: [llm.fundamentals]
       taught_in: [docs/curriculum/lectures/01-llm-fundamentals.md]
-      sources: [source-index#18]
+      sources: [source-index#18, source-index#28]
       exercises: [projects/04-ai-engineering/devmate]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "A streaming ask with typed retries and a validated structured response."
@@ -85,7 +85,7 @@ domains:
       level: core
       prerequisites: [llm.fundamentals]
       taught_in: [projects/04-ai-engineering/prompt-engineering/01-prompt-structure]
-      sources: [source-index#18]
+      sources: [source-index#18, source-index#28]
       exercises: [projects/04-ai-engineering/prompt-engineering]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "Versioned templates in a running system, changed with a golden-set diff."
@@ -99,7 +99,7 @@ domains:
       level: core
       prerequisites: [llm.fundamentals]
       taught_in: [docs/curriculum/lectures/04-evaluation-observability.md]
-      sources: [source-index#25]
+      sources: [source-index#25, source-index#28]
       exercises: [projects/04-ai-engineering/devmate]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "Every LLM call appears as a span with tokens and latency."
@@ -141,7 +141,7 @@ domains:
       level: core
       prerequisites: [rag.embeddings]
       taught_in: [projects/04-ai-engineering/rag-system/01-chunking-by-structure]
-      sources: [source-index#21]
+      sources: [source-index#21, source-index#28]
       exercises: [projects/04-ai-engineering/rag-system]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "Three chunkers compared on a golden set with measured numbers."
@@ -169,7 +169,7 @@ domains:
       level: advanced
       prerequisites: [rag.vector-store]
       taught_in: [projects/04-ai-engineering/rag-system/02-hard-filters-retrieval]
-      sources: [source-index#21]
+      sources: [source-index#21, source-index#28]
       exercises: [projects/04-ai-engineering/rag-system]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "A measured eval table showing hybrid beats dense-only."
@@ -183,7 +183,7 @@ domains:
       level: advanced
       prerequisites: [rag.hybrid-retrieval]
       taught_in: [projects/04-ai-engineering/rag-system/03-reranking]
-      sources: [source-index#21]
+      sources: [source-index#21, source-index#28]
       exercises: [projects/04-ai-engineering/rag-system]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "Rerank top-k and show the metric delta against no rerank."
@@ -197,7 +197,7 @@ domains:
       level: advanced
       prerequisites: [rag.hybrid-retrieval]
       taught_in: [projects/04-ai-engineering/rag-system/05-abstention-citations]
-      sources: [source-index#21]
+      sources: [source-index#21, source-index#28]
       exercises: [projects/04-ai-engineering/rag-system]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "Answers cite sources and abstain when evidence is missing."
@@ -211,7 +211,7 @@ domains:
       level: core
       prerequisites: [llm.fundamentals]
       taught_in: [projects/04-ai-engineering/ai-evaluation/01-gold-datasets-annotation]
-      sources: [source-index#25]
+      sources: [source-index#25, source-index#28]
       exercises: [projects/04-ai-engineering/ai-evaluation]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "A hand-graded golden set with expected sources per question."
@@ -225,7 +225,7 @@ domains:
       level: core
       prerequisites: [eval.golden-datasets, rag.hybrid-retrieval]
       taught_in: [projects/04-ai-engineering/ai-evaluation/03-retrieval-evaluation]
-      sources: [source-index#25]
+      sources: [source-index#25, source-index#28]
       exercises: [projects/04-ai-engineering/ai-evaluation]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "A harness that prints recall@k and MRR against the golden set."
@@ -239,7 +239,7 @@ domains:
       level: advanced
       prerequisites: [eval.golden-datasets]
       taught_in: [projects/04-ai-engineering/ai-evaluation/02-faithfulness-citation-precision]
-      sources: [source-index#25]
+      sources: [source-index#25, source-index#28]
       exercises: [projects/04-ai-engineering/ai-evaluation]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "Score answers for grounding and report the failure cases."
@@ -253,7 +253,7 @@ domains:
       level: advanced
       prerequisites: [eval.faithfulness]
       taught_in: [projects/04-ai-engineering/ai-evaluation/04-llm-as-judge]
-      sources: [source-index#25]
+      sources: [source-index#25, source-index#28]
       exercises: [projects/04-ai-engineering/ai-evaluation]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "A judge rubric calibrated against a hand-graded sample."
@@ -267,7 +267,7 @@ domains:
       level: advanced
       prerequisites: [eval.retrieval-metrics]
       taught_in: [projects/04-ai-engineering/ai-evaluation/06-eval-in-ci]
-      sources: [source-index#25]
+      sources: [source-index#25, source-index#28]
       exercises: [projects/04-ai-engineering/ai-evaluation]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "The eval gate fails CI when a metric regresses past a threshold."
@@ -295,7 +295,7 @@ domains:
       level: advanced
       prerequisites: [agents.tool-use]
       taught_in: [projects/04-ai-engineering/agents/lectures]
-      sources: [source-index#23]
+      sources: [source-index#23, source-index#28]
       exercises: [projects/04-ai-engineering/agents/exercises]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "A step-capped loop with loop detection and a passing test."
@@ -323,7 +323,7 @@ domains:
       level: advanced
       prerequisites: [rag.hybrid-retrieval, databases.redis]
       taught_in: [projects/04-ai-engineering/rag-system/06-caching]
-      sources: [source-index#11]
+      sources: [source-index#11, source-index#28]
       exercises: [projects/04-ai-engineering/rag-system]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "A cache hit-rate metric from a semantic (not exact-match) cache."
@@ -337,7 +337,7 @@ domains:
       level: advanced
       prerequisites: [llm.fundamentals]
       taught_in: [projects/04-ai-engineering/rag-system/08-context-security]
-      sources: [source-index#25]
+      sources: [source-index#25, source-index#28]
       exercises: [projects/04-ai-engineering/security]
       used_by_projects: [projects/04-ai-engineering/devmate]
       evidence: "Blocked injection attempts with evidence and a size limit."
@@ -390,6 +390,92 @@ domains:
       level_target: 5
       evidence_required: [test]
       verified_at: 2026-10-10
+      review_after_days: 0
+      status: active
+
+  data-engineering:
+    - id: data.etl-pipelines
+      name: ETL/ELT and ingestion pipelines
+      level: core
+      prerequisites: [python.production]
+      taught_in: [projects/00-core-foundations/data-engineering/01-etl-fundamentals, projects/00-core-foundations/data-engineering/09-elt-and-cdc]
+      sources: [source-index#29]
+      exercises: [projects/00-core-foundations/data-engineering/01-etl-fundamentals]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "An ingest job that runs end to end and records what it loaded."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: data.contracts
+      name: Schemas and data contracts
+      level: core
+      prerequisites: [data.etl-pipelines]
+      taught_in: [projects/00-core-foundations/data-engineering/02-schemas-and-contracts]
+      sources: [source-index#29]
+      exercises: [projects/00-core-foundations/data-engineering/02-schemas-and-contracts]
+      used_by_projects: [projects/00-core-foundations/data-engineering]
+      evidence: "A producer and a consumer agreeing on a schema that fails loudly on drift."
+      level_target: 6
+      evidence_required: [test, adr]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: data.reliability
+      name: Idempotency and checkpointing
+      level: core
+      prerequisites: [data.etl-pipelines]
+      taught_in: [projects/00-core-foundations/data-engineering/03-idempotency, projects/00-core-foundations/data-engineering/04-checkpointing]
+      sources: [source-index#29]
+      exercises: [projects/00-core-foundations/data-engineering/03-idempotency]
+      used_by_projects: [projects/00-core-foundations/data-engineering]
+      evidence: "A job killed mid-run and retried without duplicating or losing rows."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: data.quality
+      name: Data quality and deduplication
+      level: core
+      prerequisites: [data.contracts]
+      taught_in: [projects/00-core-foundations/data-engineering/11-data-quality, projects/00-core-foundations/data-engineering/05-deduplication]
+      sources: [source-index#29]
+      exercises: [projects/00-core-foundations/data-engineering/11-data-quality]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A quality check that quarantines bad rows instead of silently passing them."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: data.lineage
+      name: Provenance, versioning and lineage
+      level: advanced
+      prerequisites: [data.reliability]
+      taught_in: [projects/00-core-foundations/data-engineering/06-provenance-versioning, projects/00-core-foundations/data-engineering/14-data-versioning-lineage]
+      sources: [source-index#29]
+      exercises: [projects/00-core-foundations/data-engineering/14-data-versioning-lineage]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Trace a field in the output back to the exact source file and transform."
+      level_target: 6
+      evidence_required: [adr]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: data.streaming-storage
+      name: Batch vs streaming and storage layout
+      level: advanced
+      prerequisites: [data.etl-pipelines]
+      taught_in: [projects/00-core-foundations/data-engineering/08-batch-vs-streaming, projects/00-core-foundations/data-engineering/07-parquet-object-storage, projects/00-core-foundations/data-engineering/15-storage-and-databases]
+      sources: [source-index#29]
+      exercises: [projects/00-core-foundations/data-engineering/08-batch-vs-streaming]
+      used_by_projects: [projects/00-core-foundations/data-engineering]
+      evidence: "Defend a batch or streaming choice and a storage format against the workload."
+      level_target: 6
+      evidence_required: [adr, benchmark]
+      verified_at: 2026-10-14
       review_after_days: 0
       status: active
 
@@ -459,7 +545,7 @@ domains:
       level: core
       prerequisites: [ml.vectors-similarity]
       taught_in: [projects/04-ai-engineering/applied-ml/03-precision-recall-confusion]
-      sources: [source-index#12]
+      sources: [source-index#12, source-index#28]
       exercises: [projects/04-ai-engineering/applied-ml]
       used_by_projects: [projects/04-ai-engineering/applied-ml]
       evidence: "Pick the right metric for an imbalanced task and defend it."
@@ -489,7 +575,7 @@ domains:
       level: core
       prerequisites: [llm.fundamentals]
       taught_in: [projects/04-ai-engineering/fine-tuning/01-supervised-fine-tuning]
-      sources: [source-index#20]
+      sources: [source-index#20, source-index#28]
       exercises: [projects/04-ai-engineering/fine-tuning]
       used_by_projects: [projects/04-ai-engineering/fine-tuning]
       evidence: "One SFT run with a held-out loss and a sample output."
@@ -503,7 +589,7 @@ domains:
       level: advanced
       prerequisites: [fine-tuning.sft]
       taught_in: [projects/04-ai-engineering/fine-tuning/02-lora-qlora]
-      sources: [source-index#20]
+      sources: [source-index#20, source-index#28]
       exercises: [projects/04-ai-engineering/fine-tuning]
       used_by_projects: [projects/04-ai-engineering/fine-tuning]
       evidence: "A 4-bit QLoRA run inside the 16 GB budget with VRAM measured."
@@ -517,7 +603,7 @@ domains:
       level: core
       prerequisites: [fine-tuning.sft]
       taught_in: [projects/04-ai-engineering/fine-tuning/03-training-data]
-      sources: [source-index#20]
+      sources: [source-index#20, source-index#28]
       exercises: [projects/04-ai-engineering/fine-tuning]
       used_by_projects: [projects/04-ai-engineering/fine-tuning]
       evidence: "A deduplicated, format-validated dataset with a data card."
@@ -545,7 +631,7 @@ domains:
       level: advanced
       prerequisites: [fine-tuning.sft, rag.hybrid-retrieval]
       taught_in: [projects/04-ai-engineering/fine-tuning/06-rag-vs-fine-tuning]
-      sources: [source-index#20]
+      sources: [source-index#20, source-index#28]
       exercises: [projects/04-ai-engineering/fine-tuning]
       used_by_projects: [projects/04-ai-engineering/fine-tuning]
       evidence: "A written decision on when to retrieve and when to fine-tune."
@@ -661,7 +747,7 @@ domains:
       level: core
       prerequisites: [llm.fundamentals]
       taught_in: [projects/04-ai-engineering/model-serving/01-choosing-a-model]
-      sources: [source-index#12]
+      sources: [source-index#12, source-index#28]
       exercises: [projects/04-ai-engineering/model-serving]
       used_by_projects: [projects/04-ai-engineering/model-serving]
       evidence: "A model choice defended by size, license, and task fit."
@@ -689,7 +775,7 @@ domains:
       level: advanced
       prerequisites: [serving.self-hosted]
       taught_in: [projects/04-ai-engineering/model-serving/03-inference-serving]
-      sources: [source-index#12]
+      sources: [source-index#12, source-index#28]
       exercises: [projects/04-ai-engineering/model-serving]
       used_by_projects: [projects/04-ai-engineering/model-serving]
       evidence: "A served endpoint with measured throughput and latency."
@@ -705,7 +791,7 @@ domains:
       level: advanced
       prerequisites: [llm.fundamentals]
       taught_in: [projects/04-ai-engineering/security/lectures]
-      sources: [source-index#25]
+      sources: [source-index#25, source-index#28]
       exercises: [projects/04-ai-engineering/security/exercises]
       used_by_projects: [projects/04-ai-engineering/security, projects/04-ai-engineering/devmate]
       evidence: "A blocked prompt-injection attempt from the OWASP LLM top-10."

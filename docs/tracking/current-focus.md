@@ -5,16 +5,19 @@
 > ⚠️ A staleness gate fails CI if this file is more than 8 days old: `make fresh-check`
 > locally and the Tracking freshness step in `.github/workflows/ci.yml`.
 
-**Last updated:** 2026-10-06
+**Last updated:** 2026-10-14
 
 ---
 
 ## Active Window
 
-**Week 2** — 2026-10-06 → 2026-10-12 (RAG + application window)
+**Week 3** — 2026-10-13 → 2026-10-19 (RAG close-out, then deploy)
 
 **Plan:** [Active Track — 10-Week AI Engineer](../roadmap/active-track-10-week.md)
 (adopted 2026-08-02 by [ADR-0004](../decisions/0004-adopt-10-week-ai-engineer-track.md))
+The track's target application date (2026-10-12, week 10) has passed with A3 still
+open. Treat the remaining weeks as schedule recovery: close A3, then A4. Do not open
+new curriculum scope.
 
 **Strategic follow-on (not active yet):**
 [Production AI Systems Engineer roadmap](../learning/design/production-ai-systems-engineer-roadmap.md)
@@ -33,9 +36,13 @@ content (4-6 topics each, lecture + glossary + exercise + quiz).
 
 ## Main Goal
 
-Week 1 (A2) mostly closed offline: golden cases + eval harness foundation shipped.
-Remaining A2: Langfuse keys + live traced ask. A3 harness code exists; live retrieval
-and the two ADRs are next once Qdrant/ingest are up.
+Close A3: Qdrant up, ingest this repo, run `--mode live` with a measured Hit@5, then
+write the chunking ADR with those numbers. A2 still has Langfuse keys open. A4
+(public URL) is next and is the portfolio artifact.
+
+Learning OS this window: 54 registered concepts across 12 domains, 29 indexed sources,
+the `huyen-ai-engineering` skill wired in, and a new `data-engineering` domain closing
+the one gap found against the Microsoft AI Engineer career path.
 
 ---
 
@@ -66,6 +73,10 @@ and the two ADRs are next once Qdrant/ingest are up.
 23. ~~Structural splits + API tests~~ — done 2026-10-06: `stats` split into collect/format/present (RepoStats dataclass, output contract preserved, 4 tests green); agent `run` split into _initial_messages/_finish/_run_tool/_note_invalid_action (+ hoisted `import time`); 9 new API happy-path tests (61 passed total, coverage 45% to 48%)
 24. Remaining review debt: `devmate/ui/` missing so compose `ui` service fails — start only needed infra; agent/API deeper coverage before A2 grows the LLM layer
 25. ~~Hygiene: untrack pre-rule artifacts~~ — done 2026-10-07 (`git rm -r --cached outputs/` for 77 PNGs + tracked `.coverage`; files stay on disk; `.code-review-graph/` verified ignored via global exclude)
+26. ~~Learning OS: register the Huyen book skill~~ — done 2026-10-14 (`huyen-ai-engineering` skill built at `~/.agents/skills/`, `source-index#28`, 24 registry nodes wired, scan warnings reviewed and accepted)
+27. ~~Learning OS: close the data engineering gap~~ — done 2026-10-14 (new `data-engineering` domain, 6 nodes `data.*`, `source-index#29` Microsoft Learn AI Engineer career path; registry now 54 concepts / 12 domains, INDEX + scoreboard regenerated)
+28. Close A3: start qdrant, ingest this repo, `devmate.eval.run_ragas --mode live`, record measured Hit@5
+29. Write the chunking ADR citing the live numbers from task 28
 
 ---
 
@@ -114,10 +125,10 @@ Full list: [`../roadmap/milestones.md`](../roadmap/milestones.md)
 
 ## Next Window Preview
 
-**Week 2** (2026-10-06 → 2026-10-12) — RAG. Qdrant up, ingest this repo, live retrieval
-eval with measured Hit@5, chunking ADR with numbers. DevMate `ask` end to end with
-tracing. Target application date is 2026-10-12 (week 10 of the track) — portfolio
-deliverables (A4 deployment) take priority over new content.
+**Week 4** (2026-10-20 → 2026-10-26) — A4. FastAPI `/health` `/ask` `/ingest`,
+Postgres persistence with Alembic, multi-stage Dockerfile, and a public URL. The
+portfolio deliverable outranks every remaining content task. `devmate/ui/` is still
+missing, so the compose `ui` service still fails; start only the infra you need.
 
 ---
 

@@ -106,6 +106,26 @@ FastAPI + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 
 ---
 
+## Books (structured extraction)
+
+Converted into agent skills with [book-to-skill](https://github.com/virgiliojr94/book-to-skill).
+The skill lives outside the repo (`~/.agents/skills/<slug>/`) because the source is
+copyrighted; the registry links to it, it does not vendor it.
+
+| # | Source | Type | Topic | Status | Link | Lab Integration |
+|---|--------|------|-------|--------|------|-----------------|
+| 28 | AI Engineering: Building Applications with Foundation Models (Chip Huyen, O'Reilly 2024) | book | Evaluation, RAG, prompt engineering, finetuning, dataset engineering, inference optimization, AI app architecture | in-progress | local: `D:\AI\Books\AI Engineering Building Applications with Foundation Models .pdf` | Skill `huyen-ai-engineering` (10 chapters, glossary, patterns, cheatsheet). Cited as `source-index#28` by `eval.*`, `rag.*`, `fine-tuning.*`, `llm.*`, `serving.*`, `prod.*`, `security.*` nodes in `registries/knowledge-registry.yaml`. |
+
+---
+
+## Career Paths
+
+| # | Source | Type | Topic | Status | Link | Lab Integration |
+|---|--------|------|-------|--------|------|-----------------|
+| 29 | Microsoft Learn - AI Engineer career path | career-path | Production AI systems: software eng, backend, data eng, LLM eng, ML fundamentals, LLMOps, cloud/GPUs, security | planned | [learn.microsoft.com](https://learn.microsoft.com/ar-sa/training/career-paths/ai-engineer) | Gap reference measured against `registries/knowledge-registry.yaml` on 2026-10-14: 8 of the 9 domains already had registry nodes. The one with none, data engineering, is taught by `projects/00-core-foundations/data-engineering/` (15 topics) and is now registered as the `data.*` nodes. Deep Learning and Cloud/GPUs keep their existing deferral to A10 and the P-track. |
+
+---
+
 ## Reference: AI Engineering Lab Repos
 
 | # | Source | Type | Topic | Status | Link | Lab Integration |

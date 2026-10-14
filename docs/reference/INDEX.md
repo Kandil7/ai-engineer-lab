@@ -3,7 +3,7 @@
 > Generated from `registries/knowledge-registry.yaml` by `infra/scripts/build-knowledge-index.ps1`.
 > Do not edit by hand. Run the script and commit the result. The knowledge gate fails CI when this file drifts.
 
-**48 concepts across 11 domains.**
+**54 concepts across 12 domains.**
 
 ## python
 
@@ -40,7 +40,7 @@
 - **Level:** core
 - **Prerequisites:** `python.production`
 - **Taught in:** `docs/curriculum/lectures/01-llm-fundamentals.md`
-- **Sources:** `source-index#18`
+- **Sources:** `source-index#18`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/prompt-engineering`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Explain tokens, temperature, and context windows and defend each choice.
@@ -53,7 +53,7 @@
 - **Level:** core
 - **Prerequisites:** `llm.fundamentals`
 - **Taught in:** `docs/curriculum/lectures/01-llm-fundamentals.md`
-- **Sources:** `source-index#18`
+- **Sources:** `source-index#18`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/devmate`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A streaming ask with typed retries and a validated structured response.
@@ -66,7 +66,7 @@
 - **Level:** core
 - **Prerequisites:** `llm.fundamentals`
 - **Taught in:** `projects/04-ai-engineering/prompt-engineering/01-prompt-structure`
-- **Sources:** `source-index#18`
+- **Sources:** `source-index#18`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/prompt-engineering`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Versioned templates in a running system, changed with a golden-set diff.
@@ -79,7 +79,7 @@
 - **Level:** core
 - **Prerequisites:** `llm.fundamentals`
 - **Taught in:** `docs/curriculum/lectures/04-evaluation-observability.md`
-- **Sources:** `source-index#25`
+- **Sources:** `source-index#25`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/devmate`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Every LLM call appears as a span with tokens and latency.
@@ -118,7 +118,7 @@
 - **Level:** core
 - **Prerequisites:** `rag.embeddings`
 - **Taught in:** `projects/04-ai-engineering/rag-system/01-chunking-by-structure`
-- **Sources:** `source-index#21`
+- **Sources:** `source-index#21`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Three chunkers compared on a golden set with measured numbers.
@@ -144,7 +144,7 @@
 - **Level:** advanced
 - **Prerequisites:** `rag.vector-store`
 - **Taught in:** `projects/04-ai-engineering/rag-system/02-hard-filters-retrieval`
-- **Sources:** `source-index#21`
+- **Sources:** `source-index#21`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A measured eval table showing hybrid beats dense-only.
@@ -157,7 +157,7 @@
 - **Level:** advanced
 - **Prerequisites:** `rag.hybrid-retrieval`
 - **Taught in:** `projects/04-ai-engineering/rag-system/03-reranking`
-- **Sources:** `source-index#21`
+- **Sources:** `source-index#21`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Rerank top-k and show the metric delta against no rerank.
@@ -170,7 +170,7 @@
 - **Level:** advanced
 - **Prerequisites:** `rag.hybrid-retrieval`
 - **Taught in:** `projects/04-ai-engineering/rag-system/05-abstention-citations`
-- **Sources:** `source-index#21`
+- **Sources:** `source-index#21`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Answers cite sources and abstain when evidence is missing.
@@ -183,7 +183,7 @@
 - **Level:** core
 - **Prerequisites:** `llm.fundamentals`
 - **Taught in:** `projects/04-ai-engineering/ai-evaluation/01-gold-datasets-annotation`
-- **Sources:** `source-index#25`
+- **Sources:** `source-index#25`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A hand-graded golden set with expected sources per question.
@@ -196,7 +196,7 @@
 - **Level:** core
 - **Prerequisites:** `eval.golden-datasets`, `rag.hybrid-retrieval`
 - **Taught in:** `projects/04-ai-engineering/ai-evaluation/03-retrieval-evaluation`
-- **Sources:** `source-index#25`
+- **Sources:** `source-index#25`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A harness that prints recall@k and MRR against the golden set.
@@ -209,7 +209,7 @@
 - **Level:** advanced
 - **Prerequisites:** `eval.golden-datasets`
 - **Taught in:** `projects/04-ai-engineering/ai-evaluation/02-faithfulness-citation-precision`
-- **Sources:** `source-index#25`
+- **Sources:** `source-index#25`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Score answers for grounding and report the failure cases.
@@ -222,7 +222,7 @@
 - **Level:** advanced
 - **Prerequisites:** `eval.faithfulness`
 - **Taught in:** `projects/04-ai-engineering/ai-evaluation/04-llm-as-judge`
-- **Sources:** `source-index#25`
+- **Sources:** `source-index#25`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A judge rubric calibrated against a hand-graded sample.
@@ -235,7 +235,7 @@
 - **Level:** advanced
 - **Prerequisites:** `eval.retrieval-metrics`
 - **Taught in:** `projects/04-ai-engineering/ai-evaluation/06-eval-in-ci`
-- **Sources:** `source-index#25`
+- **Sources:** `source-index#25`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/ai-evaluation`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** The eval gate fails CI when a metric regresses past a threshold.
@@ -261,7 +261,7 @@
 - **Level:** advanced
 - **Prerequisites:** `agents.tool-use`
 - **Taught in:** `projects/04-ai-engineering/agents/lectures`
-- **Sources:** `source-index#23`
+- **Sources:** `source-index#23`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/agents/exercises`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A step-capped loop with loop detection and a passing test.
@@ -287,7 +287,7 @@
 - **Level:** advanced
 - **Prerequisites:** `rag.hybrid-retrieval`, `databases.redis`
 - **Taught in:** `projects/04-ai-engineering/rag-system/06-caching`
-- **Sources:** `source-index#11`
+- **Sources:** `source-index#11`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/rag-system`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** A cache hit-rate metric from a semantic (not exact-match) cache.
@@ -300,7 +300,7 @@
 - **Level:** advanced
 - **Prerequisites:** `llm.fundamentals`
 - **Taught in:** `projects/04-ai-engineering/rag-system/08-context-security`
-- **Sources:** `source-index#25`
+- **Sources:** `source-index#25`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/security`
 - **Used by:** `projects/04-ai-engineering/devmate`
 - **Evidence:** Blocked injection attempts with evidence and a size limit.
@@ -350,6 +350,86 @@
 - **Target:** 5/10
 - **Evidence required:** `test`
 - **Verified:** 2026-10-10, review every 0 days
+
+## data-engineering
+
+### `data.etl-pipelines` - ETL/ELT and ingestion pipelines
+
+- **Level:** core
+- **Prerequisites:** `python.production`
+- **Taught in:** `projects/00-core-foundations/data-engineering/01-etl-fundamentals`, `projects/00-core-foundations/data-engineering/09-elt-and-cdc`
+- **Sources:** `source-index#29`
+- **Exercises:** `projects/00-core-foundations/data-engineering/01-etl-fundamentals`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** An ingest job that runs end to end and records what it loaded.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `data.contracts` - Schemas and data contracts
+
+- **Level:** core
+- **Prerequisites:** `data.etl-pipelines`
+- **Taught in:** `projects/00-core-foundations/data-engineering/02-schemas-and-contracts`
+- **Sources:** `source-index#29`
+- **Exercises:** `projects/00-core-foundations/data-engineering/02-schemas-and-contracts`
+- **Used by:** `projects/00-core-foundations/data-engineering`
+- **Evidence:** A producer and a consumer agreeing on a schema that fails loudly on drift.
+- **Target:** 6/10
+- **Evidence required:** `test`, `adr`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `data.reliability` - Idempotency and checkpointing
+
+- **Level:** core
+- **Prerequisites:** `data.etl-pipelines`
+- **Taught in:** `projects/00-core-foundations/data-engineering/03-idempotency`, `projects/00-core-foundations/data-engineering/04-checkpointing`
+- **Sources:** `source-index#29`
+- **Exercises:** `projects/00-core-foundations/data-engineering/03-idempotency`
+- **Used by:** `projects/00-core-foundations/data-engineering`
+- **Evidence:** A job killed mid-run and retried without duplicating or losing rows.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `data.quality` - Data quality and deduplication
+
+- **Level:** core
+- **Prerequisites:** `data.contracts`
+- **Taught in:** `projects/00-core-foundations/data-engineering/11-data-quality`, `projects/00-core-foundations/data-engineering/05-deduplication`
+- **Sources:** `source-index#29`
+- **Exercises:** `projects/00-core-foundations/data-engineering/11-data-quality`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A quality check that quarantines bad rows instead of silently passing them.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `data.lineage` - Provenance, versioning and lineage
+
+- **Level:** advanced
+- **Prerequisites:** `data.reliability`
+- **Taught in:** `projects/00-core-foundations/data-engineering/06-provenance-versioning`, `projects/00-core-foundations/data-engineering/14-data-versioning-lineage`
+- **Sources:** `source-index#29`
+- **Exercises:** `projects/00-core-foundations/data-engineering/14-data-versioning-lineage`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** Trace a field in the output back to the exact source file and transform.
+- **Target:** 6/10
+- **Evidence required:** `adr`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `data.streaming-storage` - Batch vs streaming and storage layout
+
+- **Level:** advanced
+- **Prerequisites:** `data.etl-pipelines`
+- **Taught in:** `projects/00-core-foundations/data-engineering/08-batch-vs-streaming`, `projects/00-core-foundations/data-engineering/07-parquet-object-storage`, `projects/00-core-foundations/data-engineering/15-storage-and-databases`
+- **Sources:** `source-index#29`
+- **Exercises:** `projects/00-core-foundations/data-engineering/08-batch-vs-streaming`
+- **Used by:** `projects/00-core-foundations/data-engineering`
+- **Evidence:** Defend a batch or streaming choice and a storage format against the workload.
+- **Target:** 6/10
+- **Evidence required:** `adr`, `benchmark`
+- **Verified:** 2026-10-14, review every 0 days
 
 ## devops
 
@@ -414,7 +494,7 @@
 - **Level:** core
 - **Prerequisites:** `ml.vectors-similarity`
 - **Taught in:** `projects/04-ai-engineering/applied-ml/03-precision-recall-confusion`
-- **Sources:** `source-index#12`
+- **Sources:** `source-index#12`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/applied-ml`
 - **Used by:** `projects/04-ai-engineering/applied-ml`
 - **Evidence:** Pick the right metric for an imbalanced task and defend it.
@@ -442,7 +522,7 @@
 - **Level:** core
 - **Prerequisites:** `llm.fundamentals`
 - **Taught in:** `projects/04-ai-engineering/fine-tuning/01-supervised-fine-tuning`
-- **Sources:** `source-index#20`
+- **Sources:** `source-index#20`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/fine-tuning`
 - **Used by:** `projects/04-ai-engineering/fine-tuning`
 - **Evidence:** One SFT run with a held-out loss and a sample output.
@@ -455,7 +535,7 @@
 - **Level:** advanced
 - **Prerequisites:** `fine-tuning.sft`
 - **Taught in:** `projects/04-ai-engineering/fine-tuning/02-lora-qlora`
-- **Sources:** `source-index#20`
+- **Sources:** `source-index#20`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/fine-tuning`
 - **Used by:** `projects/04-ai-engineering/fine-tuning`
 - **Evidence:** A 4-bit QLoRA run inside the 16 GB budget with VRAM measured.
@@ -468,7 +548,7 @@
 - **Level:** core
 - **Prerequisites:** `fine-tuning.sft`
 - **Taught in:** `projects/04-ai-engineering/fine-tuning/03-training-data`
-- **Sources:** `source-index#20`
+- **Sources:** `source-index#20`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/fine-tuning`
 - **Used by:** `projects/04-ai-engineering/fine-tuning`
 - **Evidence:** A deduplicated, format-validated dataset with a data card.
@@ -494,7 +574,7 @@
 - **Level:** advanced
 - **Prerequisites:** `fine-tuning.sft`, `rag.hybrid-retrieval`
 - **Taught in:** `projects/04-ai-engineering/fine-tuning/06-rag-vs-fine-tuning`
-- **Sources:** `source-index#20`
+- **Sources:** `source-index#20`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/fine-tuning`
 - **Used by:** `projects/04-ai-engineering/fine-tuning`
 - **Evidence:** A written decision on when to retrieve and when to fine-tune.
@@ -602,7 +682,7 @@
 - **Level:** core
 - **Prerequisites:** `llm.fundamentals`
 - **Taught in:** `projects/04-ai-engineering/model-serving/01-choosing-a-model`
-- **Sources:** `source-index#12`
+- **Sources:** `source-index#12`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/model-serving`
 - **Used by:** `projects/04-ai-engineering/model-serving`
 - **Evidence:** A model choice defended by size, license, and task fit.
@@ -628,7 +708,7 @@
 - **Level:** advanced
 - **Prerequisites:** `serving.self-hosted`
 - **Taught in:** `projects/04-ai-engineering/model-serving/03-inference-serving`
-- **Sources:** `source-index#12`
+- **Sources:** `source-index#12`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/model-serving`
 - **Used by:** `projects/04-ai-engineering/model-serving`
 - **Evidence:** A served endpoint with measured throughput and latency.
@@ -643,7 +723,7 @@
 - **Level:** advanced
 - **Prerequisites:** `llm.fundamentals`
 - **Taught in:** `projects/04-ai-engineering/security/lectures`
-- **Sources:** `source-index#25`
+- **Sources:** `source-index#25`, `source-index#28`
 - **Exercises:** `projects/04-ai-engineering/security/exercises`
 - **Used by:** `projects/04-ai-engineering/security`, `projects/04-ai-engineering/devmate`
 - **Evidence:** A blocked prompt-injection attempt from the OWASP LLM top-10.
