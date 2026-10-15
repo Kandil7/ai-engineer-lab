@@ -1,0 +1,7 @@
+---
+id: topic_09_arabic_morphology_complete
+reported_by: builder
+created_at: 2026-10-15T08:02:53.712Z
+---
+
+Topic 09 (Arabic Morphology, Tokenization & Surface Variation) complete: 4 files in projects/04-ai-engineering/arabic-nlp/09-arabic-morphology-tokenization/. Lecture 683 lines/36,220 B; glossary 601/20,078; quiz 448/11,989 (15 Q, answers spread A-D unlike 08's B-heavy key); .py 1,105/42,747 stdlib-only. Key fix during iteration: segment_word invariant originally asserted every non-clitic part >= 3 chars; this crashed on "مش" (Levantine 2-char negator, a legitimate unsplit lexical item). Fix: apply the stem-length rule only when len(parts) > 1 (both in segment_word and check_segmenter); unsplit short words pass untouched. BAD pack emits exactly 7 findings (MOR001-007, 3 errors/4 warnings), GOOD pack 0, display fidelity 18/18, py exit 0. Known LSP false positive at line 34 (sys.stdout.reconfigure under hasattr guard) identical to topics 07/08 repo convention; py_compile passes, left as-is. Validators after adding files: repo-structure 75 passed, knowledge 11 passed (unchanged; topic folders aren't registry-checked). Quiz footer uses correct relative link to ../08-.../quiz.md (08's own footer uses broken bare filenames; left untouched per create-only rule). Lecture cites only verified measured harness numbers (1.0/1.68/8.78 tok-per-word; 8.6% unk; 80.5% byte) and repo-verified model shortlist, no invented benchmarks.

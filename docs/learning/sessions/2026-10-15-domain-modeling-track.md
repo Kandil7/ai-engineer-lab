@@ -1,0 +1,27 @@
+# Domain-modeling track built: 5 files in projects/05-system-design/domain-modeling
+
+### Context
+
+AI Engineer Lab, system-design track. Task: author the DDD/domain-modeling lane (README, lecture, glossary, quiz, exercise) in the established Format B style, grounded only in verified repo facts, then run the prescribed verifications. Gold standard: the reliability track in projects/06-devops/reliability/.
+
+### Explanation
+
+Five files created under projects/05-system-design/domain-modeling/: README.md (~130 lines), lectures/01-domain-modeling-lecture.md (635 lines, 15 Key Concepts sections: ubiquitous language, entities vs value objects, parse-don't-validate construction, aggregates and roots, invariant placement, factories and repositories, domain events, bounded contexts and context mapping, specifications, anemic-model anti-pattern, DTO discipline, identity keys, cross-aggregate consistency, proportionality, and the narrator-merge worked scenario), lectures/01-domain-modeling-glossary.md (36-term quick-reference table plus detailed definitions with FACT code from athar-lab contracts.py, devmate schemas.py/chunker.py, and the exercise), quizzes/01-domain-modeling-quiz.md (15 questions, 5 Easy / 7 Medium / 3 Hard, inline details blocks, score tracking, answer key), exercises/01-domain-modeling.py (1022 lines, stdlib-only offline rule engine: 9 rules DDD001 anemic root through DDD009 repository find_by filter dict). BAD pack trips all 9 (5 critical: DDD001, DDD003, DDD004, DDD005, DDD008; 4 warning: DDD002, DDD006, DDD007, DDD009); GOOD pack raises zero. Runnable demos: composite specifications (auto_merge = score >= 0.92 AND no veto, with review queue as NOT auto_merge), an aggregate root enforcing invariants at the boundary (Passage.ingest / attach_narration / extend_isnad rejecting invalid construction and duplicate narration attachment), and an IdempotentConsumer that suppresses redelivered EntityMerged events (alias table advances once under at-least-once delivery). Findings resolve declared lines by scanning the exercise source for marker comments of the form "# BAD:anemic" / "# GOOD:spec", one marker per rule trigger. Grounding FACTs verified before writing: SourceLocation frozen dataclass + __post_init__ invariants at athar-lab/contracts.py:33-46; Passage two-text invariants at :69-75; make_passage factory composing natural id book_id:pN:index at :90-110 (id composed at :101); Document at :49-56; devmate llm/schemas.py:10-126 DTOs; ingest/chunker.py:15-29 pipeline record and :40-49 md5 natural key; arabic-nlp 08 sections 6-9 for EntityId/MergeCandidate/MergeDecision/alias table. No DDD book exists in learning-sources/source-index.md, so Evans 2003 and Vernon 2013 are cited as general canon, not as source-index anchors. Complements recorded against system-design.contracts, system-design.failure-modes, arabic-nlp entity resolution, and the reliability track's transport-side idempotency (REL006).
+
+### Alternatives
+
+Registry node: adding a system-design.domain-modeling node to registries/knowledge-registry.yaml was considered and deferred — the reliability track (the stated gold standard for this exact format) has no registry node of its own, arabic-nlp topics 08/09 have none either, and tests/knowledge/validate.ps1 passes with the files unregistered. Detector design: entity equality detection could hard-code a list of entity names, but DDD003 instead flags any entity-typed class with a dataclass default eq, which generalizes to user-supplied model JSON. Invariant placement: DDD004 could have used a name heuristic for members, but it resolves the declared aggregate of each member via the model description so the finding names both the invariant and its aggregate.
+
+### Rationale (Why this?)
+
+Following the reliability track's format and the repo's established FACT-grounding convention keeps this lane consistent with the other system-design and DevOps tracks and makes the audit engine the answer key in runnable form: the BAD pack states what wrong modeling looks like, the GOOD pack proves the rules can all stay silent on correct shape. Offline determinism (stdlib only, no clock, no network) matches the verification gates the other tracks already pass.
+
+### Exercises
+
+Run python projects/05-system-design/domain-modeling/exercises/01-domain-modeling.py and confirm exit 0 with 5 critical + 4 warning on the BAD pack and zero on the GOOD pack. Extend DDD007's placeholder list with another domain-expert phrase from Athar and re-run to confirm the GOOD pack still stays silent. Feed a hand-written model description JSON through file mode and confirm findings report line '-' and exit codes follow the critical/warning policy. Re-derive the specification inversion in the demo (review queue = NOT auto_merge) against the narrator-merge policy in arabic-nlp 08 to check the partition covers every candidate. Take DevMate's llm/schemas.py DTO set and write the domain layer that would sit behind it, then run DDD001-DDD009 over the result.
+
+### Next Steps
+
+User decides whether to commit (uncommitted: the whole domain-modeling directory plus prior track sessions). If registering later, add a system-design.domain-modeling node with taught_in pointing at the five files and rerun tests/knowledge/validate.ps1. Possible follow-on: a second lecture covering context mapping patterns (customer-supplier, conformist, anti-corruption layer detail) or applying the nine-rule audit to Athar's live contracts.py as a real-case pass.
+
+---

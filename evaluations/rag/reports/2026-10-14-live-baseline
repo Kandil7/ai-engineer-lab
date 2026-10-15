@@ -1,0 +1,43 @@
+# DevMate Eval Report — 2026-10-14
+
+- Mode: `live`
+- Commit: `445c432`
+- Generated: 2026-10-14T11:09:20+00:00
+- RAG golden set: `evaluations\rag\datasets\devmate-golden.jsonl` (10 cases)
+- Prompt golden set: `evaluations\prompts\golden-cases\devmate.jsonl` (0 cases)
+
+## Metrics
+
+```
+Metric                  Value
+----------------------  -----
+Retrieval cases         10
+Hit@1                   0.800 (8/10)
+Hit@5                   0.900 (9/10)
+Hit@10                  0.900 (9/10)
+MRR                     0.820
+Answer cases            0
+Answer pass rate        0.000 (0/0)
+Note                    live retrieval only
+Note                    LLM answers not requested (--with-llm off); answer pass rate from fixtures skipped
+```
+
+## Retrieval detail
+
+| Case | Hit@1 | Hit@5 | Hit@10 | RR | Expected | Top retrieved |
+| --- | --- | --- | --- | --- | --- | --- |
+| dev-golden-001 | True | True | True | 1.000 | src/devmate/ingest/chunker.py | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\ingest\chunker.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\ingest\chunker.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\ingest\chunker.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\ingest\chunker.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\ingest\chunker.py |
+| dev-golden-002 | True | True | True | 1.000 | src/devmate/obs/cost.py | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\obs\cost.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\obs\cost.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\obs\cost.py, sample_corpus\05-observability.md, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\__init__.py |
+| dev-golden-003 | True | True | True | 1.000 | src/devmate/api/main.py | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\api\main.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\retrieve\rag.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\cli\main.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\cli\main.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\api\main.py |
+| dev-golden-004 | False | False | False | 0.000 | pyproject.toml | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\config.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\index\vector_store.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\docs\state-audit.md, sample_corpus\02-architecture.md, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\docs\deployment-plan.md |
+| dev-golden-005 | True | True | True | 1.000 | src/devmate/ingest/chunker.py | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\ingest\chunker.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\cli\main.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\ingest\chunker.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\ingest\chunker.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\ingest\chunker.py |
+| dev-golden-006 | True | True | True | 1.000 | src/devmate/llm/client.py | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\llm\client.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\docs\failure-modes.md, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\docs\failure-modes.md, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\retrieve\rag.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\llm\client.py |
+| dev-golden-007 | False | True | True | 0.200 | src/devmate/guards/guardrails.py | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate.egg-info\top_level.txt, sample_corpus\02-architecture.md, sample_corpus\01-overview.md, sample_corpus\06-agents-and-mcp.md, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\guards\guardrails.py |
+| dev-golden-008 | True | True | True | 1.000 | src/devmate/retrieve/retriever.py | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\retrieve\retriever.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\retrieve\retriever.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\retrieve\retriever.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\agent\agent.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\mcp\server.py |
+| dev-golden-009 | True | True | True | 1.000 | src/devmate/db/models.py | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\db\models.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\db\models.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\db\models.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\db\models.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\db\models.py |
+| dev-golden-010 | True | True | True | 1.000 | src/devmate/mcp/server.py | D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\mcp\server.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\mcp\server.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\docs\opencode-integration.md, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\src\devmate\mcp\server.py, D:\AI\Projects\ai-engineer-lab\projects\04-ai-engineering\devmate\docs\opencode-integration.md |
+
+## Decision
+
+- [ ] Accept (Hit@5 and answer pass rate meet or exceed baseline)
+- [ ] Reject (metrics below baseline — investigate before merging prompt/model changes)

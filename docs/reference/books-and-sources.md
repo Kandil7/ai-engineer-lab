@@ -164,8 +164,7 @@ post-job    Designing Data-Intensive Applications (selected chapters)
 - [`../roadmap/active-track-10-week.md`](../roadmap/active-track-10-week.md) — the fixed source
   list per week
 - [`ml-fundamentals-map.md`](ml-fundamentals-map.md)
-- [`../../learning-sources/`](../../learning-sources/) — where source notes are filed
-- [`../learning/source-summaries/`](../learning/source-summaries/) — every source studied
-  produces an entry here
+- [`../../learning-sources/`](../../learning-sources/) — where source notes are filed,
+  and [`source-index.md`](../../learning-sources/source-index.md) — every source studied
 
 *Extracted 2026-08-02 from `docs/plan/archive/Python-essentials-for-AI-engineers.md`*

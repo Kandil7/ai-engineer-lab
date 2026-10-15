@@ -3,7 +3,7 @@
 > Generated from `registries/evidence.yaml` joined with `registries/knowledge-registry.yaml` by `infra/scripts/build-skills-scoreboard.ps1`.
 > Do not edit by hand. Run the script and commit the result. The knowledge gate fails CI when this file drifts.
 
-**Summary:** 54 concepts, 15 with evidence, 0 at or above target, 39 with no evidence yet.
+**Summary:** 78 concepts, 15 with evidence, 0 at or above target, 63 with no evidence yet.
 **Evidence provenance:** 4 script-checked, 11 self-assessed, 0 external. Prefer script-checked; self-assessed levels are claims until a test or gate backs them.
 
 ## python
@@ -36,8 +36,10 @@
 | `agents.tool-use` Tool use | 7 | 0 | 7 | none |
 | `agents.react` ReAct loop | 7 | 0 | 7 | none |
 | `agents.mcp` Model Context Protocol | 6 | 1 | 5 | 1 (pr) |
+| `agents.multi-agent` Multi-agent orchestration | 6 | 0 | 6 | none |
 | `prod.semantic-cache` Semantic caching | 5 | 1 | 4 | 1 (pr) |
 | `prod.guardrails` Guardrails and injection defence | 6 | 2 | 4 | 1 (pr) |
+| `prod.ai-safety` AI safety and harm review | 6 | 0 | 6 | none |
 
 ## backend
 
@@ -62,12 +64,17 @@
 | `data.quality` Data quality and deduplication | 6 | 0 | 6 | none |
 | `data.lineage` Provenance, versioning and lineage | 6 | 0 | 6 | none |
 | `data.streaming-storage` Batch vs streaming and storage layout | 6 | 0 | 6 | none |
+| `data.lakehouse` Lakehouse table layout | 5 | 0 | 5 | none |
+| `data.feature-stores` Feature stores and feature pipelines | 5 | 0 | 5 | none |
 
 ## devops
 
 | Concept | Target | Current | Gap | Evidence |
 | --- | --- | --- | --- | --- |
-| `deploy.docker` Docker and deployment | 6 | 1 | 5 | 1 (deployment) |
+| `deploy.docker` Docker containerization for AI services | 6 | 1 | 5 | 1 (deployment) |
+| `deploy.ci-cd` CI/CD pipelines and quality gates | 6 | 0 | 6 | none |
+| `deploy.strategies` Deployment strategies and Kubernetes fundamentals | 6 | 0 | 6 | none |
+| `deploy.llmops` LLMOps lifecycle for production LLM systems | 7 | 0 | 7 | none |
 
 ## system-design
 
@@ -83,6 +90,9 @@
 | `ml.vectors-similarity` Vectors and similarity | 5 | 0 | 5 | none |
 | `ml.evaluation-metrics` Precision, recall, confusion | 5 | 0 | 5 | none |
 | `ml.baselines-error-analysis` Rules vs models, error analysis | 5 | 0 | 5 | none |
+| `ml.neural-net-foundations` Neural network foundations | 5 | 0 | 5 | none |
+| `ml.nlp-foundations` NLP foundations | 5 | 0 | 5 | none |
+| `ml.transformers` Transformers and the attention mechanism | 6 | 0 | 6 | none |
 
 ## fine-tuning
 
@@ -119,3 +129,32 @@
 | Concept | Target | Current | Gap | Evidence |
 | --- | --- | --- | --- | --- |
 | `security.llm-security` LLM application security | 6 | 0 | 6 | none |
+| `security.data-privacy` Data privacy and retention | 6 | 0 | 6 | none |
+| `security.auth-authorization` Authentication and authorization | 6 | 0 | 6 | none |
+| `security.api-security` API security and input validation | 6 | 0 | 6 | none |
+| `security.content-safety` Content safety for Islamic knowledge | 6 | 0 | 6 | none |
+| `security.monitoring-audit` Security monitoring and audit logging | 6 | 0 | 6 | none |
+
+## architecture
+
+| Concept | Target | Current | Gap | Evidence |
+| --- | --- | --- | --- | --- |
+| `arch.solid-clean-code` Clean code and SOLID | 6 | 0 | 6 | none |
+| `arch.hexagonal` Hexagonal architecture, ports and adapters | 6 | 0 | 6 | none |
+| `arch.patterns-as-decisions` Design patterns as recorded decisions | 6 | 0 | 6 | none |
+| `arch.adr-discipline` ADR discipline | 6 | 0 | 6 | none |
+
+## product
+
+| Concept | Target | Current | Gap | Evidence |
+| --- | --- | --- | --- | --- |
+| `product.personas-jtbd` Personas and jobs to be done | 5 | 0 | 5 | none |
+| `product.north-star-metrics` North-star metric and anti-metrics | 5 | 0 | 5 | none |
+
+## tooling
+
+| Concept | Target | Current | Gap | Evidence |
+| --- | --- | --- | --- | --- |
+| `tooling.git-workflow` Git workflow and branching | 5 | 0 | 5 | none |
+| `tooling.linux-cli` Linux command line | 5 | 0 | 5 | none |
+| `tooling.ds-algorithms` Data structures and algorithms | 5 | 0 | 5 | none |

@@ -1,0 +1,18 @@
+# All tunables live here. Stage code reads these; nothing is hardcoded.
+# See ADR-0012 (dedup) and ADR-0011 (profiling division) for the why.
+clean:
+  drop_empty: true
+dedup:
+  shingle_k: 5
+  num_perm: 128
+  bands: 16
+  band_rows: 8
+  threshold: 0.8
+  seed: 42
+gates:
+  min_chars: 20
+  max_chars: 20000
+export:
+  id_hash: md5
+  id_fields: [source, position, content_prefix_100]
+seed: 42

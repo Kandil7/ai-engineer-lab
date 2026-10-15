@@ -154,7 +154,7 @@ domains:
       name: Vector store (Qdrant)
       level: core
       prerequisites: [rag.embeddings]
-      taught_in: [projects/00-core-foundations/python/04-databases/vector-stores]
+      taught_in: [projects/00-core-foundations/python/04-databases/vector-stores, projects/03-databases/qdrant-rag]
       sources: [source-index#21]
       exercises: [projects/00-core-foundations/python/04-databases/vector-stores]
       used_by_projects: [projects/04-ai-engineering/devmate]
@@ -318,6 +318,20 @@ domains:
       verified_at: 2026-10-10
       review_after_days: 0
       status: active
+    - id: agents.multi-agent
+      name: Multi-agent orchestration
+      level: advanced
+      prerequisites: [agents.react]
+      taught_in: [projects/04-ai-engineering/ai-automation/lectures/08-multi-agent-lecture.md]
+      sources: [source-index#22]
+      exercises: [projects/04-ai-engineering/ai-automation/quizzes/08-multi-agent-quiz.md]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Two agents with distinct roles and a handoff whose failure mode is stated."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
     - id: prod.semantic-cache
       name: Semantic caching
       level: advanced
@@ -347,6 +361,21 @@ domains:
       review_after_days: 0
       status: active
 
+    - id: prod.ai-safety
+      name: AI safety and harm review
+      level: advanced
+      prerequisites: [prod.guardrails]
+      taught_in: [projects/04-ai-engineering/ai-automation/lectures/09-ai-safety-lecture.md]
+      sources: [source-index#25, source-index#28]
+      exercises: [projects/04-ai-engineering/ai-automation/quizzes/09-ai-safety-quiz.md]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A harm taxonomy for the product with one mitigation traced to a code change."
+      level_target: 6
+      evidence_required: [eval_report]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+
   backend:
     - id: backend.fastapi-service
       name: FastAPI service
@@ -368,7 +397,7 @@ domains:
       name: SQL schema and indexes
       level: core
       prerequisites: [python.production]
-      taught_in: [projects/00-core-foundations/python/04-databases/sql-fundamentals]
+      taught_in: [projects/00-core-foundations/python/04-databases/sql-fundamentals, projects/03-databases/postgres-design]
       sources: [source-index#10]
       exercises: [projects/00-core-foundations/python/04-databases/sql-fundamentals]
       used_by_projects: [projects/04-ai-engineering/devmate]
@@ -382,7 +411,7 @@ domains:
       name: Redis cache and queues
       level: core
       prerequisites: [python.production]
-      taught_in: [projects/00-core-foundations/python/04-databases/redis]
+      taught_in: [projects/00-core-foundations/python/04-databases/redis, projects/03-databases/redis-cache]
       sources: [source-index#11]
       exercises: [projects/00-core-foundations/python/04-databases/redis]
       used_by_projects: [projects/04-ai-engineering/devmate]
@@ -479,20 +508,91 @@ domains:
       review_after_days: 0
       status: active
 
+    - id: data.lakehouse
+      name: Lakehouse table layout
+      level: advanced
+      prerequisites: [data.streaming-storage]
+      taught_in: [projects/00-core-foundations/data-engineering/10-lakehouse]
+      sources: [source-index#29]
+      exercises: [projects/00-core-foundations/data-engineering]
+      used_by_projects: [projects/00-core-foundations/data-engineering]
+      evidence: "A bronze, silver, gold layout defended by who reads each layer and how often."
+      level_target: 5
+      evidence_required: [adr]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: data.feature-stores
+      name: Feature stores and feature pipelines
+      level: advanced
+      prerequisites: [data.lakehouse]
+      taught_in: [projects/00-core-foundations/data-engineering/12-feature-stores, projects/00-core-foundations/data-engineering/13-feature-pipelines]
+      sources: [source-index#29]
+      exercises: [projects/00-core-foundations/data-engineering]
+      used_by_projects: [projects/00-core-foundations/data-engineering]
+      evidence: "One feature computed both offline and online with the same definition and no drift."
+      level_target: 5
+      evidence_required: [test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+
   devops:
     - id: deploy.docker
-      name: Docker and deployment
+      name: Docker containerization for AI services
       level: core
       prerequisites: [backend.fastapi-service]
-      taught_in: [projects/00-core-foundations/python/08-mlops]
-      sources: [source-index#8]
-      exercises: [projects/06-devops]
+      taught_in: [projects/06-devops/docker/lectures/01-containerization-lecture.md, projects/00-core-foundations/python/08-mlops]
+      sources: [source-index#8, source-index#9]
+      exercises: [projects/06-devops/docker/exercises/01-containerization.py]
       used_by_projects: [projects/04-ai-engineering/devmate]
-      evidence: "A multi-stage image serving the API from a public URL."
+      evidence: "A multi-stage image that passes a Dockerfile analyzer with zero findings."
       level_target: 6
       evidence_required: [deployment]
-      verified_at: 2026-10-10
-      review_after_days: 90
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: deploy.ci-cd
+      name: CI/CD pipelines and quality gates
+      level: core
+      prerequisites: [deploy.docker]
+      taught_in: [projects/06-devops/ci-cd/lectures/01-ci-cd-pipelines-lecture.md]
+      sources: [source-index#8]
+      exercises: [projects/06-devops/ci-cd/exercises/01-ci-cd-pipelines.py]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A workflow analyzer that flags unpinned actions and missing timeouts on the repo's own ci.yml."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: deploy.strategies
+      name: Deployment strategies and Kubernetes fundamentals
+      level: core
+      prerequisites: [deploy.docker]
+      taught_in: [projects/06-devops/deployment/lectures/01-deployment-strategies-lecture.md]
+      sources: [source-index#8]
+      exercises: [projects/06-devops/deployment/exercises/01-deployment-strategies.py]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A manifest analyzer that rejects mutable tags, missing probes, and unset resource limits."
+      level_target: 6
+      evidence_required: [deployment]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: deploy.llmops
+      name: LLMOps lifecycle for production LLM systems
+      level: advanced
+      prerequisites: [deploy.docker, llm.fundamentals]
+      taught_in: [projects/06-devops/llmops/lectures/01-llmops-lifecycle-lecture.md]
+      sources: [source-index#28]
+      exercises: [projects/06-devops/llmops/exercises/01-llmops-lifecycle.py]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A prompt-registry auditor plus per-query cost budget that gate a model change."
+      level_target: 7
+      evidence_required: [eval_report]
+      verified_at: 2026-10-14
+      review_after_days: 0
       status: active
 
   system-design:
@@ -566,6 +666,49 @@ domains:
       level_target: 5
       evidence_required: [eval_report]
       verified_at: 2026-10-10
+      review_after_days: 0
+      status: active
+
+    - id: ml.neural-net-foundations
+      name: Neural network foundations
+      level: core
+      prerequisites: [ml.vectors-similarity]
+      taught_in: [projects/04-ai-engineering/fastai-deep-learning/lectures/03-neural-net-foundations-lecture.md]
+      sources: [source-index#13, source-index#15]
+      exercises: [projects/04-ai-engineering/fastai-deep-learning/quizzes/03-neural-net-foundations.md]
+      used_by_projects: [projects/04-ai-engineering/fastai-deep-learning]
+      evidence: "A small network trained from scratch whose loss curve and failure modes you can explain."
+      level_target: 5
+      evidence_required: [benchmark]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: ml.nlp-foundations
+      name: NLP foundations
+      level: core
+      prerequisites: [ml.neural-net-foundations]
+      taught_in: [projects/04-ai-engineering/fastai-deep-learning/lectures/04-nlp-lecture.md]
+      sources: [source-index#16]
+      exercises: [projects/04-ai-engineering/fastai-deep-learning/quizzes/04-nlp.md]
+      used_by_projects: [projects/04-ai-engineering/fastai-deep-learning]
+      evidence: "A classification baseline whose errors are grouped by cause, not by count."
+      level_target: 5
+      evidence_required: [eval_report]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: ml.transformers
+      name: Transformers and the attention mechanism
+      level: core
+      prerequisites: [ml.neural-net-foundations]
+      taught_in: [projects/00-core-foundations/python/07-machine-learning/deep-learning/40-transformers-from-scratch/40-transformers-from-scratch-lecture.md]
+      sources: [source-index#13, source-index#17]
+      exercises: [projects/00-core-foundations/python/07-machine-learning/deep-learning/40-transformers-from-scratch/40-transformers-from-scratch.py]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Implement scaled dot-product attention and explain why the cost is quadratic in sequence length."
+      level_target: 6
+      evidence_required: [benchmark]
+      verified_at: 2026-10-14
       review_after_days: 0
       status: active
 
@@ -798,5 +941,207 @@ domains:
       level_target: 6
       evidence_required: [test, eval_report]
       verified_at: 2026-10-10
+      review_after_days: 0
+      status: active
+    - id: security.data-privacy
+      name: Data privacy and retention
+      level: advanced
+      prerequisites: [security.llm-security]
+      taught_in: [projects/04-ai-engineering/security/lectures/05-data-privacy-lecture.md]
+      sources: [source-index#28]
+      exercises: [projects/04-ai-engineering/security/exercises]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A data-flow note naming what leaves the trust boundary and under what policy."
+      level_target: 6
+      evidence_required: [adr, test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: security.auth-authorization
+      name: Authentication and authorization
+      level: advanced
+      prerequisites: [security.llm-security]
+      taught_in: [projects/04-ai-engineering/security/lectures/06-authentication-authorization-lecture.md]
+      sources: [source-index#28]
+      exercises: [projects/04-ai-engineering/security/exercises]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "An RBAC matrix enforced in code, with a test proving a denied path stays denied."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: security.api-security
+      name: API security and input validation
+      level: advanced
+      prerequisites: [security.auth-authorization]
+      taught_in: [projects/04-ai-engineering/security/lectures/07-api-security-lecture.md]
+      sources: [source-index#28]
+      exercises: [projects/04-ai-engineering/security/exercises]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "Rate limit, size limit, and validation boundary each demonstrated by a rejected request."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: security.content-safety
+      name: Content safety for Islamic knowledge
+      level: advanced
+      prerequisites: [security.llm-security]
+      taught_in: [projects/04-ai-engineering/security/lectures/02-content-moderation-lecture.md]
+      sources: [source-index#28]
+      exercises: [projects/04-ai-engineering/security/exercises]
+      used_by_projects: [projects/04-ai-engineering/athar-lab]
+      evidence: "A policy that refuses a fatwa-style answer while still serving the cited source."
+      level_target: 6
+      evidence_required: [eval_report]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: security.monitoring-audit
+      name: Security monitoring and audit logging
+      level: advanced
+      prerequisites: [security.api-security]
+      taught_in: [projects/04-ai-engineering/security/lectures/10-security-monitoring-lecture.md]
+      sources: [source-index#25, source-index#28]
+      exercises: [projects/04-ai-engineering/security/exercises]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "One request reconstructable end to end from its audit record alone."
+      level_target: 6
+      evidence_required: [test, deployment]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+
+  architecture:
+    - id: arch.solid-clean-code
+      name: Clean code and SOLID
+      level: core
+      prerequisites: []
+      taught_in: [docs/learning/paths/adr-driven-ai-systems.md]
+      sources: [source-index#28]
+      exercises: [docs/learning/paths/adr-driven-ai-systems.md]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A module refactored so its business logic tests with the I/O faked, plus an ADR naming the rejected option."
+      level_target: 6
+      evidence_required: [adr, test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: arch.hexagonal
+      name: Hexagonal architecture, ports and adapters
+      level: advanced
+      prerequisites: [arch.solid-clean-code]
+      taught_in: [docs/learning/paths/adr-driven-ai-systems.md]
+      sources: [source-index#28]
+      exercises: [docs/learning/paths/adr-driven-ai-systems.md]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "One use case behind a port, satisfied by both a real and a fake adapter under the same contract test."
+      level_target: 6
+      evidence_required: [adr, test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: arch.patterns-as-decisions
+      name: Design patterns as recorded decisions
+      level: advanced
+      prerequisites: [arch.hexagonal]
+      taught_in: [docs/learning/paths/adr-driven-ai-systems.md]
+      sources: [source-index#28]
+      exercises: [docs/learning/paths/adr-driven-ai-systems.md]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "One pattern applied, with an ADR that names the alternative rejected and the cost accepted."
+      level_target: 6
+      evidence_required: [adr]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: arch.adr-discipline
+      name: ADR discipline
+      level: core
+      prerequisites: [system-design.contracts]
+      taught_in: [projects/00-core-foundations/python/10-system-design/05-architecture-decision-records]
+      sources: [source-index#26]
+      exercises: [projects/00-core-foundations/python/10-system-design/challenges/05-architecture-decision-records]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "An ADR that states context, decision, rejected alternatives, and consequences a reviewer can act on."
+      level_target: 6
+      evidence_required: [adr]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+
+  product:
+    - id: product.personas-jtbd
+      name: Personas and jobs to be done
+      level: core
+      prerequisites: []
+      taught_in: [docs/learning/paths/production-ai-systems-engineering.md]
+      sources: [source-index#28]
+      exercises: [docs/learning/paths/production-ai-systems-engineering.md]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "One persona with a stated job, and a feature list cut to the minimum that completes it."
+      level_target: 5
+      evidence_required: [adr]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: product.north-star-metrics
+      name: North-star metric and anti-metrics
+      level: core
+      prerequisites: [product.personas-jtbd]
+      taught_in: [docs/learning/paths/production-ai-systems-engineering.md]
+      sources: [source-index#28]
+      exercises: [docs/learning/paths/production-ai-systems-engineering.md]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "One north-star metric with three anti-metrics, each with a stated way to measure it."
+      level_target: 5
+      evidence_required: [eval_report]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+
+  tooling:
+    - id: tooling.git-workflow
+      name: Git workflow and branching
+      level: core
+      prerequisites: []
+      taught_in: [projects/00-core-foundations/git-linux/01-git-basics, projects/00-core-foundations/git-linux/02-branching-merging, projects/00-core-foundations/git-linux/03-remote-workflows]
+      sources: [source-index#6, source-index#7]
+      exercises: [projects/00-core-foundations/git-linux]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A feature branch merged through a review, with the history explaining why each commit exists."
+      level_target: 5
+      evidence_required: [pr]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: tooling.linux-cli
+      name: Linux command line
+      level: core
+      prerequisites: [tooling.git-workflow]
+      taught_in: [projects/00-core-foundations/git-linux/04-linux-command-line]
+      sources: [source-index#6]
+      exercises: [projects/00-core-foundations/git-linux]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A diagnostic performed from the shell alone, without an IDE or a GUI tool."
+      level_target: 5
+      evidence_required: [test]
+      verified_at: 2026-10-14
+      review_after_days: 0
+      status: active
+    - id: tooling.ds-algorithms
+      name: Data structures and algorithms
+      level: core
+      prerequisites: []
+      taught_in: [projects/00-core-foundations/ds-algo/01-arrays-strings, projects/00-core-foundations/ds-algo/02-hash-maps, projects/00-core-foundations/ds-algo/03-recursion, projects/00-core-foundations/ds-algo/04-sorting-searching]
+      sources: [source-index#1]
+      exercises: [projects/00-core-foundations/ds-algo]
+      used_by_projects: [projects/04-ai-engineering/devmate]
+      evidence: "A solution whose complexity is stated and justified against the input bound."
+      level_target: 5
+      evidence_required: [test]
+      verified_at: 2026-10-14
       review_after_days: 0
       status: active

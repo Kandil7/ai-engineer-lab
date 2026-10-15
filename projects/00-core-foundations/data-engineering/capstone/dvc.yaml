@@ -1,0 +1,50 @@
+stages:
+  clean:
+    cmd: python src/capstone/run.py clean --params params.yaml
+    deps:
+      - raw/corpus.jsonl
+      - params.yaml
+      - src/capstone/clean.py
+      - src/capstone/run.py
+    outs:
+      - data/clean.parquet
+  profile:
+    cmd: python src/capstone/run.py profile --params params.yaml
+    deps:
+      - data/clean.parquet
+      - params.yaml
+      - src/capstone/profile.py
+      - src/capstone/run.py
+    outs:
+      - data/profile.json
+  dedup:
+    cmd: python src/capstone/run.py dedup --params params.yaml
+    deps:
+      - data/clean.parquet
+      - params.yaml
+      - src/capstone/dedup.py
+      - src/capstone/run.py
+    outs:
+      - data/deduped.parquet
+      - data/dedup_report.json
+  gate:
+    cmd: python src/capstone/run.py gate --params params.yaml
+    deps:
+      - data/deduped.parquet
+      - params.yaml
+      - src/capstone/gates.py
+      - src/capstone/run.py
+    outs:
+      - data/gold.parquet
+      - data/rejected.jsonl
+  export:
+    cmd: python src/capstone/run.py export --params params.yaml
+    deps:
+      - data/gold.parquet
+      - params.yaml
+      - src/capstone/export.py
+      - src/capstone/version.py
+      - src/capstone/run.py
+    outs:
+      - data/gold.jsonl
+      - data/manifest.json

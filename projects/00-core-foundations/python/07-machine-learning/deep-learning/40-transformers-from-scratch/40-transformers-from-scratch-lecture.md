@@ -87,6 +87,7 @@ class MultiHeadAttention(nn.Module):
     def __init__(self, d_model, n_heads):
         super().__init__()
         assert d_model % n_heads == 0
+        self.d_model, self.n_heads = d_model, n_heads
         self.d_k = d_model // n_heads
         self.W_q, self.W_k, self.W_v, self.W_o = (nn.Linear(d_model, d_model) for _ in range(4))
 

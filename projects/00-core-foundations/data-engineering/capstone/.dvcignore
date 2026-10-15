@@ -1,0 +1,4 @@
+# Files DVC never tracks: scratch inputs and temp artifacts.
+raw/scratch/
+*.tmp
+*.bak

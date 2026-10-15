@@ -15,6 +15,10 @@ the architectural memory of the workspace. New ADRs are created with `infra/scri
 | [0006](0006-adopt-master-ai-engineering-curriculum.md) | Lift the lecture moratorium — adopt the Master AI Engineering curriculum | Accepted | 2026-08-02 |
 | [0007](0007-adopt-learning-os-knowledge-registry.md) | Adopt a knowledge registry as the Learning OS backbone | Accepted | 2026-10-10 |
 | [0008](0008-evidence-ledger-and-generated-scoreboard.md) | Evidence ledger and a generated skills scoreboard | Accepted | 2026-10-10 |
+| [0010](0010-adopt-duckdb-stdlib-minhash-and-dvc-for-data-engineering.md) | Adopt DuckDB stdlib MinHash and DVC for data engineering | Proposed | 2026-10-15 |
+| [0011](0011-choose-duckdb-over-polars-for-profiling.md) | Choose DuckDB over Polars for profiling | Proposed | 2026-10-15 |
+| [0012](0012-choose-minhash-lsh-for-near-duplicate-dedup.md) | Choose MinHash LSH for near-duplicate dedup | Proposed | 2026-10-15 |
+| [0013](0013-choose-dvc-for-dataset-versioning.md) | Choose DVC for dataset versioning | Proposed | 2026-10-15 |
 
 ## Lifecycle
 

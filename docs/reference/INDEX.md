@@ -3,7 +3,7 @@
 > Generated from `registries/knowledge-registry.yaml` by `infra/scripts/build-knowledge-index.ps1`.
 > Do not edit by hand. Run the script and commit the result. The knowledge gate fails CI when this file drifts.
 
-**54 concepts across 12 domains.**
+**78 concepts across 15 domains.**
 
 ## python
 
@@ -130,7 +130,7 @@
 
 - **Level:** core
 - **Prerequisites:** `rag.embeddings`
-- **Taught in:** `projects/00-core-foundations/python/04-databases/vector-stores`
+- **Taught in:** `projects/00-core-foundations/python/04-databases/vector-stores`, `projects/03-databases/qdrant-rag`
 - **Sources:** `source-index#21`
 - **Exercises:** `projects/00-core-foundations/python/04-databases/vector-stores`
 - **Used by:** `projects/04-ai-engineering/devmate`
@@ -282,6 +282,19 @@
 - **Evidence required:** `test`, `deployment`
 - **Verified:** 2026-10-10, review every 0 days
 
+### `agents.multi-agent` - Multi-agent orchestration
+
+- **Level:** advanced
+- **Prerequisites:** `agents.react`
+- **Taught in:** `projects/04-ai-engineering/ai-automation/lectures/08-multi-agent-lecture.md`
+- **Sources:** `source-index#22`
+- **Exercises:** `projects/04-ai-engineering/ai-automation/quizzes/08-multi-agent-quiz.md`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** Two agents with distinct roles and a handoff whose failure mode is stated.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
+
 ### `prod.semantic-cache` - Semantic caching
 
 - **Level:** advanced
@@ -308,6 +321,19 @@
 - **Evidence required:** `test`, `eval_report`
 - **Verified:** 2026-10-10, review every 0 days
 
+### `prod.ai-safety` - AI safety and harm review
+
+- **Level:** advanced
+- **Prerequisites:** `prod.guardrails`
+- **Taught in:** `projects/04-ai-engineering/ai-automation/lectures/09-ai-safety-lecture.md`
+- **Sources:** `source-index#25`, `source-index#28`
+- **Exercises:** `projects/04-ai-engineering/ai-automation/quizzes/09-ai-safety-quiz.md`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A harm taxonomy for the product with one mitigation traced to a code change.
+- **Target:** 6/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-14, review every 0 days
+
 ## backend
 
 ### `backend.fastapi-service` - FastAPI service
@@ -329,7 +355,7 @@
 
 - **Level:** core
 - **Prerequisites:** `python.production`
-- **Taught in:** `projects/00-core-foundations/python/04-databases/sql-fundamentals`
+- **Taught in:** `projects/00-core-foundations/python/04-databases/sql-fundamentals`, `projects/03-databases/postgres-design`
 - **Sources:** `source-index#10`
 - **Exercises:** `projects/00-core-foundations/python/04-databases/sql-fundamentals`
 - **Used by:** `projects/04-ai-engineering/devmate`
@@ -342,7 +368,7 @@
 
 - **Level:** core
 - **Prerequisites:** `python.production`
-- **Taught in:** `projects/00-core-foundations/python/04-databases/redis`
+- **Taught in:** `projects/00-core-foundations/python/04-databases/redis`, `projects/03-databases/redis-cache`
 - **Sources:** `source-index#11`
 - **Exercises:** `projects/00-core-foundations/python/04-databases/redis`
 - **Used by:** `projects/04-ai-engineering/devmate`
@@ -431,20 +457,85 @@
 - **Evidence required:** `adr`, `benchmark`
 - **Verified:** 2026-10-14, review every 0 days
 
+### `data.lakehouse` - Lakehouse table layout
+
+- **Level:** advanced
+- **Prerequisites:** `data.streaming-storage`
+- **Taught in:** `projects/00-core-foundations/data-engineering/10-lakehouse`
+- **Sources:** `source-index#29`
+- **Exercises:** `projects/00-core-foundations/data-engineering`
+- **Used by:** `projects/00-core-foundations/data-engineering`
+- **Evidence:** A bronze, silver, gold layout defended by who reads each layer and how often.
+- **Target:** 5/10
+- **Evidence required:** `adr`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `data.feature-stores` - Feature stores and feature pipelines
+
+- **Level:** advanced
+- **Prerequisites:** `data.lakehouse`
+- **Taught in:** `projects/00-core-foundations/data-engineering/12-feature-stores`, `projects/00-core-foundations/data-engineering/13-feature-pipelines`
+- **Sources:** `source-index#29`
+- **Exercises:** `projects/00-core-foundations/data-engineering`
+- **Used by:** `projects/00-core-foundations/data-engineering`
+- **Evidence:** One feature computed both offline and online with the same definition and no drift.
+- **Target:** 5/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
+
 ## devops
 
-### `deploy.docker` - Docker and deployment
+### `deploy.docker` - Docker containerization for AI services
 
 - **Level:** core
 - **Prerequisites:** `backend.fastapi-service`
-- **Taught in:** `projects/00-core-foundations/python/08-mlops`
-- **Sources:** `source-index#8`
-- **Exercises:** `projects/06-devops`
+- **Taught in:** `projects/06-devops/docker/lectures/01-containerization-lecture.md`, `projects/00-core-foundations/python/08-mlops`
+- **Sources:** `source-index#8`, `source-index#9`
+- **Exercises:** `projects/06-devops/docker/exercises/01-containerization.py`
 - **Used by:** `projects/04-ai-engineering/devmate`
-- **Evidence:** A multi-stage image serving the API from a public URL.
+- **Evidence:** A multi-stage image that passes a Dockerfile analyzer with zero findings.
 - **Target:** 6/10
 - **Evidence required:** `deployment`
-- **Verified:** 2026-10-10, review every 90 days
+- **Verified:** 2026-10-14, review every 0 days
+
+### `deploy.ci-cd` - CI/CD pipelines and quality gates
+
+- **Level:** core
+- **Prerequisites:** `deploy.docker`
+- **Taught in:** `projects/06-devops/ci-cd/lectures/01-ci-cd-pipelines-lecture.md`
+- **Sources:** `source-index#8`
+- **Exercises:** `projects/06-devops/ci-cd/exercises/01-ci-cd-pipelines.py`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A workflow analyzer that flags unpinned actions and missing timeouts on the repo's own ci.yml.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `deploy.strategies` - Deployment strategies and Kubernetes fundamentals
+
+- **Level:** core
+- **Prerequisites:** `deploy.docker`
+- **Taught in:** `projects/06-devops/deployment/lectures/01-deployment-strategies-lecture.md`
+- **Sources:** `source-index#8`
+- **Exercises:** `projects/06-devops/deployment/exercises/01-deployment-strategies.py`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A manifest analyzer that rejects mutable tags, missing probes, and unset resource limits.
+- **Target:** 6/10
+- **Evidence required:** `deployment`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `deploy.llmops` - LLMOps lifecycle for production LLM systems
+
+- **Level:** advanced
+- **Prerequisites:** `deploy.docker`, `llm.fundamentals`
+- **Taught in:** `projects/06-devops/llmops/lectures/01-llmops-lifecycle-lecture.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `projects/06-devops/llmops/exercises/01-llmops-lifecycle.py`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A prompt-registry auditor plus per-query cost budget that gate a model change.
+- **Target:** 7/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-14, review every 0 days
 
 ## system-design
 
@@ -514,6 +605,45 @@
 - **Target:** 5/10
 - **Evidence required:** `eval_report`
 - **Verified:** 2026-10-10, review every 0 days
+
+### `ml.neural-net-foundations` - Neural network foundations
+
+- **Level:** core
+- **Prerequisites:** `ml.vectors-similarity`
+- **Taught in:** `projects/04-ai-engineering/fastai-deep-learning/lectures/03-neural-net-foundations-lecture.md`
+- **Sources:** `source-index#13`, `source-index#15`
+- **Exercises:** `projects/04-ai-engineering/fastai-deep-learning/quizzes/03-neural-net-foundations.md`
+- **Used by:** `projects/04-ai-engineering/fastai-deep-learning`
+- **Evidence:** A small network trained from scratch whose loss curve and failure modes you can explain.
+- **Target:** 5/10
+- **Evidence required:** `benchmark`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `ml.nlp-foundations` - NLP foundations
+
+- **Level:** core
+- **Prerequisites:** `ml.neural-net-foundations`
+- **Taught in:** `projects/04-ai-engineering/fastai-deep-learning/lectures/04-nlp-lecture.md`
+- **Sources:** `source-index#16`
+- **Exercises:** `projects/04-ai-engineering/fastai-deep-learning/quizzes/04-nlp.md`
+- **Used by:** `projects/04-ai-engineering/fastai-deep-learning`
+- **Evidence:** A classification baseline whose errors are grouped by cause, not by count.
+- **Target:** 5/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `ml.transformers` - Transformers and the attention mechanism
+
+- **Level:** core
+- **Prerequisites:** `ml.neural-net-foundations`
+- **Taught in:** `projects/00-core-foundations/python/07-machine-learning/deep-learning/40-transformers-from-scratch/40-transformers-from-scratch-lecture.md`
+- **Sources:** `source-index#13`, `source-index#17`
+- **Exercises:** `projects/00-core-foundations/python/07-machine-learning/deep-learning/40-transformers-from-scratch/40-transformers-from-scratch.py`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** Implement scaled dot-product attention and explain why the cost is quadratic in sequence length.
+- **Target:** 6/10
+- **Evidence required:** `benchmark`
+- **Verified:** 2026-10-14, review every 0 days
 
 ## fine-tuning
 
@@ -730,3 +860,191 @@
 - **Target:** 6/10
 - **Evidence required:** `test`, `eval_report`
 - **Verified:** 2026-10-10, review every 0 days
+
+### `security.data-privacy` - Data privacy and retention
+
+- **Level:** advanced
+- **Prerequisites:** `security.llm-security`
+- **Taught in:** `projects/04-ai-engineering/security/lectures/05-data-privacy-lecture.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `projects/04-ai-engineering/security/exercises`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A data-flow note naming what leaves the trust boundary and under what policy.
+- **Target:** 6/10
+- **Evidence required:** `adr`, `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `security.auth-authorization` - Authentication and authorization
+
+- **Level:** advanced
+- **Prerequisites:** `security.llm-security`
+- **Taught in:** `projects/04-ai-engineering/security/lectures/06-authentication-authorization-lecture.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `projects/04-ai-engineering/security/exercises`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** An RBAC matrix enforced in code, with a test proving a denied path stays denied.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `security.api-security` - API security and input validation
+
+- **Level:** advanced
+- **Prerequisites:** `security.auth-authorization`
+- **Taught in:** `projects/04-ai-engineering/security/lectures/07-api-security-lecture.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `projects/04-ai-engineering/security/exercises`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** Rate limit, size limit, and validation boundary each demonstrated by a rejected request.
+- **Target:** 6/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `security.content-safety` - Content safety for Islamic knowledge
+
+- **Level:** advanced
+- **Prerequisites:** `security.llm-security`
+- **Taught in:** `projects/04-ai-engineering/security/lectures/02-content-moderation-lecture.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `projects/04-ai-engineering/security/exercises`
+- **Used by:** `projects/04-ai-engineering/athar-lab`
+- **Evidence:** A policy that refuses a fatwa-style answer while still serving the cited source.
+- **Target:** 6/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `security.monitoring-audit` - Security monitoring and audit logging
+
+- **Level:** advanced
+- **Prerequisites:** `security.api-security`
+- **Taught in:** `projects/04-ai-engineering/security/lectures/10-security-monitoring-lecture.md`
+- **Sources:** `source-index#25`, `source-index#28`
+- **Exercises:** `projects/04-ai-engineering/security/exercises`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** One request reconstructable end to end from its audit record alone.
+- **Target:** 6/10
+- **Evidence required:** `test`, `deployment`
+- **Verified:** 2026-10-14, review every 0 days
+
+## architecture
+
+### `arch.solid-clean-code` - Clean code and SOLID
+
+- **Level:** core
+- **Prerequisites:** none
+- **Taught in:** `docs/learning/paths/adr-driven-ai-systems.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `docs/learning/paths/adr-driven-ai-systems.md`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A module refactored so its business logic tests with the I/O faked, plus an ADR naming the rejected option.
+- **Target:** 6/10
+- **Evidence required:** `adr`, `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `arch.hexagonal` - Hexagonal architecture, ports and adapters
+
+- **Level:** advanced
+- **Prerequisites:** `arch.solid-clean-code`
+- **Taught in:** `docs/learning/paths/adr-driven-ai-systems.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `docs/learning/paths/adr-driven-ai-systems.md`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** One use case behind a port, satisfied by both a real and a fake adapter under the same contract test.
+- **Target:** 6/10
+- **Evidence required:** `adr`, `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `arch.patterns-as-decisions` - Design patterns as recorded decisions
+
+- **Level:** advanced
+- **Prerequisites:** `arch.hexagonal`
+- **Taught in:** `docs/learning/paths/adr-driven-ai-systems.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `docs/learning/paths/adr-driven-ai-systems.md`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** One pattern applied, with an ADR that names the alternative rejected and the cost accepted.
+- **Target:** 6/10
+- **Evidence required:** `adr`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `arch.adr-discipline` - ADR discipline
+
+- **Level:** core
+- **Prerequisites:** `system-design.contracts`
+- **Taught in:** `projects/00-core-foundations/python/10-system-design/05-architecture-decision-records`
+- **Sources:** `source-index#26`
+- **Exercises:** `projects/00-core-foundations/python/10-system-design/challenges/05-architecture-decision-records`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** An ADR that states context, decision, rejected alternatives, and consequences a reviewer can act on.
+- **Target:** 6/10
+- **Evidence required:** `adr`
+- **Verified:** 2026-10-14, review every 0 days
+
+## product
+
+### `product.personas-jtbd` - Personas and jobs to be done
+
+- **Level:** core
+- **Prerequisites:** none
+- **Taught in:** `docs/learning/paths/production-ai-systems-engineering.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `docs/learning/paths/production-ai-systems-engineering.md`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** One persona with a stated job, and a feature list cut to the minimum that completes it.
+- **Target:** 5/10
+- **Evidence required:** `adr`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `product.north-star-metrics` - North-star metric and anti-metrics
+
+- **Level:** core
+- **Prerequisites:** `product.personas-jtbd`
+- **Taught in:** `docs/learning/paths/production-ai-systems-engineering.md`
+- **Sources:** `source-index#28`
+- **Exercises:** `docs/learning/paths/production-ai-systems-engineering.md`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** One north-star metric with three anti-metrics, each with a stated way to measure it.
+- **Target:** 5/10
+- **Evidence required:** `eval_report`
+- **Verified:** 2026-10-14, review every 0 days
+
+## tooling
+
+### `tooling.git-workflow` - Git workflow and branching
+
+- **Level:** core
+- **Prerequisites:** none
+- **Taught in:** `projects/00-core-foundations/git-linux/01-git-basics`, `projects/00-core-foundations/git-linux/02-branching-merging`, `projects/00-core-foundations/git-linux/03-remote-workflows`
+- **Sources:** `source-index#6`, `source-index#7`
+- **Exercises:** `projects/00-core-foundations/git-linux`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A feature branch merged through a review, with the history explaining why each commit exists.
+- **Target:** 5/10
+- **Evidence required:** `pr`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `tooling.linux-cli` - Linux command line
+
+- **Level:** core
+- **Prerequisites:** `tooling.git-workflow`
+- **Taught in:** `projects/00-core-foundations/git-linux/04-linux-command-line`
+- **Sources:** `source-index#6`
+- **Exercises:** `projects/00-core-foundations/git-linux`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A diagnostic performed from the shell alone, without an IDE or a GUI tool.
+- **Target:** 5/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
+
+### `tooling.ds-algorithms` - Data structures and algorithms
+
+- **Level:** core
+- **Prerequisites:** none
+- **Taught in:** `projects/00-core-foundations/ds-algo/01-arrays-strings`, `projects/00-core-foundations/ds-algo/02-hash-maps`, `projects/00-core-foundations/ds-algo/03-recursion`, `projects/00-core-foundations/ds-algo/04-sorting-searching`
+- **Sources:** `source-index#1`
+- **Exercises:** `projects/00-core-foundations/ds-algo`
+- **Used by:** `projects/04-ai-engineering/devmate`
+- **Evidence:** A solution whose complexity is stated and justified against the input bound.
+- **Target:** 5/10
+- **Evidence required:** `test`
+- **Verified:** 2026-10-14, review every 0 days
