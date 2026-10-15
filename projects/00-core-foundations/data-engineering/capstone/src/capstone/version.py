@@ -1,17 +1,19 @@
-"""Reproducibility record: checksums + manifest writer. YOUR TURN: implement both."""
+"""Reproducibility record: checksums + manifest writer (reference implementation)."""
 
 from __future__ import annotations
 
-import hashlib  # noqa: F401  (scaffold seam: used once file_checksum is implemented)
-import json  # noqa: F401  (scaffold seam: used once write_manifest is implemented)
-from pathlib import (
-    Path,  # noqa: F401  (scaffold seam: used once write_manifest is implemented)
-)
+import hashlib
+import json
+from pathlib import Path
 
 
 def file_checksum(path: str) -> str:
     """SHA-256 hex digest of a file's bytes (streamed, works at any size)."""
-    raise NotImplementedError("YOUR TURN: implement file_checksum (streamed sha256)")
+    digest = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(65536), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def write_manifest(
@@ -38,6 +40,23 @@ def write_manifest(
     ``manifest_path`` are created as needed. Values echo the arguments
     (no recomputation surprises).
     """
-    raise NotImplementedError(
-        "YOUR TURN: implement write_manifest (keys + file + echo)"
+    manifest: dict[str, object] = {
+        "dataset": dataset,
+        "git_sha": git_sha,
+        "inputs": inputs,
+        "params": params,
+        "params_hash": hashlib.sha256(
+            json.dumps(params, sort_keys=True).encode("utf-8")
+        ).hexdigest(),
+        "rows_before": rows_before,
+        "rows_after": rows_after,
+        "dedup_ratio": dedup_ratio,
+        "output_bytes": output_bytes,
+        "output_path": output_path,
+    }
+    target = Path(manifest_path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
+    return manifest

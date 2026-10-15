@@ -1,4 +1,4 @@
-"""Clean raw records into a typed Polars frame. YOUR TURN: implement both functions."""
+"""Clean raw records into a typed Polars frame (reference implementation)."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ def clean_text(raw: str) -> str:
     preserved at this stage (paragraph-aware cleaning is a documented follow-up
     in the lecture for topic 16's companion practice).
     """
-    raise NotImplementedError("YOUR TURN: implement clean_text (collapse + strip)")
+    return _WS_RUN.sub(" ", raw).strip()
 
 
 def frame_from_records(records: list[dict[str, str]]) -> pl.DataFrame:
@@ -27,6 +27,22 @@ def frame_from_records(records: list[dict[str, str]]) -> pl.DataFrame:
     char_count: UInt32`` where ``char_count`` is the cleaned text length in
     characters (``str.len_chars()``), computed with expressions, not loops.
     """
-    raise NotImplementedError(
-        "YOUR TURN: implement frame_from_records (typed + char_count)"
+    cleaned = [
+        {
+            "passage_id": r["passage_id"],
+            "text": clean_text(r["text"]),
+            "source": r["source"],
+        }
+        for r in records
+    ]
+    frame = pl.DataFrame(
+        cleaned,
+        schema={
+            "passage_id": pl.String,
+            "text": pl.String,
+            "source": pl.String,
+        },
+    )
+    return frame.with_columns(
+        pl.col("text").str.len_chars().cast(pl.UInt32).alias("char_count")
     )

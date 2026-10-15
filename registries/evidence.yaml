@@ -120,3 +120,38 @@ evidence:
     path: docs/decisions/0001-repo-centric-workspace.md
     date: 2026-06-26
     checked_by: self
+  - id: ev-data-quality-duckdb
+    skill: data.quality
+    level: 2
+    type: test
+    path: projects/00-core-foundations/data-engineering/16-duckdb/16-duckdb.py
+    date: 2026-10-15
+    checked_by: script
+  - id: ev-data-quality-minhash
+    skill: data.quality
+    level: 2
+    type: test
+    path: projects/00-core-foundations/data-engineering/17-minhash-lsh/17-minhash-lsh.py
+    date: 2026-10-15
+    checked_by: script
+  - id: ev-data-lineage-dvc
+    skill: data.lineage
+    level: 2
+    type: test
+    path: projects/00-core-foundations/data-engineering/18-dvc/18-dvc.py
+    date: 2026-10-15
+    checked_by: script
+  - id: ev-data-etl-capstone
+    skill: data.etl-pipelines
+    level: 2
+    type: test
+    path: projects/00-core-foundations/data-engineering/capstone/tests/test_acceptance.py
+    date: 2026-10-15
+    checked_by: script
+  - id: ev-data-deps-adr
+    skill: data.etl-pipelines
+    level: 2
+    type: adr
+    path: docs/decisions/0010-adopt-duckdb-stdlib-minhash-and-dvc-for-data-engineering.md
+    date: 2026-10-15
+    checked_by: self
