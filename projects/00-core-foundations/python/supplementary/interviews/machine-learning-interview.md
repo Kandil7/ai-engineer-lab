@@ -347,6 +347,7 @@ auc_score = roc_auc_score(y_test, probabilities)
 ```
 
 **Key differences from linear regression:**
+
 | Aspect | Linear Regression | Logistic Regression |
 |--------|------------------|---------------------|
 | Output | Continuous (-∞, +∞) | Probability (0, 1) |
@@ -426,6 +427,7 @@ for name, imp in sorted(zip(feature_names, importance), key=lambda x: -x[1]):
 ```
 
 **Splitting criteria:**
+
 | Criterion | Formula | Use Case |
 |-----------|---------|----------|
 | Gini Impurity | 1 - Σpᵢ² | Default, faster |
@@ -478,6 +480,7 @@ importance = rf.feature_importances_
 ```
 
 **Key differences:**
+
 | Aspect | Decision Tree | Random Forest |
 |--------|--------------|---------------|
 | Overfitting | High | Low |
@@ -634,6 +637,7 @@ print(classification_report(y_test, y_pred))
 ```
 
 **When to prioritize:**
+
 | Metric | Priority | Example |
 |--------|----------|---------|
 | **Precision** | When FP is costly | Email spam (don't mark important emails as spam) |
@@ -869,6 +873,7 @@ df["is_weekend"] = df["day_of_week"].isin([5, 6]).astype(int)
 ```
 
 **Techniques by data type:**
+
 | Data Type | Techniques |
 |-----------|-----------|
 | Numerical | Scaling, log transform, binning, polynomial |

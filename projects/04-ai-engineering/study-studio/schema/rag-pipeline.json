@@ -1,0 +1,340 @@
+{
+  "meta": {
+    "chapterId": "rag-pipeline",
+    "title": "Retrieval-Augmented Generation",
+    "subtitle": "Building RAG systems for knowledge-intensive tasks",
+    "sourceTitle": "Original content for AI Engineer Lab",
+    "sourceType": "original",
+    "sourceLocator": "projects/04-ai-engineering/study-studio/schema/rag-pipeline.json",
+    "license": "CC-BY-4.0",
+    "attribution": "Created for the AI Engineer Lab. Free to adapt and reuse.",
+    "language": "en-ar",
+    "estMinutes": 25,
+    "conceptCount": 5
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "title": "What RAG does for models",
+      "order": 1,
+      "level": 1,
+      "paragraphs": [
+        {
+          "kind": "text",
+          "text": "Retrieval-Augmented Generation combines a retriever that finds relevant documents with a generator that answers using that context. This architecture addresses two fundamental limits: knowledge cutoff and hallucination.",
+          "explainArabic": "RAG يجمع بين مسترجع يجد المستندات ذات الصلة ومشفر يجيب باستخدام هذا السياق. هذا يتجاوز قصور المعرفة والتوهم."
+        },
+        {
+          "kind": "text",
+          "text": "The retriever encodes queries and documents into a shared vector space, retrieves the most similar chunks, and feeds them to a language model that generates answers grounded in retrieved evidence.",
+          "explainArabic": "المسترجع يرمز الأسئلة والمستندات في فضاء متجه مشترك، يسترجع القطع الأكثر تشابهًا ويغذيها لنموذج يجيب بناءً على الأدلة المسترجعة."
+        },
+        {
+          "kind": "list",
+          "text": "Three components form the pipeline:",
+          "items": [
+            "Document storage: Knowledge is chunked and embedded into a vector database.",
+            "Retrieval: Encode queries, find similar chunks, return top-K results.",
+            "Generation: Combine query plus retrieved context, let the model generate."
+          ]
+        }
+      ],
+      "keySentences": [
+        "RAG combines retrieval with generation for grounded answers.",
+        "The retriever and generator work together to answer questions."
+      ],
+      "takeaways": [
+        "Retrieval finds relevant context from a knowledge base.",
+        "Generation uses that context to produce answers.",
+        "This architecture limits hallucinations by grounding responses."
+      ],
+      "studyAid": {
+        "whyItMatters": "RAG enables LLMs to answer questions about private data without retraining.",
+        "badge": "AI"
+      },
+      "confusion": {
+        "simpleEnglish": "The model knows what it retrieved, not what's in training.",
+        "simpleArabic": "الموديل يعرف ما استرجعه، ليس ما في التدريب.",
+        "analogy": "A librarian who answers from retrieved books, not memory."
+      },
+      "prediction": {
+        "question": "Why not just fine-tune on your data?",
+        "answer": "Fine-tuning changes the model itself. RAG updates the knowledge base, which is easier and cheaper to maintain."
+      },
+      "wordIds": ["w01", "w02"]
+    },
+    {
+      "id": "s2",
+      "title": "Chunking affects retrieval quality",
+      "order": 2,
+      "level": 2,
+      "paragraphs": [
+        {
+          "kind": "text",
+          "text": "Documents must be chunked before embedding. Too large and chunks are too noisy; too small and concepts split across pieces.",
+          "explainArabic": "المستندات يجب تقسيمها قبل التضمين. كبيرة جدًا تصبح ضوضاء، صغيرة جدًا تنقسم المفاهيم."
+        },
+        {
+          "kind": "code",
+          "text": "Compare retrieval with different chunk sizes:",
+          "code": "# Small chunks fit budget but may split concepts\nsmall_chunks = document.split(\"\\n\\n\", 10)  # by paragraphs\n# Large chunks capture context but exceed token limits\nlarge_chunks = create_sliding_windows(document, size=2048)"
+        },
+        {
+          "kind": "formula",
+          "text": "Token budget for retrieval.",
+          "formula": "budget = max_tokens_per_query  # e.g., 4096 or 8192",
+          "symbols": [
+            { "symbol": "max_tokens_per_query", "meaning": "Context window available for the generator" }
+          ]
+        }
+      ],
+      "keySentences": [
+        "Chunk size balances precision with budget.",
+        "Concepts must stay within a single chunk."
+      ],
+      "takeaways": [
+        "Larger chunks capture more context but cost more.",
+        "Smaller chunks fit budgets but may miss relationships.",
+        "Hierarchical chunking retrieves coarse, then refines."
+      ],
+      "studyAid": {
+        "whyItMatters": "Chunking strategy determines whether retrieval finds the right pieces of information.",
+        "badge": "AI"
+      },
+      "confusion": {
+        "simpleEnglish": "Split a paragraph in half? The model loses both parts.",
+        "simpleArabic": "قسم فقرة نصفين؟ الموديل يخسر كلا الجزأين.",
+        "analogy": "Reading only one half of a sentence confuses the meaning."
+      },
+      "prediction": {
+        "question": "Your retrieval returns 4 chunks but none mention 'price'. What's wrong?",
+        "answer": "The query and chunks are too distant in vector space, or chunking broke up related content."
+      },
+      "wordIds": ["w03", "w04"]
+    }
+  ],
+  "glossary": [
+    {
+      "id": "w01",
+      "term": "retriever",
+      "ipa": "rɪˈtriːvər",
+      "meaningEn": "Finds relevant documents given a query.",
+      "meaningAr": "يجد المستندات ذات الصلة مع سؤال.",
+      "wordType": "noun",
+      "example": "The retriever returns the top-K most similar chunks.",
+      "technical": true,
+      "conceptId": "c01"
+    },
+    {
+      "id": "w02",
+      "term": "context window",
+      "ipa": "kənˈtɛkst wɪndoʊ",
+      "meaningEn": "Tokens available to the language model for generation.",
+      "meaningAr": "الرموز المتاحة لنموذج اللغات للإصدار.",
+      "wordType": "noun",
+      "example": "A 4096-token context window fits about one article.",
+      "technical": true,
+      "conceptId": "c02"
+    },
+    {
+      "id": "w03",
+      "term": "chunk size",
+      "ipa": "tʃʌŋk saɪz",
+      "meaningEn": "Number of tokens per retrieved piece.",
+      "meaningAr": "عدد الرموز لكل قطعة مسترجعة.",
+      "wordType": "noun",
+      "example": "A 512-token chunk is about half a page.",
+      "technical": true,
+      "conceptId": "c03"
+    },
+    {
+      "id": "w04",
+      "term": "reranker",
+      "ipa": "ˈriːræŋkər",
+      "meaningEn": "Reorders retrieved chunks for quality.",
+      "meaningAr": "يعيد ترتيب القطع المسترجعة للجودة.",
+      "wordType": "noun",
+      "example": "Cross-encoders rerank coarse retriever results.",
+      "technical": true,
+      "conceptId": "c04"
+    }
+  ],
+  "conceptMap": {
+    "nodes": [
+      {
+        "id": "c01",
+        "label": "Retriever-Generator Pipeline",
+        "kind": "core",
+        "definition": "Combines retrieval with generation for grounded answers.",
+        "sectionId": "s1",
+        "wordIds": ["w01"],
+        "labId": "l01"
+      },
+      {
+        "id": "c02",
+        "label": "Context Window Budget",
+        "kind": "core",
+        "definition": "Limits how much context the generator can use.",
+        "sectionId": "s1",
+        "wordIds": ["w02"]
+      },
+      {
+        "id": "c03",
+        "label": "Chunk Size Strategy",
+        "kind": "core",
+        "definition": "Balances information density with token budget.",
+        "sectionId": "s2",
+        "wordIds": ["w03"]
+      },
+      {
+        "id": "c04",
+        "label": "Reranking",
+        "kind": "advanced",
+        "definition": "Improves retrieval quality with cross-encoder scoring.",
+        "sectionId": "s2"
+      }
+    ],
+    "edges": [
+      { "from": "c01", "to": "c02", "relation": "subject to" },
+      { "from": "c01", "to": "c03", "relation": "depends on" },
+      { "from": "c04", "to": "c01", "relation": "improves" }
+    ],
+    "learningPath": ["c01", "c02", "c03", "c04"]
+  },
+  "labs": [
+    {
+      "id": "l01",
+      "title": "RAG budget planner",
+      "goal": "Watch how chunk size and top-K affect the retrieved token total.",
+      "kind": "cost-latency",
+      "controls": [
+        {
+          "id": "chunkSize",
+          "label": "Chunk Size",
+          "kind": "slider",
+          "min": 100,
+          "max": 1000,
+          "step": 50,
+          "default": 400,
+          "unit": "tokens"
+        },
+        {
+          "id": "topK",
+          "label": "Chunks Retrieved",
+          "kind": "slider",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 4,
+          "unit": "chunks"
+        }
+      ],
+      "tasks": [
+        {
+          "prompt": "Set chunk size to 400 and top-K to 4. Read the retrieved token total.",
+          "check": "Retrieved tokens equal chunk size times top-K (1600)."
+        },
+        {
+          "prompt": "Raise chunk size to 800 and keep top-K at 4.",
+          "check": "Retrieved tokens double (3200) and may exceed a 4096 token budget."
+        },
+        {
+          "prompt": "Lower chunk size to 200 and raise top-K to 8.",
+          "check": "Retrieved tokens stay inside the budget while coverage grows."
+        }
+      ],
+      "takeawayEn": "Chunk size and retrieval count jointly determine the context bill.",
+      "takeawayAr": "حجم القطع وعدد المسترجعة يحددان معًا فاتورة السياق.",
+      "simulationNote": "Illustrative simulation, not real model output."
+    }
+  ],
+  "figures": [],
+  "flashcards": [
+    {
+      "id": "k01",
+      "front": "What is a retriever?",
+      "back": "A model that encodes queries and documents into a shared space, then retrieves similar chunks.",
+      "backAr": "نموذج يرمز الأسئلة والمستندات في فضاء مشترك، يسترجع قطعًا مشابهة.",
+      "kind": "term",
+      "conceptId": "c01"
+    },
+    {
+      "id": "k02",
+      "front": "context window",
+      "back": "The maximum tokens the generator can attend to for answering a query.",
+      "backAr": "أقصى الرموز التي يمكن للمشفر الانتباه إليها للإجابة على سؤال.",
+      "kind": "en-ar",
+      "conceptId": "c02"
+    }
+  ],
+  "quiz": [
+    {
+      "id": "q01",
+      "type": "mcq",
+      "prompt": "Why use RAG instead of fine-tuning?",
+      "options": [
+        "RAG updates knowledge without changing the model weights.",
+        "Fine-tuning is cheaper than embedding a vector database.",
+        "The retriever generates answers directly, no model needed."
+      ],
+      "answer": ["RAG updates knowledge without changing the model weights."],
+      "explanationEn": "RAG adds new knowledge to the knowledge base; fine-tuning changes model parameters.",
+      "explanationAr": "RAG يضيف معرفة جديدة للأساس؛ التدريب يغير المعاملات.",
+      "conceptId": "c01"
+    },
+    {
+      "id": "q02",
+      "type": "true-false",
+      "prompt": "Larger chunks always improve retrieval.",
+      "options": ["True", "False"],
+      "answer": ["False"],
+      "explanationEn": "Too large and chunks contain irrelevant information; too small and concepts split.",
+      "explanationAr": "كبيرة جدًا تتخلل معلومات غير ذات صلة؛ صغيرة جدًا تنقسم المفاهيم.",
+      "conceptId": "c03"
+    },
+    {
+      "id": "q03",
+      "type": "match",
+      "prompt": "Match component to function.",
+      "options": [
+        "retriever | finds similar chunks given a query",
+        "context window | limits tokens for generation",
+        "chunk size | determines information density per piece"
+      ],
+      "answer": [
+        "retriever | finds similar chunks given a query",
+        "context window | limits tokens for generation",
+        "chunk size | determines information density per piece"
+      ],
+      "explanationEn": "Each component plays a distinct role in the RAG pipeline.",
+      "explanationAr": "كل مكون يلعب دورًا مختلفًا في خط أنابيب RAG.",
+      "conceptId": "c01"
+    }
+  ],
+  "collocations": [
+    {
+      "phrase": "vector database",
+      "meaningAr": "قاعدة بيانات متجهة، تخزن المتجهات للأبحث السريع.",
+      "example": "Embeddings are stored in a vector database for fast retrieval."
+    },
+    {
+      "phrase": "semantic similarity",
+      "meaningAr": "تشابه دلالي، تقارب في المعنى وليس النص الحرفي.",
+      "example": "Queries with similar meaning retrieve the same chunks."
+    }
+  ],
+  "connections": [
+    {
+      "chapterId": "transformers",
+      "title": "Transformer basics",
+      "conceptIds": ["c02"],
+      "note": "Transformers are commonly used as encoders in RAG systems."
+    },
+    {
+      "chapterId": "llm-evaluation",
+      "title": "Evaluating RAG quality",
+      "conceptIds": ["c01", "c04"],
+      "note": "Next chapter covers metrics like RAGAS and TruLens for evaluating retrieval."
+    }
+  ]
+}

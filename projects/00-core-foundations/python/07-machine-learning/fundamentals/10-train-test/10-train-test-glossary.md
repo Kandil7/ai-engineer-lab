@@ -328,6 +328,7 @@ print(f"Test R²: {test_r2:.4f}")  # Also low
 
 ## Key Parameters
 
+
 | Parameter | Description | Default | Recommended |
 |-----------|-------------|---------|-------------|
 | `test_size` | Proportion for test set | 0.25 | 0.2-0.3 |

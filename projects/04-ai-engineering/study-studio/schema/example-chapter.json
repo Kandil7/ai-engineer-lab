@@ -1,0 +1,580 @@
+{
+  "meta": {
+    "chapterId": "example-attention",
+    "title": "Attention, in plain English",
+    "subtitle": "A synthetic sample chapter that exercises the whole CHAPTER_DATA contract",
+    "sourceTitle": "Original sample written for the Study Studio contract test",
+    "sourceType": "original",
+    "sourceLocator": "projects/04-ai-engineering/study-studio/schema/example-chapter.json",
+    "license": "CC-BY-4.0",
+    "attribution": "Sample content authored for the AI Engineer Lab. Free to adapt and reuse.",
+    "language": "en-ar",
+    "estMinutes": 18,
+    "conceptCount": 5
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "title": "The problem attention solves",
+      "order": 1,
+      "level": 1,
+      "paragraphs": [
+        {
+          "kind": "text",
+          "text": "A language model reads one token at a time. When it sees the word bank, it cannot know yet whether the next word will be river or account, and it cannot know whether bank was meant as money at all. Every earlier token stays available to the model, but the model has to decide which of them matter for the token it is about to write.",
+          "explainArabic": "الموديل يقرأ رمزًا واحدًا في كل مرة. عند رؤية كلمة bank لا يعرف بعد إن كان 다음ها river أم account.attention هي آلية اختيار أي الكلمات السابقة تهم للرمز الحالي."
+        },
+        {
+          "kind": "text",
+          "text": "Attention is the mechanism that decides. For every token, the model computes a score against every earlier token, turns those scores into weights, and uses the weights to build a richer representation of the current token before predicting the next one.",
+          "explainArabic": "attention تحسب درجة لكل كلمة سابقة، تحوّل الدرجات إلى أوزان، ثم تبني تمثيلًا أغنى للرمز الحالي قبل التنبؤ بالكلمة التالية."
+        },
+        {
+          "kind": "list",
+          "text": "Three things happen inside one attention step:",
+          "items": [
+            "Score: compare the current token against every earlier token.",
+            "Weight: turn those scores into numbers that sum to one.",
+            "Mix: blend the earlier tokens into the current representation by those weights."
+          ]
+        },
+        {
+          "kind": "text",
+          "text": "A weight of 0.4 does not mean 40 percent of the answer. It means the current token borrows 40 percent of that earlier token's contribution when it forms its own representation. The same weights are then reused by every later mechanism that needs to know what mattered.",
+          "explainArabic": "الوزن 0.4 لا يعني 40% من الإجابة، بل أن الرمز الحالي يستعير 40% من مساهمة تلك الكلمة السابقة عند بناء تمثيله."
+        }
+      ],
+      "keySentences": [
+        "Attention is the mechanism that decides.",
+        "A weight of 0.4 does not mean 40 percent of the answer."
+      ],
+      "takeaways": [
+        "Attention scores, weights, then mixes.",
+        "Weights are borrow shares, not answer shares.",
+        "Every token does this against every earlier token."
+      ],
+      "studyAid": {
+        "whyItMatters": "Retrieval quality in a RAG system is the same question asked of a model: which earlier parts of the input deserve weight.",
+        "badge": "AI"
+      },
+      "confusion": {
+        "simpleEnglish": "The model looks at everything it has read and gives the important words a bigger vote.",
+        "simpleArabic": "الموديل يقرأ كل ما سبق، ويعطي الكلمات المهمة صوتًا أكبر.",
+        "analogy": "A meeting where each participant speaks, but the chair only listens closely to the two people whose answer matters."
+      },
+      "prediction": {
+        "question": "If every token attends to every earlier token, what grows fastest as the input gets longer?",
+        "answer": "The number of score computations, which grows quadratically. A context of length n needs about n squared comparisons."
+      },
+      "wordIds": ["w1", "w2", "w3"]
+    },
+    {
+      "id": "s2",
+      "title": "Why the cost matters",
+      "order": 2,
+      "level": 2,
+      "paragraphs": [
+        {
+          "kind": "text",
+          "text": "Quadratic attention is the reason long-context work is expensive. Doubling the input does not double the bill, it quadruples the attention part of it. This is why chunking, retrieval, and caching exist as separate disciplines instead of being solved by making the window bigger.",
+          "explainArabic": "الانتباه الرباعي هو سبب كلفة السياقات الطويلة: مضاعفة الإدخال تربّع الكلفة. لهذا يوجد chunking و retrieval و caching كحقول منفصلة."
+        },
+        {
+          "kind": "code",
+          "text": "Compare the attention work for two context lengths.",
+          "code": "def attention_pairs(n: int) -> int:\n    \"\"\"Number of token-to-token comparisons in one attention layer.\"\"\"\n    return n * (n - 1) // 2\n\n\nfor length in (2_000, 4_000, 8_000):\n    print(length, attention_pairs(length))"
+        },
+        {
+          "kind": "text",
+          "text": "That function is arithmetic, not a benchmark. It tells you the shape of the curve and nothing about how fast your hardware runs it. Real numbers come from measuring your own stack.",
+          "explainArabic": "هذه دالة حسابية لا قياس أداء. تُظهر شكل المنحنى فقط. الأرقام الحقيقية تأتي من قياس نظامك."
+        },
+        {
+          "kind": "formula",
+          "text": "Attention cost for one layer over n tokens.",
+          "formula": "pairs(n) = n * (n - 1) / 2",
+          "symbols": [
+            { "symbol": "n", "meaning": "number of tokens in the input" },
+            { "symbol": "pairs(n)", "meaning": "number of token-to-token comparisons" }
+          ]
+        }
+      ],
+      "keySentences": [
+        "Doubling the input does not double the bill, it quadruples the attention part of it.",
+        "That function is arithmetic, not a benchmark."
+      ],
+      "takeaways": [
+        "Attention cost grows quadratically with context.",
+        "Arithmetic shows the shape, measurement shows the speed.",
+        "Chunking, retrieval, and caching exist because of this curve."
+      ],
+      "studyAid": {
+        "whyItMatters": "Your inference bill is decided by this curve, which is why the rag-system track starts with chunking.",
+        "badge": "AI"
+      },
+      "confusion": {
+        "simpleEnglish": "Longer input does not cost twice as much. It costs about four times as much in the attention part.",
+        "simpleArabic": "الإدخال الأطول لا يكلّف الضعف، بل نحو أربعة أضعاف في جزء الانتباه.",
+        "analogy": "One person checking every item on a list of 100 items does 5,000 checks, not 100."
+      },
+      "prediction": {
+        "question": "Your retrieval budget is 4,000 tokens and a query needs 6,000. Which fix is cheapest to try first?",
+        "answer": "Chunk smaller, so the retrieved set fits the budget. Changing the window size does not reduce what retrieval returned."
+      },
+      "wordIds": ["w4", "w5"]
+    }
+  ],
+  "glossary": [
+    {
+      "id": "w1",
+      "term": "attention",
+      "ipa": "əˈtɛnʃən",
+      "meaningEn": "The mechanism that lets a model weigh earlier tokens when forming the current one.",
+      "meaningAr": "آلية تسمح للنموذج بالترجيح بين الرموز السابقة عند تمثيل الرمز الحالي.",
+      "wordType": "noun",
+      "example": "Attention is what lets a model connect bank to river.",
+      "technical": true,
+      "conceptId": "c1",
+      "labId": "l1"
+    },
+    {
+      "id": "w2",
+      "term": "token",
+      "ipa": "ˈtoʊkən",
+      "meaningEn": "A unit of text the model reads, usually a word or a word fragment.",
+      "meaningAr": "وحدة نص يقرأها النموذج، غالبًا كلمة أو جزء كلمة.",
+      "wordType": "noun",
+      "example": "Token counts drive cost and context limits.",
+      "technical": true,
+      "conceptId": "c2",
+      "labId": "l1"
+    },
+    {
+      "id": "w3",
+      "term": "weight",
+      "ipa": "weɪt",
+      "meaningEn": "A number that scales how much a token contributes to another.",
+      "meaningAr": "عدد يحدد مدى مساهمة رمز في رمز آخر.",
+      "wordType": "noun",
+      "example": "A weight of 0.4 borrows 40 percent of that token's contribution.",
+      "technical": true,
+      "conceptId": "c3"
+    },
+    {
+      "id": "w4",
+      "term": "quadratic",
+      "ipa": "kwɒˈdrætɪk",
+      "meaningEn": "Growing with the square of the input size, so doubling the input multiplies the work by four.",
+      "meaningAr": "ينمو مع مربع حجم الإدخال، فتضاعف الإدخال يربّع العمل.",
+      "wordType": "adjective",
+      "example": "Quadratic attention is why long contexts are expensive.",
+      "technical": true,
+      "conceptId": "c4",
+      "labId": "l2"
+    },
+    {
+      "id": "w5",
+      "term": "chunk",
+      "ipa": "tʃʌŋk",
+      "meaningEn": "A slice of a document that is embedded and retrieved on its own.",
+      "meaningAr": "شريحة من مستند تُضمَّن وتُسترجع بشكل مستقل.",
+      "wordType": "noun",
+      "example": "Smaller chunks fit inside a smaller retrieval budget.",
+      "technical": true,
+      "conceptId": "c5",
+      "labId": "l2"
+    },
+    {
+      "id": "w6",
+      "term": "benchmark",
+      "ipa": "ˈbɛntʃmɑːk",
+      "meaningEn": "A measurement taken on real hardware, as opposed to a calculation.",
+      "meaningAr": "قياس مأخوذ على عتاد حقيقي، بخلاف الحساب النظري.",
+      "wordType": "noun",
+      "example": "Arithmetic shows the shape, a benchmark shows the speed."
+    }
+  ],
+  "conceptMap": {
+    "nodes": [
+      {
+        "id": "c1",
+        "label": "Attention",
+        "kind": "core",
+        "definition": "The score, weight, mix cycle that links earlier tokens to the current one.",
+        "sectionId": "s1",
+        "labId": "l1",
+        "wordIds": ["w1"]
+      },
+      {
+        "id": "c2",
+        "label": "Token",
+        "kind": "core",
+        "definition": "The unit of text the model reads.",
+        "sectionId": "s1",
+        "labId": "l1",
+        "wordIds": ["w2"]
+      },
+      {
+        "id": "c3",
+        "label": "Weight",
+        "kind": "core",
+        "definition": "The scaled contribution one token lends to another.",
+        "sectionId": "s1",
+        "wordIds": ["w3"]
+      },
+      {
+        "id": "c4",
+        "label": "Quadratic cost",
+        "kind": "supporting",
+        "definition": "The n squared growth of attention work with context length.",
+        "sectionId": "s2",
+        "labId": "l2",
+        "wordIds": ["w4"]
+      },
+      {
+        "id": "c5",
+        "label": "Chunking",
+        "kind": "advanced",
+        "definition": "Splitting documents so retrieval stays inside a budget.",
+        "sectionId": "s2",
+        "labId": "l2",
+        "wordIds": ["w5"]
+      }
+    ],
+    "edges": [
+      { "from": "c1", "to": "c2", "relation": "operates over" },
+      { "from": "c1", "to": "c3", "relation": "produces" },
+      { "from": "c1", "to": "c4", "relation": "scales as" },
+      { "from": "c4", "to": "c5", "relation": "motivates" }
+    ],
+    "learningPath": ["c2", "c1", "c3", "c4", "c5"]
+  },
+  "labs": [
+    {
+      "id": "l1",
+      "title": "Attention heatmap",
+      "goal": "See which tokens a query attends to, and how the weights move as the sentence changes.",
+      "kind": "attention",
+      "controls": [
+        {
+          "id": "sentence",
+          "label": "Sentence",
+          "kind": "text",
+          "default": "the bank approved the river loan"
+        },
+        {
+          "id": "query",
+          "label": "Query token",
+          "kind": "select",
+          "options": ["bank", "approved", "river", "loan"],
+          "default": "bank"
+        },
+        {
+          "id": "sharpness",
+          "label": "Sharpness",
+          "kind": "slider",
+          "min": 0.5,
+          "max": 4,
+          "step": 0.1,
+          "default": 1.5,
+          "unit": "x"
+        }
+      ],
+      "tasks": [
+        {
+          "prompt": "Hover the query token 'bank' and read the weight on 'river'.",
+          "check": "The river weight is high because bank and river belong to the same phrase."
+        },
+        {
+          "prompt": "Switch the query to 'approved' and compare the weight on 'river'.",
+          "check": "The river weight drops because approved is about the loan, not the account."
+        },
+        {
+          "prompt": "Raise sharpness to 4.0 and look at the weight spread.",
+          "check": "Weights concentrate onto the top token and the rest collapse toward zero."
+        }
+      ],
+      "takeawayEn": "Attention weights follow meaning, and sharper weighting concentrates the mass.",
+      "takeawayAr": "أوزان الانتباه تتبع المعنى، وكلما زادت الحدة تمركز التوزيع.",
+      "simulationNote": "Illustrative simulation, not real model output."
+    },
+    {
+      "id": "l2",
+      "title": "Context budget planner",
+      "goal": "Watch retrieval cost and attention cost trade off against a fixed token budget.",
+      "kind": "cost-latency",
+      "controls": [
+        {
+          "id": "docTokens",
+          "label": "Document tokens",
+          "kind": "slider",
+          "min": 500,
+          "max": 8000,
+          "step": 250,
+          "default": 4000,
+          "unit": "tokens"
+        },
+        {
+          "id": "chunkTokens",
+          "label": "Chunk size",
+          "kind": "slider",
+          "min": 100,
+          "max": 1000,
+          "step": 50,
+          "default": 400,
+          "unit": "tokens"
+        },
+        {
+          "id": "topK",
+          "label": "Chunks retrieved",
+          "kind": "slider",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 4,
+          "unit": "chunks"
+        }
+      ],
+      "tasks": [
+        {
+          "prompt": "Set chunk size to 400 and top-K to 4. Read the retrieved token total.",
+          "check": "Retrieved tokens equal chunk size times top-K."
+        },
+        {
+          "prompt": "Raise chunk size to 800 and keep top-K at 4.",
+          "check": "Retrieved tokens double and may exceed a 4,000 token budget."
+        },
+        {
+          "prompt": "Lower chunk size to 200 and raise top-K to 8.",
+          "check": "Retrieved tokens stay inside the budget while coverage grows."
+        }
+      ],
+      "takeawayEn": "The chunk size and the number of chunks you retrieve jointly decide the context bill.",
+      "takeawayAr": "حجم الـ chunk وعدد القطع المسترجعة يحددان معًا فاتورة السياق.",
+      "simulationNote": "Illustrative simulation, not real model output."
+    }
+  ],
+  "figures": [
+    {
+      "id": "f1",
+      "title": "The score, weight, mix cycle",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 200\" role=\"img\" aria-label=\"Score, weight, mix cycle\"><rect width=\"640\" height=\"200\" fill=\"#f7f7f4\"/><g font-family=\"Segoe UI, Helvetica, Arial, sans-serif\" fill=\"#1c1f26\"><rect id=\"f1-s\" x=\"30\" y=\"60\" width=\"160\" height=\"70\" rx=\"10\" fill=\"#2a78d6\"/><text x=\"110\" y=\"102\" font-size=\"20\" fill=\"#ffffff\" text-anchor=\"middle\">Score</text><rect id=\"f1-w\" x=\"240\" y=\"60\" width=\"160\" height=\"70\" rx=\"10\" fill=\"#7b5ea7\"/><text x=\"320\" y=\"102\" font-size=\"20\" fill=\"#ffffff\" text-anchor=\"middle\">Weight</text><rect id=\"f1-m\" x=\"450\" y=\"60\" width=\"160\" height=\"70\" rx=\"10\" fill=\"#1f9d76\"/><text x=\"530\" y=\"102\" font-size=\"20\" fill=\"#ffffff\" text-anchor=\"middle\">Mix</text><path id=\"f1-e1\" d=\"M190 95 L238 95\" stroke=\"#9196a0\" stroke-width=\"3\" marker-end=\"url(#f1-arrow)\"/><path id=\"f1-e2\" d=\"M400 95 L448 95\" stroke=\"#9196a0\" stroke-width=\"3\" marker-end=\"url(#f1-arrow)\"/><text x=\"320\" y=\"168\" font-size=\"14\" fill=\"#555a66\" text-anchor=\"middle\">one attention step</text><defs><marker id=\"f1-arrow\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"4\" orient=\"auto\"><path d=\"M0 0 L8 4 L0 8 z\" fill=\"#9196a0\"/></marker></defs></g></svg>",
+      "captionEn": "One attention step runs score, then weight, then mix, for every token against every earlier token.",
+      "captionAr": "خطوة انتباه واحدة: تُحسب الدرجة، ثم الأوزان، ثم الخلط، لكل رمز مقابل كل رمز سابق.",
+      "steps": [
+        {
+          "narrativeEn": "Score: compare the current token against every earlier token.",
+          "narrativeAr": "الدرجة: قارن الرمز الحالي بكل رمز سابق.",
+          "highlight": ["f1-s"]
+        },
+        {
+          "narrativeEn": "Weight: normalize the scores so they sum to one.",
+          "narrativeAr": "الوزن: وحّد الدرجات بحيث يكون مجموعها واحدًا.",
+          "highlight": ["f1-w"]
+        },
+        {
+          "narrativeEn": "Mix: blend the earlier tokens into the current representation.",
+          "narrativeAr": "الخلط: امزج الرموز السابقة داخل تمثيل الرمز الحالي.",
+          "highlight": ["f1-m"]
+        }
+      ],
+      "hotspots": [
+        {
+          "target": "f1-s",
+          "what": "Compares the current token's query vector against every earlier key vector.",
+          "inputs": "Current token, all earlier tokens.",
+          "outputs": "One raw score per earlier token.",
+          "mistakes": "Treating a high score as a high probability of appearing in the answer."
+        },
+        {
+          "target": "f1-w",
+          "what": "Turns raw scores into weights that sum to one across earlier tokens.",
+          "inputs": "Raw scores.",
+          "outputs": "A weight per earlier token.",
+          "mistakes": "Reading a weight as a share of the final answer."
+        },
+        {
+          "target": "f1-m",
+          "what": "Combines earlier token values into the current token's representation.",
+          "inputs": "Weights and earlier token values.",
+          "outputs": "The enriched current representation.",
+          "mistakes": "Forgetting that the same weights are reused by later layers."
+        }
+      ],
+      "buildOrder": ["f1-s", "f1-w", "f1-m"]
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "k1",
+      "front": "What does attention do?",
+      "back": "It scores every earlier token against the current one, turns the scores into weights, and mixes the earlier tokens into the current representation.",
+      "backAr": "تحسب درجة كل رمز سابق مقابل الحالي، تحوّلها إلى أوزان، ثم تمزجها في تمثيل الرمز الحالي.",
+      "kind": "term",
+      "conceptId": "c1"
+    },
+    {
+      "id": "k2",
+      "front": "attention",
+      "back": "The mechanism that lets a model weigh earlier tokens when forming the current one.",
+      "backAr": "آلية تتيح للنموذج الترجيح بين الرموز السابقة عند تمثيل الحالي.",
+      "kind": "en-ar",
+      "conceptId": "c1"
+    },
+    {
+      "id": "k3",
+      "front": "quadratic",
+      "back": "Growing with the square of the input size, so doubling the input multiplies the work by four.",
+      "backAr": "ينمو مع مربع حجم الإدخال.",
+      "kind": "en-ar",
+      "conceptId": "c4"
+    },
+    {
+      "id": "k4",
+      "front": "What is the purpose of the code in section 2?",
+      "back": "It computes the number of token pairs so you can see the shape of the cost curve. It is arithmetic, not a benchmark.",
+      "backAr": "تحسب عدد أزواج الرموز لإظهار شكل منحنى الكلفة. حساب نظري وليس قياس أداء.",
+      "kind": "code",
+      "code": "def attention_pairs(n: int) -> int:\n    return n * (n - 1) // 2",
+      "conceptId": "c4"
+    },
+    {
+      "id": "k5",
+      "front": "Why do chunking and retrieval exist as separate fields?",
+      "back": "Because attention cost grows quadratically with context, so you cannot keep loading everything.",
+      "backAr": "لأن كلفة الانتباه تنمو تربيعيًا مع السياق.",
+      "kind": "term",
+      "conceptId": "c5"
+    }
+  ],
+  "quiz": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "prompt": "A weight of 0.4 on an earlier token means what?",
+      "options": [
+        "The final answer is 40 percent about that token",
+        "The current token borrows 40 percent of that token's contribution",
+        "The token appears in 40 percent of the training data",
+        "The model will output that token next"
+      ],
+      "answer": ["The current token borrows 40 percent of that token's contribution"],
+      "explanationEn": "Weights scale contributions to the current representation. They are borrow shares, not answer shares.",
+      "explanationAr": "الأوزان تحدد المساهمة في تمثيل الرمز الحالي، وليست نسبة من الإجابة.",
+      "conceptId": "c3",
+      "needsConfidence": true
+    },
+    {
+      "id": "q2",
+      "type": "true-false",
+      "prompt": "Doubling the input length doubles the attention work.",
+      "options": ["True", "False"],
+      "answer": ["False"],
+      "explanationEn": "Attention work grows with n squared, so doubling the input roughly quadruples it.",
+      "explanationAr": "العمل ينمو مع مربع n، فتضاعف الإدخال يربّعه تقريبًا.",
+      "conceptId": "c4"
+    },
+    {
+      "id": "q3",
+      "type": "order",
+      "prompt": "Put the three attention steps in the order they run.",
+      "options": ["Score", "Weight", "Mix"],
+      "answer": ["Score", "Weight", "Mix"],
+      "explanationEn": "Score produces raw comparisons, weight normalizes them, mix combines the earlier tokens.",
+      "explanationAr": "الدرجة ثم الوزن ثم الخلط.",
+      "conceptId": "c1"
+    },
+    {
+      "id": "q4",
+      "type": "match",
+      "prompt": "Match each word to its meaning.",
+      "options": [
+        "attention | a unit of text the model reads",
+        "token | the mechanism that weighs earlier tokens",
+        "benchmark | a measurement on real hardware"
+      ],
+      "answer": [
+        "attention | the mechanism that weighs earlier tokens",
+        "token | a unit of text the model reads",
+        "benchmark | a measurement on real hardware"
+      ],
+      "explanationEn": "Attention is the mechanism, token is the unit, benchmark is the measurement.",
+      "explanationAr": "attention آلية، token وحدة، benchmark قياس.",
+      "conceptId": "c2"
+    },
+    {
+      "id": "q5",
+      "type": "fill-code",
+      "prompt": "Complete the function so it returns the number of token pairs.",
+      "options": ["return n * (n - 1) // 2"],
+      "answer": ["return n * (n - 1) // 2"],
+      "answerText": "n * (n - 1) / 2",
+      "explanationEn": "Each token pairs with every earlier token, so the count is n times n minus one, divided by two.",
+      "explanationAr": "كل رمز يقابل كل رمز سابق، فالعدد n*(n-1)/2.",
+      "conceptId": "c4"
+    },
+    {
+      "id": "q6",
+      "type": "spot-mistake",
+      "prompt": "A reviewer says: 'This benchmark shows attention costs 12 million operations.' Find the problem.",
+      "options": [
+        "Nothing is wrong, benchmarks are always better than arithmetic",
+        "The function computes the pair count, so it is arithmetic and not a measured benchmark",
+        "The count should be divided by two",
+        "The function ignores the model size"
+      ],
+      "answer": [
+        "The function computes the pair count, so it is arithmetic and not a measured benchmark"
+      ],
+      "explanationEn": "A formula shows the shape of the curve. Only measuring your own stack gives a real number.",
+      "explanationAr": "المعادلة تُظهر الشكل فقط، والرقم الحقيقي يأتي من القياس.",
+      "conceptId": "c4"
+    },
+    {
+      "id": "q7",
+      "type": "explain",
+      "prompt": "In your own words, why does attention cost grow quadratically, and what engineering follows from that?",
+      "answer": [
+        "Every token is compared against every earlier token",
+        "So the comparison count is n times n minus one over two",
+        "That growth means context must be managed, not maximised"
+      ],
+      "answerText": "Every token is compared against every earlier token, so the count of comparisons is n times n minus one over two. That is quadratic in context length. Because of it, loading everything into a long window is not affordable, so the field splits into chunking, retrieval, reranking, and caching to keep the context small.",
+      "explanationEn": "Look for two parts: the n squared count, and the consequence that context must be managed rather than maximized.",
+      "explanationAr": "ابحث عن جزأين: عدّ n²، وأن السياق يجب أن يُدار لا أن يُكبَّر.",
+      "conceptId": "c4",
+      "needsConfidence": true
+    }
+  ],
+  "collocations": [
+    {
+      "phrase": "attention head",
+      "meaningAr": "رأس الانتباه، وحدة فرعية تحسب نوعًا واحدًا من أوزان الانتباه.",
+      "example": "Each attention head learns a different relation between tokens."
+    },
+    {
+      "phrase": "pay attention to",
+      "meaningAr": "ينتبه إلى، ويعني هنا إعطاء وزن أكبر.",
+      "example": "The model paid little attention to the irrelevant paragraph."
+    },
+    {
+      "phrase": "quadratic blow-up",
+      "meaningAr": "انفجار تربيعي في الكلفة.",
+      "example": "Doubling the context caused a quadratic blow-up in cost."
+    }
+  ],
+  "connections": [
+    {
+      "chapterId": "example-chunking",
+      "title": "Chunking by structure",
+      "conceptIds": ["c4", "c5"],
+      "note": "The next chapter turns the budget arithmetic into a chunking strategy."
+    },
+    {
+      "chapterId": "example-rag",
+      "title": "RAG retrieval",
+      "conceptIds": ["c1", "c5"],
+      "note": "Retrieval is the same weighting question applied to your documents instead of a sentence."
+    }
+  ]
+}

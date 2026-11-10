@@ -113,6 +113,7 @@ print("Start with one cluster, recursively split")
 **Definition:** A method for measuring the distance between clusters. Determines which clusters to merge at each step.
 
 **Types:**
+
 | Linkage | Description | Characteristics |
 |---------|-------------|-----------------|
 | Ward | Minimizes variance | Often best, balanced |
@@ -430,6 +431,7 @@ print("Measures how well dendrogram preserves pairwise distances")
 **Definition:** A function measuring similarity/dissimilarity between data points. Affects which points cluster together.
 
 **Common Metrics:**
+
 | Metric | Formula | Use Case |
 |--------|---------|----------|
 | Euclidean | √(Σ(xᵢ-yᵢ)²) | Default, continuous data |

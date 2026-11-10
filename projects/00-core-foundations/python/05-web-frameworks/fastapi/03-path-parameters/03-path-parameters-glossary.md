@@ -216,6 +216,7 @@ def read_item(
 ```
 
 **Parameters:**
+
 | Parameter | Description |
 |-----------|-------------|
 | `...` | Required parameter marker (no default) |
@@ -281,6 +282,7 @@ def get_order(order_id: UUID):
 ```
 
 **Supported types:**
+
 | Type | Example Input | Converted Value |
 |------|--------------|-----------------|
 | `int` | `"42"` | `42` |

@@ -1,0 +1,463 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/h9-tec/ai-engineer-lab/study-studio/chapter.schema.json",
+  "title": "CHAPTER_DATA",
+  "description": "Data contract for one offline Study Studio chapter. The engine reads only this shape, so a new chapter is a new data file and no new engine code.",
+  "type": "object",
+  "required": [
+    "meta",
+    "sections",
+    "glossary",
+    "conceptMap",
+    "labs",
+    "figures",
+    "flashcards",
+    "quiz",
+    "collocations",
+    "connections"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "meta": { "$ref": "#/$defs/meta" },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/section" }
+    },
+    "glossary": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/glossaryEntry" }
+    },
+    "conceptMap": { "$ref": "#/$defs/conceptMap" },
+    "labs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/lab" }
+    },
+    "figures": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/figure" }
+    },
+    "flashcards": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/flashcard" }
+    },
+    "quiz": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/quizItem" }
+    },
+    "collocations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/collocation" }
+    },
+    "connections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/connection" }
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "chapterId",
+        "title",
+        "subtitle",
+        "sourceTitle",
+        "sourceType",
+        "sourceLocator",
+        "license",
+        "attribution",
+        "language",
+        "estMinutes",
+        "conceptCount"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "chapterId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "description": "Stable slug. Used for the file name and for progress storage keys."
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "subtitle": { "type": "string" },
+        "sourceTitle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Book or document the chapter came from. Shown in the credits panel."
+        },
+        "sourceType": {
+          "enum": ["book", "roadmap", "paper", "repo-doc", "original"],
+          "description": "book means the chapter text is copyrighted and must stay out of the repo."
+        },
+        "sourceLocator": {
+          "type": "string",
+          "description": "Chapter number, section anchor, or local path. Never a URL that must be fetched."
+        },
+        "license": {
+          "enum": ["personal-study", "CC-BY-4.0", "public-domain", "MIT"],
+          "description": "personal-study means the chapter text may not be committed to a public repo."
+        },
+        "attribution": {
+          "type": "string",
+          "description": "Required attribution line. Shown next to the book content when the license demands it."
+        },
+        "language": { "enum": ["en", "ar", "en-ar"] },
+        "estMinutes": { "type": "integer", "minimum": 1, "maximum": 600 },
+        "conceptCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of concept-map nodes. The engine uses it to size the map without counting."
+        }
+      }
+    },
+    "section": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "order",
+        "level",
+        "paragraphs",
+        "keySentences",
+        "takeaways",
+        "studyAid",
+        "confusion",
+        "prediction"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^s[0-9]+$" },
+        "title": { "type": "string", "minLength": 1 },
+        "order": { "type": "integer", "minimum": 1 },
+        "level": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "paragraphs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/paragraph" }
+        },
+        "keySentences": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Skim mode reads only these. Must be verbatim substrings of the section text."
+        },
+        "takeaways": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "studyAid": {
+          "type": "object",
+          "required": ["whyItMatters", "badge"],
+          "additionalProperties": false,
+          "properties": {
+            "whyItMatters": { "type": "string", "minLength": 1 },
+            "badge": { "const": "AI" }
+          }
+        },
+        "confusion": {
+          "type": "object",
+          "required": ["simpleEnglish", "simpleArabic", "analogy"],
+          "additionalProperties": false,
+          "properties": {
+            "simpleEnglish": { "type": "string", "minLength": 1 },
+            "simpleArabic": { "type": "string", "minLength": 1 },
+            "analogy": { "type": "string", "minLength": 1 }
+          }
+        },
+        "prediction": {
+          "type": "object",
+          "required": ["question", "answer"],
+          "additionalProperties": false,
+          "properties": {
+            "question": { "type": "string", "minLength": 1 },
+            "answer": { "type": "string", "minLength": 1 }
+          }
+        },
+        "wordIds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Glossary ids that appear in this section. Used to badge technical words in place."
+        }
+      }
+    },
+    "paragraph": {
+      "type": "object",
+      "required": ["kind", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["text", "code", "list", "quote", "formula"] },
+        "text": { "type": "string", "minLength": 1 },
+        "language": { "type": "string", "minLength": 1 },
+        "code": { "type": "string" },
+        "items": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "formula": { "type": "string", "minLength": 1 },
+        "symbols": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["symbol", "meaning"],
+            "additionalProperties": false,
+            "properties": {
+              "symbol": { "type": "string", "minLength": 1 },
+              "meaning": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "figureId": { "type": "string" },
+        "explainArabic": { "type": "string", "minLength": 1 },
+        "badge": { "const": "AI" }
+      }
+    },
+    "glossaryEntry": {
+      "type": "object",
+      "required": ["id", "term", "meaningEn", "meaningAr", "wordType"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^w[0-9]+$" },
+        "term": { "type": "string", "minLength": 1 },
+        "ipa": { "type": "string" },
+        "meaningEn": { "type": "string", "minLength": 1 },
+        "meaningAr": { "type": "string", "minLength": 1 },
+        "wordType": { "enum": ["noun", "verb", "adjective", "adverb", "phrase"] },
+        "example": { "type": "string", "minLength": 1 },
+        "technical": { "type": "boolean" },
+        "conceptId": { "type": "string" },
+        "labId": { "type": "string" }
+      }
+    },
+    "conceptMap": {
+      "type": "object",
+      "required": ["nodes", "edges"],
+      "additionalProperties": false,
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "kind"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "pattern": "^c[0-9]+$" },
+              "label": { "type": "string", "minLength": 1 },
+              "kind": { "enum": ["core", "supporting", "advanced"] },
+              "definition": { "type": "string", "minLength": 1 },
+              "sectionId": { "type": "string" },
+              "labId": { "type": "string" },
+              "wordIds": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "relation"],
+            "additionalProperties": false,
+            "properties": {
+              "from": { "type": "string" },
+              "to": { "type": "string" },
+              "relation": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "learningPath": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Concept ids in study order. The Learning path button highlights them."
+        }
+      }
+    },
+    "lab": {
+      "type": "object",
+      "required": ["id", "title", "goal", "controls", "tasks", "takeawayEn", "takeawayAr", "simulationNote"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^l[0-9]+$" },
+        "title": { "type": "string", "minLength": 1 },
+        "goal": { "type": "string", "minLength": 1 },
+        "kind": {
+          "enum": [
+            "tokenizer",
+            "embedding",
+            "attention",
+            "sampling",
+            "rag-pipeline",
+            "training",
+            "quantization",
+            "metrics",
+            "cost-latency",
+            "generic"
+          ]
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "kind", "default"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "label": { "type": "string", "minLength": 1 },
+              "kind": { "enum": ["slider", "toggle", "select", "text"] },
+              "min": { "type": "number" },
+              "max": { "type": "number" },
+              "step": { "type": "number" },
+              "options": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "default": {
+                "type": ["number", "string", "boolean"]
+              },
+              "unit": { "type": "string" }
+            }
+          }
+        },
+        "tasks": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["prompt", "check"],
+            "additionalProperties": false,
+            "properties": {
+              "prompt": { "type": "string", "minLength": 1 },
+              "check": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "takeawayEn": { "type": "string", "minLength": 1 },
+        "takeawayAr": { "type": "string", "minLength": 1 },
+        "simulationNote": {
+          "const": "Illustrative simulation, not real model output.",
+          "description": "Mandatory. Labs are teaching simulations and must never look like measured results."
+        }
+      }
+    },
+    "figure": {
+      "type": "object",
+      "required": ["id", "title", "svg", "captionEn", "captionAr", "steps", "hotspots"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^f[0-9]+$" },
+        "title": { "type": "string", "minLength": 1 },
+        "svg": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Inline SVG markup. No external image, no url() reference, no script."
+        },
+        "captionEn": { "type": "string", "minLength": 1 },
+        "captionAr": { "type": "string", "minLength": 1 },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["narrativeEn", "narrativeAr", "highlight"],
+            "additionalProperties": false,
+            "properties": {
+              "narrativeEn": { "type": "string", "minLength": 1 },
+              "narrativeAr": { "type": "string", "minLength": 1 },
+              "highlight": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Element ids inside the SVG that light up during this step."
+              }
+            }
+          }
+        },
+        "hotspots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["target", "what", "inputs", "outputs", "mistakes"],
+            "additionalProperties": false,
+            "properties": {
+              "target": { "type": "string", "minLength": 1 },
+              "what": { "type": "string", "minLength": 1 },
+              "inputs": { "type": "string", "minLength": 1 },
+              "outputs": { "type": "string", "minLength": 1 },
+              "mistakes": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "buildOrder": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Element ids in correct assembly order. Empty means no build-it-yourself mode."
+        }
+      }
+    },
+    "flashcard": {
+      "type": "object",
+      "required": ["id", "front", "back", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^k[0-9]+$" },
+        "front": { "type": "string", "minLength": 1 },
+        "back": { "type": "string", "minLength": 1 },
+        "backAr": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["term", "en-ar", "code"] },
+        "conceptId": { "type": "string" },
+        "code": { "type": "string" }
+      }
+    },
+    "quizItem": {
+      "type": "object",
+      "required": ["id", "type", "prompt", "answer", "explanationEn", "explanationAr"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^q[0-9]+$" },
+        "type": {
+          "enum": ["mcq", "true-false", "order", "match", "fill-code", "spot-mistake", "explain"]
+        },
+        "prompt": { "type": "string", "minLength": 1 },
+        "options": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "answer": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Correct option texts for mcq and true-false, the ordered list for order, the pairs for match."
+        },
+        "answerText": { "type": "string", "minLength": 1 },
+        "explanationEn": { "type": "string", "minLength": 1 },
+        "explanationAr": { "type": "string", "minLength": 1 },
+        "conceptId": { "type": "string" },
+        "needsConfidence": { "type": "boolean" }
+      }
+    },
+    "collocation": {
+      "type": "object",
+      "required": ["phrase", "meaningAr"],
+      "additionalProperties": false,
+      "properties": {
+        "phrase": { "type": "string", "minLength": 1 },
+        "meaningAr": { "type": "string", "minLength": 1 },
+        "example": { "type": "string", "minLength": 1 }
+      }
+    },
+    "connection": {
+      "type": "object",
+      "required": ["chapterId", "title", "conceptIds"],
+      "additionalProperties": false,
+      "properties": {
+        "chapterId": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "conceptIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

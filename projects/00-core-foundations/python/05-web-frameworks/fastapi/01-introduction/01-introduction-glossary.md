@@ -407,6 +407,7 @@ uvicorn main:app --reload --log-level info
 ```
 
 **Common options:**
+
 | Option | Description |
 |--------|-------------|
 | `--reload` | Auto-restart on code changes |

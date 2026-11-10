@@ -30,6 +30,7 @@ Each lecture includes:
 | 08 | [Agent Evaluation](./08-agent-evaluation-lecture.md) | Metrics, testing, benchmarking | 400+ |
 | 09 | [Agent Safety](./09-agent-safety-lecture.md) | Guardrails, permissions, monitoring | 400+ |
 | 10 | [Production Agents](./10-production-agents-lecture.md) | Deployment, scaling, operations | 400+ |
+| 11 | [The Agent Loop](./11-agent-loop-lecture.md) | Control loops, termination, checkpoints, trajectory audits | 600+ |
 
 ### Glossaries
 
@@ -45,6 +46,7 @@ Each lecture includes:
 | 08 | [Agent Evaluation](./08-agent-evaluation-glossary.md) | Evaluation terms | 15+ |
 | 09 | [Agent Safety](./09-agent-safety-glossary.md) | Safety terms | 15+ |
 | 10 | [Production Agents](./10-production-agents-glossary.md) | Production terms | 15+ |
+| 11 | [The Agent Loop](./11-agent-loop-glossary.md) | Loop, checkpoint, trajectory terms | 15+ |
 
 ---
 
@@ -224,8 +226,11 @@ After completing this course, you will be able to:
 
 ### Frameworks
 - **LangChain**: Agent framework with tools
+- **LangGraph**: Graph-based agent runtime with checkpoints
 - **AutoGPT**: Autonomous agent
 - **CrewAI**: Multi-agent orchestration
+- **Microsoft Agent Framework**: Microsoft's successor to the archived AutoGen
+- **AG2**: The community continuation of AutoGen
 - **Claude Agent SDK**: Anthropic's agent toolkit
 
 ### Communities

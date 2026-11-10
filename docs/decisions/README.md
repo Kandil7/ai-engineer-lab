@@ -19,6 +19,7 @@ the architectural memory of the workspace. New ADRs are created with `infra/scri
 | [0011](0011-choose-duckdb-over-polars-for-profiling.md) | Choose DuckDB over Polars for profiling | Proposed | 2026-10-15 |
 | [0012](0012-choose-minhash-lsh-for-near-duplicate-dedup.md) | Choose MinHash LSH for near-duplicate dedup | Proposed | 2026-10-15 |
 | [0013](0013-choose-dvc-for-dataset-versioning.md) | Choose DVC for dataset versioning | Proposed | 2026-10-15 |
+| [0014](0014-adopt-the-h9-tec-ai-roadmap-2026-as-a-cross-check-reference-and-build-the-study-studio-data-contract-first.md) | Adopt the h9-tec AI Roadmap 2026 as a cross-check reference and build the Study Studio data contract first | Proposed | 2026-10-22 |
 
 ## Lifecycle
 

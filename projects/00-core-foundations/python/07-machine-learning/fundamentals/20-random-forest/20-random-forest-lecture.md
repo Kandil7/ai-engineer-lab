@@ -46,6 +46,7 @@ Combining multiple models to create a better predictor than any single model.
 
 ### 4. Key Parameters
 
+
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `n_estimators` | Number of trees | 100 |

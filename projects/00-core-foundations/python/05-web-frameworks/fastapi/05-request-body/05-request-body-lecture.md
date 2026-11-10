@@ -62,6 +62,7 @@ class UserCreate(BaseModel):
 ```
 
 **Common Field constraints:**
+
 | Constraint | Description |
 |-----------|-------------|
 | `...` | Required field (no default) |

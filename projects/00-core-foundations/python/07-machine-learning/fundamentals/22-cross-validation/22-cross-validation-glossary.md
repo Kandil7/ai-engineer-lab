@@ -189,6 +189,7 @@ for name, model in models.items():
 **Definition:** The performance measure used to evaluate model predictions during cross-validation.
 
 **Common Metrics:**
+
 | Metric | Use Case | Higher is Better |
 |--------|----------|------------------|
 | accuracy | Balanced classification | ✓ |

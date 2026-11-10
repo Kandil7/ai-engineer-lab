@@ -643,6 +643,7 @@ What's a good regression threshold for faithfulness?
 - Week 7: 50 questions (added edge cases)
 
 **Baseline Metrics (Week 3):**
+
 | Metric | Score | Target |
 |--------|-------|--------|
 | Context Precision@5 | 0.83 | > 0.7 |

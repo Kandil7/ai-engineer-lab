@@ -305,6 +305,7 @@ def list_items(
 ```
 
 **Parameters:**
+
 | Parameter | Description |
 |-----------|-------------|
 | `default` | Default value (use `...` for required) |

@@ -87,6 +87,7 @@ purpose, a duration, and a deliverable.
 **Never ask:** "Write the whole answer."
 
 **Escalation:**
+
 | Attempt | Ask for |
 |---------|---------|
 | 1st | Conceptual hint |

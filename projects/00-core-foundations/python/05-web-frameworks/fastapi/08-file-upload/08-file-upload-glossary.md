@@ -96,6 +96,7 @@ async def upload_large(file: UploadFile = File(...)):
 ```
 
 **Common chunk sizes:**
+
 | Size | Use Case |
 |------|----------|
 | 8KB | Small files |
@@ -112,6 +113,7 @@ async def upload_large(file: UploadFile = File(...)):
 **Definition:** A MIME (Multipurpose Internet Mail Extensions) type that identifies the format of a file. FastAPI provides this as `file.content_type` for uploaded files.
 
 **Common content types:**
+
 | MIME Type | File Format |
 |-----------|-------------|
 | `image/jpeg` | JPEG images |
@@ -161,6 +163,7 @@ async def upload(file: UploadFile = File(...)):
 ```
 
 **Hash algorithms:**
+
 | Algorithm | Speed | Security | Use Case |
 |-----------|-------|----------|----------|
 | MD5 | Fast | Weak | Checksums (not security) |
@@ -427,6 +430,7 @@ async def upload(file: UploadFile = File(...)):
 ```
 
 **Attributes:**
+
 | Attribute | Type | Description |
 |-----------|------|-------------|
 | `filename` | str | Original filename |
@@ -434,6 +438,7 @@ async def upload(file: UploadFile = File(...)):
 | `file` | SpooledTemporaryFile | File-like object |
 
 **Methods:**
+
 | Method | Description |
 |--------|-------------|
 | `await read()` | Read entire file |

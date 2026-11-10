@@ -858,6 +858,7 @@ What does `on_disk=True` do in Qdrant collection config?
 - Each with expected source files and ground truth
 
 **Chunking Experiment Results:**
+
 | Strategy | Context Precision | Context Recall | Faithfulness | Avg Latency |
 |----------|-------------------|----------------|--------------|-------------|
 | Fixed (512) | 0.62 | 0.58 | 0.78 | 1.8s |
@@ -867,6 +868,7 @@ What does `on_disk=True` do in Qdrant collection config?
 **Decision**: AST-aware chunking for code (ADR-006), recursive for docs.
 
 **Vector Store Comparison (ADR-005):**
+
 | DB | Precision | Recall | Latency | Cost | Decision |
 |----|-----------|--------|---------|------|----------|
 | Qdrant | 0.83 | 0.79 | 85ms | Free (self-host) | ✅ Primary |

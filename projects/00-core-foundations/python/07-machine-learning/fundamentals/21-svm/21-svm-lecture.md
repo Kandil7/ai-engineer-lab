@@ -37,6 +37,7 @@ Transforms data to higher dimensions where it becomes linearly separable, withou
 
 ### 4. Key Parameters
 
+
 | Parameter | Description | Effect |
 |-----------|-------------|--------|
 | `C` | Regularization | Small C = more regularization |

@@ -42,6 +42,7 @@ async def upload_file(file: UploadFile = File(...)):
 ```
 
 **UploadFile attributes:**
+
 | Attribute | Description |
 |-----------|-------------|
 | `filename` | Original filename from the client |
@@ -49,6 +50,7 @@ async def upload_file(file: UploadFile = File(...)):
 | `file` | SpooledTemporaryFile (file-like object) |
 
 **UploadFile methods:**
+
 | Method | Description |
 |--------|-------------|
 | `await file.read()` | Read entire file content |

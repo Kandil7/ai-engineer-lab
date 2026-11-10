@@ -312,6 +312,7 @@ print(f"Root node samples: {clf.tree_.n_node_samples[0]}")
 
 ## Key Parameters
 
+
 | Parameter | Description | Default | Effect |
 |-----------|-------------|---------|--------|
 | `criterion` | Split quality measure | 'gini' | gini or entropy |

@@ -283,6 +283,7 @@ def create_item(item: Item):
 ```
 
 **Options:**
+
 | Parameter | Description |
 |-----------|-------------|
 | `response_model` | The Pydantic model class |

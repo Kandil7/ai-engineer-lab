@@ -222,6 +222,7 @@ plt.show()
 
 ### savefig() Parameters
 
+
 | Parameter | Description | Example |
 |-----------|-------------|---------|
 | `fname` | File path/name | `'plot.png'` |

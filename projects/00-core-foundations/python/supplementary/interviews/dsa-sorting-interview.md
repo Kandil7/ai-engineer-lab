@@ -17,6 +17,7 @@ Sorting is a fundamental algorithmic skill. Interviews test your knowledge of **
 ### Q1: Compare all major sorting algorithms.
 
 **Answer:**
+
 | Algorithm | Best | Average | Worst | Space | Stable | In-place |
 |-----------|------|---------|-------|-------|--------|----------|
 | Bubble Sort | O(n) | O(n²) | O(n²) | O(1) | Yes | Yes |
@@ -283,6 +284,7 @@ def counting_sort_by_digit(arr, exp):
 ### Q9: When should you use which sorting algorithm?
 
 **Answer:**
+
 | Scenario | Algorithm | Reason |
 |----------|-----------|--------|
 | Small array (n < 20) | Insertion Sort | Low overhead, simple |

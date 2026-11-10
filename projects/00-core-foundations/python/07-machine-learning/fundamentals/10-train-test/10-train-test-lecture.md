@@ -197,6 +197,7 @@ print(f"Mean R²: {scores.mean():.4f} ± {scores.std():.4f}")
 
 ## Summary
 
+
 | Parameter | Description | Recommended |
 |-----------|-------------|-------------|
 | `test_size` | Proportion for testing | 0.2-0.3 |

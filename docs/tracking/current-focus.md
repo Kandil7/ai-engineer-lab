@@ -5,7 +5,7 @@
 > ⚠️ A staleness gate fails CI if this file is more than 8 days old: `make fresh-check`
 > locally and the Tracking freshness step in `.github/workflows/ci.yml`.
 
-**Last updated:** 2026-10-14
+**Last updated:** 2026-10-22
 
 ---
 
@@ -13,7 +13,8 @@
 
 **Week 3** — 2026-10-13 → 2026-10-19 (RAG close-out, then deploy)
 
-**Plan:** [Active Track — 10-Week AI Engineer](../roadmap/active-track-10-week.md)
+**Plan:** [Active Track — 10-Week AI Engineer](../roadmap/active-track-10-week.md)  
+**New Initiative:** [FastAPI Backend Mastery Roadmap](../../04-ai-engineering/fastapi/backend-mastery-roadmap.md) created 2026-11-10
 (adopted 2026-08-02 by [ADR-0004](../decisions/0004-adopt-10-week-ai-engineer-track.md))
 The track's target application date (2026-10-12, week 10) has passed with A3 still
 open. Treat the remaining weeks as schedule recovery: close A3, then A4. Do not open
@@ -77,6 +78,10 @@ the one gap found against the Microsoft AI Engineer career path.
 27. ~~Learning OS: close the data engineering gap~~ — done 2026-10-14 (new `data-engineering` domain, 6 nodes `data.*`, `source-index#29` Microsoft Learn AI Engineer career path; registry now 54 concepts / 12 domains, INDEX + scoreboard regenerated)
 28. Close A3: start qdrant, ingest this repo, `devmate.eval.run_ragas --mode live`, record measured Hit@5
 29. Write the chunking ADR citing the live numbers from task 28
+30. ~~Audit the h9-tec AI Roadmap 2026 against this repo~~ — done 2026-10-22 (read in full; 9 measured gaps: sandbox execution, browser agents, voice agents, GraphRAG, RFT/GRPO, pointwise judging, Cohen's kappa in the judge topic, just-in-time retrieval, Microsoft Agent Framework; registered as `source-index#30`; AutoGen archival correction applied to `11-agent-loop-lecture.md`; [ADR-0014](../decisions/0014-adopt-the-h9-tec-ai-roadmap-2026-as-a-cross-check-reference-and-build-the-study-studio-data-contract-first.md) proposed)
+31. ~~Study Studio Phase 0: the data contract~~ — done 2026-10-22 (`projects/04-ai-engineering/study-studio/`: JSON Schema 2020-12, synthetic example chapter, stdlib validator with a proven non-zero exit on broken references, `docs/STUDIO-SPEC.md`; 6 repo validators green)
+32. Study Studio Phase 1: the engine — `engine/studio.js` + `engine/studio.css` + `scripts/build_studio.py` (inline + external-reference scan + hash comparison against the source extraction), driven by the `example-chapter.json` already in place
+33. `pip install dvc` then `dvc repro` in `projects/00-core-foundations/data-engineering/capstone/` — the binary-gated acceptance checks skip until dvc is installed
 
 ---
 

@@ -216,6 +216,7 @@ async def custom_content():
 ```
 
 **Common MIME Types:**
+
 | Extension | Content-Type |
 |-----------|--------------|
 | .css | text/css |
@@ -329,6 +330,7 @@ body {
 ```
 
 **Font formats:**
+
 | Format | Support | Size |
 |--------|---------|------|
 | WOFF2 | Modern browsers | Smallest |
@@ -473,6 +475,7 @@ Response(content=b"...", media_type="image/svg+xml")
 ```
 
 **Common types:**
+
 | Extension | MIME Type |
 |-----------|-----------|
 | .html | text/html |
@@ -568,6 +571,7 @@ if Path("static").exists():
 ```
 
 **Parameters:**
+
 | Parameter | Description |
 |-----------|-------------|
 | directory | Path to static files |

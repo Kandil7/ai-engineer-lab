@@ -23,6 +23,7 @@ Linked lists store elements in nodes where each node points to the next. Unlike 
 ### Q1: What are the advantages and disadvantages of linked lists over arrays?
 
 **Answer:**
+
 | Aspect | Linked List | Array |
 |--------|-------------|-------|
 | Access by index | O(n) | O(1) |
@@ -397,6 +398,7 @@ def reorder_list(head):
 ### Q14: What is the difference between singly and doubly linked lists?
 
 **Answer:**
+
 | Feature | Singly | Doubly |
 |---------|--------|--------|
 | Direction | Forward only | Forward and backward |

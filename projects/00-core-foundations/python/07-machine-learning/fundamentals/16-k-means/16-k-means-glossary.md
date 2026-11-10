@@ -229,6 +229,7 @@ for k in range(2, 8):
 ```
 
 **Score Interpretation:**
+
 | Score | Meaning |
 |-------|---------|
 | 0.7 - 1.0 | Strong structure |

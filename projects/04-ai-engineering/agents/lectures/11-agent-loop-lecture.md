@@ -445,6 +445,17 @@ protocol, until the day the trajectory evidence says the task no longer fits
 in one head. Start raw, measure, and let the framework earn its place with
 your numbers, not its marketing.
 
+One framework in that list has changed status, and it changes the advice.
+Microsoft has archived AutoGen: the repository README now carries an
+"archived and no longer maintained" notice, and Microsoft points new users
+at Microsoft Agent Framework (MAF) with a migration guide. The community
+fork continues as AG2. AutoGen is therefore a reference implementation to
+read and a dependency not to start on. If you are choosing a
+role-and-handoff framework today, the live candidates are CrewAI, MAF, and
+AG2 — and the choice still comes down to the same thing the paragraph
+above says: pick the one whose cost matches the coordination problem your
+trajectories actually show.
+
 ### 9. Multi-Step Agents and A2A — Contracts Between Minds
 
 When one agent calls another, everything this lecture demands of tools

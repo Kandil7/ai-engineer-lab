@@ -76,6 +76,7 @@ def list_users(
 ```
 
 **Common Query() parameters:**
+
 | Parameter | Description |
 |-----------|-------------|
 | `default` | Default value (use `...` for required) |

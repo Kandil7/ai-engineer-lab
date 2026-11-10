@@ -200,6 +200,7 @@ logger.info("Formatted message")
 **Related Terms**: handler, format string, asctime
 
 **Format Variables**:
+
 | Variable | Description |
 |----------|-------------|
 | `%(asctime)s` | Time of log message |

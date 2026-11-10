@@ -426,6 +426,7 @@ for city in roads.get_vertices():
 - **Connected components** identify isolated groups
 
 **Time Complexity Reference:**
+
 | Operation | Adjacency List | Adjacency Matrix |
 |-----------|----------------|------------------|
 | Add vertex | O(1) | O(V²) |

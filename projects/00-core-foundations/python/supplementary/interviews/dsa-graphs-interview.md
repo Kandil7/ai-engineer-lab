@@ -17,6 +17,7 @@ Graphs model relationships between entities. They consist of vertices (nodes) an
 - **Complete:** Every vertex connected to every other
 
 **Time/Space for Representations:**
+
 | Operation | Adjacency List | Adjacency Matrix |
 |-----------|---------------|-----------------|
 | Space | O(V + E) | O(V²) |
@@ -570,6 +571,7 @@ def find_bridges(n, edges):
 ### Q14: What is the difference between BFS and DFS in terms of memory?
 
 **Answer:**
+
 | Aspect | BFS | DFS |
 |--------|-----|-----|
 | Data structure | Queue | Stack (or recursion) |

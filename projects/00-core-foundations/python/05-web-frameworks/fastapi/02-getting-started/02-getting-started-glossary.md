@@ -124,6 +124,7 @@ class Product(BaseModel):
 ```
 
 **Common Field constraints:**
+
 | Constraint | Description |
 |-----------|-------------|
 | `min_length` | Minimum string length |

@@ -97,6 +97,7 @@ def batch_create(users: list[UserCreate]):
 **Definition:** An HTTP header that indicates the media type of the request body. For JSON request bodies, the Content-Type is `application/json`.
 
 **Common values:**
+
 | Content-Type | Description |
 |-------------|-------------|
 | `application/json` | JSON data |
@@ -218,6 +219,7 @@ class Product(BaseModel):
 ```
 
 **Parameters:**
+
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `...` | — | Required field marker |

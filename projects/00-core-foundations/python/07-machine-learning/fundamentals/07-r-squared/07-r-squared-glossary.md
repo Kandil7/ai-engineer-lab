@@ -186,6 +186,7 @@ print(f"R² (manual):      {r2_method3:.4f}")
 ```
 
 **Interpretation:**
+
 | R² | Meaning |
 |----|---------|
 | 1.0 | Perfect fit |

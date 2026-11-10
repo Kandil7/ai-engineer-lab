@@ -1,0 +1,347 @@
+{
+  "meta": {
+    "chapterId": "transformers",
+    "title": "Transformer Architecture",
+    "subtitle": "Encoder-decoder fundamentals for sequence modeling",
+    "sourceTitle": "Original content for AI Engineer Lab",
+    "sourceType": "original",
+    "sourceLocator": "projects/04-ai-engineering/study-studio/schema/transformers.json",
+    "license": "CC-BY-4.0",
+    "attribution": "Created for the AI Engineer Lab. Free to adapt and reuse.",
+    "language": "en-ar",
+    "estMinutes": 22,
+    "conceptCount": 6
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "title": "Why the encoder-decoder design",
+      "order": 1,
+      "level": 1,
+      "paragraphs": [
+        {
+          "kind": "text",
+          "text": "The transformer processes sequences in two stages. The encoder handles all positions at once, creating representations for each token. The decoder builds output tokens autoregressively, using both the encoder's knowledge and what it has already generated.",
+          "explainArabic": "المشفر يعالج كل المواضع دفعة واحدة، يخلق تمثيلات لكل رمز. المشفر يبني الرموز الصادرة خطوة بخطوة، يستخدم معرفة المشفر وما تولده."
+        },
+        {
+          "kind": "text",
+          "text": "This design separates understanding from generation. The encoder compresses the input into a shared representation that any decoder head can access.",
+          "explainArabic": "الفصل بين الفهم والإنتاج. المشفر يضغط الإدخال لتمثيل مشترك يمكن أي رأس مشفر الوصوله."
+        },
+        {
+          "kind": "list",
+          "text": "Two key mechanisms enable this separation:",
+          "items": [
+            "Self-attention: Each position attends to all others within its layer.",
+            "Cross-attention: The decoder attends to encoder outputs when generating."
+          ]
+        }
+      ],
+      "keySentences": [
+        "The encoder processes all positions at once.",
+        "The decoder builds output autoregressively."
+      ],
+      "takeaways": [
+        "Encoder creates shared representations.",
+        "Decoder uses encoder outputs plus its own history.",
+        "This separation enables translation-style tasks."
+      ],
+      "studyAid": {
+        "whyItMatters": "The same encoder serves multiple decoder positions, making efficient use of computation for large contexts.",
+        "badge": "AI"
+      },
+      "confusion": {
+        "simpleEnglish": "Encoder understands, decoder generates using that understanding.",
+        "simpleArabic": "المشفر يفهم، المشفر يولد باستخدام هذا الفهم.",
+        "analogy": "A dictionary (encoder) that any writer (decoder) can consult."
+      },
+      "prediction": {
+        "question": "What happens if you remove cross-attention?",
+        "answer": "The decoder cannot see what the encoder learned, breaking translation-style tasks."
+      },
+      "wordIds": ["w01", "w02", "w03"]
+    },
+    {
+      "id": "s2",
+      "title": "Self-attention within the encoder",
+      "order": 2,
+      "level": 2,
+      "paragraphs": [
+        {
+          "kind": "text",
+          "text": "Each encoder layer applies self-attention to its input. Every position computes scores against every other position, normalizes them, and blends the weighted values.",
+          "explainArabic": "كل طبقة مشفرة تطبق الانتباه الذاتي على إدخالها. كل موضع يحسب درجات مقابل كل موضع آخر، يوحد الدرجات ويمزج القيم المرجحة."
+        },
+        {
+          "kind": "code",
+          "text": "For position i in a sequence of length n:",
+          "code": "# Compute attention for one position\nfor j in range(n):  # over all positions\n    score = query_i dot key_j  # raw comparison\nweight = softmax(score)  # normalize\nblended += weight * value_j  # weighted blend"
+        },
+        {
+          "kind": "formula",
+          "text": "Self-attention computation for one head.",
+          "formula": "Attention(Q, K, V) = softmax((QK^T)/√d)V",
+          "symbols": [
+            { "symbol": "Q", "meaning": "Query vector from current position" },
+            { "symbol": "K", "meaning": "Key vectors from all positions" },
+            { "symbol": "V", "meaning": "Value vectors representing token content" }
+          ]
+        }
+      ],
+      "keySentences": [
+        "Each position attends to all others.",
+        "Self-attention creates a shared understanding."
+      ],
+      "takeaways": [
+        "All positions contribute to each blended value.",
+        "Multiple heads capture different relations.",
+        "Residual connections preserve information flow."
+      ],
+      "studyAid": {
+        "whyItMatters": "Self-attention captures long-range dependencies without positional encoding limits.",
+        "badge": "AI"
+      },
+      "confusion": {
+        "simpleEnglish": "Each token sees the whole sequence, but different heads focus on different patterns.",
+        "simpleArabic": "كل رمز يرى التسلسل الكامل، لكن الرؤوس المختلفة تركز على أنماط مختلفة.",
+        "analogy": "Multiple readers scanning a document for different types of information."
+      },
+      "prediction": {
+        "question": "Why use multiple attention heads instead of one?",
+        "answer": "Different heads can learn different relations, like syntax versus semantics."
+      },
+      "wordIds": ["w04", "w05"]
+    }
+  ],
+  "glossary": [
+    {
+      "id": "w01",
+      "term": "encoder",
+      "ipa": "ˈɛŋkərdər",
+      "meaningEn": "Processes input tokens through self-attention layers.",
+      "meaningAr": "يعالج رموز الإدخال عبر طبقات الانتباه الذاتي.",
+      "wordType": "noun",
+      "example": "The encoder compresses the input into representations.",
+      "technical": true,
+      "conceptId": "c01"
+    },
+    {
+      "id": "w02",
+      "term": "decoder",
+      "ipa": "dɪˈkəʊdər",
+      "meaningEn": "Generates output tokens autoregressively.",
+      "meaningAr": "يولد الرموز الصادرة خطوة بخطوة.",
+      "wordType": "noun",
+      "example": "The decoder attends to encoder outputs while generating.",
+      "technical": true,
+      "conceptId": "c02"
+    },
+    {
+      "id": "w03",
+      "term": "cross-attention",
+      "ipa": "kɹɒs əˈtɛnʃən",
+      "meaningEn": "Decoder attends to encoder representations.",
+      "meaningAr": "المشفر ينتبه لتمثيلات المشفر.",
+      "wordType": "noun",
+      "example": "Cross-attention retrieves knowledge from the encoder.",
+      "technical": true,
+      "conceptId": "c01"
+    },
+    {
+      "id": "w04",
+      "term": "self-attention",
+      "ipa": "sɛlf əˈtɛnʃən",
+      "meaningEn": "One position attends to all positions in its sequence.",
+      "meaningAr": "موضع واحد ينتبه لجميع المواضع في تسلسله.",
+      "wordType": "noun",
+      "example": "Self-attention captures relations within the input.",
+      "technical": true,
+      "conceptId": "c03"
+    },
+    {
+      "id": "w05",
+      "term": "head",
+      "ipa": "hɛd",
+      "meaningEn": "One attention mechanism within a multi-head layer.",
+      "meaningAr": "آلية انتباه واحدة داخل طبقة متعددة الرؤوس.",
+      "wordType": "noun",
+      "example": "Each head learns to attend to different patterns.",
+      "technical": true,
+      "conceptId": "c04"
+    }
+  ],
+  "conceptMap": {
+    "nodes": [
+      {
+        "id": "c01",
+        "label": "Encoder-Decoder Design",
+        "kind": "core",
+        "definition": "Separates understanding from generation for efficient sequence processing.",
+        "sectionId": "s1",
+        "wordIds": ["w01", "w02"],
+        "labId": "l01"
+      },
+      {
+        "id": "c02",
+        "label": "Cross-Attention",
+        "kind": "core",
+        "definition": "Decoder retrieves encoder knowledge when generating.",
+        "sectionId": "s1",
+        "wordIds": ["w03"]
+      },
+      {
+        "id": "c03",
+        "label": "Self-Attention",
+        "kind": "core",
+        "definition": "All positions attend to all others for global context.",
+        "sectionId": "s2",
+        "wordIds": ["w04"]
+      },
+      {
+        "id": "c04",
+        "label": "Multi-Head Attention",
+        "kind": "supporting",
+        "definition": "Parallel attention mechanisms capture different relations.",
+        "sectionId": "s2"
+      }
+    ],
+    "edges": [
+      { "from": "c01", "to": "c02", "relation": "uses" },
+      { "from": "c01", "to": "c03", "relation": "contains" },
+      { "from": "c02", "to": "c01", "relation": "connects to" }
+    ],
+    "learningPath": ["c01", "c02", "c03", "c04"]
+  },
+  "labs": [
+    {
+      "id": "l01",
+      "title": "Encoder-Decoder Flow",
+      "goal": "Trace how input flows through encoder layers to decoder output.",
+      "kind": "generic",
+      "controls": [
+        {
+          "id": "layer",
+          "label": "Layer",
+          "kind": "select",
+          "options": ["encoder-only", "cross-attention", "decoder"],
+          "default": "encoder-only"
+        }
+      ],
+      "tasks": [
+        {
+          "prompt": "Select encoder-only and observe self-attention.",
+          "check": "All positions attend to all others equally within this view."
+        },
+        {
+          "prompt": "Switch to cross-attention layer.",
+          "check": "Decoder now retrieves knowledge from encoder outputs."
+        },
+        {
+          "prompt": "Observe the output embedding distribution.",
+          "check": "The decoder builds its own sequence while consulting encoder context."
+        }
+      ],
+      "takeawayEn": "Encoder creates shared understanding; decoder generates using that knowledge.",
+      "takeawayAr": "المشفر يخلق فهمًا مشتركًا؛ المشفر يولد باستخدام هذه المعرفة.",
+      "simulationNote": "Illustrative simulation, not real model output."
+    }
+  ],
+  "figures": [],
+  "flashcards": [
+    {
+      "id": "k01",
+      "front": "What does the encoder do?",
+      "back": "It processes input tokens through self-attention layers, creating shared representations.",
+      "backAr": "يعالج رموز الإدخال عبر طبقات الانتباه الذاتي، يخلق تمثيلات مشتركة.",
+      "kind": "term",
+      "conceptId": "c01"
+    },
+    {
+      "id": "k02",
+      "front": "What does the decoder do?",
+      "back": "It generates output autoregressively, using encoder outputs and its own history.",
+      "backAr": "يولد الإخراج خطوة بخطوة، يستخدم مخرجات المشفر وتاريخه الخاص.",
+      "kind": "term",
+      "conceptId": "c02"
+    },
+    {
+      "id": "k03",
+      "front": "encoder",
+      "back": "Processes input through self-attention for understanding.",
+      "backAr": "يعالج الإدخال عبر الانتباه الذاتي للفهم.",
+      "kind": "en-ar",
+      "conceptId": "c01"
+    }
+  ],
+  "quiz": [
+    {
+      "id": "q01",
+      "type": "mcq",
+      "prompt": "What is the role of cross-attention?",
+      "options": [
+        "The decoder retrieves knowledge from encoder outputs.",
+        "The decoder ignores the encoder entirely.",
+        "Self-attention operates within a single layer."
+      ],
+      "answer": ["The decoder retrieves knowledge from encoder outputs."],
+      "explanationEn": "Cross-attention allows the decoder to attend to encoder representations when generating.",
+      "explanationAr": "الانتباه المشترك يسمح للمشفر بالانتباه لتمثيلات المشفر عند الإصدار.",
+      "conceptId": "c02"
+    },
+    {
+      "id": "q02",
+      "type": "true-false",
+      "prompt": "Each encoder layer applies self-attention to its input.",
+      "options": ["True", "False"],
+      "answer": ["True"],
+      "explanationEn": "Self-attention operates within each encoder layer, enabling global context capture.",
+      "explanationAr": "الانتباه الذاتي يعمل داخل كل طبقة مشفرة،月月 يتيح التقاط السياق العام.",
+      "conceptId": "c03"
+    },
+    {
+      "id": "q03",
+      "type": "match",
+      "prompt": "Match each component to its function.",
+      "options": [
+        "encoder | processes input through self-attention",
+        "decoder | generates output autoregressively",
+        "cross-attention | retrieves encoder knowledge"
+      ],
+      "answer": [
+        "encoder | processes input through self-attention",
+        "decoder | generates output autoregressively",
+        "cross-attention | retrieves encoder knowledge"
+      ],
+      "explanationEn": "Encoder understands, decoder generates, cross-attention bridges them.",
+      "explanationAr": "المشفر يفهم، المشفر يولد، الانتباه المشترك يجسر بينهما.",
+      "conceptId": "c01"
+    }
+  ],
+  "collocations": [
+    {
+      "phrase": "multi-head attention",
+      "meaningAr": "انتباه متعدد الرؤوس، عدة آليات انتباه متوازية.",
+      "example": "Each head learns a different relation between tokens."
+    },
+    {
+      "phrase": "autoregressive generation",
+      "meaningAr": "إصدار تكراري، يولد كل رمز بناءً على السابق.",
+      "example": "The decoder generates one token at a time."
+    }
+  ],
+  "connections": [
+    {
+      "chapterId": "example-attention",
+      "title": "Attention fundamentals",
+      "conceptIds": ["c03"],
+      "note": "This chapter builds on self-attention mechanics from the attention chapter."
+    },
+    {
+      "chapterId": "rag-pipeline",
+      "title": "RAG with transformers",
+      "conceptIds": ["c01", "c02"],
+      "note": "Transformers enable retrieval by encoding documents and queries in shared space."
+    }
+  ]
+}

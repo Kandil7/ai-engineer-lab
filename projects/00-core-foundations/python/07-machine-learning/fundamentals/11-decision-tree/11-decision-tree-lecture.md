@@ -50,6 +50,7 @@ Measures the disorder or uncertainty in the data.
 
 ### 3. Tree Parameters
 
+
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `max_depth` | Maximum tree depth | None |

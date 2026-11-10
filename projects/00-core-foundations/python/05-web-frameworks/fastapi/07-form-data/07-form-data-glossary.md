@@ -57,6 +57,7 @@ def feedback(subscribe: bool = Form(default=False)):
 **Definition:** An HTTP header that specifies the media type of the request body. For form data, the Content-Type determines how the data is encoded.
 
 **Form Content-Types:**
+
 | Type | Description |
 |------|-------------|
 | `application/x-www-form-urlencoded` | Standard form submission (text only) |
@@ -170,6 +171,7 @@ def register(
 ```
 
 **Parameters:**
+
 | Parameter | Description |
 |-----------|-------------|
 | `...` | Required field (no default) |

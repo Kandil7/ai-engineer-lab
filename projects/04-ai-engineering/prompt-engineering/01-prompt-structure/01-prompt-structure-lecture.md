@@ -110,6 +110,7 @@ is specific.
 wanted. Vague task → vague output.
 
 **What makes a task specific:**
+
 | Vague | Specific |
 |-------|----------|
 | "Summarize this" | "Summarize in 3 sentences, focusing on the ruling" |
@@ -139,6 +140,7 @@ constraints define the acceptable output space.
 wrong length, missing citations, hallucinated content.
 
 **Constraint types:**
+
 | Type | Example |
 |------|---------|
 | Language | "Answer in Arabic" |
@@ -172,6 +174,7 @@ output requires fragile parsing.
 cannot reliably extract the answer, citations, or confidence.
 
 **Format options:**
+
 | Format | Use case |
 |--------|----------|
 | JSON | Programmatic consumption |

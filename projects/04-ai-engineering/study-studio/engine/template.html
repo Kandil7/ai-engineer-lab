@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light" data-phase="<!--STUDIO_PHASE-->">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="studio-phase" content="<!--STUDIO_PHASE-->" />
+    <title>Study Studio</title>
+    <style>
+<!--STUDIO_CSS-->
+    </style>
+  </head>
+  <body data-lang-mode="en" data-reading-mode="focus">
+    <a class="skip-link" href="#article">Skip to the chapter</a>
+
+    <header class="topbar">
+      <div class="topbar-head">
+        <div class="brand">
+          <p class="brand-kicker" id="studio-source">Study Studio</p>
+          <h1 class="brand-title" id="studio-title">Study Studio</h1>
+          <p class="brand-sub" id="studio-subtitle"></p>
+        </div>
+        <div class="topbar-controls" role="group" aria-label="Display controls">
+          <label class="ctl" for="lang-mode">Language
+            <select id="lang-mode">
+              <option value="en">English only</option>
+              <option value="en-hints">English + Arabic hints</option>
+              <option value="ar">Arabic explanations</option>
+              <option value="test">Test myself</option>
+            </select>
+          </label>
+          <label class="ctl" for="reading-mode">Reading
+            <select id="reading-mode">
+              <option value="focus">Focus</option>
+              <option value="skim">Skim</option>
+              <option value="deep">Deep</option>
+            </select>
+          </label>
+          <label class="ctl" for="theme">Theme
+            <select id="theme">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="sepia">Sepia</option>
+            </select>
+          </label>
+          <button type="button" id="open-palette" class="btn">Search <kbd>Ctrl</kbd>+<kbd>K</kbd></button>
+        </div>
+      </div>
+      <div
+        class="progress"
+        id="progress-bar"
+        role="progressbar"
+        aria-label="Chapter progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+      >
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav class="outline" id="outline" aria-label="Chapter outline">
+        <h2 class="panel-h">Outline</h2>
+        <ol class="outline-list" id="outline-list"></ol>
+        <p class="outline-meta" id="outline-meta"></p>
+      </nav>
+
+      <main class="article" id="article" tabindex="-1" aria-label="Chapter text"></main>
+
+      <aside class="panels" id="panels" aria-label="Study panels"></aside>
+    </div>
+
+    <div class="overlay" id="palette-overlay" hidden>
+      <div class="palette" role="dialog" aria-modal="true" aria-label="Command palette">
+        <input
+          type="text"
+          id="palette-input"
+          class="palette-input"
+          placeholder="Jump to a section, word, flashcard or lab"
+          aria-label="Search the chapter"
+          aria-controls="palette-list"
+          autocomplete="off"
+        />
+        <ul class="palette-list" id="palette-list" role="listbox" aria-label="Results"></ul>
+        <p class="palette-hint">Enter to open &middot; Esc to close</p>
+      </div>
+    </div>
+
+    <div class="popover" id="word-popover" role="dialog" aria-label="Word details" hidden></div>
+    <div class="mini-card" id="mini-card" role="dialog" aria-label="Technical term" hidden></div>
+    <div class="sel-toolbar" id="sel-toolbar" role="toolbar" aria-label="Selection actions" hidden></div>
+    <div class="live-region sr-only" id="live-region" role="status" aria-live="polite"></div>
+
+    <script id="chapter-data" type="application/json">
+<!--CHAPTER_DATA-->
+    </script>
+    <script>
+<!--STUDIO_JS-->
+    </script>
+  </body>
+</html>

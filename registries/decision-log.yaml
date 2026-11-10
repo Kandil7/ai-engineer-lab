@@ -1,6 +1,6 @@
 # Decision Log — index of all ADRs (mirrors docs/decisions/)
 # Schema: id, title, status, date, path, supersedes, superseded_by
-version: 1
+version: 2
 decisions:
   - id: "0001"
     title: Repo-centric agentic workspace
@@ -91,5 +91,19 @@ decisions:
     status: Proposed
     date: 2026-10-15
     path: docs/decisions/0013-choose-dvc-for-dataset-versioning.md
+    supersedes: null
+    superseded_by: null
+  - id: "0014"
+    title: "Adopt the h9-tec AI Roadmap 2026 as a cross-check reference and build the Study Studio data contract first"
+    status: Proposed
+    date: 2026-10-22
+    path: docs/decisions/0014-adopt-the-h9-tec-ai-roadmap-2026-as-a-cross-check-reference-and-build-the-study-studio-data-contract-first.md
+    supersedes: null
+    superseded_by: null
+  - id: "0015"
+    title: "Create FastAPI Backend Mastery Roadmap with Learning Management Systems structure"
+    status: Accepted
+    date: 2026-11-10
+    path: docs/decisions/0015-fastapi-backend-mastery-roadmap-created.md
     supersedes: null
     superseded_by: null

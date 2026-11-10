@@ -75,6 +75,7 @@ print(f"NumPy array: {time.time() - start:.4f}s")
 4. **No type checking**: No runtime type checking overhead
 
 **Key differences:**
+
 | Aspect | Python List | NumPy Array |
 |--------|-------------|-------------|
 | Data type | Mixed types | Single type |
@@ -757,6 +758,7 @@ filtered = signal.filtfilt(b, a, noisy_signal)
 ```
 
 **When to use SciPy:**
+
 | Task | SciPy Module | Example |
 |------|--------------|---------|
 | Statistical tests | `scipy.stats` | t-test, chi-square |
@@ -874,6 +876,7 @@ loaded = load_npz("sparse_matrix.npz")
 ```
 
 **When to use:**
+
 | Use Case | Example |
 |----------|---------|
 | Text data (TF-IDF) | Document-term matrices |
