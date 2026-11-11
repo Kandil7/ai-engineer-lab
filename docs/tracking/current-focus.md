@@ -83,6 +83,10 @@ the one gap found against the Microsoft AI Engineer career path.
 32. Study Studio Phase 1: the engine — `engine/studio.js` + `engine/studio.css` + `scripts/build_studio.py` (inline + external-reference scan + hash comparison against the source extraction), driven by the `example-chapter.json` already in place
 33. `pip install dvc` then `dvc repro` in `projects/00-core-foundations/data-engineering/capstone/` — the binary-gated acceptance checks skip until dvc is installed
 34. ~~Airflow orchestration topics: 19-dag-orchestration + 20-airflow-execution~~ — done 2026-11-11 (lecture + glossary + quiz + verified exercise each; Airflow 3.4.0 docs registered as `source-index#31`; `data.orchestration` and `data.orchestration-ops` nodes added to the knowledge registry; study-studio chapter deferred)
+35. ~~Airflow advanced topics: 21-airflow-advanced-authoring + 22-airflow-security-platform~~ — done 2026-11-11 (lecture + glossary + quiz + verified exercise each; `data.orchestration-advanced` and `data.platform-security` nodes added)
+36. ~~Airflow study-studio chapter~~ — done 2026-11-11 (`schema/dag-orchestration.json` validates; `build/dag-orchestration.html` built, 130 KB)
+37. ~~Airflow applied artifact~~ — done 2026-11-11 (`devmate-ingest-dag.py` reference Dag; requires apache-airflow, not a repo dependency)
+38. ~~Airflow bookkeeping~~ — done 2026-11-11 (evidence ledger entries for all four nodes; source note `docs/learning/source-summaries/apache-airflow-340-docs.md`; source-index row 31 flipped to completed)
 
 ---
 

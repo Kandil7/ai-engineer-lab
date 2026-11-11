@@ -62,7 +62,7 @@ FastAPI + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 
 | # | Source | Type | Topic | Status | Link | Lab Integration |
 |---|--------|------|-------|--------|------|-----------------|
-| 31 | Apache Airflow 3.4.0 stable documentation | doc | Dags, TaskFlow, sensors, XCom, assets, scheduling, catchup/backfill, executors, pools, retries, deferrable operators, deployment, monitoring | in-progress | [airflow.apache.org](https://airflow.apache.org/docs/apache-airflow/stable/index.html) | Anchor for `data.orchestration` and `data.orchestration-ops`: taught by `projects/00-core-foundations/data-engineering/19-dag-orchestration` (authoring) and `20-airflow-execution` (operations). Applied to DevMate's daily ingest-and-eval loop: Qdrant up → ingest → reindex → eval gate on Hit@5. |
+| 31 | Apache Airflow 3.4.0 stable documentation | doc | Dags, TaskFlow, sensors, XCom, assets, scheduling, catchup/backfill, executors, pools, retries, deferrable operators, deployment, monitoring | completed | [airflow.apache.org](https://airflow.apache.org/docs/apache-airflow/stable/index.html) | Anchor for `data.orchestration` and `data.orchestration-ops`: taught by `projects/00-core-foundations/data-engineering/19-dag-orchestration` (authoring) and `20-airflow-execution` (operations). Applied to DevMate's daily ingest-and-eval loop: Qdrant up → ingest → reindex → eval gate on Hit@5. Source note: `docs/learning/source-summaries/apache-airflow-340-docs.md`. |
 
 ### How to Use
 

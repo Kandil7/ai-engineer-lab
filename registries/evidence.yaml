@@ -155,3 +155,31 @@ evidence:
     path: docs/decisions/0010-adopt-duckdb-stdlib-minhash-and-dvc-for-data-engineering.md
     date: 2026-10-15
     checked_by: self
+  - id: ev-data-orchestration-scheduler
+    skill: data.orchestration
+    level: 6
+    type: test
+    path: projects/00-core-foundations/data-engineering/19-dag-orchestration/19-dag-orchestration.py
+    date: 2026-11-11
+    checked_by: script
+  - id: ev-data-orchestration-ops-executor
+    skill: data.orchestration-ops
+    level: 6
+    type: test
+    path: projects/00-core-foundations/data-engineering/20-airflow-execution/20-airflow-execution.py
+    date: 2026-11-11
+    checked_by: script
+  - id: ev-data-orchestration-advanced
+    skill: data.orchestration-advanced
+    level: 6
+    type: test
+    path: projects/00-core-foundations/data-engineering/21-airflow-advanced-authoring/21-airflow-advanced-authoring.py
+    date: 2026-11-11
+    checked_by: script
+  - id: ev-data-platform-security
+    skill: data.platform-security
+    level: 6
+    type: test
+    path: projects/00-core-foundations/data-engineering/22-airflow-security-platform/22-airflow-security-platform.py
+    date: 2026-11-11
+    checked_by: script

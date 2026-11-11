@@ -536,6 +536,34 @@ domains:
       verified_at: 2026-11-11
       review_after_days: 0
       status: active
+    - id: data.orchestration-advanced
+      name: Airflow advanced authoring
+      level: advanced
+      prerequisites: [data.orchestration]
+      taught_in: [projects/00-core-foundations/data-engineering/21-airflow-advanced-authoring]
+      sources: [source-index#31]
+      exercises: [projects/00-core-foundations/data-engineering/21-airflow-advanced-authoring]
+      used_by_projects: [projects/00-core-foundations/data-engineering]
+      evidence: "A mapping, asset-event, params-validation, and event-driven scheduling simulation with all asserts passing."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-11-11
+      review_after_days: 0
+      status: active
+    - id: data.platform-security
+      name: Airflow security and platform
+      level: advanced
+      prerequisites: [data.orchestration-ops]
+      taught_in: [projects/00-core-foundations/data-engineering/22-airflow-security-platform]
+      sources: [source-index#31]
+      exercises: [projects/00-core-foundations/data-engineering/22-airflow-security-platform]
+      used_by_projects: [projects/00-core-foundations/data-engineering]
+      evidence: "A security simulation: clean Dag scan, least-privilege RBAC, listener firing, version pinning, data/state split."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-11-11
+      review_after_days: 0
+      status: active
 
     - id: data.lakehouse
       name: Lakehouse table layout

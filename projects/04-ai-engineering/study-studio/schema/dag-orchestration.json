@@ -1,0 +1,442 @@
+{
+  "meta": {
+    "chapterId": "dag-orchestration",
+    "title": "DAG Orchestration with Airflow",
+    "subtitle": "Authoring, scheduling, and operating data pipelines as code",
+    "sourceTitle": "Original content for AI Engineer Lab",
+    "sourceType": "original",
+    "sourceLocator": "projects/04-ai-engineering/study-studio/schema/dag-orchestration.json",
+    "license": "CC-BY-4.0",
+    "attribution": "Created for the AI Engineer Lab. Free to adapt and reuse.",
+    "language": "en",
+    "estMinutes": 30,
+    "conceptCount": 6
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "title": "The Dag Model",
+      "order": 1,
+      "level": 1,
+      "paragraphs": [
+        {
+          "kind": "text",
+          "text": "A Dag is a workflow defined as Python code: its schedule, its tasks, and the dependencies between them. The Dag file is a definition that the scheduler parses; it does not execute at parse time. This is the central mental shift: the file describes the workflow, and the scheduler decides what runs and when.",
+          "explainArabic": "Dag هو سير عمل معرّف ككود Python: جدوله، مهامه، وتبعياته. ملف Dag هو تعريف يحلّله المجدول؛ لا يُنفَّذ أثناء التحليل."
+        },
+        {
+          "kind": "text",
+          "text": "Each schedule interval produces one Dag run with its own logical date, state, and logs. Catchup fills every missed interval between the start date and now; setting catchup to false runs only the latest interval. Choose catchup based on whether each missed interval carries real value: an invoices pipeline must catch up, a repo re-ingest does not.",
+          "explainArabic": "كل فاصل زمني ينتج تشغيل Dag واحد (Dag run) مع تاريخ منطقي وحالة وسجلات. catchup يملأ كل فاصل فائت؛ false يشغّل الأحدث فقط."
+        },
+        {
+          "kind": "code",
+          "language": "python",
+          "text": "from airflow.sdk import DAG, task\n\nwith DAG(dag_id=\"devmate_ingest\", start_date=datetime(2026,1,1),\n         schedule=\"0 3 * * *\", catchup=False):\n    up = BashOperator(task_id=\"start_qdrant\", bash_command=\"docker compose up -d qdrant\")\n\n    @task\n    def ingest() -> str: ...\n\n    up >> ingest()",
+          "code": "from airflow.sdk import DAG, task\n\nwith DAG(dag_id=\"devmate_ingest\", start_date=datetime(2026,1,1),\n         schedule=\"0 3 * * *\", catchup=False):\n    up = BashOperator(task_id=\"start_qdrant\", bash_command=\"docker compose up -d qdrant\")\n\n    @task\n    def ingest() -> str: ...\n\n    up >> ingest()"
+        }
+      ],
+      "keySentences": [
+        "A Dag is a workflow defined as Python code: its schedule, its tasks, and the dependencies between them.",
+        "The Dag file is a definition that the scheduler parses; it does not execute at parse time."
+      ],
+      "takeaways": [
+        "A Dag file is a definition, not a program.",
+        "One Dag run per schedule interval, identified by its logical date.",
+        "catchup is a business decision, not a default."
+      ],
+      "studyAid": {
+        "whyItMatters": "Treating the Dag file as a program is the most common beginner mistake; parse-time code runs on every scheduler cycle.",
+        "badge": "AI"
+      },
+      "confusion": {
+        "simpleEnglish": "The file describes the workflow. The scheduler runs it.",
+        "simpleArabic": "الملف يصف سير العمل. المجدول يشغّله.",
+        "analogy": "A recipe describes a dish; the chef cooks it."
+      },
+      "prediction": {
+        "answer": "One Dag run per missed interval, in order.",
+        "question": "If catchup is True and the scheduler was down for a week, what runs?"
+      }
+    },
+    {
+      "id": "s2",
+      "title": "Tasks, Data, and Scheduling",
+      "order": 2,
+      "level": 2,
+      "paragraphs": [
+        {
+          "kind": "text",
+          "text": "Tasks are declared with operators or the TaskFlow API. TaskFlow turns plain functions into tasks and infers dependencies from argument passing; those functions stay testable with pytest. XCom carries small metadata between tasks through the metadata database; large data flows through storage with only the reference in XCom.",
+          "explainArabic": "المهام تُعرَّف بـ operators أو TaskFlow. TaskFlow يحوّل الدوال إلى مهام ويستنتج التبعيات. XCom ينقل بيانات وصفية (metadata) بين المهام."
+        },
+        {
+          "kind": "text",
+          "text": "Sensors wait for conditions in poke, reschedule, or deferrable mode. Deferrable mode suspends the task and hands the wait to the triggerer, so a long wait holds no worker slot. Assets let a Dag schedule on a dataset update event instead of a clock, stating the data dependency in code.",
+          "explainArabic": "Sensors تنتظر شروطًا. الوضع deferrable يعلّق المهمة ويسلّم الانتظار إلى triggerer. Assets تسمح بالجدولة على تحديث dataset."
+        },
+        {
+          "kind": "text",
+          "text": "Backfill re-runs a Dag over a historical range and is only safe on an idempotent pipeline. Retries, execution timeouts, and SLAs are three separate levers that must be configured together: a retry without a timeout can hang forever, and a timeout without a retry decision is an accident.",
+          "explainArabic": "Backfill يعيد تشغيل Dag على مدى تاريخي، آمن فقط على pipeline idempotent. retries و timeouts و SLAs تُضبط معًا."
+        }
+      ],
+      "keySentences": [
+        "TaskFlow turns plain functions into tasks and infers dependencies from argument passing.",
+        "XCom carries small metadata between tasks; large data flows through storage."
+      ],
+      "takeaways": [
+        "TaskFlow functions are pytest-testable Python.",
+        "XCom is metadata; storage is data.",
+        "Long waits belong in deferrable sensors, never poke mode.",
+        "Backfill requires idempotency."
+      ],
+      "studyAid": {
+        "whyItMatters": "Most production incidents come from XCom abuse and unbounded retries; these rules prevent them.",
+        "badge": "AI"
+      },
+      "confusion": {
+        "simpleEnglish": "Pass references, not payloads. Bound every wait.",
+        "simpleArabic": "مرّر مراجع، لا حمولات. اربط كل انتظار بحد.",
+        "analogy": "A courier carries an address, not the furniture."
+      },
+      "prediction": {
+        "answer": "It serializes into the metadata database and becomes a bottleneck at every task boundary.",
+        "question": "A task returns a 100 MB dataframe via XCom. What happens?"
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "id": "w1",
+      "term": "Dag",
+      "meaningEn": "Workflow defined as Python: schedule, tasks, dependencies.",
+      "meaningAr": "سير عمل معرّف ككود Python.",
+      "wordType": "noun"
+    },
+    {
+      "id": "w2",
+      "term": "Dag run",
+      "meaningEn": "One execution of a Dag over one interval.",
+      "meaningAr": "تنفيذ واحد لـ Dag على فاصل زمني.",
+      "wordType": "noun"
+    },
+    {
+      "id": "w3",
+      "term": "TaskFlow",
+      "meaningEn": "Decorator API turning functions into tasks.",
+      "meaningAr": "واجهة @task لتحويل الدوال إلى مهام.",
+      "wordType": "noun"
+    },
+    {
+      "id": "w4",
+      "term": "XCom",
+      "meaningEn": "Small metadata passed between tasks.",
+      "meaningAr": "بيانات وصفية (metadata) بين المهام.",
+      "wordType": "noun"
+    },
+    {
+      "id": "w5",
+      "term": "Sensor",
+      "meaningEn": "Task that waits for a condition.",
+      "meaningAr": "مهمة تنتظر شرطًا.",
+      "wordType": "noun"
+    },
+    {
+      "id": "w6",
+      "term": "Asset",
+      "meaningEn": "Typed dataset with URI that triggers scheduling.",
+      "meaningAr": "dataset مُعطى نوعًا و URI يُشغّل الجدولة.",
+      "wordType": "noun"
+    },
+    {
+      "id": "w7",
+      "term": "Backfill",
+      "meaningEn": "Deliberate re-run over a historical range.",
+      "meaningAr": "إعادة تشغيل متعمّدة على مدى تاريخي.",
+      "wordType": "noun"
+    },
+    {
+      "id": "w8",
+      "term": "Pool",
+      "meaningEn": "Named slot limit shared across Dags.",
+      "meaningAr": "حد slots مُسمّى مشترك بين Dags.",
+      "wordType": "noun"
+    }
+  ],
+  "conceptMap": {
+    "nodes": [
+      {
+        "id": "c1",
+        "label": "Dag",
+        "kind": "core",
+        "definition": "Workflow as Python code.",
+        "sectionId": "s1",
+        "labId": null,
+        "wordIds": [
+          "w1"
+        ]
+      },
+      {
+        "id": "c2",
+        "label": "Dag run",
+        "kind": "core",
+        "definition": "One execution per interval.",
+        "sectionId": "s1",
+        "labId": null,
+        "wordIds": [
+          "w2"
+        ]
+      },
+      {
+        "id": "c3",
+        "label": "TaskFlow",
+        "kind": "core",
+        "definition": "Functions as tasks.",
+        "sectionId": "s2",
+        "labId": null,
+        "wordIds": [
+          "w3"
+        ]
+      },
+      {
+        "id": "c4",
+        "label": "XCom",
+        "kind": "core",
+        "definition": "Metadata between tasks.",
+        "sectionId": "s2",
+        "labId": null,
+        "wordIds": [
+          "w4"
+        ]
+      },
+      {
+        "id": "c5",
+        "label": "Asset",
+        "kind": "core",
+        "definition": "Data-driven scheduling.",
+        "sectionId": "s2",
+        "labId": null,
+        "wordIds": [
+          "w6"
+        ]
+      },
+      {
+        "id": "c6",
+        "label": "Backfill",
+        "kind": "core",
+        "definition": "Re-run over history.",
+        "sectionId": "s2",
+        "labId": null,
+        "wordIds": [
+          "w7"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "c1",
+        "to": "c2",
+        "relation": "produces"
+      },
+      {
+        "from": "c1",
+        "to": "c3",
+        "relation": "contains"
+      },
+      {
+        "from": "c3",
+        "to": "c4",
+        "relation": "uses"
+      },
+      {
+        "from": "c5",
+        "to": "c1",
+        "relation": "schedules"
+      },
+      {
+        "from": "c6",
+        "to": "c2",
+        "relation": "replays"
+      }
+    ],
+    "learningPath": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6"
+    ]
+  },
+  "labs": [
+    {
+      "id": "l1",
+      "title": "Mini Scheduler",
+      "goal": "Prove cycle rejection, topological order, catchup, and idempotent replay.",
+      "kind": "generic",
+      "controls": [
+        {
+          "id": "run",
+          "label": "Run",
+          "kind": "button",
+          "default": true
+        }
+      ],
+      "tasks": [
+        {
+          "prompt": "Run the exercise",
+          "check": "python 19-dag-orchestration.py --verify"
+        },
+        {
+          "prompt": "Observe cycle rejection",
+          "check": "CycleError raised at parse time"
+        },
+        {
+          "prompt": "Verify idempotent replay",
+          "check": "replay state equals first run"
+        }
+      ],
+      "takeawayEn": "A Dag is a definition; the scheduler executes it, and backfill is only safe on idempotent pipelines.",
+      "takeawayAr": "Dag هو تعريف؛ المجدول ينفذه؛ backfill آمن فقط على pipelines idempotent.",
+      "simulationNote": "Illustrative simulation, not real model output."
+    }
+  ],
+  "figures": [
+    {
+      "id": "f1",
+      "title": "Dag as a directed acyclic graph",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'><circle cx='40' cy='50' r='15' fill='#4f46e5'/><circle cx='100' cy='50' r='15' fill='#4f46e5'/><circle cx='160' cy='50' r='15' fill='#4f46e5'/><line x1='55' y1='50' x2='85' y2='50' stroke='#333' stroke-width='2'/><line x1='115' y1='50' x2='145' y2='50' stroke='#333' stroke-width='2'/></svg>",
+      "captionEn": "Tasks connected by dependencies form a directed acyclic graph.",
+      "captionAr": "المهام متصلة بتبعيات تشكل رسمًا بيانيًا موجّهًا غير دوري.",
+      "steps": [
+        {
+          "narrativeEn": "Parse the Dag file into the model.",
+          "narrativeAr": "تحليل ملف Dag إلى نموذج.",
+          "highlight": []
+        },
+        {
+          "narrativeEn": "Schedule the next Dag run.",
+          "narrativeAr": "جدولة تشغيل Dag التالي.",
+          "highlight": []
+        },
+        {
+          "narrativeEn": "Execute tasks on workers.",
+          "narrativeAr": "تنفيذ المهام على workers.",
+          "highlight": []
+        }
+      ],
+      "hotspots": [],
+      "buildOrder": []
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "k1",
+      "front": "What is a Dag?",
+      "back": "A workflow defined as Python: schedule, tasks, dependencies.",
+      "backAr": "سير عمل معرّف ككود Python.",
+      "kind": "term",
+      "conceptId": "c1"
+    },
+    {
+      "id": "k2",
+      "front": "What does XCom carry?",
+      "back": "Small metadata between tasks.",
+      "backAr": "بيانات وصفية (metadata) بين المهام.",
+      "kind": "term",
+      "conceptId": "c4"
+    },
+    {
+      "id": "k3",
+      "front": "When is backfill safe?",
+      "back": "Only on an idempotent pipeline.",
+      "backAr": "فقط على pipeline idempotent.",
+      "kind": "term",
+      "conceptId": "c6"
+    }
+  ],
+  "quiz": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "prompt": "What executes when a scheduler parses a Dag file?",
+      "options": [
+        "All tasks",
+        "Nothing; it builds the model",
+        "Only the first task",
+        "A Dag run"
+      ],
+      "answer": [
+        "Nothing; it builds the model"
+      ],
+      "explanationEn": "A Dag file is a definition, not a program.",
+      "explanationAr": "A Dag file is a definition, not a program.",
+      "conceptId": "c1"
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "prompt": "What belongs in XCom?",
+      "options": [
+        "Dataframes",
+        "Small metadata",
+        "Credentials",
+        "Raw corpora"
+      ],
+      "answer": [
+        "Small metadata"
+      ],
+      "explanationEn": "XCom lives in the metadata DB and is metadata only.",
+      "explanationAr": "XCom lives in the metadata DB and is metadata only.",
+      "conceptId": "c4"
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "prompt": "A sensor waits three hours. Which mode holds no worker slot?",
+      "options": [
+        "Poke",
+        "Reschedule",
+        "Deferrable",
+        "Stream"
+      ],
+      "answer": [
+        "Deferrable"
+      ],
+      "explanationEn": "Deferrable suspends the task; the triggerer watches.",
+      "explanationAr": "Deferrable suspends the task; the triggerer watches.",
+      "conceptId": "c5"
+    }
+  ],
+  "collocations": [
+    {
+      "phrase": "workflows as code",
+      "meaningAr": "سير العمل ككود",
+      "example": "Airflow workflows are defined entirely in Python."
+    },
+    {
+      "phrase": "logical date",
+      "meaningAr": "التاريخ المنطقي",
+      "example": "Each Dag run has a logical date, the start of its interval."
+    }
+  ],
+  "connections": [
+    {
+      "chapterId": "transformers",
+      "title": "Transformer Architecture",
+      "conceptIds": [
+        "c1"
+      ],
+      "note": "Both are pipelines: data flows through stages."
+    },
+    {
+      "chapterId": "rag-pipeline",
+      "title": "RAG Pipeline",
+      "conceptIds": [
+        "c1"
+      ],
+      "note": "Airflow schedules the RAG ingest and eval loop."
+    }
+  ]
+}
