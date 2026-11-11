@@ -80,3 +80,4 @@ projects/00-core-foundations/python/*.png
 projects/00-core-foundations/python/*.db
 err.txt
 graphify-out/
+.opencode/

@@ -58,11 +58,20 @@ FastAPI + PostgreSQL/Redis/Qdrant + LLMs/RAG + Agents.
 | 10 | PostgreSQL 16 Documentation | doc | SQL, indexing, JSONB | planned | [postgresql.org](https://www.postgresql.org/docs/16/) | Every service → apply one schema/query example → document in `docs/learning/deep-dives/`. |
 | 11 | Redis Commands Reference | doc | Data types, transactions, pub/sub | planned | [redis.io](https://redis.io/commands/) | Same approach — one command per session in `projects/03-databases/redis-cache/`. |
 
+### Orchestration & Workflow
+
+| # | Source | Type | Topic | Status | Link | Lab Integration |
+|---|--------|------|-------|--------|------|-----------------|
+| 31 | Apache Airflow 3.4.0 stable documentation | doc | Dags, TaskFlow, sensors, XCom, assets, scheduling, catchup/backfill, executors, pools, retries, deferrable operators, deployment, monitoring | in-progress | [airflow.apache.org](https://airflow.apache.org/docs/apache-airflow/stable/index.html) | Anchor for `data.orchestration` and `data.orchestration-ops`: taught by `projects/00-core-foundations/data-engineering/19-dag-orchestration` (authoring) and `20-airflow-execution` (operations). Applied to DevMate's daily ingest-and-eval loop: Qdrant up → ingest → reindex → eval gate on Hit@5. |
+
 ### How to Use
 
 - **Git/GitHub video** → write branching strategy ADR
 - **Docker course** → containerize the API service, deploy to Render/Vercel/VPS
 - **PostgreSQL/Redis docs** → apply one concept per service build session
+- **Airflow docs** → one orchestration concept per session; the miniature scheduler
+  in `19-dag-orchestration.py` and executor in `20-airflow-execution.py` prove the
+  model's invariants without installing Airflow
 
 ---
 

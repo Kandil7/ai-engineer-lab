@@ -103,7 +103,8 @@ Create an Architecture Decision Record for your LMS:
 ```python
 # Senior engineers define success thresholds BEFORE code runs
 REQUEST_LATENCY_SLO = "0.95"  # 95% of requests under X ms
-ERROR_RATE_SLO = "0.01"       # Max 1% errors allowed
+ERROR_RATE_SLO = "0.01"  # Max 1% errors allowed
+
 
 # Calculate error budget remaining
 def calculate_error_budget_remaining(total_errors, time_window):
@@ -171,12 +172,12 @@ logger = structlog.get_logger()
 
 logger.info(
     "course_completed",
-    user_id="u_12345",           # Correlation ID (trace_id or user_id)
-    course_id="c_python101",     # Structured data (no strings!)
-    duration_ms=1250,            # Numeric metrics (not "fast")
+    user_id="u_12345",  # Correlation ID (trace_id or user_id)
+    course_id="c_python101",  # Structured data (no strings!)
+    duration_ms=1250,  # Numeric metrics (not "fast")
     status_code=200,
-    error="",                    # Empty string = no error
-    level="info",                # Always use this field for filtering
+    error="",  # Empty string = no error
+    level="info",  # Always use this field for filtering
 )
 ```
 
@@ -197,9 +198,10 @@ Add observability to `devmate/` API:
 # Senior engineers know the cost per operation
 COST_MODEL = {
     "request": {"llm_token": 0.0000006, "embeddings": 0.000003},  # $/token
-    "db_query": {"postgresql": 0.05, "redis": 0.02},               # $/hour per instance
-    "storage": {"s3_std": 0.023, "vector": 0.187},                 # $/GB/month
+    "db_query": {"postgresql": 0.05, "redis": 0.02},  # $/hour per instance
+    "storage": {"s3_std": 0.023, "vector": 0.187},  # $/GB/month
 }
+
 
 # Calculate cost for a user action
 def estimate_cost_per_user_action(action: str) -> float:

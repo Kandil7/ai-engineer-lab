@@ -508,6 +508,35 @@ domains:
       review_after_days: 0
       status: active
 
+    - id: data.orchestration
+      name: DAG orchestration and scheduling
+      level: core
+      prerequisites: [data.etl-pipelines, data.reliability]
+      taught_in: [projects/00-core-foundations/data-engineering/19-dag-orchestration]
+      sources: [source-index#31]
+      exercises: [projects/00-core-foundations/data-engineering/19-dag-orchestration]
+      used_by_projects: [projects/04-ai-engineering/devmate, projects/00-core-foundations/data-engineering]
+      evidence: "A miniature scheduler that rejects cycles, orders tasks topologically, generates one Dag run per missed interval, and replays idempotently."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-11-11
+      review_after_days: 0
+      status: active
+    - id: data.orchestration-ops
+      name: Airflow execution and operations
+      level: advanced
+      prerequisites: [data.orchestration]
+      taught_in: [projects/00-core-foundations/data-engineering/20-airflow-execution]
+      sources: [source-index#31]
+      exercises: [projects/00-core-foundations/data-engineering/20-airflow-execution]
+      used_by_projects: [projects/00-core-foundations/data-engineering]
+      evidence: "An executor simulation where a 2-slot pool throttles a 50-task backfill and every attempt is bounded by a timeout."
+      level_target: 6
+      evidence_required: [test]
+      verified_at: 2026-11-11
+      review_after_days: 0
+      status: active
+
     - id: data.lakehouse
       name: Lakehouse table layout
       level: advanced
